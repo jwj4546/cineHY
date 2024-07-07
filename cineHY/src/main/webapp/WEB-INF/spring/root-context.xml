@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<!-- 
+		root-context.xml
+		서버 구동과 동시에 web.xml 파일을 거쳐서 바로 로딩되는 문서 == preloading
+		=> 서버 구동과 동시에 바로 세팅(Bean등록) 해야 하는 내용들을 작성
+		주로 DB접속정보, 트랜잭선 처리, 외부모듈연결 등등..
+	 -->
+	 
+	 <bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource" destroy-method="close">
+	 	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+	 	<property name="url" value="jdbc:oracle:thin:@43.203.180.3:1521:xe" />
+	 	<property name="username" value="system" />
+	 	<property name="password" value="1234" />
+	 </bean>
+	 
+	 <!-- 
+	 	객체가 필요할 때 내부적으로 실행되는 코드
+	 	
+	 	BasicDataSource dataSource = new BasicDataSource();
+	 	dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
+	 	dataSource.setUrl("jdbc:oracle:thin:@localhost:1521:xe");
+	 	dataSource.setUsername("C##BCLASS);
+	 	dataSource.setPassword("BCLASS");
+	 	
+	  -->
+	  
+	  <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
+	  	<property name="configLocation" value="classpath:mybatis-config.xml" />
+	  	<property name="dataSource" ref="dataSource" />
+	  </bean>
+	  
+	  <!-- 
+	  	SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean
+	  	sqlSessionFactory.setConfigLocation("classpath:mybatis-config.xml");
+	  	sqlSessionFactory.setDataSource(dataSource);
+	  	 -->
+	  	 
+	  	 <bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSession">
+	  	 	<constructor-arg ref="sqlSessionFactory" />
+	  	 </bean>
+	  	 
+	  	 <!-- 
+	  	 	SqlSessionTemplate sqlSession = new SqlSessionTempalte(sqlSessionFactory);
+	  	  -->
+	  	  
+	  	  <!-- 파일 업로드 관련 빈 등록 -->
+	  	  <bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
+	  	  		<property name="maxUploadSize" value="100000000" />
+	  	  		<property name="maxInMemorySize" value="100000000" />
+	  	  </bean>
+	  	  
+	  	  <mybatis-spring:scan base-package="com.hy.myapp"/>
+</beans>
