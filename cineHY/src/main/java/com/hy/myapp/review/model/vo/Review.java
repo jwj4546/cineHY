@@ -2,6 +2,6 @@ package com.hy.myapp.review.model.vo;
 
 public class Review {
 	
-	private int reviewNo;  //ÀÛ¾÷ÇÔ~
+	private int reviewNo;  //ìž‘ì—…í•¨~
 
 }
