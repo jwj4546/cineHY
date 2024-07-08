@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberMapper">
+
+    <insert id="insert" parameterType = "member">
+        INSERT INTO TB_MEMBER
+        (
+            USER_ID,
+            USER_PWD,
+            USER_NAME,
+            EMAIL,
+            PHONE_NO,
+            ADDRESS,
+            GENDER,
+            BIRTH_DATE,
+            PRE_GENRE1,
+            PRE_GENRE2,
+            USER_NICK,
+            JOIN_DATE,
+            STATUS,
+            PROFILE_URL
+        )
+        VALUES
+        (
+            #{userId},
+            #{userPwd},
+            #{userName},
+            #{email},
+            #{phoneNo},
+            #{address},
+            #{gender},
+            #{birthDate},
+            #{preGenre1},
+            #{preGenre2},
+            #{userNick},
+            #{joinDate},
+            #{status},
+            #{profileUrl}
+        )
+    </insert>
+
+</mapper>

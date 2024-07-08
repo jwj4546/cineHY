@@ -33,20 +33,15 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	
-	<!-- 
-			*필터 !
-			
-			모든 요청 처리 전 공통적으로 필요한 기능들을
-			클라이언트 요청을 Servlet이 받기 전에 먼저 필터링해서 수행하도록 함
-			배포서술자에 작성!
-			
-			* 스프링에서 제공해주는 인코딩 필터!
-			org.springframework.web.filter.CharacterEncodingFilter
-			filter 태그와 filter-mapping태그를 꼭 함께 써야함!!!
-	 -->
+	<!-- 필터
+	모든 요청 처리 전 공통적으로 필요한 기능들을 클라이언트 요청을 
+	servlet 이 받기전에 먼저 필터링 해서 수행하도록 함
+	배포서술자에 작성!
+
+	*스프링에서 제공해주는 인코딩 필터
+	org.springframework.web.filter.CharacterEncodingFilter
+	filter태그와 filter-mapping태그를 꼭 함께 써야함. -->
 	
-	
-	<!--  한글깨짐 방지  -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -59,10 +54,9 @@
 			<param-value>true</param-value>
 		</init-param>
 	</filter>
-	
+
 	<filter-mapping>
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-
 </web-app>
