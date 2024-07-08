@@ -122,170 +122,175 @@
     <br>
     <div id="page3">
 	    <div>
-	    <h2 class="mb-4">선택한 영화</h2>
-	    <br><br><br>
+		    <h2 class="mb-4">선택한 영화</h2>
+		    <br><br><br>
 	        <div class="row" id="movieDetails">
-            <div class="col-md-4 mt-5">
-                <img src="https://picsum.photos/300/450" class="img-fluid" alt="Movie Poster">
-            </div>
-            <div class="col-md-6 mt-5" >
-                <h4 class="mb-4">영화 제목</h4>
-                <p class="lead">영화 줄거리 Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum veniam sunt, quia sed error in explicabo.</p>
-                <p><strong>개봉일:</strong> 2023-01-01</p>
-                <p><strong>감독:</strong> 감독 이름</p>
-                <p><strong>출연:</strong> 배우 이름1, 배우 이름2, 배우 이름3</p>
-                <p><strong>장르:</strong> 드라마, 로맨스</p>
-                <p><strong>관람 등급:</strong> 15세 이상 관람 가능</p>
-                <p><strong>상영 시간:</strong> 120분</p>
-                <p><strong>평점:</strong> 4.5 / 5.0</p>
-                <div class="mt-4">
-                    <a href="#" class="btn btn-primary mr-3">등록하기</a>
-                </div>
+            <!-- view 버튼 누르면 나오는 부분 -->
             </div>
         </div>
+	        
+	        <div class="card mb-4" id="Movie-enroll-list-card" style="width: 300px; min-width: 200px;">
+	            <ul class="list-group list-group-flush">
+	            	<li class="list-group-item text-primary"><p><strong>등록한 영화</strong></p></li>
+	                <li class="list-group-item">인사이드 아웃</li>
+	                <li class="list-group-item">핸섬가이즈</li>
+	                <li class="list-group-item">매드맥스 사가</li>
+	                <li class="list-group-item">매드맥스 사가</li>
+	                <li class="list-group-item">매드맥스 사가</li>
+	                <li class="list-group-item">매드맥스 사가</li>
+	                <li class="list-group-item">매드맥스 사가</li>
+	                <li class="list-group-item">매드맥스 사가</li>
+	                <li class="list-group-item">매드맥스 사가</li>
+	                <li class="list-group-item">매드맥스 사가</li>
+	                <li class="list-group-item">매드맥스 사가</li>
+	            </ul>
+	            <div id="listbutton" class="mt-3">
+	            <button type="button" class="btn btn-primary btn-sm">조회하기</button>
+	            <button type="button" class="btn btn-secondary btn-sm">삭제하기</button>
+	        	</div>
+	        </div>
         </div>
-        <div class="card mb-4" id="Movie-enroll-list-card" style="width: 20rem;">
-            <ul class="list-group list-group-flush">
-            	<li class="list-group-item text-primary"><p><strong>등록한 영화</strong></p></li>
-                <li class="list-group-item">인사이드 아웃</li>
-                <li class="list-group-item">핸섬가이즈</li>
-                <li class="list-group-item">매드맥스 사가</li>
-                <li class="list-group-item">매드맥스 사가</li>
-                <li class="list-group-item">매드맥스 사가</li>
-                <li class="list-group-item">매드맥스 사가</li>
-                <li class="list-group-item">매드맥스 사가</li>
-                <li class="list-group-item">매드맥스 사가</li>
-                <li class="list-group-item">매드맥스 사가</li>
-                <li class="list-group-item">매드맥스 사가</li>
-                <li class="list-group-item">매드맥스 사가</li>
-            </ul>
-            <div id="listbutton" class="mt-3">
-            <button type="button" class="btn btn-primary btn-sm">조회하기</button>
-            <button type="button" class="btn btn-secondary btn-sm">삭제하기</button>
-        	</div>
-        </div>
-        
     </div>
     </main>
     
     <script>
-        $(document).ready(function() {
-            var currentPage = 1;
-            function fetchMovies(pageNo) {
-                $.ajax({
-                    url: 'movieEnroll/nowPlaying',
-                    method: 'get',
-                    dataType: 'json',
-                    data: { pageNo: pageNo },
-                    success: function(data) {
-                        displayMovies(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.error('Error fetching movie data:', textStatus, errorThrown);
-                    }
-                });
-            }
-
-            function displayMovies(data) {
-                var movieList = $('#movieList');
-                movieList.empty();
-                if (data.results && data.results.length > 0) {
-                    const movies = data.results;
-                    let movieHtml = '';
-                    for(let i in movies) {
-                    	const movieId = movies[i].id;
-                        movieHtml += '<div class="card" style="width: 12rem;">'
-                          + '<img src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" class="card-img-top">'
-                          + '<div class="card-body">'
-                          + '<h5 class="card-title">' + movies[i].title + '</h5>'
-                          + '<p class="card-text">' + movies[i].title + '</p>'
-                          + '</div>'
-                          + '<ul class="list-group list-group-flush">'
-                          + '<li class="list-group-item">' + movies[i].release_date + ' 개봉</li>'
-                          + '</ul>'
-                          + '<div class="card-body">'
-                          + '<div class="btn-group">'
-                          + '<button type="button" class="btn btn-sm btn-outline-secondary" onclick=viewDetail('+movieId+')>View</button>'
-                          + '<button type="button" class="btn btn-sm btn-outline-secondary" href>등록하기</button>'
-                          + '</div>'
-                          + '</div>'
-                          + '</div>';
-                    }
-                    movieList.html(movieHtml);
-                } else {
-                    movieList.append('<li>No movies currently playing.</li>');
-                }
-            }
-
-            function changePage(pageNo) {
-                currentPage = pageNo;
-                fetchMovies(pageNo);
-            }
-
-            window.changePage = changePage;
-            window.nextPage = function() {
-                changePage(currentPage + 1);
-            }
-            window.previousPage = function() {
-            	changePage(currentPage - 1);				
+	    $(document).ready(function() {
+	        var currentPage = 1;
+	        function fetchMovies(pageNo) {
+	            $.ajax({
+	                url: 'movieEnroll/nowPlaying',
+	                method: 'get',
+	                dataType: 'json',
+	                data: { pageNo: pageNo },
+	                success: function(data) {
+	                    displayMovies(data);
+	                },
+	                error: function(jqXHR, textStatus, errorThrown) {
+	                    console.error('Error fetching movie data:', textStatus, errorThrown);
+	                }
+	            });
+	        }
+	
+	        function displayMovies(data) {
+	            var movieList = $('#movieList');
+	            movieList.empty();
+	            if (data.results && data.results.length > 0) {
+	                const movies = data.results;
+	                let movieHtml = '';
+	                for(let i in movies) {
+	                	const movieId = movies[i].id;
+	                    movieHtml += '<div class="card" style="width: 12rem;">'
+	                      + '<img src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" class="card-img-top" >'
+	                      + '<div class="card-body">'
+	                      + '<h5 class="card-title">' + movies[i].title + '</h5>'
+	                      + '<p class="card-text">' + movies[i].title + '</p>'
+	                      + '</div>'
+	                      + '<ul class="list-group list-group-flush">'
+	                      + '<li class="list-group-item">' + movies[i].release_date + ' 개봉</li>'
+	                      + '</ul>'
+	                      + '<div class="card-body">'
+	                      + '<div class="btn-group">'
+	                      + '<button type="button" class="btn btn-sm btn-outline-secondary" onclick="viewDetail('+movieId+')">View</button>'
+	                      + '<button type="button" class="btn btn-sm btn-outline-secondary" href="#">등록하기</button>'
+	                      + '</div>'
+	                      + '</div>'
+	                      + '</div>';
+	                }
+	                movieList.html(movieHtml);
+	            } else {
+	                movieList.append('<li>No movies currently playing.</li>');
+	            }
+	        }
+	
+	        function changePage(pageNo) {
+	            currentPage = pageNo;
+	            fetchMovies(pageNo);
+	        }
+	
+	        window.changePage = changePage;
+	        window.nextPage = function() {
+	            changePage(currentPage + 1);
+	        }
+	        window.previousPage = function() {
+	        	changePage(currentPage - 1);				
 			}
-
-            fetchMovies(currentPage);
-            
-            window.viewDetail = function(movieId) {
-            	
-                $.ajax({
-                    url: 'movieEnroll/details',
-                    method: 'get',
-                    dataType: 'json',
-                    data: { movie_id: movieId },
-                    success: function(data) {
-                    	displayMovieDetails(data);
-                    	console.log(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.error('Error fetching movie data:', textStatus, errorThrown);
-                    }
-                });
-            }
-            
-            function displayMovieDetails(data) {
-                var movieDetails = $('#movieDetails');
-                movieDetails.empty();
-                if (data.results && data.results.length > 0) {
-                    const Info = data.results;
-                    let InfoHtml = '';
-                    for(let i in details) {
-                    	InfoHtml += '<div class="col-md-4 mt-5">'
-                          + '<img src="https://image.tmdb.org/t/p/w500' + details[i].poster_path + '"class="img-fluid" alt="Movie Poster">'
-                          + '</div>'
-                          + '<div class="col-md-6 mt-5" >'
-                          + '<h4 class="mb-4">' + details[i].title + '</h4>'
-                          + '<p class="lead">' + details[i].overview + '</p>'
-                          + '<p><strong>개봉일:</strong>'+ details[i].release_date + '</p>'
-                          + '<p><strong>감독:</strong>'
-                          + '<p><strong>출연:</strong>' + details[i].release_date + ' 개봉</li>'
-                          + '<p><strong>장르:</strong>'+ details[i].genres +'</p>'
-                          + '<p><strong>관람 등급:</strong>'+  +'</p>'
-                          + '<p><strong>상영 시간:</strong>'+ details[i].runtime +'</p>'
-                          + '<p><strong>평점:</strong>'+ +'</p>'
-                          + '<div class="mt-4">'
-                          + '<a href="#" class="btn btn-primary mr-3">등록하기</a>'
-                          + '</div>';
-                    }
-                    movieDetails.html(InfoHtml);
-                } else {
-                	movieDetails.append('<li>No movies selected</li>');
-                }
-            }
-            
-            
-        });
-        
-       
-        
-        
-    </script>
+	
+	        fetchMovies(currentPage);
+	        
+	        window.viewDetail = function(movieId) {
+	            $.ajax({
+	                url: 'movieEnroll/details',
+	                method: 'get',
+	                dataType: 'json',
+	                data: { movie_id: movieId },
+	                success: function(data) {
+	                    var movieDetails = $('#movieDetails');
+	                    let InfoHtml = '';
+	                    InfoHtml += '<div class="col-md-4 mt-5">'
+	                        + '<img src="https://image.tmdb.org/t/p/w500' + data.poster_path + '"class="img-fluid" alt="Movie Poster" style="width:300px;">'
+	                        + '</div>'
+	                        + '<div class="col-md-6 mt-5" >'
+	                        + '<h4 class="mb-4">' + data.title + '</h4>'
+	                        + '<p>' + data.overview + '</p>'
+	                        + '<p><strong>개봉일:</strong>'+ data.release_date + '</p>';
+						
+	                    //장르 문자열 변환
+						var genres = data.genres.map(function(genre) {
+	                    	return genre.name;
+	                    }).join(',');
+	                    
+	                    InfoHtml += '<p><strong>장르:</strong>'+ genres +'</p>';
+	                   
+	                    //등급 정보 가져오기
+	                    $.ajax({
+	                        url: 'movieEnroll/rating',
+	                        method: 'get',
+	                        dataType: 'json',
+	                        data: { movie_id: movieId },
+	                        success: function(releaseData) {
+	                            let rating = 'N/A';
+	                            let countries = releaseData.results;
+	                            for (let i = 0; i < countries.length; i++) {
+	                                if (countries[i].iso_3166_1 === 'KR') {
+	                                    let releases = countries[i].release_dates;
+	                                    for (let j = 0; j < releases.length; j++) {
+	                                        if (releases[j].certification) {
+	                                            rating = releases[j].certification;
+	                                            break;
+	                                        }
+	                                    }
+	                                    break;
+	                                }
+	                            }
+	                            
+	                            InfoHtml += '<p><strong>관람 등급:</strong>'+ rating +'</p>'
+	                                + '<p><strong>상영 시간:</strong>'+ data.runtime +'분</p>'
+	                                + '<p><strong>평점:</strong>'+ data.vote_average +'</p>'
+	                                + '<div class="mt-4">'
+	                                + '<a href="#" class="btn btn-primary mr-3">등록하기</a>'
+	                                + '</div>';
+	                        
+	                            movieDetails.html(InfoHtml);
+	                        },
+	                        error: function(jqXHR, textStatus, errorThrown) {
+	                            console.error('Error fetching movie rating data:', textStatus, errorThrown);
+	                            InfoHtml += '<p><strong>관람 등급:</strong> N/A</p>'
+	                                + '<p><strong>상영 시간:</strong>'+ data.runtime +'분</p>'
+	                                + '<p><strong>평점:</strong>'+ data.vote_average +'</p>'
+	                                + '<div class="mt-4">'
+	                                + '<a href="#" class="btn btn-primary mr-3">등록하기</a>'
+	                                + '</div>';
+	                            movieDetails.html(InfoHtml);
+	                        }
+	                    });
+	                },
+	                error: function(jqXHR, textStatus, errorThrown) {
+	                    console.error('Error fetching movie data:', textStatus, errorThrown);
+	                }
+	            });
+	        }
+	    });
+	</script>
     
     <script>
         $(document).ready(function() {
@@ -313,6 +318,7 @@
                     const movies = data.results;
                     let movieHtml = '';
                     for(let i in movies) {
+                    	const movieId = movies[i].id;
                         movieHtml += '<div class="card" style="width: 12rem;">'
                           + '<img src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" class="card-img-top">'
                           + '<div class="card-body">'
@@ -324,7 +330,7 @@
                           + '</ul>'
                           + '<div class="card-body">'
                           + '<div class="btn-group">'
-                          + '<button type="button" class="btn btn-sm btn-outline-secondary" onclick=viewDetail()>View</button>'
+                          + '<button type="button" class="btn btn-sm btn-outline-secondary" onclick=viewDetail('+ movieId +')>View</button>'
                           + '<button type="button" class="btn btn-sm btn-outline-secondary" href>등록하기</button>'
                           + '</div>'
                           + '</div>'
