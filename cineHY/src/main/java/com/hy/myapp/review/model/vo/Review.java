@@ -1,13 +1,23 @@
 package com.hy.myapp.review.model.vo;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Review {
 	
-	private int reviewNo;  //작업함~
+	private int reviewNo;  
 	private String reviewContent;
 	private String reviewDate;
 	private int star;
 	private String status;
 	private String userId;
 	private String movieCd;
+	
 
 }
