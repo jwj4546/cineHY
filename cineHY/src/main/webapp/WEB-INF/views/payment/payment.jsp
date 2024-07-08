@@ -1,17 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cine HY - 결제</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <style>
         .btn-secondary {
             margin: 10px;
@@ -130,7 +130,7 @@
     <!-- 결제 금액 -->
     <div class="total-amount">
         <h2>결제 금액</h2>
-        <p>100,000원</p>
+        <p id="totalPrice">100</p>
     </div>
 
     <!-- 영화 정보 및 좌석 정보 -->
@@ -167,15 +167,30 @@
     
 
     <script>
-        function creditCard() {
-            document.getElementById("selectCard").style.display = "block";
-        }
-
+    
+    // 사전 검증
+	    $(document).ready(function() {
+	    	var merchant_uid = "0" + new Date().getTime();
+	    	var totalPrice = $("#totalPrice").text();
+	    	
+	    	$.ajax({
+	    		url : "payment/prepare",
+	    		method : "post",
+	    		contentType : "application/json",
+	    		data : JSON.stringify({
+	    			merchantUid : merchant_uid,
+	    			amount : totalPrice
+	    		})
+	    	});
+	    })
+    
+	   
+	    
        
+	    // 결제 버튼 클릭시 진행되는 결제 API process
         $("#orderBtn").on("click", function () {
-            var userid = $("#userid").val();
-            var username = $("#username").val();
-   			...          
+            // var userId = $("#userid").val();
+            // var userName = $("#username").val();
    
             var merchant_uid = "O" + new Date().getTime(); // 고유한 주문번호 생성 
 
@@ -186,25 +201,98 @@
                 pg: "html5_inicis",           // 등록된 pg사 (적용된 pg사는 KG이니시스)
                 pay_method: "card",           // 결제방식: card(신용카드), trans(실시간계좌이체), vbank(가상계좌), phone(소액결제)
                 merchant_uid: merchant_uid,   // 주문번호
-                name: productName,                  // 상품명
+                name: "영화티켓",                  // 상품명
                 amount: totalPrice,           // 금액
-                buyer_name: userName,         // 주문자
-                buyer_tel: phoneNo,             // 전화번호 (필수입력)
-                buyer_addr: address,    		  // 주소
-                buyer_postcode: post          // 우편번호
+                buyer_name: "조우진",         // 주문자
+                buyer_tel: "01033479535",             // 전화번호 (필수입력)
+                buyer_addr: "대현동",    		  // 주소
+                buyer_postcode: "12703",          // 우편번호
+                img : "aasdfasdf",
+                day : "2024-07-09",
+                product_id : "티켓",
+                movie_code : "영화",
+                movie_title : "인사이드 아웃2"
+           
+            // 사후 검증
             }, function (rsp) {
                 if (rsp.success) {
-                    var msg = '결제가 완료되었습니다.';
-                  
-                  	// 겅증 후 결제 정보 & 주문 정보 DB 저장
-
+					$.ajax({
+						url : "payment/validate",
+						method : "post",
+						contentType : "application/json",
+						data : JSON.stringify({
+							impUid : rsp.imp_uid,
+							merchantUid : rsp.merchant_uid,
+						}),
+					}).done(function (data) {
+						// 결제 정보 DB 저장
+						//주문 상품 정보 DB 저장
+						var msg = '결제가 완료되었습니다.';
+						var buyerInfo = {
+								"merchantUid" : rsp.merchant_uid,
+								"userId" : userId,
+								"userName" : rsp.buyer_name,
+								"pay_method" : rsp.pay_method,
+								"productName" : rsp.name,
+								"amount" : rsp.paid.amount,
+								"phoneNo" : rsp.buyer_tel,
+								"address" : rsp.buyer_addr,
+								"receipt" : rsp.receipt_url
+						}
+						$.ajax({
+							type : "post",
+							url : "save_buy",
+							contentType : "application/json",
+							data : JSON.Stringify(buy),
+							success : function(response) {
+								console.log("결제정보 저장 완료");
+							}
+						});
+						
+						if(rsp.product_id == null) {
+							var orderProduct = {
+								"merchantUid" : rsp.merchant_uid,
+								"userId" : userId,
+								"userName" : rsp.buyer_name,
+								"receipt" : rsp.receipt_url,
+								"payMethod" : rsp.pay_method,
+								"productId" : rsp.product_id,
+								"productName" : rsp.name,
+								"productAmount" : rsp.paid.amount,
+								"productImg" :  rsp.img
+								"phoneNo" : rsp.buyer_tel,
+								"orderDay" : rsp.day
+							}
+						}
+						else {
+							var orderMovie = {
+									"merchantUid" : rsp.merchant_uid,
+									"userId" : userId,
+									"userName" : rsp.buyer_name,
+									"receipt" : rsp.receipt_url,
+									"payMethod" : rsp.pay_method,
+									"movieCode" : rsp.movie_code,
+									"movieTitle" : rsp.movie_title,
+									"ticketPrice" : rsp.ticket_price,
+									"ticketAmount" : rsp.paid.amount,
+									"posterUrl" : rsp.img,
+									"phoneNo" : rsp.buyer_tel,
+									"orderDay" : rsp.day
+							}
+						}
+					});
                 } else {
                     var msg = '결제를 실패하였습니다.';
                     alert(msg);
                 }
-            }
-            );
+            });
         });
+        
+    
+    
+	    function creditCard() {
+            document.getElementById("selectCard").style.display = "block";
+        }
     </script>
 </body>
 </html>

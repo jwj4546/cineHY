@@ -14,6 +14,14 @@
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 	</properties>
 	
+	<!-- 결제 금액 위변조 검증  -->		
+		<repositories>
+			<repository>
+			    <id>jitpack.io</id>
+			    <url>https://jitpack.io</url>
+			</repository>
+		</repositories>
+	
 	
 		<dependencies>
 		<!-- Spring -->
@@ -216,14 +224,6 @@
 	</dependency>
 		
 	</dependencies>
-	
-	<!-- 결제 금액 위변조 검증  -->		
-		<repositories>
-			<repository>
-			    <id>jitpack.io</id>
-			    <url>https://jitpack.io</url>
-			</repository>
-		</repositories>
 	
 	
     <build>
