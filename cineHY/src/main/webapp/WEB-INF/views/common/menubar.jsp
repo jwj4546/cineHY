@@ -18,7 +18,7 @@
             </a>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">영화</a>
+                    <a class="nav-link" href="movieList">영화</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">극장</a>

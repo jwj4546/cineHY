@@ -150,7 +150,6 @@
 	        	</div>
 	        </div>
         </div>
-    </div>
     </main>
     
     <script>
@@ -158,7 +157,7 @@
 	        var currentPage = 1;
 	        function fetchMovies(pageNo) {
 	            $.ajax({
-	                url: 'movieEnroll/nowPlaying',
+	                url: 'movieList/nowPlaying',
 	                method: 'get',
 	                dataType: 'json',
 	                data: { pageNo: pageNo },
@@ -219,7 +218,7 @@
 	        
 	        window.viewDetail = function(movieId) {
 	            $.ajax({
-	                url: 'movieEnroll/details',
+	                url: 'movieList/details',
 	                method: 'get',
 	                dataType: 'json',
 	                data: { movie_id: movieId },
@@ -243,7 +242,7 @@
 	                   
 	                    //등급 정보 가져오기
 	                    $.ajax({
-	                        url: 'movieEnroll/rating',
+	                        url: 'movieList/rating',
 	                        method: 'get',
 	                        dataType: 'json',
 	                        data: { movie_id: movieId },
@@ -297,7 +296,7 @@
             var currentPage = 1;
             function fetchUpMovies(pageUpNo) {
                 $.ajax({
-                    url: 'movieEnroll/upComming',
+                    url: 'movieList/upComming',
                     method: 'get',
                     dataType: 'json',
                     data: { pageNo: pageUpNo },

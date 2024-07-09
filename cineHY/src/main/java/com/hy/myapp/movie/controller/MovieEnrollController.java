@@ -12,10 +12,10 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 @RestController
-@RequestMapping("movieEnroll/")
-public class MovieController {
+@RequestMapping("movieList/")
+public class MovieEnrollController {
 	
-	@GetMapping(value="nowPlaying", produces="application/json; charse=UTF-8")
+	@GetMapping(value="nowPlaying", produces="application/json; charset=UTF-8")
 	public String getNowPlayingMovie(@RequestParam("pageNo") int pageNo) throws IOException {
 		
 		//OkHttp 클라이언트 객체생성
@@ -41,7 +41,7 @@ public class MovieController {
         }
     }
 	
-	@GetMapping(value="upComming", produces="application/json; charse=UTF-8")
+	@GetMapping(value="upComming", produces="application/json; charset=UTF-8")
 	public String getUpcommingMovie(@RequestParam("pageNo") int pageUpNo) throws IOException {
 		
 		OkHttpClient client = new OkHttpClient();
@@ -64,7 +64,7 @@ public class MovieController {
 	        }
 	}
 	
-	@GetMapping(value="details", produces="application/json; charse=UTF-8")
+	@GetMapping(value="details", produces="application/json; charset=UTF-8")
 	public String getDetails(@RequestParam("movie_id") int movieId) throws IOException {
 		
 		OkHttpClient client = new OkHttpClient();
@@ -88,7 +88,7 @@ public class MovieController {
 	}
 	
 	
-	@GetMapping(value="rating", produces="application/json; charse=UTF-8")
+	@GetMapping(value="rating", produces="application/json; charset=UTF-8")
 	public String getratings(@RequestParam("movie_id") int movieId) throws IOException {
 		
 		OkHttpClient client = new OkHttpClient();

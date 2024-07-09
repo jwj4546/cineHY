@@ -57,5 +57,4 @@
 	  	  		<property name="maxInMemorySize" value="100000000" />
 	  	  </bean>
 	  	  
-	  	  <mybatis-spring:scan base-package="com.hy.myapp"/>
 </beans>
