@@ -1,11 +1,17 @@
 package com.hy.myapp.movie.controller;
 
 import java.io.IOException;
+import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
+import com.hy.myapp.movie.model.service.MovieService;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -14,6 +20,9 @@ import okhttp3.Response;
 @RestController
 @RequestMapping("movieList/")
 public class MovieEnrollController {
+	
+	@Autowired
+    private MovieService movieService;
 	
 	@GetMapping(value="nowPlaying", produces="application/json; charset=UTF-8")
 	public String getNowPlayingMovie(@RequestParam("pageNo") int pageNo) throws IOException {
@@ -89,7 +98,7 @@ public class MovieEnrollController {
 	
 	
 	@GetMapping(value="rating", produces="application/json; charset=UTF-8")
-	public String getratings(@RequestParam("movie_id") int movieId) throws IOException {
+	public String getRatings(@RequestParam("movie_id") int movieId) throws IOException {
 		
 		OkHttpClient client = new OkHttpClient();
 
@@ -110,6 +119,17 @@ public class MovieEnrollController {
 	            }
 	        }
 	}
+	
+	 @GetMapping(value = "movieDB", produces = "application/json; charset=UTF-8")
+	    public String getMovieDB() {
+		 
+		 List<Integer> movieIdList = movieService.getMovieIdList();
+		 
+		 System.out.println("Movie ID List: " + movieIdList);
+	        
+		 
+		 return new Gson().toJson(movieIdList);
+	    }
 	
 		
 }

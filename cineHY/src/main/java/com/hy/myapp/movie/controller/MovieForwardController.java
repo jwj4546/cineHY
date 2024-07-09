@@ -15,5 +15,10 @@ public class MovieForwardController {
 	public String getMovieList() {
 		return "movie/movieList";
 	}
+	
+	@GetMapping("movieDetails")
+	public String getMovieDetails() {
+		return "movie/movieDetails";
+	}
 
 }

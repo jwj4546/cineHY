@@ -121,5 +121,84 @@
     </main>
     
     <jsp:include page="../common/footer.jsp"></jsp:include>
+    
+    <script>
+    $(document).ready(function() {
+	    window.viewDetail = function(movieId) {
+	        $.ajax({
+	            url: 'movieList/details',
+	            method: 'get',
+	            dataType: 'json',
+	            data: { movie_id: movieId },
+	            success: function(data) {
+	                var movieDetails = $('#movieDetails');
+	                let InfoHtml = '';
+	                InfoHtml += '<div class="col-md-4 mt-5">'
+	                    + '<img src="https://image.tmdb.org/t/p/w500' + data.poster_path + '"class="img-fluid" alt="Movie Poster" style="width:300px;">'
+	                    + '</div>'
+	                    + '<div class="col-md-6 mt-5" >'
+	                    + '<h4 class="mb-4">' + data.title + '</h4>'
+	                    + '<p>' + data.overview + '</p>'
+	                    + '<p><strong>개봉일:</strong>'+ data.release_date + '</p>';
+					
+	                //장르 문자열 변환
+					var genres = data.genres.map(function(genre) {
+	                	return genre.name;
+	                }).join(',');
+	                
+	                InfoHtml += '<p><strong>장르:</strong>'+ genres +'</p>';
+	               
+	                //등급 정보 가져오기
+	                $.ajax({
+	                    url: 'movieList/rating',
+	                    method: 'get',
+	                    dataType: 'json',
+	                    data: { movie_id: movieId },
+	                    success: function(releaseData) {
+	                        let rating = 'N/A';
+	                        let countries = releaseData.results;
+	                        for (let i = 0; i < countries.length; i++) {
+	                            if (countries[i].iso_3166_1 === 'KR') {
+	                                let releases = countries[i].release_dates;
+	                                for (let j = 0; j < releases.length; j++) {
+	                                    if (releases[j].certification) {
+	                                        rating = releases[j].certification;
+	                                        break;
+	                                    }
+	                                }
+	                                break;
+	                            }
+	                        }
+	                        
+	                        InfoHtml += '<p><strong>관람 등급:</strong>'+ rating +'</p>'
+	                            + '<p><strong>상영 시간:</strong>'+ data.runtime +'분</p>'
+	                            + '<p><strong>평점:</strong>'+ data.vote_average +'</p>'
+	                            + '<div class="mt-4">'
+	                            + '<a href="#" class="btn btn-primary mr-3">등록하기</a>'
+	                            + '</div>';
+	                    
+	                        movieDetails.html(InfoHtml);
+	                    },
+	                    error: function(jqXHR, textStatus, errorThrown) {
+	                        console.error('Error fetching movie rating data:', textStatus, errorThrown);
+	                        InfoHtml += '<p><strong>관람 등급:</strong> N/A</p>'
+	                            + '<p><strong>상영 시간:</strong>'+ data.runtime +'분</p>'
+	                            + '<p><strong>평점:</strong>'+ data.vote_average +'</p>'
+	                            + '<div class="mt-4">'
+	                            + '<a href="#" class="btn btn-primary mr-3">등록하기</a>'
+	                            + '</div>';
+	                        movieDetails.html(InfoHtml);
+	                    }
+	                });
+	            },
+	            error: function(jqXHR, textStatus, errorThrown) {
+	                console.error('Error fetching movie data:', textStatus, errorThrown);
+	            }
+	        });
+	    }
+	});
+    
+    </script>
+    
 </body>
 </html>

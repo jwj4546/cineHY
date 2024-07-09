@@ -80,6 +80,23 @@
     
     <script>
     $(document).ready(function() {
+    	
+    	function getMovieDB() {
+    		$.ajax({
+    			url: 'movieList/movieDB',
+    			method: 'get',
+    			dataType: 'json',
+    			success: function(result) {
+    				console.log(result);
+    				const movieIdList = result; // movieIdList에 결과 할당
+                    fetchMovies(currentPage); // 데이터 로딩 후 영화 목록 가져오기
+    			},
+    			error : () => {
+    				console.log('데이터못불러옴?')
+    			}
+    		});
+    	}
+    	
         var currentPage = 1;
         function fetchMovies(pageNo) {
             $.ajax({
@@ -88,7 +105,9 @@
                 dataType: 'json',
                 data: { pageNo: pageNo },
                 success: function(data) {
+                	
                     displayMovies(data);
+                    console.log(data.results);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error('Error fetching movie data:', textStatus, errorThrown);
@@ -102,32 +121,38 @@
             if (data.results && data.results.length > 0) {
                 const movies = data.results;
                 let movieHtml = '';
-                for(let i in movies) {
-                	const movieId = movies[i].id;
-                    movieHtml += '<div class="col-md-4">'
-                      + '<div class="card mb-4 box-shadow">'
-                      + '<div class="rank">No1</div>'
-                      + '<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" alt="Card image cap" >'
-                      + '<div class="card-body">'
-                      + '<h5 class="card-title">' + movies[i].title + '</h5>'
-                      + '<p class="card-text">' + movies[i].release_date + ' 개봉</p>'
-                      + '<div class="d-flex justify-content-between align-items-center">'
-                      + '<div class="btn-group">'
-                      + '<button type="button" class="btn btn-sm btn-outline-secondary" onclick="viewDetail('+movieId+')">View</button>'
-                      + '<button type="button" class="btn btn-sm btn-outline-secondary" href="#">등록하기</button>'
-                      + '</div>'
-                      + '<small class="text-muted">9 mins</small>'
-                      + '</div>'
-                      + '</div>'
-                      + '</div>'
-                      + '</div>'
-                      + '</div>';
+                for(let i = 0; i < movies.length; i++) {
+                    const movieId = movies[i].id;
+                    // movieIdList에 포함된 영화 ID만 출력
+                    if (movieIdList.includes(movieId)) {
+                        movieHtml += '<div class="col-md-4">'
+                          + '<div class="card mb-4 box-shadow">'
+                          + '<div class="rank">No1</div>'
+                          + '<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" alt="Card image cap" >'
+                          + '<div class="card-body">'
+                          + '<h5 class="card-title">' + movies[i].title + '</h5>'
+                          + '<p class="card-text">' + movies[i].release_date + ' 개봉</p>'
+                          + '<div class="d-flex justify-content-between align-items-center">'
+                          + '<div class="btn-group">'
+                          + '<button type="button" class="btn btn-sm btn-outline-secondary" href="movieDetails">View</button>'
+                          + '<button type="button" class="btn btn-sm btn-outline-secondary" href="#">예매하기</button>'
+                          + '</div>'
+                          + '<small class="text-muted"> popularity ' + movies[i].popularity + '</small>'
+                          + '</div>'
+                          + '</div>'
+                          + '</div>'
+                          + '</div>'
+                          + '</div>';
+                    }
                 }
                 movieList.html(movieHtml);
             } else {
                 movieList.append('<li>No movies currently playing.</li>');
             }
         }
+
+            // 초기 로딩 시 호출
+            getMovieDB();
 
         function changePage(pageNo) {
             currentPage = pageNo;
