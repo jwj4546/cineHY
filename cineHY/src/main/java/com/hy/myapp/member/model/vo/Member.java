@@ -21,11 +21,12 @@ public class Member {
 	private String phoneNo;
 	private String address;
 	private String gender;
-	private Date birthDate;
+	private String birthDate;
 	private String preGenre1;
 	private String preGenre2;
 	private String userNick;
 	private Date joinDate;
+	private Date modifyDate;
 	private String status;
 	private String  profileUrl;
 	

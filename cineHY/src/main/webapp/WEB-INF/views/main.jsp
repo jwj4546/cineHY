@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="com.hy.myapp.member.model.vo.Member" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +15,6 @@
           display: flex;
           justify-content: space-around;
           margin-right: 30px;
-
         }
 
         .Movie-enroll-title { 
@@ -27,8 +28,7 @@
           line-height: 1.7em;
         }
 
-
-        #page3{
+        #page3 {
           height: 340px;
           width: 1200px;
           display: grid;
@@ -36,7 +36,11 @@
           margin: 0 auto;
           gap: 10px;
         }
-
+        
+        .welcome {
+          color : white;
+        
+        }
 
         #select-movie {
           grid-column: 2/3;
@@ -69,18 +73,13 @@
 
         #Movie-enroll-list-card {
           display: flex;
-
-
         }
-        
-       
     </style>
     <title>영화등록 페이지</title>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-          
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -105,18 +104,32 @@
                 <a class="nav-link disabled" href="#">Disabled</a>
               </li>
             </ul>
-            <form class="form-inline mt-2 mt-md-0">
-              <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+             
             <ul class="navbar-nav" style="justify-content: flex-end;">
-                <li class="nav-item active" style="float: right;">
-                  <a class="nav-link" href="#">로그인 </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="join">회원가입</a>
-                </li>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.loginUser}">
+                    	<div class = "welcome">
+                        <label>${sessionScope.loginUser.userNick}님 환영합니다</label> &nbsp;&nbsp;
+                        </div>
+                        <li class="nav-item active" style="float: right;">
+                          <a class="nav-link" href="mypage">마이페이지</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="logout">로그아웃</a>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="nav-item active" style="float: right;">
+                          <a class="nav-link" href="login">로그인</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="join">회원가입</a>
+                        </li>
+                    </c:otherwise>
+                </c:choose>
             </ul>
           </div>
         </nav>
       </header>
+</body>
+</html>

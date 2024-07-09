@@ -11,8 +11,7 @@
 
 </head>
 <body>
-<!-- 메뉴바 -->
-    <jsp:include page="../common/menubar.jsp" />
+
 
 	<br>
     <div align="center">

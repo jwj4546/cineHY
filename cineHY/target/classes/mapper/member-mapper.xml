@@ -5,6 +5,7 @@
 <mapper namespace="MemberMapper">
 
     <insert id="insert" parameterType = "member">
+    
         INSERT INTO TB_MEMBER
         (
             USER_ID,
@@ -18,8 +19,6 @@
             PRE_GENRE1,
             PRE_GENRE2,
             USER_NICK,
-            JOIN_DATE,
-            STATUS,
             PROFILE_URL
         )
         VALUES
@@ -35,10 +34,38 @@
             #{preGenre1},
             #{preGenre2},
             #{userNick},
-            #{joinDate},
-            #{status},
             #{profileUrl}
         )
     </insert>
+    
+    <select id = "login" parameterType = "member" resultType="member">
+    
+    	SELECT
+    			USER_ID AS userId,
+    			USER_PWD AS userPwd,
+    			USER_NAME AS userName,
+    			EMAIL,
+    			PHONE_NO AS phoneNo,
+    			ADDRESS,
+    			GENDER,
+    			BIRTH_DATE AS birthDate,
+    			PRE_GENRE1 AS preGenre1,
+    			PRE_GENRE2 AS preGenre2,
+    			USER_NICK AS userNick,
+    			MODIFY_DATE AS modifyDate,
+    			JOIN_DATE AS joinDate,
+    			STATUS,
+    			PROFILE_URL AS profileUrl
+    	
+    	FROM
+    			TB_MEMBER
+    	WHERE
+    			USER_ID = #{userId}
+    	AND
+    			STATUS = 'Y'
+
+    	
+    	
+    </select>
 
 </mapper>

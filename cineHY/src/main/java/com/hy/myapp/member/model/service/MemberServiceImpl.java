@@ -17,17 +17,19 @@ public class MemberServiceImpl implements MemberService {
 	private final MemberRepository memberRepository;
 	
 	
-	@Override
+	
 	public int returnNum() {
 		
 		return 1;
 	}
 
-	@Override
-	public Member login(Member member) {
-		
-		return null;
-	}
+    @Override
+    public Member login(Member member) {
+       // System.out.println("Logging in with userId: " + member.getUserId());
+        Member result = memberRepository.login(sqlSession, member);
+       // System.out.println("Result from database: " + result);
+        return result;
+    }
 
 	@Override
 	public int insert(Member member) {
