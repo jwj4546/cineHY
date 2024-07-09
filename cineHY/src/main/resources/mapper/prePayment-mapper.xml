@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		   			TB_PREPAYMENT
 		   			(
 		   			MERCHANT_UID,
-		   			AMOUNT
+		   			AMOUNT 
 		   			)
 		VALUES
 					(
@@ -21,8 +21,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="findById" parameterType="_int" resultType="prePayment">
 		SELECT
-					MERCHANT_UID,
-					AMOUNT
+					MERCHANT_UID merchantUid,
+					AMOUNT amount
 		  FROM
 		  			TB_PREPAYMENT
 	</select>

@@ -58,4 +58,5 @@
 	  	  </bean>
 	  	  
 	  	  <mybatis-spring:scan base-package="com.hy.myapp.payment.model.repository"/>
+	  	  <mybatis-spring:scan base-package="com.hy.myapp.product.model.repository"/>
 </beans>

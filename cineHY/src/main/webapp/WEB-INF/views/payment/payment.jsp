@@ -290,9 +290,7 @@
         
     
     
-	    function creditCard() {
-            document.getElementById("selectCard").style.display = "block";
-        }
+	   
     </script>
 </body>
 </html>
