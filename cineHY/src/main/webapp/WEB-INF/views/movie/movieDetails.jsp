@@ -41,7 +41,8 @@
 	
     <main>
     	<div id="page1"></div>
-   	 	<div class="row">
+   	 	<div class="row" id="movieDetails">
+   	 	
             <div class="col-md-4 mt-5">
                 <img src="https://picsum.photos/300/450" class="img-fluid" alt="Movie Poster">
             </div>
@@ -69,19 +70,19 @@
             <div class="col-md-4 mt-3">
                 <div class="video-container">
                     <!-- YouTube Embed 예시 -->
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/tgbNymZ7vqY" frameborder="0" allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
             <div class="col-md-4 mt-3">
                 <div class="video-container">
                     <!-- YouTube Embed 예시 -->
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/tgbNymZ7vqY" frameborder="0" allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
             <div class="col-md-4 mt-3">
                 <div class="video-container">
                     <!-- YouTube Embed 예시 -->
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/tgbNymZ7vqY" frameborder="0" allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
@@ -124,13 +125,28 @@
     
     <script>
     $(document).ready(function() {
-	    window.viewDetail = function(movieId) {
+        const searchParams = new URLSearchParams(window.location.href);
+        const values = searchParams.values();
+        console.log(values);
+        
+        let movieId;  // 외부 변수 선언
+
+        for (var param of searchParams) {
+            const parsedMovieId = parseInt(param[1]);
+            console.log(parsedMovieId);
+            if (!isNaN(parsedMovieId)) {
+                movieId = parsedMovieId;  // 외부 변수에 할당
+            }
+        }
+        console.log(movieId);  // 외부 변수 사용
+	    function getDetails(movieId) {
 	        $.ajax({
 	            url: 'movieList/details',
 	            method: 'get',
 	            dataType: 'json',
 	            data: { movie_id: movieId },
 	            success: function(data) {
+	            	console.log(data);
 	                var movieDetails = $('#movieDetails');
 	                let InfoHtml = '';
 	                InfoHtml += '<div class="col-md-4 mt-5">'

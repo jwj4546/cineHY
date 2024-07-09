@@ -80,7 +80,7 @@
     
     <script>
     $(document).ready(function() {
-    	
+    	var movieIdList = []; // 전역 변수로 선언
     	function getMovieDB() {
     		$.ajax({
     			url: 'movieList/movieDB',
@@ -88,7 +88,7 @@
     			dataType: 'json',
     			success: function(result) {
     				console.log(result);
-    				const movieIdList = result; // movieIdList에 결과 할당
+    				movieIdList = result; // movieIdList에 결과 할당
                     fetchMovies(currentPage); // 데이터 로딩 후 영화 목록 가져오기
     			},
     			error : () => {
@@ -134,7 +134,7 @@
                           + '<p class="card-text">' + movies[i].release_date + ' 개봉</p>'
                           + '<div class="d-flex justify-content-between align-items-center">'
                           + '<div class="btn-group">'
-                          + '<button type="button" class="btn btn-sm btn-outline-secondary" href="movieDetails">View</button>'
+                          + '<a href="movieDetails?movieId=' + movieId + '" class="btn btn-sm btn-outline-secondary">View</a>'
                           + '<button type="button" class="btn btn-sm btn-outline-secondary" href="#">예매하기</button>'
                           + '</div>'
                           + '<small class="text-muted"> popularity ' + movies[i].popularity + '</small>'
