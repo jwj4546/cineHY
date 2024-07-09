@@ -11,9 +11,8 @@ import com.hy.myapp.review.model.vo.Review;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Service
-public class ReviewServiceImpl implements ReviewService {
-	
+public class ReviewServiceImple implements ReviewService {
+
 	private final ReviewRepository reviewRepository;
 	private final SqlSessionTemplate sqlSession;
 	

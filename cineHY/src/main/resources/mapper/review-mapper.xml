@@ -4,22 +4,16 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="reviewMapper">
-
-
-	<select id="findAllReview" resultType="review" >
-		SELECT
-			REVIEW_NO,
-			REVIEW_CONTENT,
-			REVIEW_DATE,
-			STAR,
-			STATUS,
-			USER_ID
+    <select id="findAllReview" resultType="review">
+        SELECT
+			REVIEW_NO reviewNo,
+			REVIEW_CONTENT reviewContent,
+			REVIEW_DATE reviewDate,
+			STAR star,
+			STATUS status,
+			USER_ID userId,
+			MOVIE_CD movieCd
 		FROM
 			TB_REVIEW
-			
-	
-	</select>
-
-
-
+    </select>
 </mapper>

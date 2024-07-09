@@ -2,6 +2,7 @@ package com.hy.myapp.review.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +20,10 @@ public class ReviewController {
 	
 	private final ReviewService reviewService;
 	
-	
-	@GetMapping("reviewlist")
+	@GetMapping("/reviews")
 	public String forwarding(Model model) {
 		
-		
+		log.info("리뷰스");
 		List<Review> reviewList = reviewService.findAllReview();
 		
 		
@@ -32,10 +32,8 @@ public class ReviewController {
 		log.info("조회된 게시글 목록 : {}", reviewList);
 		
 		model.addAttribute("list",reviewList);
-	
 		
-		return "review/list";
-		
+		return "review/review";
+
 	}
-	
 }

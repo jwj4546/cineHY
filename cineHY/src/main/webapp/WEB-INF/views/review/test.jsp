@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -308,12 +307,12 @@
  
             <br>
             <div class="info">
-                <h4>${review.StarAvg} | ${review.star}</h4>
+                <h4>${review.StarAvg} | ${review.Star}</h4>
             </div>
             <div class="modal-btn-box">
-                <!--<c:if test="${not empty sessionScope.loginUser}">로그인 구현되면 추가-->
+                <c:if test="${not empty sessionScope.loginUser}">
                     <button class="btn" type="button" id="insertmodal-open" style="float:right;"  >리뷰쓰기</button>
-                <!--</c:if>-->
+                </c:if>
             </div>
             <div class="popup-wrap" id="insert_popup">
                 <div class="popup">
@@ -356,8 +355,11 @@
             <br><br>
             <table id="noticeList" class="table table-hover">
                 <tbody>
-                   
-                            <c:forEach items="${list}" var="review">
+                    <c:choose>
+                        <c:when test="${list.size() == 0}">
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach items="${list}" var="notice">
                                 <tr>
                                     <td class="rv">
                                             <div class="d-flex bd-highlight">
@@ -366,8 +368,7 @@
                                                     
                                                 </div>
                                                 <div class="user_info">
-                                                    <!--  <p>${review.star}</p>-->
-                                                     <div class="reviewStars" id="reviewStars-${review.star}"></div>
+                                                    <p>${review.Star}</p>
                                                     <p>${review.userId}</p>
                                                     <p>${review.reviewContent }</p>
                                                 </div>
@@ -387,8 +388,9 @@
                                     <div id="bubble_sp"  class="speech-bubble hidden">
                                         <input onclick="call_confirm_sp()" class="btn btn-light" type="button" id="id2" value="스포일러 신고">
                                     </div>
-                         </c:forEach>
-                        
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
                 </tbody>
             </table>
 
@@ -429,19 +431,6 @@
         function enableScroll() {
             document.body.style.overflow = 'visible';
         }
-        
-        
-        function generateStars(starCount) {
-            let stars = '';
-            for (let i = 0; i < starCount; i++) {
-                stars += '★';
-            }
-            return stars;
-        }
-        const starsElement = document.getElementById(`review-stars-${review.userId}`);
-        starsElement.innerHTML = generateStars(review.star);
-        starsElement.classList.add('star');
-        
 
         $(() => {
             $("#insert_confirm").click(() => {
