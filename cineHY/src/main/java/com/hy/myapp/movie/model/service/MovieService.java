@@ -12,4 +12,6 @@ public interface MovieService {
 
 	List<Movie> getMovieList();
 
+	int delete(int movieCode);
+
 }

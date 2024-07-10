@@ -46,4 +46,13 @@
 
 </select>
 
+<delete id="deleteMovie" parameterType="_int" >
+	DELETE
+		   TB_MOVIE
+	 WHERE
+	 	   MOVIE_CODE = #{movieCode} 
+
+</delete>
+
+
 </mapper>

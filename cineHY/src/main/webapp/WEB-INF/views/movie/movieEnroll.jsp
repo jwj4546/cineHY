@@ -69,6 +69,16 @@
     	width: 900px;
     }
     
+    .list-group-item:hover {
+    background-color: #f0f0f0; /* 호버 시 배경색 변경 */
+    cursor: pointer; /* 커서 모양 변경 */
+	}
+
+	.list-group-item.active {
+	    background-color: #007bff; /* active 시 배경색 변경 */
+	    color: white; /* active 시 글자색 변경 */
+	}
+    
     
 </style>
 <title>영화 등록 페이지</title>
@@ -142,12 +152,10 @@
 		        
 		        <div class="card mb-4" id="Movie-enroll-list-card" style="width: 300px; min-width: 200px;">
 		            <ul class="list-group list-group-flush" id="movieEnrollList">
-		            	<li class="list-group-item text-primary"><p><strong>등록한 영화</strong></p></li>
+		            	
 		                <!-- 등록된 영화 리스트 출력 -->
 		            </ul>
 		            <div id="listbutton" class="mt-3">
-		            <button type="button" class="btn btn-primary btn-sm">조회하기</button>
-		            <button type="button" class="btn btn-secondary btn-sm">삭제하기</button>
 		        	</div>
 		        </div>
 	        </div>
@@ -317,17 +325,37 @@
     				const movieEList = data.data;
     				console.log(data.data)
     				let ListHtml = '';
+    				ListHtml += '<li class="list-group-item text-primary"><p><strong>등록한 영화</strong></p></li>'
     				for(let i in movieEList) {
-	    				ListHtml += '<li class="list-group-item">'+ movieEList[i].movieTitle +'</li>'
+    					
+    					ListHtml += '<li class="list-group-item" data-code="'+ movieEList[i].movieCode + '">'+ movieEList[i].movieTitle                         
+	                      + '<button class="btn btn-danger btn-sm float-right delete-btn">삭제</button>'
+	                      + '</li>';
     				}
+    				
     				$('#movieEnrollList').html(ListHtml);
-    			},
-    			error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('Error fetching movie data:', textStatus, errorThrown);
-                }
-    		});
-    		
+
+    	            // 리스트 항목에 호버 효과와 클릭 이벤트 핸들러 추가
+    	            $('#movieEnrollList .list-group-item').hover(
+    	                function() {
+    	                    $(this).addClass('hover');
+    	                }, 
+    	                function() {
+    	                    $(this).removeClass('hover');
+    	                }
+    	            ).click(function() {
+    	                $('#movieEnrollList .list-group-item').removeClass('active');
+    	                $(this).addClass('active');
+    	            });
+    	            
+    	         	
+    	        },
+    	        error: function(jqXHR, textStatus, errorThrown) {
+    	            console.error('Error fetching movie data:', textStatus, errorThrown);
+    	        }
+    	    });
     	}
+    	
 	    
 	    
 	    function insert() {
@@ -362,6 +390,21 @@
 	        });
 	        
 	    }
+	    
+	    function deleteByCode(movieCode) {
+			
+			$.ajax ({
+				url : 'movieList/'+movieCode,
+				type : 'delete',
+				success : response => {
+					
+				},
+				error: function(xhr, status, error) {
+	                console.error("Error occurred while deleting movie:", error);
+	            }
+			});
+			
+		}
 	    
 	    
 	</script>
