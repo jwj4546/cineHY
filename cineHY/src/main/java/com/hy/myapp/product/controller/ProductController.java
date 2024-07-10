@@ -91,4 +91,46 @@ public class ProductController {
 		return mv;
 	}
 	
+	@PostMapping("updateForm")
+	public ModelAndView updateForm(ModelAndView mv,
+													int productId) {
+		mv.addObject("product", productService.findById(productId)).setViewName("product/updateForm");
+		return mv;
+	}
+	
+	@PostMapping("update")
+	public String update(ProductVO productVO,
+								 MultipartFile reUpFile,
+								 HttpSession session) {
+		if(!reUpFile.getOriginalFilename().equals("")) {
+			
+			productVO.setProductImage(reUpFile.getOriginalFilename());
+			productVO.setChangeImage(saveFile(reUpFile, session));
+		}
+		
+		if(productService.update(productVO) > 0) {
+			session.setAttribute("alertMsg", "상품 수정 성공~");
+			return "redirect:product-detail?productId="+productVO.getProductId();
+		} else {
+			session.setAttribute("errorMsg", "상품 수정 실패~");
+			return "product/updateForm";
+		}
+	}
+	
+	@PostMapping("delete")
+	public String deleteById(int productId,
+									  String filePath,
+									  HttpSession session,
+									  Model model) {
+		if(productService.delete(productId) > 0) {
+			if(!"".equals(filePath)) {
+				new File(session.getServletContext().getRealPath(filePath)).delete();
+			}
+			session.setAttribute("alertMsg", "상품 삭제 성공");
+			return "redirect:productlist";
+		} else {
+			model.addAttribute("errorMsg", "상품 삭제 실패");
+			return "redirect:productlist";
+		}
+	}
 }

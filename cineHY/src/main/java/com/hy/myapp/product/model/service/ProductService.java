@@ -11,4 +11,8 @@ public interface ProductService {
 	int save(ProductVO productVO);
 
 	ProductVO findById(int productId);
+
+	int update(ProductVO productVO);
+
+	int delete(int productId);
 }

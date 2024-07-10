@@ -30,4 +30,14 @@ public class ProductServiceImpl implements ProductService {
 		return productRepository.findById(productId);
 	}
 
+	@Override
+	public int update(ProductVO productVO) {
+		return productRepository.update(productVO);
+	}
+
+	@Override
+	public int delete(int productId) {
+		return productRepository.delete(productId);
+	}
+
 }

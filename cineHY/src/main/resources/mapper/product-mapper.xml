@@ -61,4 +61,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	</select>
 
+	<update id="update" parameterType="product">
+		UPDATE
+					TB_PRODUCT
+			 SET
+			 		PRODUCT_NAME = #{productName},
+			 		PRODUCT_CATEGORY = #{productCategory},
+			 		PRODUCT_COMMENT = #{productComment},
+			 		PRODUCT_PRICE = #{productPrice},
+			 		PRODUCT_IMAGE = #{productImage},
+			 		CHANGE_IMAGE = #{changeImage}
+		WHERE
+					PRODUCT_ID = #{productId}
+	</update>
+	
+	<delete id="delete" parameterType="_int">
+		DELETE
+		  FROM
+		  			TB_PRODUCT
+		WHERE
+					PRODUCT_ID = #{productId}
+	</delete>
 </mapper>

@@ -15,4 +15,8 @@ public interface ProductRepository {
 
 	ProductVO findById(int productId);
 
+	int update(ProductVO productVO);
+
+	int delete(int productId);
+
 }

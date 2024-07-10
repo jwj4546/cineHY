@@ -96,12 +96,43 @@
           <button type="button" class="btn btn-secondary">스낵</button>
         </div>
         <div class="float-right">
-          <button type="button" class="btn btn-secondary">
-            장바구니 <span class="badge badge-light">5</span>
-          </button>
+        	<form action="updateForm" method="post" id="postForm">
+			  	<input type="hidden" name="productId" value="${ product.productId }" />
+			  	<input type="hidden" name="filePath" value="${ product.changeImage }">
+		  	</form>
+		  	<button type="submit" class="btn btn-primary" onclick="postSubmit()">수정하기</button>
+		  	<button type="button" data-toggle="modal" class="btn btn-danger" data-target="#deleteForm">삭제하기</button>
+			  	<button type="button" class="btn btn-secondary">
+            		장바구니<span class="badge badge-light">5</span>
+          		</button>
         </div>
       </div>
     </div>
+    <div class="modal" tabindex="-1" role="dialog" id="deleteForm">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">삭제</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <form action="delete" method="post" id="deleteForm">
+			  	<input type="hidden" name="productId" value="${ product.productId }" />
+			  	<input type="hidden" name="filePath" value="${ product.changeImage }">
+
+		      <div class="modal-body">
+		        <p>상품을 삭제 하시겠습니까</p>
+		      </div>
+		      
+		      <div class="modal-footer">
+		        <button type="submit" class="btn btn-danger">삭제</button>
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+		      </div>
+	      </form>
+	    </div>
+	  </div>
+	</div>
   </div><br>
 
   <!-- Product Detail -->
@@ -136,7 +167,14 @@
       </div>
     </div>
   </div>
+  
+
+  
   <script>
+  
+  	function postSubmit() {
+  			$('#postForm').attr('action', 'updateForm').submit();
+  		}
     
     $(document).ready(function () {
         com();

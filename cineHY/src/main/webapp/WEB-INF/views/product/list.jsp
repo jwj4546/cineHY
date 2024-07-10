@@ -127,6 +127,10 @@
       			location.href = 'product-detail?productId=' + e.currentTarget.id.split('-')[1];
       		});
       	});
+      	
+      	function category() {
+      		
+      	}
       </script>
     
 
