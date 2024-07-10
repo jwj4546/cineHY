@@ -11,6 +11,7 @@
   		<typeAlias type="com.hy.myapp.payment.model.vo.PaymentVO" alias="payment"/>
   		<typeAlias type="com.hy.myapp.payment.model.vo.PrePaymentVO" alias="prePayment"/>
   		<typeAlias type="com.hy.myapp.product.model.vo.ProductVO" alias="product"/>
+  		<typeAlias type="com.hy.myapp.cart.model.vo.CartVO" alias="cart"/>
   	</typeAliases>
   	<!-- 주의할 점! : 별칭 등록을 하기 위해서는 반드시 해당 클래스가 존재해야 함! -->
   	
@@ -18,6 +19,7 @@
   		<mapper resource="/mapper/payment-mapper.xml"/>
   		<mapper resource="/mapper/prePayment-mapper.xml"/>
   		<mapper resource="/mapper/product-mapper.xml"/>
+  		<mapper resource="/mapper/cart-mapper.xml"/>
   	</mappers>
   	<!-- 주의할 점! : 매퍼 파일을 등록하기 위해서는 반드시 해당 경로에 파일이 존재해야하며 namespace 속성값도 존재해야함! -->
 

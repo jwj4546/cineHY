@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hy.myapp.cart.model.repository.CartRepository">
+
+	<select id="findById" resultType="cart">
+		SELECT
+			        C.CART_NO cartNo,
+			        C.CART_AMOUNT cartAmount,
+			        P.PRODUCT_ID productId,
+			        P.PRODUCT_NAME productName,
+			        P.PRODUCT_CATEGORY productCategory,
+			        P.PRODUCT_COMMENT productComment,
+			        P.PRODUCT_PRICE productPrice,
+			        P.CHANGE_IMAGE productImage,
+			        M.USER_ID userId
+  		  FROM
+			        TB_CART C,
+			        TB_PRODUCT P,
+			        TB_MEMBER M
+ 		WHERE
+ 					M.USER_ID = #{userId}
+ 			AND
+       				C.PRODUCT_ID = P.PRODUCT_ID
+   			AND
+        			C.USER_ID = M.USER_ID
+	</select>
+</mapper>

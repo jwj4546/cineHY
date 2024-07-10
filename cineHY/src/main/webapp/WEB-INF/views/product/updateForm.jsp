@@ -125,8 +125,8 @@
 	    $(function(){
 	    	$("#categorySelect").val("${ product.productCategory }").attr("selected","selected");
 	    });
-    
-    
+
+	    
     	function loadImg(inputFile) {
     		
     		if(inputFile.files.length) {
