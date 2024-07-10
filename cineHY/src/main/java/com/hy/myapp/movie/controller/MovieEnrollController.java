@@ -120,8 +120,53 @@ public class MovieEnrollController {
 	        }
 	}
 	
-	 @GetMapping(value = "movieDB", produces = "application/json; charset=UTF-8")
-	    public String getMovieDB() {
+	@GetMapping(value="credits", produces="application/json; charset=UTF-8")
+	public String getCredits(@RequestParam("movie_id") int movieId) throws IOException {
+		OkHttpClient client = new OkHttpClient();
+
+		Request request = new Request.Builder()
+		  .url("https://api.themoviedb.org/3/movie/"+ movieId +"/credits?language=ko-KR")
+		  .get()
+		  .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcyMDA2Mjc5Ni41OTIxNDksInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WfXqF4gZs0s7v7N9TyGhAUHP_ut6LgIEjSs_Bge8vH0")
+		  .addHeader("accept", "application/json")
+		  .build();
+
+		try (Response response = client.newCall(request).execute()) {
+	            // 응답 본문 추출
+	            okhttp3.ResponseBody responseBody = response.body();
+	            if (responseBody != null) {
+	                return responseBody.string();
+	            } else {
+	                return "{}"; // 응답 본문이 없는 경우 빈 JSON 객체 반환
+	            }
+	        }
+	}
+	
+	@GetMapping(value="images", produces="application/json; charset=UTF-8")
+	public String getImages(@RequestParam("movie_id") int movieId) throws IOException {
+		OkHttpClient client = new OkHttpClient();
+
+		Request request = new Request.Builder()
+		  .url("https://api.themoviedb.org/3/movie/"+ movieId +"/images")
+		  .get()
+		  .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcyMDA2Mjc5Ni41OTIxNDksInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WfXqF4gZs0s7v7N9TyGhAUHP_ut6LgIEjSs_Bge8vH0")
+		  .addHeader("accept", "application/json")
+		  .build();
+
+		try (Response response = client.newCall(request).execute()) {
+	            // 응답 본문 추출
+	            okhttp3.ResponseBody responseBody = response.body();
+	            if (responseBody != null) {
+	                return responseBody.string();
+	            } else {
+	                return "{}"; // 응답 본문이 없는 경우 빈 JSON 객체 반환
+	            }
+	        }
+	}
+	
+	
+	@GetMapping(value = "movieDB", produces = "application/json; charset=UTF-8")
+	public String getMovieDB() {
 		 
 		 List<Integer> movieIdList = movieService.getMovieIdList();
 		 
