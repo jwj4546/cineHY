@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 
 import com.hy.myapp.movie.model.repository.MovieRepository;
+import com.hy.myapp.movie.model.vo.Movie;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +21,16 @@ public class MovieServiceImpl implements MovieService {
 	public List<Integer> getMovieIdList() {
 		
 		return movieRepository.getMovieIdList(sqlSession);
+	}
+
+	@Override
+	public int save(Movie movie) {
+		return movieRepository.save(sqlSession, movie);
+	}
+
+	@Override
+	public List<Movie> getMovieList() {
+		return movieRepository.getMovieList(sqlSession);
 	}
 
 	

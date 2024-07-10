@@ -6,12 +6,12 @@
       <div class="container text-center text-md-left">
           <div class="row text-center text-md-left">
               <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                  <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Cine HY</h5>
+                  <h5 class="text-uppercase mb-4 font-weight-bold" style="color: #29b9a5;">Cine HY</h5>
                   <p>최고의 영화 예매 사이트 Cine HY에 오신 것을 환영합니다. 다양한 최신 영화를 만나보세요.</p>
               </div>
 
               <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
-                  <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Quick Links</h5>
+                  <h5 class="text-uppercase mb-4 font-weight-bold" style="color: #29b9a5;">Quick Links</h5>
                   <p><a href="#" class="text-light" style="text-decoration: none;">Home</a></p>
                   <p><a href="#" class="text-light" style="text-decoration: none;">Movies</a></p>
                   <p><a href="#" class="text-light" style="text-decoration: none;">Theaters</a></p>
@@ -19,15 +19,15 @@
               </div>
 
               <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
-                  <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Useful Links</h5>
+                  <h5 class="text-uppercase mb-4 font-weight-bold" style="color: #29b9a5;">Useful Links</h5>
                   <p><a href="#" class="text-light" style="text-decoration: none;">Account</a></p>
                   <p><a href="#" class="text-light" style="text-decoration: none;">Help</a></p>
                   <p><a href="#" class="text-light" style="text-decoration: none;">Contact Us</a></p>
                   <p><a href="#" class="text-light" style="text-decoration: none;">Privacy Policy</a></p>
               </div>
 
-              <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                  <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Contact</h5>
+              <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3" >
+                  <h5 class="text-uppercase mb-4 font-weight-bold" style="color: #29b9a5;">Contact</h5>
                   <p><i class="fas fa-home mr-3"></i> Seoul, South Korea</p>
                   <p><i class="fas fa-envelope mr-3"></i> info@cinehy.com</p>
                   <p><i class="fas fa-phone mr-3"></i> + 82 10 1234 5678</p>

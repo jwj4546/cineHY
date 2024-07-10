@@ -3,23 +3,31 @@ package com.hy.myapp.movie.controller;
 import java.io.IOException;
 import java.util.List;
 
-import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.hy.myapp.movie.model.service.MovieService;
+import com.hy.myapp.movie.model.vo.Message;
+import com.hy.myapp.movie.model.vo.Movie;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+@Slf4j
 @RestController
 @RequestMapping("movieList/")
-public class MovieEnrollController {
+public class MovieApiController {
 	
 	@Autowired
     private MovieService movieService;
@@ -171,10 +179,54 @@ public class MovieEnrollController {
 		 List<Integer> movieIdList = movieService.getMovieIdList();
 		 
 		 System.out.println("Movie ID List: " + movieIdList);
-	        
 		 
 		 return new Gson().toJson(movieIdList);
-	    }
+    }
+	
+	
+	
+	
+	@PostMapping(value="movieInsert", produces = "application/json; charset=UTF-8")
+	public ResponseEntity<Message> save(@RequestBody Movie movie) {
+		
+		System.out.println("Movie 정보: " + movie);
+		int result = movieService.save(movie);
+		if (result == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder()
+															 .message("추가안됨")
+															 .build());
+        }
+
+		Message responseMsg = Message.builder().data("영화목록 추가에 성공했습니다")
+											   .message("서비스요청성공")
+											   .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+	}
+	
+	
+	@GetMapping(value = "movieEnrollList", produces = "application/json; charset=UTF-8")
+	public ResponseEntity<Message> getMovieList() {
+		 
+		 List<Movie> movieList = movieService.getMovieList();
+		 
+		 System.out.println("Movie Title List: " + movieList);
+		 
+		 if(movieList.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+									 .body(Message.builder()
+										 .message("조회결과존재없음")
+										 .build());
+			}
+			//log.info("조회된 공지사항 목록 : {}", noticeList);
+			
+			Message responseMsg = Message.builder()
+										 .data(movieList)
+										 .message("조회성공")
+										 .build();
+		 
+		 return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+    }
 	
 		
 }

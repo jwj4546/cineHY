@@ -5,12 +5,45 @@
 <mapper namespace="movieMapper">
 
 <select id="getMovieIdList" resultType="java.lang.Integer">
-	 SELECT
-    	    MOVIE_CODE
-       FROM
-       		TB_MOVIE
+
+		 SELECT
+	    	    MOVIE_CODE
+	       FROM
+	       		TB_MOVIE
 
 </select>
 
+
+<insert id="insertMovie" parameterType="movie">
+
+	INSERT INTO
+				TB_MOVIE
+		 VALUES
+		 		(
+		 		#{movieCode},
+		 		#{movieTitle},
+		 		#{genre},
+		 		#{summary},
+		 		#{runningTime},
+		 		#{rating},
+		 		#{openedDate}
+		 		)
+
+</insert>
+
+<select id="getMovieList" resultType="movie">
+
+		 SELECT
+	    	    MOVIE_CODE movieCode,
+	    	    MOVIE_TITLE movieTitle,
+	    	    GENRE,
+	    	    SUMMARY,
+	    	    RUNNING_TIME runningTime,
+	    	    RATING,
+	    	    OPENED_DATE openedDate
+	       FROM
+	       		TB_MOVIE
+
+</select>
 
 </mapper>

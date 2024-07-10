@@ -3,8 +3,14 @@ package com.hy.myapp.movie.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
-public class MovieForwardController {
+@AllArgsConstructor
+public class MovieController {
+	
 	
 	@GetMapping("movieEnroll")
 	public String getEnrollMoive() {
@@ -20,5 +26,6 @@ public class MovieForwardController {
 	public String getMovieDetails() {
 		return "movie/movieDetails";
 	}
+	
 
 }
