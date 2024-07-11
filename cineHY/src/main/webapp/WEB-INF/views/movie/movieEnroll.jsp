@@ -66,7 +66,7 @@
     }
     
     #movieDetails { 
-    	width: 900px;
+    	width: 800px;
     }
     
     .list-group-item:hover {
@@ -150,7 +150,7 @@
 		            </div>
 		        </div>
 		        
-		        <div class="card mb-4" id="Movie-enroll-list-card" style="width: 300px; min-width: 200px;">
+		        <div class="card mb-4" id="Movie-enroll-list-card" style="width: 35rem; min-width: 200px;">
 		            <ul class="list-group list-group-flush" id="movieEnrollList">
 		            	
 		                <!-- 등록된 영화 리스트 출력 -->
@@ -163,7 +163,6 @@
     </main>
     
     <script>
-    
     
 	    $(document).ready(function() {
 	    	
@@ -230,6 +229,7 @@
 	        
 	        
 	        window.viewDetail = function(movieId) {
+	        	
 	            $.ajax({
 	                url: 'movieList/details',
 	                method: 'get',
@@ -288,7 +288,7 @@
 	                                + '<input type="hidden" id="runningTime" name="runningTime" value="' + data.runtime + '"/>' //영화 상영시간
 	                                + '<input type="hidden" id="rating" name="rating" value="' + rating + '"/>' //영화 등급
 	                                + '<input type="hidden" id="openedDate" name="openedDate" value="' + data.release_date + '"/>' //영화 개봉일 */
-	                                + '<button class="btn btn-primary mr-3" onclick="insert()">등록하기</button>'
+	                                + '<button class="btn btn-primary mr-3" onclick="insert()" style="background-color:#29b9a5; border:1px #29b9a5;">등록하기</button>'
 	                                + '</div>';
 	                        
 	                            movieDetails.html(InfoHtml);
@@ -325,11 +325,11 @@
     				const movieEList = data.data;
     				console.log(data.data)
     				let ListHtml = '';
-    				ListHtml += '<li class="list-group-item text-primary"><p><strong>등록한 영화</strong></p></li>'
+    				ListHtml += '<li class="list-group-item" style="font-size:25px; color:white; background-color:#29b9a5;"><p>등록한 영화</p></li>'
     				for(let i in movieEList) {
     					
     					ListHtml += '<li class="list-group-item" data-code="'+ movieEList[i].movieCode + '">'+ movieEList[i].movieTitle                         
-	                      + '<button class="btn btn-danger btn-sm float-right delete-btn">삭제</button>'
+	                      + '<button class="btn btn-danger btn-sm float-right delete-btn" onclick="deleteByCode('+ movieEList[i].movieCode +')">삭제</button>'
 	                      + '</li>';
     				}
     				
@@ -342,12 +342,7 @@
     	                }, 
     	                function() {
     	                    $(this).removeClass('hover');
-    	                }
-    	            ).click(function() {
-    	                $('#movieEnrollList .list-group-item').removeClass('active');
-    	                $(this).addClass('active');
-    	            });
-    	            
+    	                });
     	         	
     	        },
     	        error: function(jqXHR, textStatus, errorThrown) {
@@ -386,6 +381,7 @@
 	            },
 	            error: function(xhr, status, error) {
 	                console.error("Error occurred while inserting movie:", error);
+	                alert("해당영화를 추가할 수 없습니다.");
 	            }
 	        });
 	        
@@ -396,8 +392,9 @@
 			$.ajax ({
 				url : 'movieList/'+movieCode,
 				type : 'delete',
-				success : response => {
-					
+				success : data => {
+					console.log(data)
+					findAll();
 				},
 				error: function(xhr, status, error) {
 	                console.error("Error occurred while deleting movie:", error);
@@ -405,7 +402,6 @@
 			});
 			
 		}
-	    
 	    
 	</script>
     

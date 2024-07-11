@@ -232,9 +232,9 @@ public class MovieApiController {
 	
 	@DeleteMapping("{movieCode}")
 	public ResponseEntity<Message> deleteById(@PathVariable int movieCode) {
-		movieService.delete(movieCode);
-		
+		System.out.println(movieCode);
 		int result = movieService.delete(movieCode);
+		System.out.println(result);
 		
 		if(result == 0) {
 			return ResponseEntity.status(HttpStatus.OK).body(Message.builder()
