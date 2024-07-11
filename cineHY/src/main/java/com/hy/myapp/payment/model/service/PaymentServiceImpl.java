@@ -26,7 +26,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 	
 	public PaymentServiceImpl() {
-		this.api = new IamportClient();
+		this.api = new IamportClient("12312", "123123");
 	}
 
 	public void postPrepare(PrePaymentVO request) throws IamportResponseException, IOException {
