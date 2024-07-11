@@ -320,7 +320,7 @@
             </div>
             <div class="popup-wrap" id="insert_popup">
                 <div class="popup">
-	                <form name="starForm" id="starForm" method="post" action="insertTReview" >
+	                <form name="starForm" id="starForm" method="post" action="" >
 	                
 	                
 	                    <div class="body-contentbox">
@@ -337,11 +337,9 @@
 	                    </div>
 	                    
 	                    
-	                    <input type="hidden" id="writer" name="userId" value="${sessionScope.loginUser.userId}" />
-	               		<input type="hidden" id="movieCode" name="movieCode" value="${sessionScope.ReviewList.movieCode}" />
 	                    <div class="popup-foot">
-	                        <input type="submit" class="btn02" id="insert_confirm" value="리뷰등록"/>
-	                        <input type="submit" class="btn02" id="insert_close" value="취소"/>
+	                        <input type="button" class="btn02" id="insert_confirm" onclick="saveReview()" value="리뷰등록"/>
+	                        <input type="button" class="btn02" id="insert_close" value="취소"/>
 	                    </div>
 	                </form>
                 </div>
@@ -366,46 +364,26 @@
                 </div>
             </div>
             <br><br>
+            <div>
+                <span colspan="3">리뷰(<span id="rcount">0</span>)</span>
+            </div>
+            
             <table id="reviewList" class="table table-hover">
             
-            		<tr>
-                        <td colspan="3">리뷰(<span id="rcount">0</span>)</td>
-                    </tr>
+            		
                 <tbody>
-                            <c:forEach items="${getReviewList}" var="review">
-                                <tr>
-                                    <td class="rv">
-                                            <div class="d-flex bd-highlight">
-                                                <div class="img_cont">
-                                                    <img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img">
-                                                    
-                                                </div>
-                                                <div class="user_info">
-                                                    <p>${review.star}</p>
-                                                    <p>${review.userId}</p>
-                                                    <p>${review.reviewContent }</p>
-                                                </div>
-                                            </div>
-                                    </td>
-                                    <td class="right">
-                                        <a class="plus">...</a>
-                                        <p class="dd">${review.reviewDate }</p>
-                                    </td>
-                                </tr>
-                                    <div id="bubble_up"  class="speech-bubble hidden">
-                                        <input onclick="call_confirm_up_de()" class="btn btn-light" type="button" value="리뷰 삭제">
-                                        <input onclick="call_confirm_up()" class="btn btn-light" type="button"  id="updatemodal-open" value="리뷰 수정">
-                                    </div>
-
-
-                                    <div id="bubble_sp"  class="speech-bubble hidden">
-                                        <input onclick="call_confirm_sp()" class="btn btn-light" type="button" id="id2" value="스포일러 신고">
-                                    </div>
-                         </c:forEach>
+                          <%--
+                          ajax영역
+                          --%>
                         
+                        
+	               
                 </tbody>
+                
+                
             </table>
-
+            
+           
             <div class="modal-btn-box">
                 <c:if test="${not empty sessionScope.loginUser}">
                     <button class="btn " type="button" id="insertmodal-open" style="float:right;"  >돌아가기</button>
@@ -441,6 +419,9 @@
     
         $(() => {
             $('#searchForm option[value="${condition}"]').prop('selected', true);
+            
+            
+            
         });
         
         function disableScroll() {
@@ -484,39 +465,7 @@
         });
 
 
-        $(() => {
-            $("#insert_confirm").click(() => {
-                modalClose();
-                enableScroll();
-            });
-            $("#insertmodal-open").click(() => {
-                $("#insert_popup").css('display', 'flex').hide().fadeIn();
-                disableScroll();
-            });
-            $("#insert_close").click(() => {
-                modalClose();
-                enableScroll();
-            });
-            function modalClose() {
-                $("#insert_popup").fadeOut();
-            }
-
-            $(".plus").click(function() {
-                const offset = $(this).offset();
-                $("#bubble_sp").css({
-                    top: offset.top - $("#bubble_sp").outerHeight() - 5,
-                    left: offset.left - 60
-                }).toggle();
-            });
-
-            $(".plusTest").click(function() {
-                const offset = $(this).offset();
-                $("#bubble_up").css({
-                    top: offset.top - $("#bubble_sp").outerHeight() - 50,
-                    left: offset.left - 60
-                }).toggle();
-            });
-        });
+        
         
 
         $('.star_rating > .star').click(function () {
@@ -527,51 +476,10 @@
         
         
         
+        $(() => {
         
-        
 
-        function call_confirm_sp(){
-	
-            if(confirm("리뷰 내용에 스포일러가 포함되어있습니까?")){
-                alert("신고를 완료하였습니다. 내용 확인 후 반영하도록 하겠습니다.");
-            }else{
-                
-            }
-            
-        }
-
-        function call_confirm_up_de(){
-	
-            if(confirm("리뷰를 삭세하시겠습니까?")){
-                alert("리뷰가 삭제되었습니다.");
-            }else{
-                
-            }
-            
-        }
-
-        function call_confirm_up(){
-	
-            $(() => {
-            $("#update_confirm").click(() => {
-                    modalClose();
-                    enableScroll();
-                });
-
-                $("#updatemodal-open").click(() => {
-                    $("#update_popup").css('display', 'flex').hide().fadeIn();
-                    disableScroll();
-                });
-                $("#update_close").click(() => {
-                    modalClose();
-                    enableScroll();
-                });
-                function modalClose() {
-                    $("#update_popup").fadeOut();
-                }
-            });
-        }
-        
+       
         
         function saveReview(){
         	
@@ -579,24 +487,22 @@
         	if($('#textReview').val().trim() != ''){
         		
         		$.ajax({
-            		url : 'insertTReview',
+            		url : 'insertReview',
             		data : {
-            			movieCode : ${ movie.movieCode },
+            			star: $('#star').val(),
             			reviewContent : $('#textReview').val(),
             			userId : '${ sessionScope.loginUser.userId }'
-            			
             		},
             		type : 'post',
             		
-            		success : result => {
+            		success : function(result)  {
             			console.log(result);
             			
             			if(result == 'success'){
-            				selectReply();
+            				selectReview();
             				$('#textReview').val('');
             			};
             		}
-            		
             	});
         		
         	}else {
@@ -606,20 +512,20 @@
         
         
         
-        $(() =>{
+        $(() => {
     		selectReview();
     		//setInt
     	})
     
     
-    	//바로 호출되게 하려고 ( 쓰면 업데이트도 되어야함)
+    	//바로 호출되게 하려고 ( 쓰면 업데이트도 되어야함)  !!! 나중에 data의 value에  ${ review.movieCode }  수정하기
     	function selectReview(){
     		
     		$.ajax({
-    			url : 'insertTReview',
+    			url : 'selectReview',
     			type :'get',
     			data : {
-    				movieCode : ${ movie.movieCode }
+    				movieCode : 1
     			},
     			
     			success : result => {
@@ -628,12 +534,37 @@
     				let resultStr ='';
     				
     				for(let i in result){
-    					resultStr += '<div class="user_info">'
-    								+'<p>' +result[i].userId +'</p>'
-    								+'<p>' +result[i].star +'</p>'
-    								+'<p>' +result[i].reviewContent +'</p>'
-    								+'</div>';
-    				};
+    					resultStr += 	'<tr>'
+					                    +'<td class="rv">'
+					                    +	    '<div class="d-flex bd-highlight">'
+					                    +    	     '<div class="img_cont">'
+					                    +        	     '<img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img">'
+					                    +            '</div>'
+					                    +            '<div class="user_info">'
+					                    +                '<p>' +result[i].star +'</p>'
+					                    +                '<p>' +result[i].userId +'</p>'
+					                    +           	 '<p>' +result[i].reviewContent +'</p>'
+					                    +    	     '</div>'
+					                    +	    '</div>'
+					                    +'</td>'
+					                    +'<td class="right">'
+					                    +	'<p class="plus" onclick="test()">...</p>'
+					                    
+					                    +'<div id="bubble_sp"  class="speech-bubble hidden">'
+                                        +	'<input onclick="call_confirm_sp()" class="btn btn-light" type="button" id="id2" value="스포일러 신고">'
+                                        +'</div>'
+					                    +	'<p class="dd">' +result[i].reviewDate +'</p>'
+					                    +'</td>'
+					                    
+					                    +'<div id="bubble_up"  class="speech-bubble hidden">'
+					                    +	'<input onclick="call_confirm_up_de()" class="btn btn-light" type="button" value="리뷰 삭제">'
+					                    +	'<input onclick="call_confirm_up()" class="btn btn-light" type="button"  id="updatemodal-open" value="리뷰 수정">'
+                                        +'</div>'
+
+                                        
+					                    +'</tr>'
+					                    
+					                };
     				
     				
     				$('#reviewList tbody').html(resultStr);
@@ -641,15 +572,121 @@
     			}
     			
     			
-    			//error : e=>{
-    				//console.log(e);
-    			//}
+    			
     		});
+    		var i=0;
+    		window.test= function() {
+                var offset = $(".plus").offset();
+                if(i=0){
+                	$("#bubble_up").css({
+                        top: offset.top - $("#bubble_sp").outerHeight() - 5,
+                        left: offset.left - 10
+                	}).toggle();
+                }else{
+                	$("#bubble_up").css({
+                        top: offset.top - $("#bubble_sp").outerHeight() - 50,
+                        left: offset.left - 60
+                	
+                	}).toggle();
+                }
+                
+                
+                
+            }
     		
-    		
+    		window.call_confirm_sp= function(){
+    	    	
+    	        if(confirm("리뷰 내용에 스포일러가 포함되어있습니까?")){
+    	            alert("신고를 완료하였습니다. 내용 확인 후 반영하도록 하겠습니다.");
+    	        }
+    	    }
+    	
+    		window.call_confirm_up_de= function(){
+    	
+    	        if(confirm("리뷰를 삭세하시겠습니까?")){
+    	            alert("리뷰가 삭제되었습니다.");
+    	        }
+    	    }
+    	
+    	    function call_confirm_up(){
+    	
+    	        $(() => {
+    	        $("#update_confirm").click(() => {
+    	                modalClose();
+    	                enableScroll();
+    	            });
+    	
+    	            $("#updatemodal-open").click(() => {
+    	                $("#update_popup").css('display', 'flex').hide().fadeIn();
+    	                disableScroll();
+    	            });
+    	            $("#update_close").click(() => {
+    	                modalClose();
+    	                enableScroll();
+    	            });
+    	            function modalClose() {
+    	                $("#update_popup").fadeOut();
+    	            }
+    	        });
+    	    }
     	}
     	
+    	/* window.test= function() {
+            const offset = $(this).offset();
+            $("#bubble_sp").css({
+                top: offset.top - $("#bubble_sp").outerHeight() - 5,
+                left: offset.left - 60
+            }).toggle();
+        } */
+    	
+   
+    
+    document.addEventListener('DOMContentLoaded', function() {
+		
+    });
+	    
+	    
+    
+   
+        $("#insert_confirm").click(() => {
+            modalClose();
+            enableScroll();
+        });
+        $("#insertmodal-open").click(() => {
+            $("#insert_popup").css('display', 'flex').hide().fadeIn();
+            disableScroll();
+        });
+        $("#insert_close").click(() => {
+            modalClose();
+            enableScroll();
+        });
+        function modalClose() {
+            $("#insert_popup").fadeOut();
+        }
         
+        
+
+        function test() {
+            const offset = $(this).offset();
+            $("#bubble_sp").css({
+                top: offset.top - $("#bubble_sp").outerHeight() - 5,
+                left: offset.left - 60
+            }).toggle();
+        }
+        
+        
+
+        $(".plusTest").click(function() {
+            const offset = $(this).offset();
+            $("#bubble_up").css({
+                top: offset.top - $("#bubble_sp").outerHeight() - 50,
+                left: offset.left - 60
+            }).toggle();
+        });
+    });
+    
+    
+    
     </script>
 </body>
 </html>

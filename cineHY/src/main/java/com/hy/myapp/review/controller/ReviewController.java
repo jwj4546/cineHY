@@ -36,7 +36,7 @@ public class ReviewController {
 		
 		model.addAttribute("list",reviewList);
 		
-		return "review/review2";
+		return "review/review";
 
 	}
 	
@@ -55,42 +55,18 @@ public class ReviewController {
 	
 		session.setAttribute("ReviewList", ReviewList); //ReviewList.movieCode쓰려고
 		
-		return "review/review2";
+		return "review/review";
 	}
 	
 	
-	@PostMapping("/insertTReview22")
-	public String reviewInsert(Review review, Model model, HttpSession session){
-		
-		//int insertedReview = reviewService.insertReview();
-		
-		//log.info("조회된 리뷰 목록 : {}", insertedReview);
-		//model.addAttribute("getReviewList", insertedReview);
-		
-		log.info("게시글 정보 : {}", review);
-		/*
-		if(reviewService.insertReview(review)>0) {
-			
-			session.setAttribute("alertMsg", "리뷰 작성 성공");
-			
-			return "redirect:review2";
-		}else {
-			model.addAttribute("erroeMsg", "실패");
-			return "redirect:review2";
-		}
-		*/
-		return "review/review2";
-	}
 	
 	
-	@ResponseBody      
-	@GetMapping(value="insertTReview22", produces="application/json; charset=UTF-8")
-	public String insertTReview(int movieCode) {
-		
-		
-		
-		return new Gson().toJson(reviewService.getMovieOfReview(movieCode));
-	}
+	
+//	@ResponseBody      
+//	@GetMapping(value="insertTReview22", produces="application/json; charset=UTF-8")
+//	public String insertTReview(int movieCode) {
+//		return new Gson().toJson(reviewService.getMovieOfReview(movieCode));
+//	}
 	
 	
 	@ResponseBody
