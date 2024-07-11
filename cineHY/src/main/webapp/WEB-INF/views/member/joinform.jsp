@@ -5,11 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>find_id</title>
+    <title>join</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <style>
 * {
@@ -236,9 +237,9 @@ article input {
 		     </div>
 		    <form action="join.do" method="post">
 			    <div>
-			        <p>아이디 *</p>
+			        <p>아이디 * </p><span id="IdCheckResult" style="font-size:12px;"></span>	                
 			        <input type="text" id="userId" placeholder="아이디를 입력해주세요." name="userId" required>
-			        <button type="button" class="btn btn-dark">중복확인</button>
+			        <button type="button" id = "checkId-btn" class="btn btn-dark">중복확인</button>
 			    </div>
 			    <div>
 			        <p>비밀번호 *</p>
@@ -266,9 +267,9 @@ article input {
 			        <button type="button" class="btn btn-dark">주소검색</button>
 			    </div>
 			    <div>
-			        <p>닉네임</p>
+			        <p>닉네임</p><span id="NickCheckResult" style="font-size:12px;"></span>
 			        <input type="text" id="userNick" placeholder="닉네임을 입력해주세요." name="userNick">
-			        <button type="button" class="btn btn-dark">중복확인</button>
+			        <button type="button" id="checkNick-btn" class="btn btn-dark">중복확인</button>
 			    </div>
 			    <div class="gender" id="gender">
 			        <p>성별</p>
@@ -330,7 +331,7 @@ article input {
                 </div>
                 <div>
                     <div>
-                        <input type="checkbox" name="agree" id="cj-agree">이용약관 동의 <span>(필수)</span>
+                        <input type="checkbox" name="agree" id="hy-agree">이용약관 동의 <span>(필수)</span>
                         <a href = "terms">약관보기 ></a>
                     </div>
                     <div>
@@ -338,13 +339,10 @@ article input {
                        <a href = "terms">약관보기 ></a>
                     </div>
                     <div>
-                        <input type="checkbox" name="agree" id="info-agree">본인은 만 14세 이상입니다 <span>(필수)</span>
-                        <a href = "terms">약관보기 ></a>
-                    </div>
-                    <div>
                         <input type="checkbox" name="agree" id="pro-agree">프로모션 정보 수신 동의 <span>(필수)</span>
                         <a href = "terms">약관보기 ></a>
                     </div>
+                    
                     
                     
                     
@@ -355,6 +353,108 @@ article input {
 
     </article>
     
+    <script>
+    
+    $(()=> {
+    	
+    	const $idInput = $(' #userId');
+    	const $checkResult = $('#IdCheckResult');
+    	const $joinSubmit = $('#join-btn');
+    	const $checkIdBtn = $('#checkId-btn');
+    	
+    	$checkIdBtn.click(() => {
+    		
+  		console.log('checked button');
+    		
+  		$.ajax({
+    			type : 'get',
+				url : 'checkId',
+				data : {checkId : $idInput.val()},
+				success: response => {
+					
+					console.log(response);
+					
+					if(response === 'N') {
+						$checkResult.show().css('color', 'crimson').text('이미 존재하는 아이디입니다!');
+						$joinSubmit.attr('disabled', true);
+					}
+					else {
+						$checkResult.show().css('color', 'green').text('사용가능한 아이디입니다!');
+						$joinSubmit.removeAttr('disabled');
+					}
+				},
+					error : ()	=> {
+						console.log('띠용 오류입니다!')
+					}
+    		});
+    		
+    	});
+    	
+    });
+    
+    
+    $(() =>{
+
+    	const $nickInput = $(' #userNick');
+    	const $checkNickResult = $(' #NickCheckResult');
+    	const $checkNickBtn = $('#checkNick-btn');
+    	const $joinSubmit = $('join-btn');
+    	
+    	$checkNickBtn.click(() =>{
+    		
+    		  console.log('Check Nick button clicked');
+    		
+    		
+    		$.ajax({
+    		
+    			url : 'checkNick',
+    			type : 'get',
+    			data : {checkNick : $nickInput.val()},
+    			
+    			success : response => {
+    				
+    				console.log(response);
+    				
+    				if(response === 'N') {
+    					$checkNickResult.show().css('color', 'crimson').text('이미 존재하는 닉네임입니다!');
+    					$joinSubmit.attr('disabled', ture);
+    					
+    				} else{
+    					$checkNickResult.show().css('color', 'green').text('사용가능한 닉네임입니다!');
+    					$joinSubmit.removeAttr('disabled');
+    			}
+    			
+    		},
+    		
+    				error : () => {
+    				
+    					cosole.log('sorry, this is error')
+    				}
+    				
+    			
+    			
+    			
+    			
+    			
+    		});
+    		
+    		
+    	});
+    });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </script>
    
 
 </body>

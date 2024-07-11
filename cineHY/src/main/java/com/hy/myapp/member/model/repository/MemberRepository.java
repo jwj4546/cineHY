@@ -16,6 +16,17 @@ public class MemberRepository {
 		return sqlSession.selectOne("MemberMapper.login", member);
 	}
 
+
+	public int idcheck(SqlSessionTemplate sqlSession, String checkId) {
+		
+		return sqlSession.selectOne("MemberMapper.idcheck", checkId);
+	}
+
+	public int nickCheck(SqlSessionTemplate sqlSession, String checkNick) {
+		
+		return sqlSession.selectOne("MemberMapper.nickCheck", checkNick);
+	}
+
 	
 	
 	

@@ -49,7 +49,12 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int idCheck(String checkId) {
 		
-		return 0;
+		return memberRepository.idcheck(sqlSession, checkId);
+	}
+
+	@Override
+	public int nickCheck(String checkNick) {
+		return memberRepository.nickCheck(sqlSession, checkNick);
 	}
 
 }

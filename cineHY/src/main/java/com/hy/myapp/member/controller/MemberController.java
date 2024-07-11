@@ -3,6 +3,8 @@ package com.hy.myapp.member.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hy.myapp.member.model.service.MemberService;
@@ -23,6 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class MemberController {
+	
+	  
 	
 	
     @Autowired
@@ -60,6 +65,27 @@ public class MemberController {
 		return viewName;
 		
 	}
+	
+	@GetMapping("checkId")
+	@ResponseBody
+	public String checkId(String checkId) {
+		log.info(checkId);
+		
+		return memberService.idCheck(checkId) > 0 ? "N" : "Y";
+		
+		
+	}
+	
+	
+	@GetMapping("checkNick")
+	@ResponseBody
+	public String checkNick(String checkNick) {
+		log.info(checkNick);
+		
+		return memberService.nickCheck(checkNick) > 0 ? "N" : "Y";
+	}
+	
+	
 	
 	@GetMapping("login")
 	public String loginform() {
@@ -99,10 +125,53 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
+	@GetMapping("myPage")
+	public String mypage() {
+		
+		return "member/myPage/myPage";
+	}
+	
+	@GetMapping("myReview")
+	public String myReview() {
+		
+		return "member/myPage/myReview";
+	}
+	
+	@GetMapping("chatAdmin")
+	public String chatAdmin() {
+		
+		return "member/myPage/chatAdmin";
+	}
+	@GetMapping("myInfoUpdate")
+	public String myInfoUpdate() {
+		
+		return "member/myPage/myInfoUpdate";
+	}
+	@GetMapping("myProductList")
+	public String myProductList() {
+		
+		return "member/myPage/myProductList";
+	}
+	
+	@GetMapping("myTicketList")
+	public String myTicketList() {
+		
+		return "member/myPage/myTicketList";
+	}
+	
+	@GetMapping("myNearby")
+	public String myNearby() {
+		
+		return "member/myPage/myNearby";
+	}
 	
 	
+	@GetMapping("resign")
+	public String resign() {
+		
+		return "member/myPage/resign";
 	
-	
+	}
 	
 	
 	

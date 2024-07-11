@@ -67,5 +67,29 @@
     	
     	
     </select>
+    
+    
+    <select id = "idcheck" parameterType = "String" resultType="_int">
+    
+    SELECT
+    		COUNT(*)
+    FROM
+    		TB_MEMBER
+    WHERE
+    		USER_ID = #{checkId}
+    
+    </select>
+    
+    <select id="nickCheck" parameterType = "String" resultType = "_int">
+    
+    SELECT
+    		COUNT(*)
+    FROM	
+    		TB_MEMBER
+    WHERE
+    		USER_NICK = #{checkNick}
+    
+    
+    </select>
 
 </mapper>
