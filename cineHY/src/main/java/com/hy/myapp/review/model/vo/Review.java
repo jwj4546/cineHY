@@ -17,7 +17,9 @@ public class Review {
 	private int star;
 	private String status;
 	private String userId;
-	private String movieCd;
+	private int movieCode;
+	private String ticketNo;
+	private double ratingAvg;
 	
 
 }

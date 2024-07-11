@@ -14,4 +14,16 @@ public class ReviewRepository {
 	public List<Review> findAllReview(SqlSessionTemplate sqlSession) {
 		return sqlSession.selectList("reviewMapper.findAllReview");
 	}
+
+	public List<Review> getMovieOfReview(SqlSessionTemplate sqlSession, int movieCode) {
+		return sqlSession.selectList("reviewMapper.getMovieOfReview", movieCode);
+	}
+
+	public String getTicketNo(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("reviewMapper.getTicketNo");
+	}
+
+	public int insertReview(SqlSessionTemplate sqlSession, Review review) {
+		return sqlSession.insert("reviewMapper.insertReview", review);
+	}
 }

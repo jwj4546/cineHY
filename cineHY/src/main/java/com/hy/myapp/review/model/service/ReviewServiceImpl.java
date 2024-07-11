@@ -22,4 +22,39 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewRepository.findAllReview(sqlSession);
 	}
 
+	@Override
+	public List<Review> getMovieOfReview(int movieCode) {
+		return reviewRepository.getMovieOfReview(sqlSession, movieCode);
+	}
+
+	@Override
+	public String getTicketNo() {
+		return reviewRepository.getTicketNo(sqlSession);
+	}
+
+	@Override
+	public Review getTicket() {
+		return null;
+	}
+
+	@Override
+	public int insertReview(Review review) {
+		return reviewRepository.insertReview(sqlSession, review);
+	}
+
+	
+	@Override
+	public Review reviewAndReview(int boardNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Review> findTopBoard() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+
 }
