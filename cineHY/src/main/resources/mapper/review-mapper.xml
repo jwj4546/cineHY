@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="reviewMapper">
+    <select id="findAllReview" resultType="review">
+        SELECT
+			REVIEW_NO reviewNo,
+			REVIEW_CONTENT reviewContent,
+			REVIEW_DATE reviewDate,
+			STAR star,
+			STATUS status,
+			USER_ID userId,
+			MOVIE_CODE movieCode
+		FROM
+			TB_REVIEW
+    </select>
+    
+    <select id="getMovieOfReview" resultType="review" parameterType="_int">
+    	SELECT 
+    		REVIEW_NO reviewNo,
+			REVIEW_CONTENT reviewContent,
+			REVIEW_DATE reviewDate,
+			STAR star,
+			STATUS status,
+			USER_ID userId,
+			MOVIE_CODE movieCode,
+			TICKET_NO ticketNo
+		FROM
+			TB_REVIEW
+		WHERE
+			MOVIE_CODE=#{movieCode}
+		 AND 
+		 	STATUS = 'Y'
+	ORDER BY
+    		REVIEW_DATE DESC
+    
+    
+    </select>
+    
+    
+    <insert id="insertReview"  parameterType="review">
+    	INSERT INTO 
+    			TB_REVIEW
+						(
+						REVIEW_NO, 
+						REVIEW_CONTENT, 
+						REVIEW_DATE, 
+						STAR, 
+						STATUS, 
+						USER_ID, 
+						MOVIE_CODE,
+						TICKET_NO
+						)
+				VALUES
+						(
+						31,
+						#{reviewContent},
+						SYSDATE,
+						#{star },
+						DEFAULT, 
+						'user27', 
+						'1', 
+						'TICK00067'
+						)
+    
+    </insert>
+    
+    
+    
+</mapper>

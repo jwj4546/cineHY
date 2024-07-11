@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -309,39 +307,30 @@
  
             <br>
             <div class="info">
-                <h4>|</h4>
+                <h4>${review.StarAvg} | ${review.Star}</h4>
             </div>
             <div class="modal-btn-box">
-                    <c:if test="${ empty sessionScope.ticketNo}">
+                <c:if test="${not empty sessionScope.loginUser}">
                     <button class="btn" type="button" id="insertmodal-open" style="float:right;"  >리뷰쓰기</button>
-                	</c:if>
-                
-               
+                </c:if>
             </div>
             <div class="popup-wrap" id="insert_popup">
                 <div class="popup">
-	                <form name="starForm" id="starForm" method="post" action="" >
-	                
-	                
-	                    <div class="body-contentbox">
-	                        <p>리뷰작성 폼</p><br>
-		                        <div class="star_rating">
-		                            <span  class="star"  value="1" > </span>
-		                            <span  class="star"  value="2" > </span>
-		                            <span  class="star"  value="3" > </span>
-		                            <span  class="star"  value="4" > </span>
-		                            <span  class="star"  value="5" > </span>
-		                            <input type="hidden" id="star" name="star"  />
-		                        </div>
-	                        <textarea id="textReview" class="star_box" name="reviewContent" placeholder="리뷰 내용을 작성해주세요."></textarea>
-	                    </div>
-	                    
-	                    
-	                    <div class="popup-foot">
-	                        <input type="button" class="btn02" id="insert_confirm" onclick="saveReview()" value="리뷰등록"/>
-	                        <input type="button" class="btn02" id="insert_close" value="취소"/>
-	                    </div>
-	                </form>
+                    <div class="body-contentbox">
+                        <p>리뷰작성 폼</p><br>
+                        <div class="star_rating">
+                            <span class="star on" value="1"> </span>
+                            <span class="star" value="2"> </span>
+                            <span class="star" value="3"> </span>
+                            <span class="star" value="4"> </span>
+                            <span class="star" value="5"> </span>
+                        </div>
+                        <textarea class="star_box" placeholder="리뷰 내용을 작성해주세요."></textarea>
+                    </div>
+                    <div class="popup-foot">
+                        <input type="submit" class="btn02" id="insert_confirm" value="리뷰 등록"/>
+                        <input type="submit" class="btn02" id="insert_close" value="취소"/>
+                    </div>
                 </div>
             </div>
             <div class="popup-wrap" id="update_popup">
@@ -349,11 +338,11 @@
                     <div class="body-contentbox">
                         <p>리뷰수정 폼</p><br>
                         <div class="star_rating">
-                            <span class="star1 on" value="1"> </span>
-                            <span class="star1" value="2"> </span>
-                            <span class="star1" value="3"> </span>
-                            <span class="star1" value="4"> </span>
-                            <span class="star1" value="5"> </span>
+                            <span class="star on" value="1"> </span>
+                            <span class="star" value="2"> </span>
+                            <span class="star" value="3"> </span>
+                            <span class="star" value="4"> </span>
+                            <span class="star" value="5"> </span>
                         </div>
                         <textarea class="star_box" placeholder="리뷰를 수정해주세요."></textarea>
                     </div>
@@ -364,26 +353,47 @@
                 </div>
             </div>
             <br><br>
-            <div>
-                <span colspan="3">리뷰(<span id="rcount">0</span>)</span>
-            </div>
-            
-            <table id="reviewList" class="table table-hover">
-            
-            		
+            <table id="noticeList" class="table table-hover">
                 <tbody>
-                          <%--
-                          ajax영역
-                          --%>
-                        
-                        
-	               
+                    <c:choose>
+                        <c:when test="${list.size() == 0}">
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach items="${list}" var="notice">
+                                <tr>
+                                    <td class="rv">
+                                            <div class="d-flex bd-highlight">
+                                                <div class="img_cont">
+                                                    <img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img">
+                                                    
+                                                </div>
+                                                <div class="user_info">
+                                                    <p>${review.Star}</p>
+                                                    <p>${review.userId}</p>
+                                                    <p>${review.reviewContent }</p>
+                                                </div>
+                                            </div>
+                                    </td>
+                                    <td class="right">
+                                        <a class="plus">...</a>
+                                        <p class="dd">${review.reviewDate }</p>
+                                    </td>
+                                </tr>
+                                    <div id="bubble_up"  class="speech-bubble hidden">
+                                        <input onclick="call_confirm_up_de()" class="btn btn-light" type="button" value="리뷰 삭제">
+                                        <input onclick="call_confirm_up()" class="btn btn-light" type="button"  id="updatemodal-open" value="리뷰 수정">
+                                    </div>
+
+
+                                    <div id="bubble_sp"  class="speech-bubble hidden">
+                                        <input onclick="call_confirm_sp()" class="btn btn-light" type="button" id="id2" value="스포일러 신고">
+                                    </div>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
                 </tbody>
-                
-                
             </table>
-            
-           
+
             <div class="modal-btn-box">
                 <c:if test="${not empty sessionScope.loginUser}">
                     <button class="btn " type="button" id="insertmodal-open" style="float:right;"  >돌아가기</button>
@@ -410,283 +420,99 @@
             
             <br><br>
         </div>
-    
-    <script>
-    
-    	
-    
-    
-    
+    </div>
+    <script type="text/javascript">
         $(() => {
             $('#searchForm option[value="${condition}"]').prop('selected', true);
-            
-            
-            
         });
-        
         function disableScroll() {
             document.body.style.overflow = 'hidden';
         }
         function enableScroll() {
             document.body.style.overflow = 'visible';
         }
-        
-        
-        function setStar() {
-          	 document.getElementById('starValue').value = point;
-          	 console.log(point);
-          	 console.log(2222);
-          }
-        
-        
-        function generateStars(starCount) {
-            let stars = '';
-            for (let i = 0; i < starCount; i++) {
-                stars += '★';
+
+        $(() => {
+            $("#insert_confirm").click(() => {
+                modalClose();
+                enableScroll();
+            });
+            $("#insertmodal-open").click(() => {
+                $("#insert_popup").css('display', 'flex').hide().fadeIn();
+                disableScroll();
+            });
+            $("#insert_close").click(() => {
+                modalClose();
+                enableScroll();
+            });
+            function modalClose() {
+                $("#insert_popup").fadeOut();
             }
-            return stars;
-        }
-        const starsElement = document.getElementById(`review-stars-${review.userId}`);
-        //starsElement.innerHTML = generateStars(review.star);
-        //starsElement.classList.add('star');
-        
-        
-    	document.addEventListener('DOMContentLoaded', function () {
-    		
-            const stars = document.querySelectorAll('.star');
-            const ratingInput = document.getElementById('star');
-            
-            stars.forEach(star => {
-                star.addEventListener('click', function () {
-                    const ratingValue = this.getAttribute('value');
-                    ratingInput.value = ratingValue;
-                });
+
+            $(".plus").click(function() {
+                const offset = $(this).offset();
+                $("#bubble_sp").css({
+                    top: offset.top - $("#bubble_sp").outerHeight() - 5,
+                    left: offset.left - 60
+                }).toggle();
+            });
+
+            $(".plusTest").click(function() {
+                const offset = $(this).offset();
+                $("#bubble_up").css({
+                    top: offset.top - $("#bubble_sp").outerHeight() - 50,
+                    left: offset.left - 60
+                }).toggle();
             });
         });
-
-
-        
         
 
         $('.star_rating > .star').click(function () {
             $(this).parent().children('span').removeClass('on');
             $(this).addClass('on').prevAll('span').addClass('on');
         });
-        
-        
-        
-        
-        $(() => {
-        
 
-       
-        
-        function saveReview(){
-        	
-        	//빈 문자열이 아닐때만 요청 보낼거임 (빈 게시글작성 막기 위해)trim(): 앞 뒤 공백 제거
-        	if($('#textReview').val().trim() != ''){
-        		
-        		$.ajax({
-            		url : 'insertReview',
-            		data : {
-            			star: $('#star').val(),
-            			reviewContent : $('#textReview').val(),
-            			userId : '${ sessionScope.loginUser.userId }'
-            		},
-            		type : 'post',
-            		
-            		success : function(result)  {
-            			console.log(result);
-            			
-            			if(result == 'success'){
-            				selectReview();
-            				$('#textReview').val('');
-            			};
-            		}
-            	});
-        		
-        	}else {
-        		alertify.alert('내용 쓰셈');
-        	}
-        }
-        
-        
-        
-        $(() => {
-    		selectReview();
-    		//setInt
-    	})
-    
-    
-    	//바로 호출되게 하려고 ( 쓰면 업데이트도 되어야함)  !!! 나중에 data의 value에  ${ review.movieCode }  수정하기
-    	function selectReview(){
-    		
-    		$.ajax({
-    			url : 'selectReview',
-    			type :'get',
-    			data : {
-    				movieCode : 1
-    			},
-    			
-    			success : result => {
-    				console.log(result);  //json타입의 배열 출력됨
-    				
-    				let resultStr ='';
-    				
-    				for(let i in result){
-    					resultStr += 	'<tr>'
-					                    +'<td class="rv">'
-					                    +	    '<div class="d-flex bd-highlight">'
-					                    +    	     '<div class="img_cont">'
-					                    +        	     '<img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img">'
-					                    +            '</div>'
-					                    +            '<div class="user_info">'
-					                    +                '<p>' +result[i].star +'</p>'
-					                    +                '<p>' +result[i].userId +'</p>'
-					                    +           	 '<p>' +result[i].reviewContent +'</p>'
-					                    +    	     '</div>'
-					                    +	    '</div>'
-					                    +'</td>'
-					                    +'<td class="right">'
-					                    +	'<p class="plus" onclick="test()">...</p>'
-					                    
-					                    +'<div id="bubble_sp"  class="speech-bubble hidden">'
-                                        +	'<input onclick="call_confirm_sp()" class="btn btn-light" type="button" id="id2" value="스포일러 신고">'
-                                        +'</div>'
-					                    +	'<p class="dd">' +result[i].reviewDate +'</p>'
-					                    +'</td>'
-					                    
-					                    +'<div id="bubble_up"  class="speech-bubble hidden">'
-					                    +	'<input onclick="call_confirm_up_de()" class="btn btn-light" type="button" value="리뷰 삭제">'
-					                    +	'<input onclick="call_confirm_up()" class="btn btn-light" type="button"  id="updatemodal-open" value="리뷰 수정">'
-                                        +'</div>'
-
-                                        
-					                    +'</tr>'
-					                    
-					                };
-    				
-    				
-    				$('#reviewList tbody').html(resultStr);
-    				$('#rcount').html(result.length);
-    			}
-    			
-    			
-    			
-    		});
-    		var i=0;
-    		window.test= function() {
-                var offset = $(".plus").offset();
-                if(i=0){
-                	$("#bubble_up").css({
-                        top: offset.top - $("#bubble_sp").outerHeight() - 5,
-                        left: offset.left - 10
-                	}).toggle();
-                }else{
-                	$("#bubble_up").css({
-                        top: offset.top - $("#bubble_sp").outerHeight() - 50,
-                        left: offset.left - 60
-                	
-                	}).toggle();
-                }
-                
-                
+        function call_confirm_sp(){
+	
+            if(confirm("리뷰 내용에 스포일러가 포함되어있습니까?")){
+                alert("신고를 완료하였습니다. 내용 확인 후 반영하도록 하겠습니다.");
+            }else{
                 
             }
-    		
-    		window.call_confirm_sp= function(){
-    	    	
-    	        if(confirm("리뷰 내용에 스포일러가 포함되어있습니까?")){
-    	            alert("신고를 완료하였습니다. 내용 확인 후 반영하도록 하겠습니다.");
-    	        }
-    	    }
-    	
-    		window.call_confirm_up_de= function(){
-    	
-    	        if(confirm("리뷰를 삭세하시겠습니까?")){
-    	            alert("리뷰가 삭제되었습니다.");
-    	        }
-    	    }
-    	
-    	    function call_confirm_up(){
-    	
-    	        $(() => {
-    	        $("#update_confirm").click(() => {
-    	                modalClose();
-    	                enableScroll();
-    	            });
-    	
-    	            $("#updatemodal-open").click(() => {
-    	                $("#update_popup").css('display', 'flex').hide().fadeIn();
-    	                disableScroll();
-    	            });
-    	            $("#update_close").click(() => {
-    	                modalClose();
-    	                enableScroll();
-    	            });
-    	            function modalClose() {
-    	                $("#update_popup").fadeOut();
-    	            }
-    	        });
-    	    }
-    	}
-    	
-    	/* window.test= function() {
-            const offset = $(this).offset();
-            $("#bubble_sp").css({
-                top: offset.top - $("#bubble_sp").outerHeight() - 5,
-                left: offset.left - 60
-            }).toggle();
-        } */
-    	
-   
-    
-    document.addEventListener('DOMContentLoaded', function() {
-		
-    });
-	    
-	    
-    
-   
-        $("#insert_confirm").click(() => {
-            modalClose();
-            enableScroll();
-        });
-        $("#insertmodal-open").click(() => {
-            $("#insert_popup").css('display', 'flex').hide().fadeIn();
-            disableScroll();
-        });
-        $("#insert_close").click(() => {
-            modalClose();
-            enableScroll();
-        });
-        function modalClose() {
-            $("#insert_popup").fadeOut();
+            
         }
-        
-        
 
-        function test() {
-            const offset = $(this).offset();
-            $("#bubble_sp").css({
-                top: offset.top - $("#bubble_sp").outerHeight() - 5,
-                left: offset.left - 60
-            }).toggle();
+        function call_confirm_up_de(){
+	
+            if(confirm("리뷰를 삭세하시겠습니까?")){
+                alert("리뷰가 삭제되었습니다.");
+            }else{
+                
+            }
+            
         }
-        
-        
 
-        $(".plusTest").click(function() {
-            const offset = $(this).offset();
-            $("#bubble_up").css({
-                top: offset.top - $("#bubble_sp").outerHeight() - 50,
-                left: offset.left - 60
-            }).toggle();
-        });
-    });
-    
-    
-    
+        function call_confirm_up(){
+	
+            $(() => {
+            $("#update_confirm").click(() => {
+                    modalClose();
+                    enableScroll();
+                });
+
+                $("#updatemodal-open").click(() => {
+                    $("#update_popup").css('display', 'flex').hide().fadeIn();
+                    disableScroll();
+                });
+                $("#update_close").click(() => {
+                    modalClose();
+                    enableScroll();
+                });
+                function modalClose() {
+                    $("#update_popup").fadeOut();
+                }
+            });
+        }
     </script>
 </body>
 </html>
