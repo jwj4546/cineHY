@@ -15,9 +15,9 @@ public class CartServiceImpl implements CartService {
 
 	private final CartRepository cartRepository;
 	
-	@Override
-	public List<CartVO> findById(CartVO cart) {
-		return cartRepository.findById(cart);
-	}
+	/*
+	 * @Override public List<CartVO> findById(CartVO cart) { return
+	 * cartRepository.findById(cart); }
+	 */
 
 }
