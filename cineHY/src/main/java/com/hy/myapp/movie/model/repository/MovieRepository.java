@@ -22,8 +22,8 @@ public class MovieRepository {
 		return sqlSession.selectList("movieMapper.getMovieList");
 	}
 
-	public int deleteMoive(SqlSessionTemplate sqlSession, int movieCode) {
-		return sqlSession.delete("movieMapper.deleteMovie");
+	public int deleteMovie(SqlSessionTemplate sqlSession, int movieCode) {
+		return sqlSession.delete("movieMapper.deleteMovie", movieCode);
 	}
 
 }
