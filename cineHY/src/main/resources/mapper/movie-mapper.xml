@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="movieMapper">
+
+<select id="getMovieIdList" resultType="java.lang.Integer">
+
+		 SELECT
+	    	    MOVIE_CODE
+	       FROM
+	       		TB_MOVIE
+
+</select>
+
+
+<insert id="insertMovie" parameterType="movie">
+
+	INSERT INTO
+				TB_MOVIE
+		 VALUES
+		 		(
+		 		#{movieCode},
+		 		#{movieTitle},
+		 		#{genre},
+		 		#{summary},
+		 		#{runningTime},
+		 		#{rating},
+		 		#{openedDate}
+		 		)
+
+</insert>
+
+<select id="getMovieList" resultType="movie">
+
+		 SELECT
+	    	    MOVIE_CODE movieCode,
+	    	    MOVIE_TITLE movieTitle,
+	    	    GENRE,
+	    	    SUMMARY,
+	    	    RUNNING_TIME runningTime,
+	    	    RATING,
+	    	    OPENED_DATE openedDate
+	       FROM
+	       		TB_MOVIE
+
+</select>
+
+<delete id="deleteMovie" parameterType="_int" >
+	DELETE
+		   TB_MOVIE
+	 WHERE
+	 	   MOVIE_CODE = #{movieCode} 
+
+</delete>
+
+
+</mapper>
