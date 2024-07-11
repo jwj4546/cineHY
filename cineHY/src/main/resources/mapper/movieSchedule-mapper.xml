@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="movieScheduleMapper">
+
+<select id="getTheaterList" resultType="theater">
+
+	SELECT
+		   THEATER_CODE theaterCode,
+		   THEATER_NAME theaterName,
+		   THEATER_ADDR theaterAddr,
+		   LOCATION_X locationX,
+		   LOCATION_Y locationY
+	  FROM
+	  	   TB_THEATER
+	 
+</select>
+
+<select id="getScheduleList" resultType="movieSchedule" parameterType="hashmap">
+	
+	SELECT
+		   SCREENING_ID screeningId,
+		   SCREEN_CODE screenCode,
+		   STARTTIME,
+		   ENDTIME,
+		   STARTDATE,
+		   ENDDATE,
+		   MOVIE_CODE movieCode,
+		   THEATER_CODE theaterCode
+	  FROM
+	  	   TB_MOVIE_SCHEDULE
+	 WHERE
+	 	   MOVIE_CODE = #{movie}
+	   AND
+	   	   THEATER_CODE = #{theater}
+	   AND
+	   	   #{date} BETWEEN STARTDATE AND ENDDATE	   
+
+</select>
+	
+	
+
+</mapper>

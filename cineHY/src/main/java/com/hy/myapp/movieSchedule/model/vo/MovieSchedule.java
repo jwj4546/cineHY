@@ -1,13 +1,28 @@
 package com.hy.myapp.movieSchedule.model.vo;
 
+import java.time.LocalDate;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class MovieSchedule {
 	
 	private int screeningId;
-	private String screenCode;
+	private int screenCode;
 	private String startime;
 	private String endtime;
-	private String startdate;
-	private String enddate;
-	private String movieCode;
+	private LocalDate startDate;
+	private LocalDate endDate;
+	private int movieCode;
 
 }
