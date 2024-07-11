@@ -9,6 +9,6 @@ import com.hy.myapp.cart.model.vo.CartVO;
 @Mapper
 public interface CartRepository {
 
-	List<CartVO> findById(CartVO cart);
+	/* List<CartVO> findById(CartVO cart); */
 
 }
