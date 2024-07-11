@@ -7,8 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>하이하이</h1>
-	<li><a href="reviews">전체 리뷰조회</a></li>
-	<li><a href="getReview">특정 영화의 리뷰조회</a></li>
+
+	<jsp:forward page="WEB-INF/views/common/main.jsp"></jsp:forward>
+	
 </body>
 </html>

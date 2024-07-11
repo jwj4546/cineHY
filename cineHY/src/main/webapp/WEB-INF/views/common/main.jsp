@@ -20,7 +20,11 @@
 	<jsp:include page="../common/menubar.jsp"></jsp:include>
 	<main>
 		<div id="page1"></div>
-		<div id="page2"></div>
+		<div id="page2">
+			<h1>하이하이</h1>
+			<li><a href="reviews">전체 리뷰조회</a></li>
+			<li><a href="getReview">특정 영화의 리뷰조회</a></li>
+		</div>
 	</main>
 	<jsp:include page="../common/footer.jsp"></jsp:include>
 </body>
