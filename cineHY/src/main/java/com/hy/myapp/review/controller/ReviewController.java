@@ -6,11 +6,12 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
 import com.hy.myapp.review.model.service.ReviewService;
 import com.hy.myapp.review.model.vo.Review;
 
@@ -98,6 +99,23 @@ public class ReviewController {
 		
 	}
 	
+	@ResponseBody
+	@PostMapping("ReviewUpdate")
+	public String updateReview(Review review){
+		
+		//log.info("업데이트할 리뷰 : {}", review);
+		
+		return reviewService.updateReview(review)>0? "success":"fail";
+	}
+	
+	 @DeleteMapping("deleteReview")
+	    @ResponseBody
+	    public String deleteReview(Review review) {
+	        // 리뷰 삭제 로직 구현
+		 
+		 log.info(" N 리뷰 : {}", review);
+		 return reviewService.updateReview(review)>0? "success":"fail";
+	    }
 }
 
 

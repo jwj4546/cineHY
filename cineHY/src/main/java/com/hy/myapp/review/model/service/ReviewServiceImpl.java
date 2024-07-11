@@ -55,6 +55,16 @@ public class ReviewServiceImpl implements ReviewService {
 		return null;
 	}
 
+	@Override
+	public int updateReview(Review review) {
+		return reviewRepository.updateReview(sqlSession, review);
+	}
+
+	@Override
+	public int deleteReview(Review review) {
+		return reviewRepository.deleteReview(sqlSession, review);
+	}
+
 	
 
 }

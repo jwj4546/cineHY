@@ -26,4 +26,12 @@ public class ReviewRepository {
 	public int insertReview(SqlSessionTemplate sqlSession, Review review) {
 		return sqlSession.insert("reviewMapper.insertReview", review);
 	}
+
+	public int updateReview(SqlSessionTemplate sqlSession, Review review) {
+		return sqlSession.insert("reviewMapper.updateReview", review);
+	}
+
+	public int deleteReview(SqlSessionTemplate sqlSession, Review review) {
+		return sqlSession.update("reviewMapper.deleteReview", review);
+	}
 }

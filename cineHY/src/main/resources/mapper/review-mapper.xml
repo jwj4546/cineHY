@@ -55,17 +55,42 @@
 						)
 				VALUES
 						(
-						31,
+						SEQ_RNO.NEXTVAL,
 						#{reviewContent},
 						SYSDATE,
 						#{star },
 						DEFAULT, 
-						'user27', 
-						'1', 
-						'TICK00067'
+						#{userId }, 
+						1, 
+						'TICK00004'
 						)
     
     </insert>
+    
+    <update id="updateReview" parameterType="review">
+    
+    	UPDATE 
+    		   TB_REVIEW
+			SET 
+				REVIEW_CONTENT = #{reviewContent},
+    			STAR = #{star },
+    			REVIEW_DATE = SYSDATE
+		  WHERE
+				REVIEW_NO = #{reviewNo }
+    
+    
+    </update>
+    
+    
+    <update id="deleteReview" parameterType="_int">
+		UPDATE
+			   TB_REVIEW
+		   SET	
+		       STATUS = 'N'
+		  WHERE
+			   REVIEW_NO = #{reviewNo}
+	
+	</update>
     
     
     
