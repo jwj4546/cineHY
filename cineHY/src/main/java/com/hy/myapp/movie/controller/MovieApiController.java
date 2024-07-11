@@ -180,8 +180,6 @@ public class MovieApiController {
 		 
 		 List<Integer> movieIdList = movieService.getMovieIdList();
 		 
-		 System.out.println("Movie ID List: " + movieIdList);
-		 
 		 return new Gson().toJson(movieIdList);
     }
 	
@@ -191,7 +189,6 @@ public class MovieApiController {
 	@PostMapping(value="movieInsert", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<Message> save(@RequestBody Movie movie) {
 		
-		System.out.println("Movie 정보: " + movie);
 		int result = movieService.save(movie);
 		if (result == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder()
@@ -212,15 +209,12 @@ public class MovieApiController {
 		 
 		 List<Movie> movieList = movieService.getMovieList();
 		 
-		 System.out.println("Movie Title List: " + movieList);
-		 
 		 if(movieList.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
 									 .body(Message.builder()
 										 .message("조회결과존재없음")
 										 .build());
 			}
-			//log.info("조회된 공지사항 목록 : {}", noticeList);
 			
 			Message responseMsg = Message.builder()
 										 .data(movieList)
@@ -232,9 +226,7 @@ public class MovieApiController {
 	
 	@DeleteMapping("{movieCode}")
 	public ResponseEntity<Message> deleteById(@PathVariable int movieCode) {
-		System.out.println(movieCode);
 		int result = movieService.delete(movieCode);
-		System.out.println(result);
 		
 		if(result == 0) {
 			return ResponseEntity.status(HttpStatus.OK).body(Message.builder()
