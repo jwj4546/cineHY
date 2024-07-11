@@ -17,7 +17,7 @@
 	 <bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource" destroy-method="close">
 	 	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
 	 	<property name="url" value="jdbc:oracle:thin:@43.203.180.3:1521:xe" />
-	 	<property name="username" value="system" />
+	 	<property name="username" value="C##CINEHY" />
 	 	<property name="password" value="1234" />
 	 </bean>
 	 
@@ -57,5 +57,7 @@
 	  	  		<property name="maxInMemorySize" value="100000000" />
 	  	  </bean>
 	  	  
-	  	  <mybatis-spring:scan base-package="com.hy.myapp"/>
+	  	  <mybatis-spring:scan base-package="com.hy.myapp.payment.model.repository"/>
+	  	  <mybatis-spring:scan base-package="com.hy.myapp.product.model.repository"/>
+	  	  <mybatis-spring:scan base-package="com.hy.myapp.cart.model.repository"/>
 </beans>
