@@ -39,6 +39,30 @@
 
 </select>
 
+	
+<select id="allScheduleList" resultType="movieScheduleVO" parameterType="hashmap">
+    SELECT
+        MS.SCREENING_ID screeningId,
+        MS.SCREEN_CODE screenCode,
+        MS.STARTTIME startTime,
+        MS.ENDTIME endTime, 
+        MS.STARTDATE startDate,
+        MS.ENDDATE endDate,
+        MS.MOVIE_CODE movieCode,
+        MS.THEATER_CODE theaterCode,
+        M.MOVIE_TITLE movieTitle 
+    FROM
+        TB_MOVIE_SCHEDULE MS
+        INNER JOIN TB_MOVIE M ON MS.MOVIE_CODE = M.MOVIE_CODE
+    WHERE
+        MS.THEATER_CODE = #{theaterCode} 
+        AND #{date} BETWEEN MS.STARTDATE AND MS.ENDDATE 
+    ORDER BY
+        M.MOVIE_TITLE ASC,
+        MS.SCREEN_CODE ASC,
+        MS.STARTTIME ASC
+</select>	   
+
 <select id="checkSchedule" resultType="int">
     SELECT 
         COUNT(*) AS schedule_count

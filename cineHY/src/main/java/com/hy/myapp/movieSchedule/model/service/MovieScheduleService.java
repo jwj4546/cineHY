@@ -21,6 +21,9 @@ public interface MovieScheduleService {
 	int insert(MovieSchedule movieSchedule);
 
 
+	List<Schedule> allScheduleList(String theaterCode, String selectedTabDate);
+
+
 
 
 }

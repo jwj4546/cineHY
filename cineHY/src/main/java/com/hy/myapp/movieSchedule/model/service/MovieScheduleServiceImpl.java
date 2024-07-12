@@ -39,4 +39,9 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
 		return movieScheduleRepository.insert(sqlSession, movieSchedule);
 	}
 
+	@Override
+	public List<Schedule> allScheduleList(String theaterCode, String selectedTabDate) {
+		return movieScheduleRepository.allScheduleList(sqlSession, theaterCode, selectedTabDate);
+	}
+
 }

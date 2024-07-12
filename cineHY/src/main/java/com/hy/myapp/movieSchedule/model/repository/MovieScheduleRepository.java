@@ -52,4 +52,13 @@ public class MovieScheduleRepository {
 		return sqlSession.insert("movieScheduleMapper.insert", movieSchedule);
 	}
 
+
+	public List<Schedule> allScheduleList(SqlSessionTemplate sqlSession, String theaterCode, String selectedTabDate) {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("theaterCode", theaterCode);
+	    params.put("date", selectedTabDate);
+		
+		return sqlSession.selectList("movieScheduleMapper.allScheduleList", params);
+	}
+
 }

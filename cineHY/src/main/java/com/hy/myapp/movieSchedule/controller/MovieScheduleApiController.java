@@ -49,6 +49,43 @@ public class MovieScheduleApiController {
 		 return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
 	
+	@GetMapping(value="AllScheduleList/{theaterCode}/{selectedTabDate}", produces="application/json; charset=UTF-8")
+	public ResponseEntity<Message> getAll(
+			@PathVariable String theaterCode,
+			@PathVariable String selectedTabDate) {
+		List<Schedule> allScheduleList;
+        try {
+            allScheduleList = movieScheduleService.allScheduleList(theaterCode, selectedTabDate);
+        } catch (Exception e) {
+            // 조회 도중 오류 발생 시 INTERNAL_SERVER_ERROR 반환
+            log.error("스케줄 조회 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body(Message.builder()
+                                     .message("조회 중 오류 발생")
+                                     .build());
+        }
+        
+        if (allScheduleList.isEmpty()) {
+        	Message responseMsg = Message.builder()
+					                    .data(allScheduleList)
+					                    .message("조회결과 없음")
+					                    .build();
+        	
+        	return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+        }
+        
+        log.info("조회된 scheduleList 목록 : {}", allScheduleList);
+        
+        Message responseMsg = Message.builder()
+                                     .data(allScheduleList)
+                                     .message("조회성공")
+                                     .build();
+        log.info("조회된 scheduleList 목록 : {}", allScheduleList);
+        return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+    }
+	
+	
+	
 	@GetMapping(value="schedule/{movie}/{theater}/{date}", produces="application/json; charset=UTF-8")
     public ResponseEntity<Message> getSchedule(
             @PathVariable int movie, 
