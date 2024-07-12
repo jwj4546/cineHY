@@ -16,8 +16,6 @@ public class MemberServiceImpl implements MemberService {
 	private final SqlSessionTemplate sqlSession;
 	private final MemberRepository memberRepository;
 	
-	
-	
 	public int returnNum() {
 		
 		return 1;

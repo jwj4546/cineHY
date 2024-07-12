@@ -222,6 +222,95 @@ article input {
 
 
 </style>
+
+<script>
+	
+	
+	function onCheckClick()	{
+		
+		const checkB1 = document.getElementById("hy-agree");	
+		const checkB2 = document.getElementById("info-agree");
+		const checkB3 = document.getElementById("pro-agree");
+		const allAg = document.getElementById("all-agree");
+		
+		if(allAg.checked){			
+			checkB1.checked = true;
+			checkB2.checked = true;
+			checkB3.checked = true;	
+			
+			
+		} else {
+			checkB1.checked = false;
+			checkB2.checked = false;
+			checkB3.checked = false;
+		}
+		
+
+	}
+	
+	function agCheck() {
+		
+		const joinSubmit = document.getElementById("join-btn");
+		const agreeCheck = document.getElementById("agreeCheckResult");
+		const checkB1 = document.getElementById("hy-agree");	
+		const checkB2 = document.getElementById("info-agree");
+		const checkB3 = document.getElementById("pro-agree");
+		
+				if(!(checkB1.checked && checkB2.checked && checkB3.checked)){				
+					joinSubmit.setAttribute('disabled' ,'true'); 
+					agreeCheck.style.display = 'block';
+					agreeCheck.style.color = 'crimson';
+					agreeCheck.textContent = '모든약관에 동의해주세요!';
+				} else {
+					joinSubmit.removeAttribute('disabled');					
+					agreeCheck.style.display = 'none';
+				} 
+	
+	}
+    
+	
+
+    function pwCheck(){
+    	const $pwdInput = $(' #userPwd');
+    	const $pwdInput2 = $(' #userPwd2');
+    	var regPw = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%&*^?]).{8,16}$/;
+    	var $userPwd = $(' #userPwd');
+    	
+    	if (regPw.test($userPwd.val())) {
+    		
+	    	if ($pwdInput.val() == $pwdInput2.val()) {
+	    		$('#pwdCheckResult').show().css('color', 'green').text('비밀번호가 일치하며 유효한 형식입니다!')
+	    		
+	    		}else {
+	    			$('#pwdCheckResult').show().css('color', 'crimson').text('비밀번호가 서로 다릅니다. 다시 확인해주세요!')
+	    		}
+    		
+    	} else {
+    			$('#pwdCheckResult').show().css('color', 'crimson').text('비밀번호는 최소 8자에서 16자까지 영문자, 숫자 및 특수 문자를 각각 하나 이상 포함해야 합니다.')
+    	}
+    }
+    
+    
+    function idCheck(){
+    	
+    	var regId = /^[0-9a-z]{5,12}$/;
+    	//var regPw = /^(?=.*[a-zA-Z])(?=.[0-9])(?=.[!@#$%&*^?].{8,16}$/;
+    	//var regName = /^[가-힣]{2,6}$/;
+    	
+    	var $userId = $(' #userId');
+    	//var $userPwd = $(' #userPwd');
+    	//var $userName = $(' #userName');
+    	
+    	if (regId.test($userId.val())) {
+    		$('#IdCheckResult').show().css('color', 'green').text('유효한 아이디입니다! 중복체크 버튼을 눌러주세요!')
+    		
+    	}else{
+    		$('#IdCheckResult').show().css('color', 'crimson').text('아이디는 5~12자 사이에 영어소문자와 숫자로 이루어져야 합니다!')
+    	}
+    	
+    }
+
+</script>
 </head>
 <body>
     <article class="join">
@@ -235,19 +324,20 @@ article input {
              <div id = must class = must>
 		        <p>* 은 필수사항입니다</p>
 		     </div>
-		    <form action="join.do" method="post">
+		    <form action="join.do" method="post" enctype="multipart/form-data">
+		    	
 			    <div>
 			        <p>아이디 * </p><span id="IdCheckResult" style="font-size:12px;"></span>	                
-			        <input type="text" id="userId" placeholder="아이디를 입력해주세요." name="userId" required>
+			        <input type="text" id="userId" oninput=idCheck() placeholder="아이디를 입력해주세요." name="userId" required>
 			        <button type="button" id = "checkId-btn" class="btn btn-dark">중복확인</button>
 			    </div>
 			    <div>
 			        <p>비밀번호 *</p>
-			        <input type="password" id="userPwd" placeholder="비밀번호를 입력해주세요." name="userPwd" required>
+			        <input type="password" id="userPwd" oninput=pwCheck() placeholder="비밀번호를 입력해주세요." name="userPwd" required>
 			    </div>
 			    <div>
-			        <p>비밀번호 확인 *</p>
-			        <input type="password" id="userPwd2" placeholder="비밀번호를 한번 더 입력해주세요." name="pwdCheck" required>
+			        <p>비밀번호 확인 *</p><span id="pwdCheckResult" style="font-size:12px;"></span>
+			        <input type="password" id="userPwd2" oninput=pwCheck() placeholder="비밀번호를 한번 더 입력해주세요." name="userPwd2" required>
 			    </div>
 			    <div>
 			        <p>이름 *</p>
@@ -263,8 +353,11 @@ article input {
 			    </div>
 			    <div>
 			        <p>주소</p>
-			        <input type="text" id="address" placeholder="주소를 입력해주세요." name="address">
-			        <button type="button" class="btn btn-dark">주소검색</button>
+			        <input type="text" id="postcode" placeholder="우편번호">
+					<input type="text" id="address" placeholder="주소" name = "address"><br>
+					<input type="text" id="detailAddress" placeholder="상세주소">
+					<input type="text" id="extraAddress" placeholder="참고항목">
+					<input type="button" class = "btn btn-dark" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
 			    </div>
 			    <div>
 			        <p>닉네임</p><span id="NickCheckResult" style="font-size:12px;"></span>
@@ -282,6 +375,7 @@ article input {
 			        <p>생년월일</p>
 			        <input type="date" id="birthDate" name="birthDate">
 			    </div>
+			   
 			    <div>
 			        <p>선호장르</p>
 			        <div>
@@ -320,26 +414,27 @@ article input {
 			            </div>
 			        </div>
 			    </div>
-			    <button type="submit" id="join-btn" class="join-btn btn-primary">가입하기</button>
+			    <button type="submit" id="join-btn"  class="join-btn btn-primary" >가입하기</button>
 			    </form>
 			
 
             <div class = "terms" id = "terms">
                 <p>이용약관동의</p>
                 <div>
-                    <input type="checkbox" name="all-agree" id="all-agree">전체 동의하기
+                    <input type="checkbox" onclick="onCheckClick()" name="all-agree" id="all-agree">전체 동의하기<br>
+                    <span id="agreeCheckResult" style="font-size:12px; font-weight: bold;"></span>
                 </div>
                 <div>
                     <div>
-                        <input type="checkbox" name="agree" id="hy-agree">이용약관 동의 <span>(필수)</span>
+                        <input type="checkbox" name="agree" id="hy-agree" onclick="agCheck()">이용약관 동의 <span>(필수)</span>
                         <a href = "terms">약관보기 ></a>
                     </div>
                     <div>
-                        <input type="checkbox" name="agree" id="info-agree">개인정보 수집 및 이용 동의 <span>(필수)</span>
+                        <input type="checkbox" name="agree" id="info-agree" onclick="agCheck()">개인정보 수집 및 이용 동의 <span>(필수)</span>
                        <a href = "terms">약관보기 ></a>
                     </div>
                     <div>
-                        <input type="checkbox" name="agree" id="pro-agree">프로모션 정보 수신 동의 <span>(필수)</span>
+                        <input type="checkbox" name="agree" id="pro-agree" onclick="agCheck()">프로모션 정보 수신 동의 <span>(필수)</span>
                         <a href = "terms">약관보기 ></a>
                     </div>
                     
@@ -355,12 +450,15 @@ article input {
     
     <script>
     
+    
+    
+    
     $(()=> {
     	
-    	const $idInput = $(' #userId');
-    	const $checkResult = $('#IdCheckResult');
-    	const $joinSubmit = $('#join-btn');
-    	const $checkIdBtn = $('#checkId-btn');
+	   	const $idInput = $(' #userId');
+	   	const $checkResult = $('#IdCheckResult');
+	   	const $joinSubmit = $('#join-btn');
+	   	const $checkIdBtn = $('#checkId-btn');
     	
     	$checkIdBtn.click(() => {
     		
@@ -377,6 +475,7 @@ article input {
 					if(response === 'N') {
 						$checkResult.show().css('color', 'crimson').text('이미 존재하는 아이디입니다!');
 						$joinSubmit.attr('disabled', true);
+						
 					}
 					else {
 						$checkResult.show().css('color', 'green').text('사용가능한 아이디입니다!');
@@ -398,7 +497,7 @@ article input {
     	const $nickInput = $(' #userNick');
     	const $checkNickResult = $(' #NickCheckResult');
     	const $checkNickBtn = $('#checkNick-btn');
-    	const $joinSubmit = $('join-btn');
+    	const $joinSubmit = $('#join-btn');
     	
     	$checkNickBtn.click(() =>{
     		
@@ -417,7 +516,8 @@ article input {
     				
     				if(response === 'N') {
     					$checkNickResult.show().css('color', 'crimson').text('이미 존재하는 닉네임입니다!');
-    					$joinSubmit.attr('disabled', ture);
+    					$joinSubmit.attr('disabled', true);
+    					
     					
     				} else{
     					$checkNickResult.show().css('color', 'green').text('사용가능한 닉네임입니다!');
@@ -441,6 +541,91 @@ article input {
     		
     	});
     });
+       
+    
+    
+   
+ 
+    
+    </script>
+    
+   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		<script>
+		    function execDaumPostcode() {
+		        new daum.Postcode({
+		            oncomplete: function(data) {
+		                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+		
+		                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+		                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+		                var addr = ''; // 주소 변수
+		                var extraAddr = ''; // 참고항목 변수
+		
+		                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+		                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+		                    addr = data.roadAddress;
+		                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+		                    addr = data.jibunAddress;
+		                }
+		
+		                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+		                if(data.userSelectedType === 'R'){
+		                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+		                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+		                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+		                        extraAddr += data.bname;
+		                    }
+		                    // 건물명이 있고, 공동주택일 경우 추가한다.
+		                    if(data.buildingName !== '' && data.apartment === 'Y'){
+		                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+		                    }
+		                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+		                    if(extraAddr !== ''){
+		                        extraAddr = ' (' + extraAddr + ')';
+		                    }
+		                    // 조합된 참고항목을 해당 필드에 넣는다.
+		                    document.getElementById("extraAddress").value = extraAddr;
+		                
+		                } else {
+		                    document.getElementById("extraAddress").value = '';
+		                }
+		
+		                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+		                document.getElementById('postcode').value = data.zonecode;
+		                document.getElementById("address").value = addr;
+		                // 커서를 상세주소 필드로 이동한다.
+		                document.getElementById("detailAddress").focus();
+		            }
+		        }).open();
+		    }
+		</script>
+    
+    
+   
+
+</body>
+</html>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
