@@ -10,6 +10,7 @@
   	<typeAliases>
   		<typeAlias type="com.hy.myapp.movie.model.vo.Movie" alias="movie" />
   		<typeAlias type="com.hy.myapp.movieSchedule.model.vo.MovieSchedule" alias="movieSchedule" />
+  		<typeAlias type="com.hy.myapp.movieSchedule.model.vo.MovieScheduleVO" alias="movieScheduleVO" />
   		<typeAlias type="com.hy.myapp.theater.model.vo.Theater" alias="theater" />
   		<typeAlias type="com.hy.myapp.screen.model.vo.Screen" alias="screen" />
   		<typeAlias type="com.hy.myapp.payment.model.vo.PaymentVO" alias="payment"/>
