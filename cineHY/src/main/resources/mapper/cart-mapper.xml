@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			        P.PRODUCT_CATEGORY productCategory,
 			        P.PRODUCT_COMMENT productComment,
 			        P.PRODUCT_PRICE productPrice,
-			        P.CHANGE_IMAGE productImage,
+			        P.CHANGE_IMAGE changeImage,
 			        M.USER_ID userId
   		  FROM
 			        TB_CART C,

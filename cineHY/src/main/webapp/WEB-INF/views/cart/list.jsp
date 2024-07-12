@@ -82,7 +82,7 @@
             </div>
         </div>
     </div><br><br>
-
+	
     <table class="table table-bordered mt-4">
         <thead>
             <tr>
@@ -92,28 +92,34 @@
                 <th scope="col">판매금액</th>
                 <th scope="col">수량</th>
                 <th scope="col">구매금액</th>
-                <th scope="col">선택</th>
+                <th scope="col">삭제</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td><input type="checkbox" checked></td>
-                <td><img src="popcorn1.webp" alt="" style="width: auto; height: 100px;"></td>
-                <td>
-                    <div>어니언 팝콘</div>
-                </td>
-                <td>8000원</td>
-                <td>
-                    <input type="number" class="form-control" value="1" min="1" style="width: auto;" />
-                </td>
-                <td>8000원</td>
-                <td><button class="btn btn-danger btn-sm">삭제</button></td>
-            </tr>
-        </tbody>
+        
+	        <tbody>
+	        	<c:forEach items="${ list }" var="cart">
+		            <tr>
+		                <td><input type="checkbox" class="checkbox" onchange="changeCheck" checked></td>
+		                <td><img src="${ cart.changeImage }" alt="" style="width: auto; height: 100px;"></td>
+		                <td>
+		                    <div>${ cart.productName }</div>
+		                </td>
+		                <td>
+		                	${ cart.productPrice }
+		                	<input type="hidden" class="productPrice" value="${ cart.productPrice }" />
+		                </td>
+		                <td>
+		                    <input type="number" class="productAmount"  value="${ cart.cartAmount }" min="1" style="width: auto;" onchange="amountChange()" />
+		                </td>
+		                <td class="oneTotal"><input type="hidden" class="oneTotal" value="" /></td>
+		                <td><button class="btn btn-danger btn-sm">삭제</button></td>
+		            </tr>
+	        	</c:forEach>
+	        </tbody>
     </table>
 
     <div class="text-right mt-3">
-        <h4>결제 예정 금액: <span>8000원</span></h4>
+        <h4 >결제 예정 금액: <span id="total"></span>원</h4>
     </div>
 
     <div class="text-center mt-4">
@@ -122,8 +128,68 @@
 </div>
 
 <script>
+// 문서가 실행되면 각 항목의 금액과 전체 금액이 계산되는 함수
+	window.onload = function() {
+		
+		var count = document.getElementsByClassName("checkbox").length;
+		
+		for(let i=0; i<count; i++) {
+			var price = document.getElementsByClassName("productPrice")[i].value;
+			var amount = document.getElementsByClassName("productAmount")[i].value;
+			var oneTotal = price * amount;
+			
+			document.getElementsByClassName("oneTotal")[i].innerHTML = oneTotal;
+			document.getElementsByClassName("oneTotal")[i].value = oneTotal;
+		}
+			
+			var total = 0;	
+			for(let k=0; k<count; k++) {
+				
+				total += document.getElementsByClassName("oneTotal")[k].value;
+				
+			}
+			document.getElementById("total").innerHTML = total;
+			console.log(total);
+	}
+		
+	// 각 항목에 체크를 해제하고 선택할 때 마다 전체 가격이 변하는 함수
+	function changeCheck() {
+		let checkboxes = document.querySelectorAll(".checkbox");
+		
+		for(let i=0;i<checkboxes.length;i++) {
+			if(checkboxes[i].checked) {
+				console.log("체크");
+			} else {
+				console.log("노체크");
+			}
+			
+		}
+	}
 
 
+	// 각 항목의 수량을 변경할 때 그에 따라 항목의 가격과 전체 가격이 변경되는 함수
+	function amountChange() {
+		
+	var count = document.getElementsByClassName("checkbox").length;
+		
+		for(let i=0; i<count; i++) {
+			var price = document.getElementsByClassName("productPrice")[i].value;
+			var amount = document.getElementsByClassName("productAmount")[i].value;
+			var oneTotal = price * amount;
+			
+			document.getElementsByClassName("oneTotal")[i].innerHTML = oneTotal;
+			document.getElementsByClassName("oneTotal")[i].value = oneTotal;
+		}
+			
+			var total = 0;	
+			for(let k=0; k<count; k++) {
+				
+				total += document.getElementsByClassName("oneTotal")[k].value;
+				
+			}
+			document.getElementById("total").innerHTML = total;
+			console.log(total);
+	}
 </script>
 
 <footer class="bg-light py-3 mt-5">
