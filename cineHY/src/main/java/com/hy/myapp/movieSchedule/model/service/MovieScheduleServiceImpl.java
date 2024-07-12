@@ -1,12 +1,12 @@
 package com.hy.myapp.movieSchedule.model.service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 
 import com.hy.myapp.movieSchedule.model.repository.MovieScheduleRepository;
+import com.hy.myapp.movieSchedule.model.vo.MovieSchedule;
 import com.hy.myapp.theater.model.vo.Theater;
 import com.siot.IamportRestClient.response.Schedule;
 
@@ -25,8 +25,18 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
 	}
 
 	@Override
-	public List<Schedule> getScheduleList(int movie, String theater, LocalDate date) {
+	public List<Schedule> getScheduleList(int movie, String theater, String date) {
 		return movieScheduleRepository.getScheduleList(sqlSession, movie, theater, date);
+	}
+
+	@Override
+	public int checkSchedule(String theaterCode, int screenCode, String startDate, String endDate, String startTime, String endTime) {
+		return movieScheduleRepository.checkSchedule(sqlSession, theaterCode, screenCode, startDate, endDate, startTime, endTime);
+	}
+
+	@Override
+	public int insert(MovieSchedule movieSchedule) {
+		return movieScheduleRepository.insert(sqlSession, movieSchedule);
 	}
 
 }

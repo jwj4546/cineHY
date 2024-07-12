@@ -38,7 +38,50 @@
 	   	   #{date} BETWEEN STARTDATE AND ENDDATE	   
 
 </select>
-	
+
+<select id="checkSchedule" resultType="int">
+    SELECT 
+        COUNT(*) AS schedule_count
+    FROM 
+        TB_MOVIE_SCHEDULE MS
+    JOIN 
+        TB_SCREEN S ON MS.SCREEN_CODE = S.SCREEN_CODE
+    JOIN 
+        TB_THEATER T ON MS.THEATER_CODE = T.THEATER_CODE
+    WHERE 
+        T.THEATER_CODE = #{theaterCode}
+        AND MS.SCREEN_CODE = #{screenCode}
+        AND (
+            (#{startDate} &lt; MS.ENDDATE AND #{endDate} &gt; MS.STARTDATE) OR
+            (#{startDate} = MS.STARTDATE AND #{startTime} &lt; MS.ENDTIME) OR
+            (#{endDate} = MS.ENDDATE AND #{endTime} &gt; MS.STARTTIME) OR
+            (MS.STARTDATE BETWEEN #{startDate} AND #{endDate}) OR
+            (MS.ENDDATE BETWEEN #{startDate} AND #{endDate})
+        )
+        <if test="startTime != null and endTime != null">
+            AND NOT (
+                (#{startTime} &gt;= MS.ENDTIME OR #{endTime} &lt;= MS.STARTTIME)
+            )
+        </if>
+</select>
+
+<insert id="insert" parameterType="movieSchedule" >
+
+	INSERT INTO
+				TB_MOVIE_SCHEDULE
+	     VALUES
+	     		(
+	     		SEQ_MOVIE_SCHEDULE.NEXTVAL,
+				#{screenCode},
+				#{theaterCode},
+				#{startTime},
+				#{endTime},
+				#{startDate},
+				#{endDate},
+				#{movieCode}		
+	     		)
+
+</insert>
 	
 
 </mapper>
