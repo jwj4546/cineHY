@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -117,7 +119,7 @@
 		            <div class="product-card">
 		              <div style="height:300px; overflow:hidden;"><img src="${ product.changeImage }" alt="영화관람권" style="height:100%; width:auto;"></div>
 		              <div class="product-name">${ product.productName }</div>
-		              <div class="product-price">${ product.productPrice }원</div>
+		              <div class="product-price"><fmt:formatNumber value="${ product.productPrice }" pattern="#,###" />원</div>
 		            </div>
 		          </div>
 	          	</c:forEach>
