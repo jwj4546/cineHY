@@ -13,7 +13,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
     #page1 { height: 80px;}
-    #page2 { height: 900px;}
+    #page3 { height: 500px;}
    	.mt-4 { margin-top: 1.5rem; }
     .mt-5 { margin-top: 3rem; }
 </style>
@@ -39,10 +39,7 @@
 		                <div class="form-group col-md-4">
 		                    <label for="theaterSelect">영화관 선택</label>
 		                    <select id="theaterSelect" class="form-control">
-		                        <option value="">영화관을 선택하세요</option>
-		                        <option>강남</option>
-		                        <option>강서</option>
-		                        <option>종로</option>
+		                        
 		                    </select>
 		                </div>
 		                <div class="form-group col-md-4">
@@ -78,12 +75,121 @@
 		        </form>
 		
 		        <div id="registerSchedule" class="mt-4">
-		            <h4>등록할 상영 스케줄</h4>
 		            <div id="newScheduleInfo"></div>
 		            <button type="button" class="btn btn-success" onclick="checkSchedule()" >등록하기</button>
 		        </div>
 		    </div>
 	    </div>
+	    <br>
+	    <hr>
+	    <br>
+	    <div id="page3">
+		    <div class="container mt-5">
+	        <h2 class="mb-4">등록된 영화 스케줄</h2>
+	        
+	        <!-- 지역 선택 버튼 -->
+	        <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
+	            <label class="btn btn-outline-primary">
+	                <input type="radio" name="theater" autocomplete="off"> 강남
+	            </label>
+	            <label class="btn btn-outline-primary">
+	                <input type="radio" name="theater" autocomplete="off"> 홍대
+	            </label>
+	            <label class="btn btn-outline-primary">
+	                <input type="radio" name="theater" autocomplete="off"> 강서
+	            </label>
+	            <label class="btn btn-outline-primary">
+	                <input type="radio" name="theater" autocomplete="off"> 마곡
+	            </label>
+	            <label class="btn btn-outline-primary">
+	                <input type="radio" name="theater" autocomplete="off"> 종로
+	            </label>
+	            <label class="btn btn-outline-primary">
+	                <input type="radio" name="theater" autocomplete="off"> 잠실
+	            </label>
+	        </div>
+	
+	        <!-- 날짜 선택 탭 -->
+	        <ul class="nav nav-tabs">
+	            <li class="nav-item">
+	                <a class="nav-link active" href="#date1" data-toggle="tab">6/19 (수)</a>
+	            </li>
+	            <li class="nav-item">
+	                <a class="nav-link" href="#date2" data-toggle="tab">6/20 (목)</a>
+	            </li>
+	            <li class="nav-item">
+	                <a class="nav-link" href="#date3" data-toggle="tab">6/21 (금)</a>
+	            </li>
+	            <li class="nav-item">
+	                <a class="nav-link" href="#date4" data-toggle="tab">6/22 (토)</a>
+	            </li>
+	            <li class="nav-item">
+	                <a class="nav-link" href="#date5" data-toggle="tab">6/23 (일)</a>
+	            </li>
+	            <li class="nav-item">
+	                <a class="nav-link" href="#date6" data-toggle="tab">6/24 (월)</a>
+	            </li>
+	            <li class="nav-item">
+	                <a class="nav-link" href="#date7" data-toggle="tab">6/25 (화)</a>
+	            </li>
+	        </ul>
+	
+	        <!-- 스케줄 표 -->
+	        <div class="tab-content">
+	            <div class="tab-pane fade show active" id="date1">
+	                <table class="table table-bordered schedule-table">
+	                    <thead>
+	                        <tr>
+	                            <th>영화</th>
+	                            <th>상영관</th>
+	                            <th>시간</th>
+	                            <th>옵션</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody>
+	                        <tr>
+	                            <td>인사이드 아웃</td>
+	                            <td>1관</td>
+	                            <td>10:10</td>
+	                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
+	                        </tr>
+	                        <tr>
+	                            <td>인사이드 아웃</td>
+	                            <td>2관</td>
+	                            <td>11:10</td>
+	                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
+	                        </tr>
+	                        <tr>
+	                            <td>카브리올레</td>
+	                            <td>1관</td>
+	                            <td>19:30</td>
+	                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
+	                        </tr>
+	                    </tbody>
+	                </table>
+	            </div>
+	            <div class="tab-pane fade" id="date2">
+	                <!-- 다른 날짜의 영화 스케줄 표 -->
+	            </div>
+	            <div class="tab-pane fade" id="date3">
+	                <!-- 다른 날짜의 영화 스케줄 표 -->
+	            </div>
+	            <div class="tab-pane fade" id="date4">
+	                <!-- 다른 날짜의 영화 스케줄 표 -->
+	            </div>
+	            <div class="tab-pane fade" id="date5">
+	                <!-- 다른 날짜의 영화 스케줄 표 -->
+	            </div>
+	            <div class="tab-pane fade" id="date6">
+	                <!-- 다른 날짜의 영화 스케줄 표 -->
+	            </div>
+	            <div class="tab-pane fade" id="date7">
+	                <!-- 다른 날짜의 영화 스케줄 표 -->
+	            </div>
+	        </div>
+	    </div>
+    </div>
+	    
 
     <script>
 	    $(document).ready(function() {
@@ -149,16 +255,12 @@
 	    		url : 'movieSchedule/schedule/' + movie + '/' + theater + '/' + date,
 	    		method : 'get',
 	    		dataType : 'json',
-	    		success : function(data) {
-	    			console.log(data)
-
+	    		success : function(data) { // data => 
 		            const scheduleResult = document.getElementById('scheduleResult');
 		            scheduleResult.innerHTML = '';
-		
+					//console.log(data);
 		            if (data.data.length > 0) {
-		            	console.log(data.data);
 		                data.data.forEach(s => {
-		                	console.log(s.startDate);
 		                    scheduleResult.innerHTML += '<div class="card mt-2">'
 		                            + '<div class="card-body">'
 		                            + '<h5 class="card-title">' + s.startDate + ' 상영 스케줄</h5>'
@@ -175,44 +277,8 @@
 	        });
         }
  
-        /* function updateSchedule() {
-            const movie = document.getElementById('movieSelect').value;
-            const theater = document.getElementById('theaterSelect').value;
-            const date = document.getElementById('dateSelect').value;
-            const screen = document.getElementById('screenSelect').value;
-            const startTime = document.getElementById('startTime').value;
-            const endTime = document.getElementById('endTime').value;
-
-            const newScheduleInfo = document.getElementById('newScheduleInfo');
-
-            if (movie && theater && date && screen && startTime && endTime) {
-                newScheduleInfo.innerHTML = `
-                    <div class="card mt-2">
-                        <div class="card-body">
-                            <h5 class="card-title">${date} 등록할 상영 스케줄</h5>
-                            <p class="card-text">영화관: ${theater}</p>
-                            <p class="card-text">영화: ${movie}</p>
-                            <p class="card-text">상영관: ${screen}</p>
-                            <p class="card-text">시간: ${startTime} - ${endTime}</p>
-                        </div>
-                    </div>
-                `;
-            } else {
-                newScheduleInfo.innerHTML = '<p>등록할 스케줄 정보를 모두 입력해주세요.</p>';
-            }
-        } */
         
-     /*    const movie = document.getElementById('movieSelect').value;
-        const theater = document.getElementById('theaterSelect').value;
-        const date = document.getElementById('dateSelect').value;
-        const screen = document.getElementById('screenSelect').value;
-        const startTime = document.getElementById('startTime').value;
-        const endTime = document.getElementById('endTime').value;
-        if (!movie || !theater || !date || !screen || !startTime || !endTime) {
-            alert('모든 옵션을 선택해주세요.');
-            return;
-        } */
-        
+        //중복 스케줄 체크
         function checkSchedule() {
            
             const theaterCode= $('#theaterSelect').val();
@@ -234,11 +300,8 @@
                 method: 'get',
                 dataType: 'json',
                 success: function(data) {
-                    console.log(data.data);
                     let result = data.data;
-                    console.log(result);
                     if (result == 0) {
-                    	console.log(result);
                     	registerSchedule();
                     } else if(result > 0){
                     	alert("이미 등록된 스케줄이 있습니다.")
@@ -248,7 +311,7 @@
                 }
             });
         }
-
+		//중복된 시간이 없으면 스케줄 등록
         function registerSchedule() {
             const requestData = {
             		movieCode: $('#movieSelect').val(),
@@ -266,9 +329,8 @@
                 contentType: 'application/json; charset=UTF-8', // JSON 형식으로 설정
                 data: JSON.stringify(requestData), // JSON 문자열로 변환하여 전송
                 success: function(data) {
-                    console.log(data);
+                    //console.log(data);
 
-                    // 실제로는 서버에 요청을 보내서 스케줄을 등록해야 함.
                     alert('상영 스케줄이 등록되었습니다.');
 
                     // 등록 후 폼 초기화
