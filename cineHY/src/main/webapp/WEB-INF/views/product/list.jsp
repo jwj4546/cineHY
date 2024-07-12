@@ -97,15 +97,18 @@
                 <button type="button" class="btn btn-secondary">스낵</button>
             </div><br><br>
             <div class="float-right">
-            <a href="productForm"><button type="button" class="btn btn-warning">상품 등록</button></a>
-              <button type="button" class="btn btn-info">
-                장바구니<span class="badge badge-light">5</span>
-              </button>
+            
+              <form action="cartlist" method="post" id="cartList">
+              	<input type="hidden" name="userId" value="${ sessionScope.loginUser.userId }" />
+              	<a href="productForm"><button type="button" class="btn btn-warning">상품 등록</button></a>
+              	<button type="submit" class="btn btn-info">
+               	 장바구니<span class="badge badge-light">5</span>
+              	</button>
+              </form>
             </div>
           </div>
         </div>
-      </div>
-    
+      </div><br><br><br><br>
       <!-- Product Grid -->
 	      <div class="container">
 	        <div class="row">

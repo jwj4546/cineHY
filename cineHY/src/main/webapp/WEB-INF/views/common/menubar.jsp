@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <header>
@@ -27,7 +28,7 @@
                     <a class="nav-link " href="#">예매</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="#">스토어</a>
+                    <a class="nav-link " href="productlist">스토어</a>
                 </li>
             </ul>
             <form class="form-inline mt-2 mt-md-0">
@@ -35,12 +36,27 @@
                 <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
             </form>
             <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">로그인</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">회원가입</a>
-                </li>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.loginUser}">
+                    	<div class = "welcome">
+                        <label>${sessionScope.loginUser.userNick}님 환영합니다</label> &nbsp;&nbsp;
+                        </div>
+                        <li class="nav-item active" style="float: right;">
+                          <a class="nav-link" href="mypage">마이페이지</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="logout">로그아웃</a>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="nav-item active" style="float: right;">
+                          <a class="nav-link" href="login">로그인</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="join">회원가입</a>
+                        </li>
+                    </c:otherwise>
+                </c:choose>
             </ul>
         </div>
     </nav>
