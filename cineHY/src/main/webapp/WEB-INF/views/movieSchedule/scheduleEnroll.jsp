@@ -22,66 +22,68 @@
 	<jsp:include page="../common/menubar.jsp"></jsp:include>
 	<main>
     	<div id="page1"></div>
-    <div class="container mt-5">
-        <h2 class="mb-4">영화 스케줄 등록</h2>
-        <form id="scheduleForm">
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="movieSelect">영화선택</label>
-                    <select id="movieSelect" class="form-control">
-                        <option value="">영화를 선택하세요</option>
-                        <option>인사이드 아웃</option>
-                        <option>하이저킹</option>
-                        <option>헨젤가이즈</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="theaterSelect">영화관 선택</label>
-                    <select id="theaterSelect" class="form-control">
-                        <option value="">영화관을 선택하세요</option>
-                        <option>강남</option>
-                        <option>강서</option>
-                        <option>종로</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="dateSelect">상영날짜</label>
-                    <input type="date" id="dateSelect" class="form-control">
-                </div>
-            </div>
-            <button type="button" class="btn btn-primary mb-4" onclick="fetchSchedule()">조회하기</button>
-        </form>
-
-        <div id="scheduleResult" class="mt-4"></div>
-
-        <form id="registerForm">
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="screenSelect">상영관 선택</label>
-                    <select id="screenSelect" class="form-control" onchange="updateSchedule()">
-                        <option value="">상영관을 선택하세요</option>
-                        <option value="1">1관</option>
-                        <option value="2">2관</option>
-                        <option value="3">3관</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="startTime">상영시작시간</label>
-                    <input type="time" id="startTime" class="form-control" onchange="updateSchedule()">
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="endTime">상영종료시간</label>
-                    <input type="time" id="endTime" class="form-control" onchange="updateSchedule()">
-                </div>
-            </div>
-        </form>
-
-        <div id="registerSchedule" class="mt-4">
-            <h4>등록할 상영 스케줄</h4>
-            <div id="newScheduleInfo"></div>
-            <button type="button" class="btn btn-success" onclick="registerSchedule()">등록하기</button>
-        </div>
-    </div>
+    	<div id="page2">
+		    <div class="container mt-5">
+		        <h2 class="mb-4">영화 스케줄 등록</h2>
+		        <form id="scheduleForm">
+		            <div class="form-row">
+		                <div class="form-group col-md-4">
+		                    <label for="movieSelect">영화선택</label>
+		                    <select id="movieSelect" class="form-control">
+		                        <option value="">영화를 선택하세요</option>
+		                        <option>인사이드 아웃</option>
+		                        <option>하이저킹</option>
+		                        <option>헨젤가이즈</option>
+		                    </select>
+		                </div>
+		                <div class="form-group col-md-4">
+		                    <label for="theaterSelect">영화관 선택</label>
+		                    <select id="theaterSelect" class="form-control">
+		                        <option value="">영화관을 선택하세요</option>
+		                        <option>강남</option>
+		                        <option>강서</option>
+		                        <option>종로</option>
+		                    </select>
+		                </div>
+		                <div class="form-group col-md-4">
+		                    <label for="dateSelect">상영날짜</label>
+		                    <input type="date" id="dateSelect" class="form-control">
+		                </div>
+		            </div>
+		            <button type="button" class="btn btn-primary mb-4" onclick="fetchSchedule()">조회하기</button>
+		        </form>
+		
+		        <div id="scheduleResult" class="mt-4"></div>
+		
+		        <form id="registerForm">
+		            <div class="form-row">
+		                <div class="form-group col-md-4">
+		                    <label for="screenSelect">상영관 선택</label>
+		                    <select id="screenSelect" class="form-control" >
+		                        <option value="">상영관을 선택하세요</option>
+		                        <option value="1">1관</option>
+		                        <option value="2">2관</option>
+		                        <option value="3">3관</option>
+		                    </select>
+		                </div>
+		                <div class="form-group col-md-4">
+		                    <label for="startTime">상영시작시간</label>
+		                    <input type="time" id="startTime" class="form-control" >
+		                </div>
+		                <div class="form-group col-md-4">
+		                    <label for="endTime">상영종료시간</label>
+		                    <input type="time" id="endTime" class="form-control" >
+		                </div>
+		            </div>
+		        </form>
+		
+		        <div id="registerSchedule" class="mt-4">
+		            <h4>등록할 상영 스케줄</h4>
+		            <div id="newScheduleInfo"></div>
+		            <button type="button" class="btn btn-success" onclick="checkSchedule()" >등록하기</button>
+		        </div>
+		    </div>
+	    </div>
 
     <script>
 	    $(document).ready(function() {
@@ -153,20 +155,19 @@
 		            const scheduleResult = document.getElementById('scheduleResult');
 		            scheduleResult.innerHTML = '';
 		
-		            if (result.length > 0) {
-		                result.forEach(s => {
-		                    scheduleResult.innerHTML += `
-		                        <div class="card mt-2">
-		                            <div class="card-body">
-		                                <h5 class="card-title">${s.date} 상영 스케줄</h5>
-		                                <p class="card-text">영화관: ${s.theater}</p>
-		                                <p class="card-text">영화: ${s.movie}</p>
-		                                <p class="card-text">상영관: ${s.screen}</p>
-		                                <p class="card-text">시간: ${s.startTime} - ${s.endTime}</p>
-		                            </div>
-		                        </div>
-		                    `;})
-		                }
+		            if (data.data.length > 0) {
+		            	console.log(data.data);
+		                data.data.forEach(s => {
+		                	console.log(s.startDate);
+		                    scheduleResult.innerHTML += '<div class="card mt-2">'
+		                            + '<div class="card-body">'
+		                            + '<h5 class="card-title">' + s.startDate + ' 상영 스케줄</h5>'
+		                            + '<p class="card-text">상영관: ' + s.screenCode + '관</p>'
+		                            + '<p class="card-text">시간: ' + s.startTime +'-' + s.endTime + '</p>'
+		                            + '</div>'
+		                        	+ '</div>'
+		                  ;})
+		            }
 		            else {
 		                scheduleResult.innerHTML = '<p>선택한 날짜에 해당 영화의 스케줄이 없습니다.</p>';
 		            }
@@ -174,7 +175,7 @@
 	        });
         }
  
-        function updateSchedule() {
+        /* function updateSchedule() {
             const movie = document.getElementById('movieSelect').value;
             const theater = document.getElementById('theaterSelect').value;
             const date = document.getElementById('dateSelect').value;
@@ -199,31 +200,86 @@
             } else {
                 newScheduleInfo.innerHTML = '<p>등록할 스케줄 정보를 모두 입력해주세요.</p>';
             }
+        } */
+        
+     /*    const movie = document.getElementById('movieSelect').value;
+        const theater = document.getElementById('theaterSelect').value;
+        const date = document.getElementById('dateSelect').value;
+        const screen = document.getElementById('screenSelect').value;
+        const startTime = document.getElementById('startTime').value;
+        const endTime = document.getElementById('endTime').value;
+        if (!movie || !theater || !date || !screen || !startTime || !endTime) {
+            alert('모든 옵션을 선택해주세요.');
+            return;
+        } */
+        
+        function checkSchedule() {
+           
+            const theaterCode= $('#theaterSelect').val();
+            const screenCode= $('#screenSelect').val();
+            const startDate= $('#dateSelect').val();
+            const endDate= $('#dateSelect').val();
+            const startTime= $('#startTime').val();
+            const endTime= $('#endTime').val();
+        
+
+            $.ajax({
+                url: 'movieSchedule/check/' 
+                		+ theaterCode + '/' 
+                		+ screenCode + '/'
+                		+ startDate + '/' 
+                		+ endDate + '/'
+                		+ startTime + '/'
+                		+ endTime,
+                method: 'get',
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data.data);
+                    let result = data.data;
+                    console.log(result);
+                    if (result == 0) {
+                    	console.log(result);
+                    	registerSchedule();
+                    } else if(result > 0){
+                    	alert("이미 등록된 스케줄이 있습니다.")
+                    } else {
+                    	alert("등록실행 오류")
+                    }
+                }
+            });
+        }
+
+        function registerSchedule() {
+            const requestData = {
+            		movieCode: $('#movieSelect').val(),
+                    theaterCode: $('#theaterSelect').val(),
+                    screenCode: $('#screenSelect').val(),
+                    startDate: $('#dateSelect').val(),
+                    endDate: $('#dateSelect').val(),
+                    startTime: $('#startTime').val(),
+                    endTime: $('#endTime').val()
+            };
+
+            $.ajax({
+                url: 'movieSchedule/insert',
+                method: 'post',
+                contentType: 'application/json; charset=UTF-8', // JSON 형식으로 설정
+                data: JSON.stringify(requestData), // JSON 문자열로 변환하여 전송
+                success: function(data) {
+                    console.log(data);
+
+                    // 실제로는 서버에 요청을 보내서 스케줄을 등록해야 함.
+                    alert('상영 스케줄이 등록되었습니다.');
+
+                    // 등록 후 폼 초기화
+                    document.getElementById('scheduleForm').reset();
+                    document.getElementById('registerForm').reset();
+                    document.getElementById('newScheduleInfo').innerHTML = '';
+                    document.getElementById('scheduleResult').innerHTML = '';
+                }
+            });
         }
         
-        function registerSchedule() {
-            const movie = document.getElementById('movieSelect').value;
-            const theater = document.getElementById('theaterSelect').value;
-            const date = document.getElementById('dateSelect').value;
-            const screen = document.getElementById('screenSelect').value;
-            const startTime = document.getElementById('startTime').value;
-            console.log(startTime);
-            const endTime = document.getElementById('endTime').value;
-
-            if (!movie || !theater || !date || !screen || !startTime || !endTime) {
-                alert('모든 옵션을 선택해주세요.');
-                return;
-            }
-
-            // 실제로는 서버에 요청을 보내서 스케줄을 등록해야 함.
-            alert('상영 스케줄이 등록되었습니다.');
-
-            // 등록 후 폼 초기화
-            document.getElementById('scheduleForm').reset();
-            document.getElementById('registerForm').reset();
-            document.getElementById('newScheduleInfo').innerHTML = '';
-            document.getElementById('scheduleResult').innerHTML = '';
-        } 
     </script>
     </main>
 

@@ -352,7 +352,6 @@
     	}
     	
 	    
-	    
 	    function insert() {
 	        const requestData = {
 	            movieCode: $('#movieCode').val(),
