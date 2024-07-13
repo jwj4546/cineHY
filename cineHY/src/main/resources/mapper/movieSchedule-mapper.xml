@@ -60,7 +60,8 @@
     ORDER BY
         M.MOVIE_TITLE ASC,
         MS.SCREEN_CODE ASC,
-        MS.STARTTIME ASC
+        MS.STARTTIME ASC,
+        MS.ENDTIME ASC
 </select>	   
 
 <select id="checkSchedule" resultType="int">
@@ -106,6 +107,14 @@
 	     		)
 
 </insert>
+
+<delete id="delete" parameterType="_int">
+	DELETE
+		   TB_MOVIE_SCHEDULE
+	 WHERE
+	 	   SCREENING_ID = #{screeningId}
+
+</delete>
 	
 
 </mapper>
