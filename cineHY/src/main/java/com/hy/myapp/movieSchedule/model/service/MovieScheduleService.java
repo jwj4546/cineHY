@@ -24,6 +24,9 @@ public interface MovieScheduleService {
 	List<Schedule> allScheduleList(String theaterCode, String selectedTabDate);
 
 
+	int delete(int screeningId);
+
+
 
 
 }

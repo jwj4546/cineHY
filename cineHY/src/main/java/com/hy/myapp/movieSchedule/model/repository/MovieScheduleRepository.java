@@ -61,4 +61,9 @@ public class MovieScheduleRepository {
 		return sqlSession.selectList("movieScheduleMapper.allScheduleList", params);
 	}
 
+
+	public int delete(SqlSessionTemplate sqlSession, int screeningId) {
+		return sqlSession.delete("movieScheduleMapper.delete", screeningId);
+	}
+
 }

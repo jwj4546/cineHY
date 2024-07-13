@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,13 +75,13 @@ public class MovieScheduleApiController {
         	return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
         }
         
-        log.info("조회된 scheduleList 목록 : {}", allScheduleList);
+        //log.info("조회된 allscheduleList 목록 : {}", allScheduleList);
         
         Message responseMsg = Message.builder()
                                      .data(allScheduleList)
                                      .message("조회성공")
                                      .build();
-        log.info("조회된 scheduleList 목록 : {}", allScheduleList);
+        //log.info("조회된 allscheduleList 목록 : {}", allScheduleList);
         return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
     }
 	
@@ -113,13 +114,13 @@ public class MovieScheduleApiController {
         	return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
         }
         
-        log.info("조회된 scheduleList 목록 : {}", scheduleList);
+        //log.info("조회된 scheduleList 목록 : {}", scheduleList);
         
         Message responseMsg = Message.builder()
                                      .data(scheduleList)
                                      .message("조회성공")
                                      .build();
-        log.info("조회된 scheduleList 목록 : {}", scheduleList);
+        //log.info("조회된 scheduleList 목록 : {}", scheduleList);
         return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
     }
 	
@@ -142,14 +143,14 @@ public class MovieScheduleApiController {
 					                        .data(count)
 					                        .message("등록된 스케줄 있음")
 					                        .build();
-	        	log.info("조회된 schedule 수 : {}", count);
+	        	//log.info("조회된 schedule 수 : {}", count);
 	        	return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	        } else {
 	            Message responseMsg = Message.builder()
 	                                         .data(count)
 	                                         .message("등록가능")
 	                                         .build();
-	            log.info("조회된 schedule 수 : {}", count);
+	            //log.info("조회된 schedule 수 : {}", count);
 	            return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	        }
 	    } catch (Exception ex) {
@@ -177,4 +178,19 @@ public class MovieScheduleApiController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
+	
+	@DeleteMapping("{screeningId}")
+	public ResponseEntity<Message> deleteById(@PathVariable int screeningId) {
+		int result = movieScheduleService.delete(screeningId);
+		
+		if(result == 0) {
+			return ResponseEntity.status(HttpStatus.OK).body(Message.builder()
+																	.message("게시글 없음")
+																	.build());
+		}
+		Message responseMsg = Message.builder().data("삭제성공!").message("서비스처리성공").build();
+		
+		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+	}
+	
 }

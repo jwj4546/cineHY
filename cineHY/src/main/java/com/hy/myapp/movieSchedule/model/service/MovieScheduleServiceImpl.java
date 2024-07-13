@@ -44,4 +44,9 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
 		return movieScheduleRepository.allScheduleList(sqlSession, theaterCode, selectedTabDate);
 	}
 
+	@Override
+	public int delete(int screeningId) {
+		return movieScheduleRepository.delete(sqlSession, screeningId);
+	}
+
 }

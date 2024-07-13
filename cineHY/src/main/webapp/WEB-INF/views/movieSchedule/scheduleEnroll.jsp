@@ -14,7 +14,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
     #page1 { height: 80px;}
-    #page3 { height: 500px;}
+    #page3 { 
+    	height: 800px;
+    }
    	.mt-4 { margin-top: 1.5rem; }
     .mt-5 { margin-top: 3rem; }
 </style>
@@ -37,15 +39,19 @@
 		                        <option>헨젤가이즈</option>
 		                    </select>
 		                </div>
-		                <div class="form-group col-md-4">
+		                <div class="form-group col-md-2">
 		                    <label for="theaterSelect">영화관 선택</label>
 		                    <select id="theaterSelect" class="form-control">
 		                        
 		                    </select>
 		                </div>
-		                <div class="form-group col-md-4">
-		                    <label for="dateSelect">상영날짜</label>
-		                    <input type="date" id="dateSelect" class="form-control">
+		                <div class="form-group col-md-3">
+		                    <label for="startdateSelect">상영시작날짜</label>
+		                    <input type="date" id="startdateSelect" class="form-control">
+		                </div>
+		                <div class="form-group col-md-3">
+		                    <label for="enddateSelect">상영종료날짜</label>
+		                    <input type="date" id="enddateSelect" class="form-control">
 		                </div>
 		            </div>
 		            <button type="button" class="btn btn-primary mb-4" onclick="fetchSchedule()">조회하기</button>
@@ -136,23 +142,12 @@
 	                    </thead>
 	                    <tbody>
 	                        <tr>
-	                            <td>인사이드 아웃</td>
-	                            <td>1관</td>
-	                            <td>10:10</td>
+	                            <td></td>
+	                            <td></td>
+	                            <td></td>
 	                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
 	                        </tr>
-	                        <tr>
-	                            <td>인사이드 아웃</td>
-	                            <td>2관</td>
-	                            <td>11:10</td>
-	                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
-	                        </tr>
-	                        <tr>
-	                            <td>카브리올레</td>
-	                            <td>1관</td>
-	                            <td>19:30</td>
-	                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
-	                        </tr>
+	                        
 	                    </tbody>
 	                </table>
 	            </div>
@@ -168,9 +163,9 @@
 	                    </thead>
 	                    <tbody>
 	                        <tr>
-	                            <td>인사이드 아웃</td>
-	                            <td>1관</td>
-	                            <td>10:10</td>
+	                            <td></td>
+	                            <td></td>
+	                            <td></td>
 	                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
 	                        </tr>
 	                    </tbody>
@@ -188,9 +183,9 @@
 	                    </thead>
 	                    <tbody>
 	                        <tr>
-	                            <td>인사이드 아웃</td>
-	                            <td>1관</td>
-	                            <td>10:10</td>
+	                            <td></td>
+	                            <td></td>
+	                            <td></td>
 	                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
 	                        </tr>
 	                    </tbody>
@@ -208,9 +203,9 @@
 	                    </thead>
 	                    <tbody>
 	                        <tr>
-	                            <td>인사이드 아웃</td>
-	                            <td>1관</td>
-	                            <td>10:10</td>
+	                            <td></td>
+	                            <td></td>
+	                            <td></td>
 	                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
 	                        </tr>
 	                    </tbody>
@@ -228,9 +223,9 @@
 	                    </thead>
 	                    <tbody>
 	                        <tr>
-	                            <td>인사이드 아웃</td>
-	                            <td>1관</td>
-	                            <td>10:10</td>
+	                            <td></td>
+	                            <td></td>
+	                            <td></td>
 	                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
 	                        </tr>
 	                    </tbody>
@@ -248,9 +243,9 @@
 	                    </thead>
 	                    <tbody>
 	                        <tr>
-	                            <td>인사이드 아웃</td>
-	                            <td>1관</td>
-	                            <td>10:10</td>
+	                            <td></td>
+	                            <td></td>
+	                            <td></td>
 	                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
 	                        </tr>
 	                    </tbody>
@@ -268,9 +263,9 @@
 	                    </thead>
 	                    <tbody>
 	                        <tr>
-	                            <td>인사이드 아웃</td>
-	                            <td>1관</td>
-	                            <td>10:10</td>
+	                            <td></td>
+	                            <td></td>
+	                            <td></td>
 	                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
 	                        </tr>
 	                    </tbody>
@@ -373,8 +368,8 @@
            
             const theaterCode= $('#theaterSelect').val();
             const screenCode= $('#screenSelect').val();
-            const startDate= $('#dateSelect').val();
-            const endDate= $('#dateSelect').val();
+            const startDate= $('#startdateSelect').val();
+            const endDate= $('#enddateSelect').val();
             const startTime= $('#startTime').val();
             const endTime= $('#endTime').val();
         
@@ -407,8 +402,8 @@
             		movieCode: $('#movieSelect').val(),
                     theaterCode: $('#theaterSelect').val(),
                     screenCode: $('#screenSelect').val(),
-                    startDate: $('#dateSelect').val(),
-                    endDate: $('#dateSelect').val(),
+                    startDate: $('#startdateSelect').val(),
+                    endDate: $('#enddateSelect').val(),
                     startTime: $('#startTime').val(),
                     endTime: $('#endTime').val()
             };
@@ -496,8 +491,7 @@
 
     // 스케줄 조회 함수
     function AllScheduleList(theaterCode, selectedTabDate) {
-        // Ajax 호출을 통해 선택된 지역과 날짜의 스케줄 조회
-        console.log(theaterCode, selectedTabDate)
+        //console.log(theaterCode, selectedTabDate)
         $.ajax({
             url: 'movieSchedule/AllScheduleList/' + theaterCode + '/' + selectedTabDate,
             method: 'get',
@@ -529,7 +523,8 @@
                                 '<td>' + schedule.movieTitle + '</td>' +
                                 '<td>' + schedule.screenCode + '</td>' +
                                 '<td>' + schedule.startTime + '-' + schedule.endTime + '</td>' +
-                                '<td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>' +
+                                '<input type="hidden" value=' + schedule.movieCode + ' id="tableMovieCode">' +
+                                '<td><button class="btn btn-danger btn-sm float-right delete-btn" onclick="deleteSchedule(' + schedule.screeningId + ')">삭제</button></td>' +
                             '</tr>';
                 scheduleTable.append(row);
             });
@@ -540,6 +535,20 @@
         }
     }
     
+    function deleteSchedule(screeningId) {
+    	$.ajax ({
+			url : 'movieSchedule/'+screeningId,
+			type : 'delete',
+			success : data => {
+				console.log(data)
+				AllScheduleList();
+			},
+			error: function(xhr, status, error) {
+                console.error("Error occurred while deleting movie:", error);
+            }
+		});
+		
+	}
         
     </script>
     </main>
