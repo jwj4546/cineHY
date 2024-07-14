@@ -61,8 +61,8 @@
 						#{star },
 						DEFAULT, 
 						#{userId }, 
-						1, 
-						'TICK00004'
+						#{movieCode}, 
+						'TICK00007'
 						)
     
     </insert>
@@ -91,6 +91,31 @@
 			   REVIEW_NO = #{reviewNo}
 	
 	</update>
+	
+	<resultMap id="reviewResultMap" type="com.hy.myapp.review.model.vo.Review">
+	    <result property="movieTitle" column="movieTitle"/>
+	    <result property="userId" column="userId"/>
+	    <result property="star" column="star"/>
+	    <result property="reviewDate" column="reviewDate"/>
+	    <result property="reviewContent" column="reviewContent"/>
+	    <result property="star" column="star"/>
+	</resultMap>
+
+<select id="selectMyReview" resultMap="reviewResultMap" parameterType="String">
+    SELECT 
+        M.MOVIE_TITLE AS movieTitle,
+        R.REVIEW_NO AS reviewNo,
+        R.USER_ID AS userId,
+        R.REVIEW_DATE AS reviewDate,
+        R.REVIEW_CONTENT AS reviewContent,
+        R.STAR AS star
+    FROM 
+        TB_REVIEW R
+    JOIN 
+        TB_MOVIE M ON R.MOVIE_CODE = M.MOVIE_CODE
+    WHERE 
+        R.USER_ID = #{userId}
+</select>
     
     
     

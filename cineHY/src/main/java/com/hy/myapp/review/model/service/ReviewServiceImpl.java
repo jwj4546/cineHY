@@ -61,9 +61,19 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public int deleteReview(Review review) {
-		return reviewRepository.deleteReview(sqlSession, review);
+	public int deleteReview(int reviewNo) {
+		return reviewRepository.deleteReview(sqlSession, reviewNo);
 	}
+
+	@Override
+	public List<Review> selectMyReview(String userId) {
+		return reviewRepository.selectMyReview(sqlSession, userId);
+	}
+
+//	@Override
+//	public Double getRatingAverage(int reviewNo) {
+//		return reviewRepository.getRatingAvg(sqlSession, reviewNo);
+//	}
 
 	
 

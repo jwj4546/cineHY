@@ -1,5 +1,6 @@
 package com.hy.myapp.review.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -42,23 +43,14 @@ public class ReviewController {
 	}
 	
 	@GetMapping("/getReview")
-	public String reviewSelect(Review review, HttpSession session, Model model) {
-		
-		
-		review = (Review) session.getAttribute("review");
-
-		//List<Review> ReviewList = reviewService.getMovieOfReview(review.getMovieCode());
-		List<Review> ReviewList = reviewService.getMovieOfReview(1);
-		//log.info("리스트 : {}", ReviewList);
-		model.addAttribute("getReviewList", ReviewList);
-		
-		
-	
-		session.setAttribute("ReviewList", ReviewList); //ReviewList.movieCode쓰려고
-		
+	public String reviewSelect() {
 		return "review/review";
 	}
 	
+	@GetMapping("/MyReview")
+	public String MyReviewTest() {
+		return "review/myReview";
+	}
 	
 	
 	
@@ -82,16 +74,16 @@ public class ReviewController {
 	
 	@ResponseBody
 	@GetMapping(value="selectReview", produces="application/json; charset=UTF-8")
-	public List<Review> selectReview(int movieCode) {
+	public List<Review> selectReview(int movieCode, Review review, HttpSession session) {
 		
 		//review = (Review) session.getAttribute("review");
 
 		//List<Review> ReviewList = reviewService.getMovieOfReview(review.getMovieCode());
 		
-		
-		
-		List<Review> selectReviewList = reviewService.getMovieOfReview(1);
-		log.info("리스트 : {}", selectReviewList);
+		log.info("movieCode : {}", movieCode);
+		//log.info("ReviewList : {}", ReviewList);
+		List<Review> selectReviewList = reviewService.getMovieOfReview(movieCode);
+		log.info("selectReviewList : {}", selectReviewList);
 	
 		
 		return reviewService.getMovieOfReview(movieCode);
@@ -103,18 +95,33 @@ public class ReviewController {
 	@PostMapping("ReviewUpdate")
 	public String updateReview(Review review){
 		
-		//log.info("업데이트할 리뷰 : {}", review);
+		log.info("업데이트할 리뷰 : {}", review);
 		
 		return reviewService.updateReview(review)>0? "success":"fail";
 	}
 	
-	 @DeleteMapping("deleteReview")
+	@PostMapping("deleteReview")
 	    @ResponseBody
-	    public String deleteReview(Review review) {
-	        // 리뷰 삭제 로직 구현
+	    public String deleteReview(int reviewNo) {
+	        
 		 
-		 log.info(" N 리뷰 : {}", review);
-		 return reviewService.updateReview(review)>0? "success":"fail";
+		 log.info(" N 리뷰 : {}", reviewNo);
+		 return reviewService.deleteReview(reviewNo)>0? "success":"fail";
+	    }
+	 
+	 
+	 
+
+	    @ResponseBody
+	    @GetMapping(value = "MyReview", produces = "application/json; charset=UTF-8")
+	    public List<Review> MyReview(@RequestParam(value = "userId", required = false) String userId) {
+	        log.info("userId : {}", userId); // 로그로 userId 확인
+	        List<Review> selectMyReview = reviewService.selectMyReview(userId);
+	        //List<TEST> selectMyReview = reviewService.selectMyReview(userId);
+	        
+	        log.info("마이리뷰 : {}", selectMyReview);
+			return reviewService.selectMyReview(userId);
+
 	    }
 }
 

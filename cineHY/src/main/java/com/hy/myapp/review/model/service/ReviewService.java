@@ -39,7 +39,15 @@ public interface ReviewService {
 	int updateReview(Review review);
 	
 	//리뷰 삭제
-	int deleteReview(Review review);
+	int deleteReview(int reviewNo);
+
+	//마이리뷰
+	List<Review> selectMyReview(String userId);
+	
+	//평균 평점 구하기
+//	Double getRatingAverage(int reviewNo);
+	
+	
 
 	
 

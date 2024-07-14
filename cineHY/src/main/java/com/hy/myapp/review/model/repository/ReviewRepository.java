@@ -31,7 +31,15 @@ public class ReviewRepository {
 		return sqlSession.insert("reviewMapper.updateReview", review);
 	}
 
-	public int deleteReview(SqlSessionTemplate sqlSession, Review review) {
-		return sqlSession.update("reviewMapper.deleteReview", review);
+	public int deleteReview(SqlSessionTemplate sqlSession, int reviewNo) {
+		return sqlSession.update("reviewMapper.deleteReview", reviewNo);
 	}
+
+	public List<Review> selectMyReview(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("reviewMapper.selectMyReview", userId);
+	}
+
+//	public Double getRatingAvg(SqlSessionTemplate sqlSession, int reviewNo) {
+//		return sqlSession.;
+//	}
 }

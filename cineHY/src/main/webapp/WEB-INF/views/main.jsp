@@ -90,59 +90,18 @@
     <title>영화등록 페이지</title>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <a href="#" class="navbar-brand d-flex align-items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
-                stroke-linecap="round" stroke-linejoin="round" class="mr-2">
-                <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
-                <path d="M16 3l-4 4H3L7 3z"></path>
-                <path d="M22 3l-4 4h-9L17 3z"></path>
-            </svg>
-              <strong>Cine HY</strong>
-            </a>
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
-              </li>
-            </ul>
-             
-            <ul class="navbar-nav" style="justify-content: flex-end;">
-                <c:choose>
-                    <c:when test="${not empty sessionScope.loginUser}">
-                    	<div class = "welcome">
-                        <label>${sessionScope.loginUser.userNick}님 환영합니다</label> &nbsp;&nbsp;
-                        </div>
-                        <li class="nav-item active" style="float: right;">
-                          <a class="nav-link" href="myPage">마이페이지</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" href="logout">로그아웃</a>
-                        </li>
-                    </c:when>
-                    <c:otherwise>
-                        <li class="nav-item active" style="float: right;">
-                          <a class="nav-link" href="login">로그인</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" href="join">회원가입</a>
-                        </li>
-                    </c:otherwise>
-                </c:choose>
-            </ul>
-          </div>
-        </nav>
-      </header>
+    <jsp:include page="./common/menubar.jsp"></jsp:include>
+    
+    
+    <main>
+		<div id="page1"></div>
+		<div id="page2"></div>
+		<div id="page3"></div>
+	</main>
+    
+    
+    <jsp:include page="./common/footer.jsp"></jsp:include>
+    
      
 </body>
 </html>

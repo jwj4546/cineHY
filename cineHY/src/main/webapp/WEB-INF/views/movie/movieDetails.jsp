@@ -39,6 +39,11 @@
 <body>
 	<jsp:include page="../common/menubar.jsp"></jsp:include>
 	
+	<%
+    // 영화 코드를 서버에서 가져와서 변수에 저장
+    String movieId = request.getParameter("movieId");
+	%>
+	
     <main>
     	<div id="page1"></div>
     	<div class="container">
@@ -63,6 +68,13 @@
                 </div>
             </div>
         </div>
+        
+        <div id="review-section">
+		    <jsp:include page="../review/review.jsp">
+		        <jsp:param name="movieId" value="<%= movieId %>" />
+		    </jsp:include>
+		</div>
+        
     </main>
     
     <jsp:include page="../common/footer.jsp"></jsp:include>

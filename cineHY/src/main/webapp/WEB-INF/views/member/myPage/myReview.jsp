@@ -87,7 +87,7 @@
           display: flex;
         }
         
-p {
+.style_p {
     font-family: 'Poppins', sans-serif;
     font-size: 1.6em;
     font-weight: 500;
@@ -402,7 +402,7 @@ ul.CTAs a {
             </div>
 
             <ul class="list-unstyled components">
-                <p>마이페이지</p>
+                <p class="style_p">마이페이지</p>
                 <li >
                     <a href="myInfoUpdate" >나의 정보수정</a>                 
                 </li>
@@ -444,24 +444,26 @@ ul.CTAs a {
             
            <div id = "innerCont">
            
-           <!-- 여기에 컨텐트를 넣어주세요!!!
+           <!-- 여기에 컨텐트를 넣어주세요!!!-->
+           
+            
+           <%
+		        String userId = (String) session.getAttribute("loginUser.userId");
+		        request.setAttribute("userId", userId);
+		        System.out.println("Received userId: " + userId);
+    		%>
+           
+		    <div id="review-section">
+		    	<jsp:include page="/WEB-INF/views/review/myReview.jsp">
+        			<jsp:param name="userId" value="${sessionScope.loginUser.userId}" />
+	    		</jsp:include>
+			</div>
+	           
            
            
            
            
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-            -->
+            
            </div>
             
 
