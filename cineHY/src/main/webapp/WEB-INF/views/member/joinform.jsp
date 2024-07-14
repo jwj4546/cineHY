@@ -258,14 +258,30 @@ article input {
 		
 				if(!(checkB1.checked && checkB2.checked && checkB3.checked)){				
 					joinSubmit.setAttribute('disabled' ,'true'); 
-					agreeCheck.style.display = 'block';
-					agreeCheck.style.color = 'crimson';
-					agreeCheck.textContent = '모든약관에 동의해주세요!';
+					
+					
 				} else {
 					joinSubmit.removeAttribute('disabled');					
 					agreeCheck.style.display = 'none';
 				} 
 	
+	}
+	
+	function formSub() {
+	    
+	    const checkB1 = document.getElementById("hy-agree");    
+	    const checkB2 = document.getElementById("info-agree");
+	    const checkB3 = document.getElementById("pro-agree");
+
+	   
+	    if (!(checkB1.checked && checkB2.checked && checkB3.checked)) {
+	        
+	        alert('모든 약관에 동의해주세요!');
+	        return; 
+	    }
+	    
+	   
+	    document.getElementById("join-form").submit(); 
 	}
     
 	
@@ -414,7 +430,7 @@ article input {
 			            </div>
 			        </div>
 			    </div>
-			    <button type="submit" id="join-btn"  class="join-btn btn-primary" >가입하기</button>
+			    <button type="submit" id="join-btn" onclick="formSub()"  class="join-btn btn-primary" >가입하기</button>
 			    </form>
 			
 
