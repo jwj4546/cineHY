@@ -22,7 +22,7 @@
                     <a class="nav-link" href="movieList">영화</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">극장</a>
+                    <a class="nav-link" href="theater">극장</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " href="#">예매</a>
