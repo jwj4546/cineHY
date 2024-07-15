@@ -75,27 +75,29 @@ public class MovieScheduleApiController {
         	return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
         }
         
-        //log.info("조회된 allscheduleList 목록 : {}", allScheduleList);
         
         Message responseMsg = Message.builder()
                                      .data(allScheduleList)
                                      .message("조회성공")
                                      .build();
-        //log.info("조회된 allscheduleList 목록 : {}", allScheduleList);
         return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
     }
 	
 	
 	
-	@GetMapping(value="schedule/{movie}/{theater}/{date}", produces="application/json; charset=UTF-8")
+	@GetMapping(value="schedule/{movie}/{theater}/{startdate}/{enddate}", produces="application/json; charset=UTF-8")
     public ResponseEntity<Message> getSchedule(
             @PathVariable int movie, 
             @PathVariable String theater,
-            @PathVariable String date) { 
+            @PathVariable String startdate,
+            @PathVariable String enddate
+            ) { 
         
         List<Schedule> scheduleList;
         try {
-            scheduleList = movieScheduleService.getScheduleList(movie, theater, date);
+            scheduleList = movieScheduleService.getScheduleList(movie, theater, startdate, enddate);
+            System.out.println(startdate);
+            
         } catch (Exception e) {
             // 조회 도중 오류 발생 시 INTERNAL_SERVER_ERROR 반환
             log.error("스케줄 조회 중 오류 발생", e);

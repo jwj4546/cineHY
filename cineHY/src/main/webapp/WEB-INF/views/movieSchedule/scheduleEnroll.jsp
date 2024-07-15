@@ -325,22 +325,26 @@
 		    }
 		    getTheater();
 	    });
-    
+    	
+	    //영화-극장-날짜 선조회 함수 
         function fetchSchedule() {
             const movie = document.getElementById('movieSelect').value;
             const theater = document.getElementById('theaterSelect').value;
-            const date = document.getElementById('dateSelect').value;
-
-            if (!movie || !theater || !date) {
+            const startdate = document.getElementById('startdateSelect').value;
+            const enddate = document.getElementById('enddateSelect').value;
+            
+            
+            if (!movie || !theater || !startdate || !enddate ) {
                 alert('영화, 영화관, 상영날짜를 모두 선택해주세요.');
                 return;
             }
 			
             $.ajax({
-	    		url : 'movieSchedule/schedule/' + movie + '/' + theater + '/' + date,
+	    		url : 'movieSchedule/schedule/' + movie + '/' + theater + '/' + startdate + '/' + enddate,
 	    		method : 'get',
 	    		dataType : 'json',
 	    		success : function(data) { // data => 
+	    			console.log(data);
 		            const scheduleResult = document.getElementById('scheduleResult');
 		            scheduleResult.innerHTML = '';
 					//console.log(data);
@@ -348,7 +352,7 @@
 		                data.data.forEach(s => {
 		                    scheduleResult.innerHTML += '<div class="card mt-2">'
 		                            + '<div class="card-body">'
-		                            + '<h5 class="card-title">' + s.startDate + ' 상영 스케줄</h5>'
+		                            + '<h5 class="card-title">' + s.startDate + '-' + s.endDate + ' 상영 스케줄</h5>'
 		                            + '<p class="card-text">상영관: ' + s.screenCode + '관</p>'
 		                            + '<p class="card-text">시간: ' + s.startTime +'-' + s.endTime + '</p>'
 		                            + '</div>'
@@ -429,6 +433,22 @@
 		
         updateDateTabs(); // 페이지 로드 시 날짜 탭 업데이트
 
+        $(document).ready(function() {
+            // 첫 번째 지역 버튼 자동 선택
+            const firstTheaterButton = $('.btn-group-toggle .btn').first();
+            firstTheaterButton.addClass('active');
+            firstTheaterButton.find('input').prop('checked', true);
+
+            // 첫 번째 날짜 탭 자동 선택
+            const firstDateTab = $('.nav-tabs a.nav-link').first();
+            firstDateTab.tab('show');
+
+            // 지역 및 날짜에 맞는 스케줄 자동 로드
+            const selectedTabDate = firstDateTab.attr('data-date');
+            const theaterCode = firstTheaterButton.find('input').val();
+            AllScheduleList(theaterCode, selectedTabDate);
+        });
+        
         // 날짜 탭 업데이트 함수
         function updateDateTabs() {
             // 오늘 날짜를 기준으로 탭 생성
@@ -489,7 +509,7 @@
             AllScheduleList(theaterCode, selectedTabDate);
         });
 
-    // 스케줄 조회 함수
+    // 하단 극장,날짜별 스케줄 조회 함수
     function AllScheduleList(theaterCode, selectedTabDate) {
         //console.log(theaterCode, selectedTabDate)
         $.ajax({
@@ -497,7 +517,7 @@
             method: 'get',
             dataType: 'json',
             success: function(data) {
-            	console.log(data)
+            	//console.log(data)
             	
             	displayScheduleForDate(data);
             },
@@ -507,7 +527,7 @@
         });
     }
     
- // 받아온 스케줄 데이터를 화면에 출력하는 함수
+ 	// 받아온 스케줄 데이터를 화면에 출력하는 함수
     function displayScheduleForDate(data) {
         // 탭 페이지의 스케줄 테이블에 출력
         const activeTabId = $('.nav-tabs .nav-link.active').attr('href'); // 현재 활성화된 탭의 ID 가져오기
@@ -535,12 +555,13 @@
         }
     }
     
+ 	//스케줄 삭제 함수
     function deleteSchedule(screeningId) {
     	$.ajax ({
 			url : 'movieSchedule/'+screeningId,
 			type : 'delete',
 			success : data => {
-				console.log(data)
+				//console.log(data)
 				AllScheduleList();
 			},
 			error: function(xhr, status, error) {

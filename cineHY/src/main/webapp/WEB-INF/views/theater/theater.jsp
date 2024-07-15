@@ -77,7 +77,7 @@
 		                            <td></td>
 		                            <td></td>
 		                            <td></td>
-		                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
+		                            <td><button class="btn btn-danger btn-sm float-right delete-btn"></button></td>
 		                        </tr>
 		                        
 		                    </tbody>
@@ -98,7 +98,7 @@
 		                            <td></td>
 		                            <td></td>
 		                            <td></td>
-		                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
+		                            <td><button class="btn btn-danger btn-sm float-right delete-btn"></button></td>
 		                        </tr>
 		                    </tbody>
 		                </table>
@@ -118,7 +118,7 @@
 		                            <td></td>
 		                            <td></td>
 		                            <td></td>
-		                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
+		                            <td><button class="btn btn-danger btn-sm float-right delete-btn"></button></td>
 		                        </tr>
 		                    </tbody>
 		                </table>
@@ -138,7 +138,7 @@
 		                            <td></td>
 		                            <td></td>
 		                            <td></td>
-		                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
+		                            <td><button class="btn btn-danger btn-sm float-right delete-btn"></button></td>
 		                        </tr>
 		                    </tbody>
 		                </table>
@@ -158,7 +158,7 @@
 		                            <td></td>
 		                            <td></td>
 		                            <td></td>
-		                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
+		                            <td><button class="btn btn-danger btn-sm float-right delete-btn"></button></td>
 		                        </tr>
 		                    </tbody>
 		                </table>
@@ -178,7 +178,7 @@
 		                            <td></td>
 		                            <td></td>
 		                            <td></td>
-		                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
+		                            <td><button class="btn btn-danger btn-sm float-right delete-btn"></button></td>
 		                        </tr>
 		                    </tbody>
 		                </table>
@@ -198,7 +198,7 @@
 		                            <td></td>
 		                            <td></td>
 		                            <td></td>
-		                            <td><button class="btn btn-danger btn-sm float-right delete-btn">삭제</button></td>
+		                            <td><button class="btn btn-danger btn-sm float-right delete-btn"></button></td>
 		                        </tr>
 		                    </tbody>
 		                </table>
@@ -211,6 +211,22 @@
     <script>
     
     updateDateTabs(); // 페이지 로드 시 날짜 탭 업데이트
+    
+    $(document).ready(function() {
+        // 첫 번째 지역 버튼 자동 선택
+        const firstTheaterButton = $('.btn-group-toggle .btn').first();
+        firstTheaterButton.addClass('active');
+        firstTheaterButton.find('input').prop('checked', true);
+
+        // 첫 번째 날짜 탭 자동 선택
+        const firstDateTab = $('.nav-tabs a.nav-link').first();
+        firstDateTab.tab('show');
+
+        // 지역 및 날짜에 맞는 스케줄 자동 로드
+        const selectedTabDate = firstDateTab.attr('data-date');
+        const theaterCode = firstTheaterButton.find('input').val();
+        AllScheduleList(theaterCode, selectedTabDate);
+    });
 	
     // 날짜 탭 업데이트 함수
     function updateDateTabs() {
