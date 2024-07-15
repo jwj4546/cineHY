@@ -17,6 +17,8 @@ public interface MemberService {
 	int idCheck(String checkId);
 	
 	int nickCheck(String checkNick);
+
+	Member findMyId(String userName, String phoneNo, String email);
 	
 	
 	

@@ -176,19 +176,26 @@ public class MemberController {
 	@GetMapping("findMyId")
 	public String findMyId() {
 		
-		return "member/findMyId";
+		return "member/find/findMyId";
 	
 	}
+	
+	@RequestMapping(value = "findMyId.do", method = RequestMethod.POST)
+    @ResponseBody
+    public String findMyId(@RequestParam("userName") String userName, 
+                           @RequestParam("phoneNo") String phoneNo, 
+                           @RequestParam("email") String email) {
+       // System.out.println("userName의 이름=" + userName);
+      //  System.out.println("phoneNo의 번호=" + phoneNo);
+     //   System.out.println("email의 주소=" + email);
 
-		
-	
-	@GetMapping("findMyPw")
-	public String findMyPw() {
-		
-		return "member/findMyPw";
-	
-	}
-	
+        Member member = memberService.findMyId(userName, phoneNo, email);
+        if (member == null) {
+            return null;
+        } else {
+            return member.getUserId();
+        }
+    }
 	
 	
 	

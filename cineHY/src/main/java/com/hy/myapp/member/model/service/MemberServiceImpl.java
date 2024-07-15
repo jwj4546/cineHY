@@ -56,6 +56,12 @@ public class MemberServiceImpl implements MemberService {
 		return memberRepository.nickCheck(sqlSession, checkNick);
 	}
 
+	@Override
+    public Member findMyId(String userName, String phoneNo, String email) {
+        return memberRepository.findMyId(userName, phoneNo, email);
+    }
+
+
 	
 
 }

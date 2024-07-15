@@ -92,19 +92,13 @@
     
     </select>
     
-    <select id = "findId" parameterType = "String" resultType = "String">
-    
-    SELECT
-    		USER_ID AS userId
-      FROM
-      		TB_MEMBER
-      WHERE
-      		USER_NAME = #{userName}
-        AND
-			EMAIL = #{email}
-		AND
-			PHONE_NO AS phoneNo = #{phoneNo}       
-        
+    <select id="findMyId" parameterType="map" resultType="member">
+        SELECT 
+        		USER_ID AS userId
+        			
+        FROM 
+        		TB_MEMBER
+        WHERE 
+        		USER_NAME = #{userName} AND PHONE_NO = #{phoneNo} AND EMAIL = #{email}
     </select>
-
 </mapper>
