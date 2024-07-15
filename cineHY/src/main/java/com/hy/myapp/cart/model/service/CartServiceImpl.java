@@ -20,4 +20,21 @@ public class CartServiceImpl implements CartService {
 	 * cartRepository.findById(cart); }
 	 */
 
+	@Override
+	public int findByCart(CartVO cart) {
+		return cartRepository.findByCart(cart);
+	}
+	
+	@Override
+	public int apply(CartVO cart) {
+		return cartRepository.apply(cart);
+	}
+
+	@Override
+	public int delete(CartVO cart) {
+		return cartRepository.delete(cart);
+	}
+
+	
+
 }

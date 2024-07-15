@@ -8,4 +8,9 @@ public interface CartService {
 
 	/* List<CartVO> findById(CartVO cart); */
 
+	int findByCart(CartVO cart);
+	
+	int apply(CartVO cart);
+
+	int delete(CartVO cart);
 }

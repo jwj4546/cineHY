@@ -97,8 +97,8 @@
         </div>
         <div class="float-right">
         	<form action="updateForm" method="post" id="postForm">
-			  	<input type="hidden" name="productId" value="${ product.productId }" />
-			  	<input type="hidden" name="filePath" value="${ product.changeImage }">
+			  	<input type="hidden" id="productId" name="productId" value="${ product.productId }" />
+			  	<input type="hidden" id="changeImage" name="filePath" value="${ product.changeImage }">
 		  	</form>
 		  	<button type="submit" class="btn btn-primary" onclick="postSubmit()">수정하기</button>
 		  	<button type="button" data-toggle="modal" class="btn btn-danger" data-target="#deleteForm">삭제하기</button>
@@ -162,7 +162,10 @@
         </div>
         <p>총 구매금액</p>
         <span id="total">${ product.productPrice }</span><span>원</span><br><br>
-        <button class="btn btn-secondary">장바구니 추가</button>
+        
+        
+        <input type="hidden" id="userId" value="${ sessionScope.loginUser.userId }"/>
+       	<button class="btn btn-secondary" id="cartInsert">장바구니 추가</button>
         <button class="btn btn-info">구매하기</button>
       </div>
     </div>
@@ -172,16 +175,17 @@
   
   <script>
   
+  	// '수정' 버튼 클릭시 상품 수정 페이지로 post 요청을 보내는 함수
   	function postSubmit() {
   			$('#postForm').attr('action', 'updateForm').submit();
   		}
-    
+  	 
+  	// 페이지가 실행되면 총 합계금액을 정규표현식 사용해서 3자리 마다 ,를 삽입
     $(document).ready(function () {
-        com();
+    	com();
         comm();
     });
 
-    // 총 합계금액을 정규표현식 사용해서 3자리 마다 ,를 삽입
     function com() {
         var total = $('#total').text();
         var totall = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -194,7 +198,7 @@
         $('#won').text(wonn);
     }
 
-
+ 	// '-' 버튼 클릭시 수량이 1씩 감소하고, 변경된 금액이 계산되는 함수
     function minus() {
         am = document.getElementById("amount");
         price = document.getElementById("price");
@@ -205,7 +209,8 @@
         document.getElementById("total").innerHTML = total;
         com();
     }
-
+	
+    // '+' 버튼 클릭시 수량이 1씩 증가되고, 변경된 금액이 계산되는 함수
     function plus() {
         am = document.getElementById("amount");
         price = document.getElementById("price");
@@ -216,10 +221,67 @@
         document.getElementById("total").innerHTML = total;
         com();
     }
-
     
+    //장바구니 추가
+    document.getElementById("cartInsert").onclick = () => {
+    	
+    	const productId = document.getElementById("productId").value;
+    	const amount = document.getElementById("amount").value;
+    	const userId = document.getElementById("userId").value;
+		
+    	$.ajax({
+    		url : 'cart',
+    		type : 'get',
+    		data : {
+    			productId : productId
+    		},
+    		success : request => {
+    			if(request === 'YY') {			// user의 장바구니를 조회하여 이미 해당 품목이 장바구니에 있으면 해당 조건문 진행
+    				const check = confirm("해당 상품이 장바구니에 이미 존재합니다.\n 장바구니로 이동하시겠습니까?");
+    				if(check) {
+    					location.href = "cartlist";
+    				} else {
+    					
+    				}
+    			} else {		// user의 장바구니에 해당 품목이 없다면 추가 진행
+    				$.ajax({
+    		    		url : 'insert',
+    		    		type : 'post',
+    		    		data : {
+    		    			productId : productId,
+    		    			cartAmount : amount,
+    		    			userId : userId
+    		    		},
+    		    		success : response => {
+    		    			if(response === 'Y') {		// 장바구니 추가에 성공하면 진행되는 process
+    		    				const result = confirm("장바구니 추가에 성공~ \n장바구니로 이동하실래여?");			// 장바구니로 이동할지 묻는 confirm창
+    		    				if(result) {
+    		    					location.href = "cartlist";
+    		    				} else {
+    		    					
+    		    				}
+    		    			} else {
+    		    				alert("장바구니 추가 실패ㅠ");
+    		    			}
+    		    		},
+    		    		error : () => {
+    		    			console.log("AJAX 전송 실패ㅠ");
+    		    		}
+    		    	});
+    		    }
+    		},
+    		// 회원이 아니거나 로그인을 안 하고 장바구니를 이용하려고 할 때 로그인 페이지로 이동
+    		error : () => {
+				const error = confirm("회원만 이용이 가능합니다.\n 로그인 하시겠습니까?");
+				if(error) {
+					location.href = "login";
+				} else {
+					
+				}
+			}
+   			});
+   		}
     
-
   </script>
 
   <!-- Footer -->

@@ -12,6 +12,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
 
@@ -97,7 +98,7 @@
             </tr>
         </thead>
         
-	        <tbody>
+	        <tbody id="reLoad">
 	        	<c:forEach items="${ list }" var="cart">
 		            <tr>
 		                <td><input type="checkbox" class="checkbox" onclick="changePrice()" checked></td>
@@ -115,7 +116,10 @@
 		                <td class="oneTotal">
 		                	<input type="hidden"  class="oneTotal" />
 		                </td>
-		                <td><button class="btn btn-danger btn-sm">삭제</button></td>
+		                <td>
+		                	<input type="hidden" id="productId" value="${ cart.productId }" />
+		                	<button type="button" class="btn btn-danger btn-sm" onclick="del()" >삭제</button>
+		             	</td>	
 		            </tr>
 	        	</c:forEach>
 	        </tbody>
@@ -158,13 +162,16 @@
 	// 각 항목에 체크를 해제하고 선택할 때 마다 전체 가격이 변하는 함수 + 항목의 수량을 변경할 때 가격과 결제 예정금액이 변경되는 함수
 	function changePrice() {
 	
+		// 반복되는 checkbox의 길이를 count에 저장
 		var count = document.getElementsByClassName("checkbox").length;
 		
+		// count 수 만큼 반복하여 각 항목의 금액 계산
 		for(let i=0; i<count; i++) {
 			var price = document.getElementsByClassName("productPrice")[i].value;
 			var amount = document.getElementsByClassName("productAmount")[i].value;
 			var oneTotal = price * amount;
 		
+			// 체크 해제했을 때 해당 값을 전체 금액에 포함시키지 않는 조건문
 			if(document.getElementsByClassName("checkbox")[i].checked == false) {
 			
 				document.getElementsByClassName("oneTotal")[i].innerHTML = oneTotal.toLocaleString()+"원";
@@ -175,18 +182,49 @@
 				document.getElementsByClassName("oneTotal")[i].value = oneTotal;
 			}
 			
+			// 장바구니 각 항목을 더하여 전체 금액을 계산하는 반복문
 			var total = 0;	
 			for(let k=0; k<count; k++) {
-				
 				total += document.getElementsByClassName("oneTotal")[k].value;
-				
 			}
 			document.getElementById("total").innerHTML = total.toLocaleString();
 		
 		}
 	}
 	
-</script>
+		// 장바구니에서 품목 삭제
+	 	function del() {
+			
+			const productId = document.getElementById("productId").value;
+			const result = confirm("해당 품목을 삭제하시겠습니까?");
+			if(result) {
+				$.ajax({
+					url : "deleteCart",
+					type : "post",
+					data : {
+						productId : productId
+					},
+					success : response => {
+						if(response === 'D') {
+							alert("삭제 되었습니다.");
+							document.location.href = document.location.href;
+						} else {
+							alert("삭제에 실패했습니다.");
+						}
+					},
+					error : () => {
+						console.log("삭제 실패ㅠ");
+					}
+					
+				});
+			} else {
+				
+			}
+			
+			
+		}
+ 	</script>
+
 
 <footer class="bg-light py-3 mt-5">
     <div class="container text-center">
