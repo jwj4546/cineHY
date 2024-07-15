@@ -1,5 +1,6 @@
 package com.hy.myapp.member.model.service;
 
+import org.apache.catalina.mapper.Mapper;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 
@@ -54,5 +55,7 @@ public class MemberServiceImpl implements MemberService {
 	public int nickCheck(String checkNick) {
 		return memberRepository.nickCheck(sqlSession, checkNick);
 	}
+
+	
 
 }
