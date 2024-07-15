@@ -25,7 +25,7 @@
                     <a class="nav-link" href="theater">극장</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="#">예매</a>
+                    <a class="nav-link " href="reservation">예매</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " href="#">스토어</a>
