@@ -25,8 +25,8 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
 	}
 
 	@Override
-	public List<Schedule> getScheduleList(int movie, String theater, String date) {
-		return movieScheduleRepository.getScheduleList(sqlSession, movie, theater, date);
+	public List<Schedule> getScheduleList(int movie, String theater, String startdate, String enddate) {
+		return movieScheduleRepository.getScheduleList(sqlSession, movie, theater, startdate, enddate);
 	}
 
 	@Override

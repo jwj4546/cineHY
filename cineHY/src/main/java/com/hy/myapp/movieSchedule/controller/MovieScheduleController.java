@@ -20,7 +20,6 @@ public class MovieScheduleController {
 	public String getScheduleForm(Model model) {
 		List<Theater> theaters = movieScheduleService.getTheaterList();
         model.addAttribute("theaters", theaters);
-        System.out.println(theaters);
 		return "movieSchedule/scheduleEnroll";
 	}
 	

@@ -12,7 +12,7 @@ public interface MovieScheduleService {
 	List<Theater> getTheaterList();
 
 
-	List<Schedule> getScheduleList(int movie, String theater, String date);
+	List<Schedule> getScheduleList(int movie, String theater, String startdate, String enddate);
 
 
 	int checkSchedule(String theaterCode, int screenCode, String endDate, String startTime, String endTime, String endTime2);

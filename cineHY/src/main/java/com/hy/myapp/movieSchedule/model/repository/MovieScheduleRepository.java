@@ -1,6 +1,5 @@
 package com.hy.myapp.movieSchedule.model.repository;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,11 +20,12 @@ public class MovieScheduleRepository {
 	}
 
 
-	public List<Schedule> getScheduleList(SqlSessionTemplate sqlSession, int movie, String theater, String date) {
+	public List<Schedule> getScheduleList(SqlSessionTemplate sqlSession, int movie, String theater, String startdate, String enddate) {
 	    Map<String, Object> params = new HashMap<>();
-	    params.put("movie", movie);
-	    params.put("theater", theater);
-	    params.put("date", date);
+	    params.put("movieCode", movie);
+	    params.put("theaterCode", theater);
+	    params.put("startDate", startdate);
+	    params.put("endDate", enddate);
 
 	    return sqlSession.selectList("movieScheduleMapper.getScheduleList", params);
 	}
@@ -58,7 +58,7 @@ public class MovieScheduleRepository {
 	    params.put("theaterCode", theaterCode);
 	    params.put("date", selectedTabDate);
 		
-		return sqlSession.selectList("movieScheduleMapper.allScheduleList", params);
+		return sqlSession.selectList("movieScheduleMapper.allScheduleListByDate", params);
 	}
 
 
