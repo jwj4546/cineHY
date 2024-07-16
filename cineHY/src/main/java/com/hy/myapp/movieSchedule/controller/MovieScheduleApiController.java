@@ -40,7 +40,6 @@ public class MovieScheduleApiController {
 									 .message("조회결과존재없음")
 									 .build());
 		}
-		//log.info("조회된 theater 목록 : {}", theaterList);
 		
 		Message responseMsg = Message.builder()
 									 .data(theaterList)
@@ -96,7 +95,6 @@ public class MovieScheduleApiController {
         List<Schedule> scheduleList;
         try {
             scheduleList = movieScheduleService.getScheduleList(movie, theater, startdate, enddate);
-            System.out.println(startdate);
             
         } catch (Exception e) {
             // 조회 도중 오류 발생 시 INTERNAL_SERVER_ERROR 반환
@@ -116,13 +114,10 @@ public class MovieScheduleApiController {
         	return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
         }
         
-        //log.info("조회된 scheduleList 목록 : {}", scheduleList);
-        
         Message responseMsg = Message.builder()
                                      .data(scheduleList)
                                      .message("조회성공")
                                      .build();
-        //log.info("조회된 scheduleList 목록 : {}", scheduleList);
         return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
     }
 	
@@ -145,14 +140,12 @@ public class MovieScheduleApiController {
 					                        .data(count)
 					                        .message("등록된 스케줄 있음")
 					                        .build();
-	        	//log.info("조회된 schedule 수 : {}", count);
 	        	return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	        } else {
 	            Message responseMsg = Message.builder()
 	                                         .data(count)
 	                                         .message("등록가능")
 	                                         .build();
-	            //log.info("조회된 schedule 수 : {}", count);
 	            return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	        }
 	    } catch (Exception ex) {

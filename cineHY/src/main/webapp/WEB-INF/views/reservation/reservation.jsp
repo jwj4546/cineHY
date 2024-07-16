@@ -15,79 +15,89 @@
 <style>
 	#page1 { height: 80px;}
 	#page2 { height: 800px;}
+	.row .col .navbar {
+		background-color: #29b9a5;
+	}
+	#selectedInfo {
+		width: 800px;
+		height: 200px;
+	}
 </style>
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp"></jsp:include>
 	<main>
 	<div id="page1"></div>
-    <div id="page2" class="container">
-	    <div class="text-center mb-4">
-	        <button class="btn btn-secondary" style="float: right; margin-left: 10px;">예매 다시하기</button>
-	        <button class="btn btn-primary" style="float: right;">상영시간표</button>
-	    </div>  
-	    <br><br>
-        <div class="row mb-3">
-            <div class="col">
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-secondary active">
-                        <input type="radio" name="options" id="option1" autocomplete="off" checked> 박스오피스 순
-                    </label>
-                    <label class="btn btn-secondary">
-                        <input type="radio" name="options" id="option2" autocomplete="off"> 가나다순
-                    </label>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row mb-3">
-            <div class="col">
-            	<div class="navbar bg-primary" data-bs-theme="dark" style="color:white;">영화</div>
-                <select class="form-control" id="movieSelect" size="10">
-                    <option></option>
-                </select>
-            </div>
-            <div class="col">
-            	<div class="navbar bg-primary" data-bs-theme="dark" style="color:white;">극장</div>
-                <select class="form-control" id="theaterSelect" size="10">
-                	<option>조회된 영화관이 없습니다.</option>
-                    <%-- <c:forEach var="theater" items="${theaters}">
-                    	<option value="${theater.theaterCode }">${theater.theaterName }</option>
-                    </c:forEach> --%>
-                </select>
-            </div>
-            <div class="col">
-            	<div class="navbar bg-primary" data-bs-theme="dark" style="color:white;">날짜</div>
-                <select class="form-control" id="dateSelect" size="10">
-                    <option>2024-6-19 수</option>
-                </select>
-            </div>
-            <div class="col">
-            	<div class="navbar bg-primary" data-bs-theme="dark" style="color:white;">시간</div>
-                <select class="form-control" id="timeSelect" size="10">
-                    <option>조회된 스케줄이 없습니다.</option>
-                </select>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col" style="display: flex;">
-                <div class="card" style=" margin-right: 50px;">
-                    <div class="card-body" id="selectedInfo">
-                        	<p class="card-text">영화 제목: </p>
-                        	<p class="card-text">극장: </p>
-                        	<p class="card-text">날짜: </p>
-                        	<p class="card-text">시간: </p>
-                    </div>
-                </div>
-                
-            </div>
-            <div class="col d-flex justify-content-end align-items-center">
-                <button class="btn btn-primary mx-2">좌석선택</button>
-                <button class="btn btn-danger">취소</button>
-            </div>
-        </div>
+    <div id="page2">
+    	<div class="container mt-5">
+	    	<h2 class="mb-4 text-center">예매하기</h2>
+		    <div class="text-center mb-4">
+		        <button class="btn btn-secondary" style="float: right; margin-left: 10px;">예매 다시하기</button>
+		        <button class="btn btn-primary" style="float: right;">상영시간표</button>
+		    </div>  
+		    <br><br>
+	        <div class="row mb-3">
+	            <div class="col">
+	                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+	                    <label class="btn btn-secondary active">
+	                        <input type="radio" name="options" id="option1" autocomplete="off" checked> 박스오피스 순
+	                    </label>
+	                    <label class="btn btn-secondary">
+	                        <input type="radio" name="options" id="option2" autocomplete="off"> 가나다순
+	                    </label>
+	                </div>
+	            </div>
+	        </div>
+	        
+	        <div class="row mb-3">
+	            <div class="col">
+	            	<div class="navbar text-light" data-bs-theme="dark">영화</div>
+	                <select class="form-control" id="movieSelect" size="10">
+	                    <option></option>
+	                </select>
+	            </div>
+	            <div class="col">
+	            	<div class="navbar text-light" data-bs-theme="dark" >극장</div>
+	                <select class="form-control" id="theaterSelect" size="10">
+	                	<option>조회된 영화관이 없습니다.</option>
+	                    <%-- <c:forEach var="theater" items="${theaters}">
+	                    	<option value="${theater.theaterCode }">${theater.theaterName }</option>
+	                    </c:forEach> --%>
+	                </select>
+	            </div>
+	            <div class="col">
+	            	<div class="navbar text-light" data-bs-theme="dark">날짜</div>
+	                <select class="form-control" id="dateSelect" size="10">
+	                    <option>2024-6-19 수</option>
+	                </select>
+	            </div>
+	            <div class="col">
+	            	<div class="navbar text-light" data-bs-theme="dark">시간</div>
+	                <select class="form-control" id="timeSelect" size="10">
+	                    <option>조회된 스케줄이 없습니다.</option>
+	                </select>
+	            </div>
+	        </div>
+	
+	
+	        <div class="row">
+	            <div class="col" style="display: flex;">
+	                <div class="card" style=" margin-right: 50px;">
+	                    <div class="card-body" id="selectedInfo">
+	                        	<p class="card-text">영화 제목: </p>
+	                        	<p class="card-text">극장: </p>
+	                        	<p class="card-text">날짜: </p>
+	                        	<p class="card-text">시간: </p>
+	                    </div>
+	                </div>
+	                
+	            </div>
+	            <div class="col d-flex justify-content-end align-items-center">
+	                <button class="btn btn-primary mx-2">좌석선택</button>
+	                <button class="btn btn-danger">취소</button>
+	            </div>
+	        </div>
+	        </div>
         </div>
     </main>
 <jsp:include page="../common/footer.jsp"></jsp:include>
