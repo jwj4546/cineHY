@@ -1,12 +1,12 @@
 package com.hy.myapp.movie.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 @Slf4j
 @RestController
@@ -34,54 +35,63 @@ public class MovieApiController {
 	@Autowired
     private MovieService movieService;
 	
-	@GetMapping(value="nowPlaying", produces="application/json; charset=UTF-8")
-	public String getNowPlayingMovie(@RequestParam("pageNo") int pageNo) throws IOException {
-		
-		//OkHttp 클라이언트 객체생성
-		OkHttpClient client = new OkHttpClient();
-		int pageNumber = 1;
-		//get 요청
-		Request request = new Request.Builder()
-		  .url("https://api.themoviedb.org/3/movie/now_playing?append_to_response=images&language=ko-KR&page="+pageNo+"&include_image_language=en,null")
-		  .get()
-		  .addHeader("accept", "application/json")
-		  .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcxOTk4Mzc5NS40NDkyODMsInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qMXzz1zFbiC7Mct5mGb96DwMT3Tjtuo1HFjLE_b_kZ0")
-		  .build();
+	private static final String API_URL = "https://api.themoviedb.org/3/movie/";
+    private static final String BEARER_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcyMDA2Mjc5Ni41OTIxNDksInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WfXqF4gZs0s7v7N9TyGhAUHP_ut6LgIEjSs_Bge8vH0"; // 여기에 실제 Bearer Token을 입력하세요
+    private static final int TOTAL_PAGES = 20; // 가져올 페이지 수
+	
+    @GetMapping(value = "nowPlaying", produces = "application/json; charset=UTF-8")
+    public String getNowPlayingMovie() throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        List<String> allMoviesResponses = new ArrayList<>();
 
-		// 요청 실행 및 응답 받기
-        try (Response response = client.newCall(request).execute()) {
-            // 응답 본문 추출
-            okhttp3.ResponseBody responseBody = response.body();
-            if (responseBody != null) {
-                return responseBody.string();
-            } else {
-                return "{}"; // 응답 본문이 없는 경우 빈 JSON 객체 반환
+        for (int pageNumber = 1; pageNumber <= TOTAL_PAGES; pageNumber++) {
+            Request request = new Request.Builder()
+                    .url(API_URL + "now_playing?language=ko-KR&page=" + pageNumber + "&include_image_language=en,null")
+                    .get()
+                    .addHeader("accept", "application/json")
+                    .addHeader("Authorization", BEARER_TOKEN)
+                    .build();
+
+            try (Response response = client.newCall(request).execute()) {
+                okhttp3.ResponseBody responseBody = response.body();
+                if (responseBody != null) {
+                    allMoviesResponses.add(responseBody.string());
+                }
             }
         }
+
+        // 각 응답을 하나의 JSON 배열로 결합
+        String combinedResponse = "[" + String.join(",", allMoviesResponses) + "]";
+        return combinedResponse;
     }
 	
 	@GetMapping(value="upComming", produces="application/json; charset=UTF-8")
-	public String getUpcommingMovie(@RequestParam("pageNo") int pageUpNo) throws IOException {
+	public String getUpcommingMovie() throws IOException {
 		
 		OkHttpClient client = new OkHttpClient();
+        List<String> allMoviesResponses = new ArrayList<>();
 
-		Request request = new Request.Builder()
-		  .url("https://api.themoviedb.org/3/movie/upcoming?language=ko-KR&page="+pageUpNo+"&sort_by=popularity.desc")
-		  .get()
-		  .addHeader("accept", "application/json")
-		  .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcyMDA2Mjc5Ni41OTIxNDksInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WfXqF4gZs0s7v7N9TyGhAUHP_ut6LgIEjSs_Bge8vH0")
-		  .build();
+        for (int pageNumber = 1; pageNumber <= TOTAL_PAGES; pageNumber++) {
+            Request request = new Request.Builder()
+                    .url(API_URL + "upcoming?language=ko-KR&page=" + pageNumber+"&sort_by=popularity.desc")
+                    .get()
+                    .addHeader("accept", "application/json")
+                    .addHeader("Authorization", BEARER_TOKEN)
+                    .build();
 
-		try (Response response = client.newCall(request).execute()) {
-	            // 응답 본문 추출
-	            okhttp3.ResponseBody responseBody = response.body();
-	            if (responseBody != null) {
-	                return responseBody.string();
-	            } else {
-	                return "{}"; // 응답 본문이 없는 경우 빈 JSON 객체 반환
-	            }
-	        }
-	}
+            try (Response response = client.newCall(request).execute()) {
+                okhttp3.ResponseBody responseBody = response.body();
+                if (responseBody != null) {
+                    allMoviesResponses.add(responseBody.string());
+                }
+            }
+        }
+
+        // 각 응답을 하나의 JSON 배열로 결합
+        String combinedResponse = "[" + String.join(",", allMoviesResponses) + "]";
+        return combinedResponse;
+    }
+		
 	
 	@GetMapping(value="details", produces="application/json; charset=UTF-8")
 	public String getDetails(@RequestParam("movie_id") int movieId) throws IOException {
@@ -89,9 +99,9 @@ public class MovieApiController {
 		OkHttpClient client = new OkHttpClient();
 
 		Request request = new Request.Builder()
-		  .url("https://api.themoviedb.org/3/movie/"+ movieId +"?language=ko-KR")
+		  .url(API_URL + movieId +"?language=ko-KR")
 		  .get()
-		  .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcyMDA2Mjc5Ni41OTIxNDksInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WfXqF4gZs0s7v7N9TyGhAUHP_ut6LgIEjSs_Bge8vH0")
+		  .addHeader("Authorization", BEARER_TOKEN)
 		  .addHeader("accept", "application/json")
 		  .build();
 
@@ -113,9 +123,9 @@ public class MovieApiController {
 		OkHttpClient client = new OkHttpClient();
 
 		Request request = new Request.Builder()
-		  .url("https://api.themoviedb.org/3/movie/"+ movieId +"/release_dates")
+		  .url(API_URL + movieId +"/release_dates")
 		  .get()
-		  .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcyMDA2Mjc5Ni41OTIxNDksInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WfXqF4gZs0s7v7N9TyGhAUHP_ut6LgIEjSs_Bge8vH0")
+		  .addHeader("Authorization", BEARER_TOKEN)
 		  .addHeader("accept", "application/json")
 		  .build();
 
@@ -135,7 +145,7 @@ public class MovieApiController {
 		OkHttpClient client = new OkHttpClient();
 
 		Request request = new Request.Builder()
-		  .url("https://api.themoviedb.org/3/movie/"+ movieId +"/credits?language=ko-KR")
+		  .url(API_URL + movieId +"/credits?language=ko-KR")
 		  .get()
 		  .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcyMDA2Mjc5Ni41OTIxNDksInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WfXqF4gZs0s7v7N9TyGhAUHP_ut6LgIEjSs_Bge8vH0")
 		  .addHeader("accept", "application/json")
@@ -157,7 +167,7 @@ public class MovieApiController {
 		OkHttpClient client = new OkHttpClient();
 
 		Request request = new Request.Builder()
-		  .url("https://api.themoviedb.org/3/movie/"+ movieId +"/images")
+		  .url(API_URL + movieId +"/images")
 		  .get()
 		  .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcyMDA2Mjc5Ni41OTIxNDksInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WfXqF4gZs0s7v7N9TyGhAUHP_ut6LgIEjSs_Bge8vH0")
 		  .addHeader("accept", "application/json")
