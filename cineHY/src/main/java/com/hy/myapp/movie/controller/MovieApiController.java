@@ -39,7 +39,7 @@ public class MovieApiController {
 		
 		//OkHttp 클라이언트 객체생성
 		OkHttpClient client = new OkHttpClient();
-
+		int pageNumber = 1;
 		//get 요청
 		Request request = new Request.Builder()
 		  .url("https://api.themoviedb.org/3/movie/now_playing?append_to_response=images&language=ko-KR&page="+pageNo+"&include_image_language=en,null")
