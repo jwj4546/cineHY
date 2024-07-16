@@ -61,6 +61,18 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findMyId(userName, phoneNo, email);
     }
 
+	@Override
+	public Member findMyPw(String userId, String userName, String phoneNo) {
+		return memberRepository.findMyPw(userId, userName, phoneNo);
+	}
+
+	@Override
+	public int changePw(Member member) {
+		return memberRepository.changePw(sqlSession, member);
+	}
+	
+	
+
 
 	
 

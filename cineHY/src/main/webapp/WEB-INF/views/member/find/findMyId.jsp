@@ -9,6 +9,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
     <style>
         @import url("http://fonts.googleapis.com/earlyaccess/nanumgothic.css");
        	body {
@@ -68,10 +70,10 @@
         <label for="userName"> 이름 : </label>
         <input type="text" class="form-control" id="userName" placeholder="이름을 입력해주세요." name="userName" required> <br>
 
-        <label for="email"> 전화번호 : </label>
+        <label for="phoneNo"> 전화번호 : </label>
         <input type="tel" class="form-control" id="phoneNo" placeholder="전화번호를 입력해주세요." name="phoneNo" required> <br>
 
-        <label for="age"> 이메일 </label>
+        <label for="email"> 이메일 </label>
         <input type="email" class="form-control" id="email" placeholder="이메일을 입력해주세요." name="email" required> <br>
                 <div>
                     <span id="findIdResult" style="font-size:12px; font-weight:bold;"></span>
@@ -84,9 +86,8 @@
         </div>
     </div>
 
-    <!-- JavaScript and Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+   
 
     <script>
         function findId() {
@@ -115,7 +116,7 @@
 
             $.ajax({
                 url: 'findMyId.do',
-                method: 'POST',
+               	type: 'POST',
                 data: data,
                 success: function(response) {
                     if (response) {

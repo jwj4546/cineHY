@@ -38,4 +38,16 @@ public class MemberRepository {
         params.put("email", email);
         return sqlSession.selectOne("MemberMapper.findMyId", params);
     }
+
+	public Member findMyPw(String userId, String userName, String phoneNo) {
+		Map<String, String> params = new HashMap<>();
+		params.put("userId", userId);
+		params.put("userName", userName);
+		params.put("phoneNo", phoneNo);
+		return sqlSession.selectOne("MemberMapper.findMyPw", params);
+	}
+
+	public int changePw(SqlSessionTemplate sqlSession, Member member) {
+		return sqlSession.update("MemberMapper.changePw", member);
+	}
 }

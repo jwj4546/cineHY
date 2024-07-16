@@ -20,6 +20,9 @@ public interface MemberService {
 
 	Member findMyId(String userName, String phoneNo, String email);
 	
+	Member findMyPw(String userId, String userName, String phoneNo);
+
+	int changePw(Member member);
 	
 	
 }

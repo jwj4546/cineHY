@@ -1,7 +1,6 @@
 package com.hy.myapp.member.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hy.myapp.member.model.service.MemberService;
@@ -22,6 +23,7 @@ import com.hy.myapp.member.model.vo.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@SessionAttributes("member")
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -198,9 +200,56 @@ public class MemberController {
     }
 	
 	
+	@GetMapping("findMyPw")
+	public String findMyPw() {
+		return "member/find/findMyPw";
+	}
 	
+	@RequestMapping(value = "findMyPw.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String findMyPw(@RequestParam("userId") String userId,
+						   @RequestParam("userName") String userName,
+						   @RequestParam("phoneNo") String phoneNo) {
+		
+	      // System.out.println("userName =" + userName);
+	       //System.out.println("userId=" + userId);
+	      // System.out.println("phoneNo =" + phoneNo);
+	       
+	      Member member = memberService.findMyPw(userId, userName, phoneNo);
+	      if (member == null) {
+	    	  return null;
+	      } else {
+	    	  return member.getUserPwd();
+	      }
+	     	      
+	      
+	}
 	
+	@GetMapping("changeMyPw")
+	public String changeMyPw() {
+		return "member/find/changeMyPw";
+	}
 	
+	@PostMapping("changeMyPw.do")
+    public String changePw(Member member, HttpSession session, Model model) {
+      
+			
+			log.info("수정요청멤버 : {}", member);
+			
+			if(memberService.changePw(member) > 0) {
+				//DB로부터 수정된 회원정보를 다시 조회해서
+				//sessionScope에 loginUser라는 키값으로 덥ㅍ어씌워줄것
+				session.setAttribute("loginUser", memberService.login(member));
+				//회원정보 수정시 띄우는 alert메세지
+				session.setAttribute("alertMsg", "회원정보를 수정하였습니다.");
+				
+				return "redirect:/";
+			} else {
+				model.addAttribute("errorMsg","정보 수정에 실패했습니다");
+				return "common/errorPage";
+			}
+			
+		}
 	
 	
 	
