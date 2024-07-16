@@ -171,7 +171,7 @@
 	        var currentPage = 1;
 	        function fetchMovies(pageNo) {
 	            $.ajax({
-	                url: 'movieList/nowPlaying',
+	                url: 'movieList/nowPlaying/Admin',
 	                method: 'get',
 	                dataType: 'json',
 	                data: { pageNo: pageNo },
@@ -410,7 +410,7 @@
             var currentPage = 1;
             function fetchUpMovies(pageUpNo) {
                 $.ajax({
-                    url: 'movieList/upComming',
+                    url: 'movieList/upComming/Admin',
                     method: 'get',
                     dataType: 'json',
                     data: { pageNo: pageUpNo },

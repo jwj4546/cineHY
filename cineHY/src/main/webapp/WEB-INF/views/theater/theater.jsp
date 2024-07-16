@@ -13,8 +13,57 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
-	#page1 { height: 80px;}
-	#page2 { height: 800px;}
+	
+	body { 
+		background-color: #222;
+	}
+	
+	#page1 { 
+		height: 80px;
+	}
+	#page2 { 
+		height: 800px;
+	}
+	
+	.nav-tabs .nav-link {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        margin-right: 10px; /* 탭 간격 조정 */
+        padding: 10px 40px; /* 탭 너비 조정 */
+        color: #333;
+    }
+    
+    .nav-tabs .nav-link.active {
+        background-color: #29b9a5; /* 활성화된 탭 색상 */
+        color: white;
+    }
+    
+    .nav-tabs {
+        border-bottom: none; /* 하단 테두리 제거 */
+        margin-top: 50px;
+    }
+    
+    .btn-group-toggle {
+    	margin-top: 100px;
+    }
+    
+    .btn-group-toggle .btn {
+    	color: #333;
+    	font-size : 20px;
+    	padding: 10px 40px; /* 탭 너비 조정 */
+    }
+    
+    .btn-group-toggle .btn.active {
+        background-color: #29b9a5;
+        border: 0px;    
+    }
+    .schedule-table th, .schedule-table td {
+        vertical-align: middle;
+    }
+    
+    .tab-content {
+    	margin-top: 50px;
+    }
 </style>
 
 </head>
@@ -24,21 +73,23 @@
 		<div id="page1"></div>
 		<div id="page2">
 			<div class="container mt-5">
-			   <h2 class="mb-4">극장별 영화 스케줄</h2>
+			   <h2 class="mb-4 text-center text-light">극장별 영화 스케줄</h2>
 			   
 			   	<!-- 지역 선택 버튼 -->
-				<div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
-				    <c:forEach var="theater" items="${theaters}">
-				        <label class="btn btn-outline-primary">
-				            <input type="radio" name="theater" autocomplete="off" value="${theater.theaterCode}"> ${theater.theaterName}
-				        </label>
-				    </c:forEach>
+			   	<div class="d-flex justify-content-center mb-4">
+					<div class="btn-group btn-group-toggle" data-toggle="buttons">
+					    <c:forEach var="theater" items="${theaters}">
+					        <label class="btn text-light">
+					            <input type="radio" name="theater" autocomplete="off" value="${theater.theaterCode}"> ${theater.theaterName}
+					        </label>
+					    </c:forEach>
+					</div>
 				</div>
 				
 		        <!-- 날짜 선택 탭 -->
-		        <ul class="nav nav-tabs">
+		         <ul class="nav nav-tabs justify-content-center text-light mb-4">
 		            <li class="nav-item">
-		                <a class="nav-link active" href="#date1" data-toggle="tab">6/19 (수)</a>
+		                <a class="nav-link text-light active" href="#date1" data-toggle="tab">6/19 (수)</a>
 		            </li>
 		            <li class="nav-item">
 		                <a class="nav-link" href="#date2" data-toggle="tab">6/20 (목)</a>
@@ -219,7 +270,7 @@
         firstTheaterButton.find('input').prop('checked', true);
 
         // 첫 번째 날짜 탭 자동 선택
-        const firstDateTab = $('.nav-tabs a.nav-link').first();
+        const firstDateTab = $('.nav-tabs a.nav-link ').first();
         firstDateTab.tab('show');
 
         // 지역 및 날짜에 맞는 스케줄 자동 로드
@@ -252,7 +303,7 @@
             const day = date.getDate();
             const formattedDate = date.getFullYear() + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
             tabHtml += '<li class="nav-item">';
-            tabHtml += '<a class="nav-link' + (i === 0 ? ' active' : '') + '" href="#date' + (i + 1) + '" data-toggle="tab" data-date="' + formattedDate + '">';
+            tabHtml += '<a class="nav-link text-light' + (i === 0 ? ' active' : '') + '" href="#date' + (i + 1) + '" data-toggle="tab" data-date="' + formattedDate + '">';
             tabHtml += month + '/' + day + ' (' + dayOfWeek + ')';
             tabHtml += '</a>';
             tabHtml += '</li>';

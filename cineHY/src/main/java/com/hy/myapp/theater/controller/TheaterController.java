@@ -23,7 +23,6 @@ public class TheaterController {
 		
 		List<Theater> theaters = movieScheduleService.getTheaterList();
         model.addAttribute("theaters", theaters);
-        //System.out.println(theaters);
 		
 		return "theater/theater";
 	}
