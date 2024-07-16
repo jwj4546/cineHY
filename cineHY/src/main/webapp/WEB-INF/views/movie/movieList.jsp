@@ -107,12 +107,6 @@
 		
 		
 		</div>
-		<nav aria-label="Page navigation example">
-		  <ul class="pagination" id="pagination-btn">
-		    <li class="page-item" id="p-pageNo"><a class="page-link" href="#" onclick="previousPage()">Previous</a></li>
-		    <li class="page-item" id="pageNo"><a class="page-link" href="#" onclick="nextPage()">Next</a></li>
-		  </ul>
-		</nav>
 	    
     </main>
     
@@ -129,7 +123,7 @@
     			success: function(result) {
     				console.log(result);
     				movieIdList = result; // movieIdList에 결과 할당
-                    fetchMovies(currentPage); // 데이터 로딩 후 영화 목록 가져오기
+                    fetchMovies(); // 데이터 로딩 후 영화 목록 가져오기
     			},
     			error : () => {
     				console.log('데이터못불러옴?')
@@ -137,17 +131,16 @@
     		});
     	}
     	
-        var currentPage = 1;
-        function fetchMovies(pageNo) {
+        
+        function fetchMovies() {
             $.ajax({
                 url: 'movieList/nowPlaying',
                 method: 'get',
                 dataType: 'json',
-                data: { pageNo: pageNo },
                 success: function(data) {
-                	
+                	//console.log(data);
                     displayMovies(data);
-                    console.log(data.results);
+                    //console.log(data[0].results);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error('Error fetching movie data:', textStatus, errorThrown);
@@ -156,71 +149,59 @@
         }
 
         function displayMovies(data) {
-            var movieList = $('#movieList');
-            movieList.empty();
-            if (data.results && data.results.length > 0) {
-                const movies = data.results;
-                let movieHtml = '';
-                let rank = 1; // 순위 초기화
-                for(let i = 0; i < movies.length; i++) {
-                    const movieId = movies[i].id;
-                    // movieIdList에 포함된 영화 ID만 출력
-                    if (movieIdList.includes(movieId)) {
-                        movieHtml += '<div class="col-md-4">'
-                          + '<div class="card mb-4 box-shadow">'
-                          + '<div class="rank">No'+ rank +'</div>'
-                          + '<div><img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" alt="Card image cap"></div>'
-                          + '<div class="card-body">'
-                          + '<h5 class="card-title">' + movies[i].title + '</h5>'
-                          + '<p class="card-text">' + movies[i].release_date + ' 개봉</p>'
-                          + '<div class="d-flex justify-content-between align-items-center">'
-                          + '<div class="btn-group">'
-                          + '<a href="movieDetails?movieId=' + movieId + '" class="btn btn-sm btn-outline-secondary">View</a>'
-                       	  + '<form action="reservationById" method="get">'
-                          + '<input type="hidden" value="' + movieId + '" name="movieId">'
-                          + '<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
-                          + '</form>'
-                          + '</div>'
-                          + '<small class="text-muted"> popularity ' + movies[i].popularity + '</small>'
-                          + '</div>'
-                          + '</div>'
-                          + '</div>'
-                          + '</div>'
-                          + '</div>';
-                        rank++;
+            var movieList = document.getElementById('movieList');
+            movieList.innerHTML = ''; // 기존 내용 비우기
+            for (var j = 0; j < data.length; j++) {
+                if (data[j].results && data[j].results.length > 0) {
+                    var movies = data[j].results;
+                    //console.log('Movies:', movies);
+                    var movieHtml = '';
+                    var rank = 1; // 순위 초기화
+                    for (var i = 0; i < movies.length; i++) {
+                        var movieId = movies[i].id;
+                        if (movieIdList.includes(movieId)) {
+                        	console.log(movies[i].title);
+                            movieHtml += '<div class="col-md-4">'
+                                + '<div class="card mb-4 box-shadow">'
+                                + '<div class="rank">No ' + rank + '</div>'
+                                + '<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" alt="Card image cap">'
+                                + '<div class="card-body">'
+                                + '<h5 class="card-title">' + movies[i].title + '</h5>'
+                                + '<p class="card-text">' + movies[i].release_date + ' 개봉</p>'
+                                + '<div class="d-flex justify-content-between align-items-center">'
+                                + '<div class="btn-group">'
+                                + '<a href="movieDetails?movieId=' + movieId + '" class="btn btn-sm btn-outline-secondary">View</a>'
+                                + '<form action="reservationById" method="get">'
+                                + '<input type="hidden" value="' + movieId + '" name="movieId">'
+                                + '<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
+                                + '</form>'
+                                + '</div>'
+                                + '<small class="text-muted">인기도 ' + movies[i].popularity + '</small>'
+                                + '</div>'
+                                + '</div>'
+                                + '</div>'
+                                + '</div>';
+                            rank++;
+                        }
                     }
+                    movieList.innerHTML = movieHtml;
+                } else {
+                    movieList.innerHTML = '<li>No movies currently playing.</li>';
                 }
-                movieList.html(movieHtml);
-            } else {
-                movieList.append('<li>No movies currently playing.</li>');
             }
         }
 
-            // 초기 로딩 시 호출
-            getMovieDB();
+        getMovieDB();
 
-        function changePage(pageNo) {
-            currentPage = pageNo;
-            fetchMovies(pageNo);
-        }
-
-        window.changePage = changePage;
-        window.nextPage = function() {
-            changePage(currentPage + 1);
-        }
-        window.previousPage = function() {
-        	changePage(currentPage - 1);				
-		}
-
-        fetchMovies(currentPage);
+        fetchMovies();
    
-        function fetchUpMovies(pageUpNo) {
+        function fetchUpMovies() {
             $.ajax({
                 url: 'movieList/upComming',
                 method: 'get',
                 dataType: 'json',
-                data: { pageNo: pageUpNo },
                 success: function(data) {
+                	console.log(data);
                     displayUpMovies(data);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -232,58 +213,48 @@
         function displayUpMovies(data) {
             var movieUpList = $('#movieUpList');
             movieUpList.empty();
-            if (data.results && data.results.length > 0) {
-                const upMovies = data.results;
-                let upMovieHtml = '';
-                let rank = 1; // 순위 초기화
-                for(let i in upMovies) {
-                	const upMovieId = upMovies[i].id;
-                	// movieIdList에 포함된 영화 ID만 출력
-                    if (movieIdList.includes(upMovieId)) {
-                    	upMovieHtml += '<div class="col-md-4">'
-                            + '<div class="card mb-4 box-shadow">'
-                            + '<div class="rank">No'+ rank +'</div>'
-                            + '<div><img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + upMovies[i].poster_path + '" alt="Card image cap"></div>'
-                            + '<div class="card-body">'
-                            + '<h5 class="card-title">' + upMovies[i].title + '</h5>'
-                            + '<p class="card-text">' + upMovies[i].release_date + ' 개봉</p>'
-                            + '<div class="d-flex justify-content-between align-items-center">'
-                            + '<div class="btn-group">'
-                            + '<a href="movieDetails?movieId=' + upMovieId + '" class="btn btn-sm btn-outline-secondary">View</a>'
-                         	  + '<form action="reservationById" method="get">'
-                            + '<input type="hidden" value="' + upMovieId + '" name="movieId">'
-                            + '<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
-                            + '</form>'
-                            + '</div>'
-                            + '<small class="text-muted"> popularity ' + upMovies[i].popularity + '</small>'
-                            + '</div>'
-                            + '</div>'
-                            + '</div>'
-                            + '</div>'
-                            + '</div>';
-                          rank++;
-                    }
-                }
-                movieUpList.html(upMovieHtml);
-            } else {
-            	movieUpList.append('<li>No movies currently playing.</li>');
+            for (var j = 0; j < data.length; j++) {
+            	if (data[j].results && data[j].results.length > 0) {
+                    var upMovies = data[j].results;
+	                let upMovieHtml = '';
+	                let rank = 1; // 순위 초기화
+	                for(let i in upMovies) {
+	                	const upMovieId = upMovies[i].id;
+	                	// movieIdList에 포함된 영화 ID만 출력
+	                    if (movieIdList.includes(upMovieId)) {
+	                    	upMovieHtml += '<div class="col-md-4">'
+	                            + '<div class="card mb-4 box-shadow">'
+	                            + '<div class="rank">No'+ rank +'</div>'
+	                            + '<div><img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + upMovies[i].poster_path + '" alt="Card image cap"></div>'
+	                            + '<div class="card-body">'
+	                            + '<h5 class="card-title">' + upMovies[i].title + '</h5>'
+	                            + '<p class="card-text">' + upMovies[i].release_date + ' 개봉</p>'
+	                            + '<div class="d-flex justify-content-between align-items-center">'
+	                            + '<div class="btn-group">'
+	                            + '<a href="movieDetails?movieId=' + upMovieId + '" class="btn btn-sm btn-outline-secondary">View</a>'
+	                         	  + '<form action="reservationById" method="get">'
+	                            + '<input type="hidden" value="' + upMovieId + '" name="movieId">'
+	                            + '<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
+	                            + '</form>'
+	                            + '</div>'
+	                            + '<small class="text-muted"> popularity ' + upMovies[i].popularity + '</small>'
+	                            + '</div>'
+	                            + '</div>'
+	                            + '</div>'
+	                            + '</div>'
+	                            + '</div>';
+	                          rank++;
+	                    }
+	                }
+	                movieUpList.html(upMovieHtml);
+	            } else {
+	            	movieUpList.append('<li>No movies currently playing.</li>');
+	            }
             }
         }
+        
 
-        function changeUpPage(pageUpNo) {
-            currentPage = pageUpNo;
-            fetchUpMovies(pageUpNo);
-        }
-
-        window.changeUpPage = changeUpPage;
-        window.nextUpPage = function() {
-            changeUpPage(currentPage + 1);
-        }
-        window.previousUpPage = function() {
-        	changeUpPage(currentPage - 1);				
-		}	
-
-         fetchUpMovies(currentPage);
+         fetchUpMovies();
      });
     </script>
     
