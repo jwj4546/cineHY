@@ -42,27 +42,28 @@
         
         <div class="row mb-3">
             <div class="col">
-            	<div class="list-group-item list-group-item-info">영화</div>
+            	<div class="navbar bg-primary" data-bs-theme="dark" style="color:white;">영화</div>
                 <select class="form-control" id="movieSelect" size="10">
                     <option></option>
                 </select>
             </div>
             <div class="col">
-            	<div class="list-group-item list-group-item-info">극장</div>
+            	<div class="navbar bg-primary" data-bs-theme="dark" style="color:white;">극장</div>
                 <select class="form-control" id="theaterSelect" size="10">
-                    <c:forEach var="theater" items="${theaters}">
+                	<option>조회된 영화관이 없습니다.</option>
+                    <%-- <c:forEach var="theater" items="${theaters}">
                     	<option value="${theater.theaterCode }">${theater.theaterName }</option>
-                    </c:forEach>
+                    </c:forEach> --%>
                 </select>
             </div>
             <div class="col">
-            	<div class="list-group-item list-group-item-info">날짜</div>
+            	<div class="navbar bg-primary" data-bs-theme="dark" style="color:white;">날짜</div>
                 <select class="form-control" id="dateSelect" size="10">
                     <option>2024-6-19 수</option>
                 </select>
             </div>
             <div class="col">
-            	<div class="list-group-item list-group-item-info">시간</div>
+            	<div class="navbar bg-primary" data-bs-theme="dark" style="color:white;">시간</div>
                 <select class="form-control" id="timeSelect" size="10">
                     <option>조회된 스케줄이 없습니다.</option>
                 </select>
@@ -73,18 +74,14 @@
         <div class="row">
             <div class="col" style="display: flex;">
                 <div class="card" style=" margin-right: 50px;">
-                    <div class="card-body">
-                        <img src="" alt="">
-                        <p class="card-text">영화 제목: 영화선택하면~</p>
+                    <div class="card-body" id="selectedInfo">
+                        	<p class="card-text">영화 제목: </p>
+                        	<p class="card-text">극장: </p>
+                        	<p class="card-text">날짜: </p>
+                        	<p class="card-text">시간: </p>
                     </div>
                 </div>
-                <div class="card" >
-                    <div class="card-body">
-                        <p class="card-text">극장: 극장 선택하면~</p>
-                        <p class="card-text">일시: 날짜 선택하면~</p>
-                        <p class="card-text">상영관: 시간 선택하면~</p>
-                    </div>
-                </div>
+                
             </div>
             <div class="col d-flex justify-content-end align-items-center">
                 <button class="btn btn-primary mx-2">좌석선택</button>
@@ -99,10 +96,10 @@
 
 $(document).ready(function() {
 	
-	const selectedMovieCode = '${movieCode}';
+	let selectedMovieCode = '${movieCode}';
+    let selectedTheaterCode = '${theaterCode}';
     const selectedTicketDate = '${ticketDate}';
     const selectedScreenCode = '${screenCode}';
-    const selectedTheaterCode = '${theaterCode}';
     const selectedStartTime = '${startTime}';
 	
 	function findAllMovie() {
@@ -112,20 +109,19 @@ $(document).ready(function() {
 			method : 'get',
 			dataType : 'json',
 			success: function(data) {
-				//console.log(data.data);
 				const movieTitleList = data.data;
 				let ListHtml ='';
 				for(let i in movieTitleList) {
 					ListHtml += '<option value="'+ movieTitleList[i].movieCode +'">'+ movieTitleList[i].movieTitle +'</option>';
-					//console.log(movieTitleList[i].movieTitle);
 				}
 				$('#movieSelect').html(ListHtml);
 				$('#movieSelect').val(selectedMovieCode); // 자동 선택
 	            fetchScheduleTime();
 				
-				$('#movieSelect').change(function() {
-			   		fetchScheduleTime();
-			    });
+	            $('#movieSelect').change(function() {
+                    selectedMovieCode = $(this).val();
+                    getTheater();
+                });
 				
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
@@ -136,11 +132,36 @@ $(document).ready(function() {
 
 	findAllMovie();
 	
-	// 극장 선택 시 스케줄을 업데이트하는 함수 호출
-    $('#theaterSelect').change(function() {
-        fetchScheduleTime();
-    });
-    $('#theaterSelect').val(selectedTheaterCode); // 극장 자동 선택
+	function getTheater() {
+    	
+    	$.ajax({
+    		url : 'movieSchedule/theater',
+    		method : 'get',
+    		dataType : 'json',
+    		success : function(data) {
+    			const theaterList = data.data;
+    			let TheaterHtml ='';
+    			for(let i in theaterList) {
+    				TheaterHtml += '<option value="'+ theaterList[i].theaterCode +'">'+ theaterList[i].theaterName +'</option>';
+    			}
+				
+    			$('#theaterSelect').html(TheaterHtml);
+    			$('#theaterSelect').val(selectedTheaterCode); // 극장 자동 선택
+    			fetchScheduleTime();
+    			
+    			// 극장 선택 시 스케줄을 업데이트하는 함수 호출
+    			$('#theaterSelect').change(function() {
+                    selectedTheaterCode = $(this).val();
+                    fetchScheduleTime();
+                });
+    		},
+    		error: function(jqXHR, textStatus, errorThrown) {
+	            console.error('Error fetching movie data:', textStatus, errorThrown);
+    		}
+    	});
+    }
+    getTheater();
+   
 	
 	function updateDate() {
         // 오늘 날짜를 기준
@@ -177,25 +198,77 @@ $(document).ready(function() {
 	    const startdate = document.getElementById('dateSelect').value;
 	    const enddate = document.getElementById('dateSelect').value;
 		
-	    $.ajax({
-    		url : 'movieSchedule/schedule/' + movie + '/' + theater + '/' + startdate + '/' + enddate,
-    		method : 'get',
-    		dataType : 'json',
-    		success : function(data) { // data => 
-    			console.log(data);
-    			const scheduleResult = document.getElementById('timeSelect');
-	            scheduleResult.innerHTML = '';
-    			if (data.data.length > 0) {
-	                data.data.forEach(s => {
-	                    scheduleResult.innerHTML += '<option value="${s.startTime}" data-screen-code="${s.screenCode}">' + s.startTime + ' ' + s.screenCode + '관</option>'
-	                  ;})
-	            }
-	            else {
-	                scheduleResult.innerHTML = '<option>스케줄이 없습니다.</option>';
-	            }
-    		}
-		});
+	    if (movie && theater && startdate && enddate) {
+		    $.ajax({
+	    		url : 'movieSchedule/schedule/' + movie + '/' + theater + '/' + startdate + '/' + enddate,
+	    		method : 'get',
+	    		dataType : 'json',
+	    		success : function(data) { // data => 
+	    			const scheduleResult = document.getElementById('timeSelect');
+		            scheduleResult.innerHTML = '';
+	    			if (data.data.length > 0) {
+		                data.data.forEach(s => {
+		                    scheduleResult.innerHTML += '<option value="${s.startTime}" data-screen-code="${s.screenCode}">' + s.startTime + ' ' + s.screenCode + '관</option>'
+		                  ;})
+		            }
+		            else {
+		                scheduleResult.innerHTML = '<option>스케줄이 없습니다.</option>';
+		            }
+	    			$('#timeSelect option:first').prop('selected', true);
+	    			displaySelectedMovie();
+	    		},
+	    		error: function(jqXHR, textStatus, errorThrown) {
+	                console.error('Error fetching schedule data:', textStatus, errorThrown);
+	    		}
+			});
+	    }
 	}
+	
+	
+	function displaySelectedMovie() {
+        const movie = $('#movieSelect option:selected').text();
+        const theater = $('#theaterSelect option:selected').text();
+        const startDate = $('#dateSelect').val();
+        const startTime = $('#timeSelect option:selected').text();
+        console.log('Selected Movie:', movie);
+        console.log('Selected Theater:', theater);
+        console.log('Selected Date:', startDate);
+        console.log('Selected Time:', startTime);
+
+        if (movie && theater && startDate && startTime) {
+        	console.log('Selected Movie:', movie);
+        	console.log('Selected Theater:', theater);
+        	console.log('Selected Date:', startDate);
+        	console.log('Selected Time:', startTime);
+            let infoHtml = '';
+            infoHtml += '<p class="card-text">영화 제목: ' + movie + '</p>'
+                      + '<p class="card-text">극장: ' + theater + '</p>'
+                      + '<p class="card-text">날짜: ' + startDate + '</p>'
+                      + '<p class="card-text">시간: ' + startTime + '</p>';
+
+            $('#selectedInfo').html(infoHtml);
+        } else {
+        	let infoHtml = '';
+            infoHtml += '<p class="card-text">영화 제목을 선택하세요 </p>'
+                      + '<p class="card-text">극장을 선택하세요 </p>'
+                      + '<p class="card-text">날짜를 선택하세요 </p>'
+                      + '<p class="card-text">시간을 선택하세요 </p>';
+
+            $('#selectedInfo').html(infoHtml);
+        }
+    }
+
+    // 페이지 로드 시 초기 한 번 호출
+    displaySelectedMovie();
+
+    // 선택 값이 변경될 때마다 호출
+    $('#movieSelect, #theaterSelect, #dateSelect, #timeSelect').change(function() {
+        displaySelectedMovie();
+    });
+
+    
+	
+	    
 });
 
 

@@ -76,29 +76,43 @@
 		</div>
 		<div class="tab-content" id="pills-tabContent">
 		  <!-- 상영중인 영화 -->
-		  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
-		  	<div class="album py-5 bg-light">
-		    	<div class="container">
-		        	<div class="row" id="movieList">
-		        	<!-- 영화 출력 -->
-		        	
-		        	</div>
-	        </div>
-		  </div>   
-		  	<nav aria-label="Page navigation example">
-			  <ul class="pagination" id="pagination-btn">
-			    <li class="page-item" id="p-pageNo"><a class="page-link" href="#" onclick="previousPage()">Previous</a></li>
-			    <li class="page-item" id="pageNo"><a class="page-link" href="#" onclick="nextPage()">Next</a></li>
-			  </ul>
-			</nav>
-		  </div>
+			<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+				<div class="album py-5 bg-light">
+					<div class="container">
+					   	<div class="row" id="movieList">
+					   	<!-- 영화 출력 -->
+						
+						</div>
+					</div>
+				</div>   
+		  	
+			</div>
 		 
-		  <!-- 상영예정 영화 -->
-		  <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">...</div>
+		<!-- 상영예정 영화 -->
+		<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">...
+	  		<div class="album py-5 bg-light">
+				<div class="container">
+				   	<div class="row" id="movieUpList">
+				   	<!-- 영화 출력 -->
+					
+					</div>
+				</div>
+			</div>   
+		</div>  
 		  
-		  <!-- 선호도별 추천영화 -->
-		  <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">...</div>
+		  
+		<!-- 선호도별 추천영화 -->
+		<div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">...</div>
+		
+		
+		
 		</div>
+		<nav aria-label="Page navigation example">
+		  <ul class="pagination" id="pagination-btn">
+		    <li class="page-item" id="p-pageNo"><a class="page-link" href="#" onclick="previousPage()">Previous</a></li>
+		    <li class="page-item" id="pageNo"><a class="page-link" href="#" onclick="nextPage()">Next</a></li>
+		  </ul>
+		</nav>
 	    
     </main>
     
@@ -162,7 +176,7 @@
                           + '<div class="d-flex justify-content-between align-items-center">'
                           + '<div class="btn-group">'
                           + '<a href="movieDetails?movieId=' + movieId + '" class="btn btn-sm btn-outline-secondary">View</a>'
-                       	  + '<form action="reservationById" method="post">'
+                       	  + '<form action="reservationById" method="get">'
                           + '<input type="hidden" value="' + movieId + '" name="movieId">'
                           + '<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
                           + '</form>'
@@ -199,7 +213,79 @@
 		}
 
         fetchMovies(currentPage);
-    });
+   
+        function fetchUpMovies(pageUpNo) {
+            $.ajax({
+                url: 'movieList/upComming',
+                method: 'get',
+                dataType: 'json',
+                data: { pageNo: pageUpNo },
+                success: function(data) {
+                    displayUpMovies(data);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching movie data:', textStatus, errorThrown);
+                }
+            });
+        }
+            
+        function displayUpMovies(data) {
+            var movieUpList = $('#movieUpList');
+            movieUpList.empty();
+            if (data.results && data.results.length > 0) {
+                const upMovies = data.results;
+                let upMovieHtml = '';
+                let rank = 1; // 순위 초기화
+                for(let i in upMovies) {
+                	const upMovieId = upMovies[i].id;
+                	// movieIdList에 포함된 영화 ID만 출력
+                    if (movieIdList.includes(upMovieId)) {
+                    	upMovieHtml += '<div class="col-md-4">'
+                            + '<div class="card mb-4 box-shadow">'
+                            + '<div class="rank">No'+ rank +'</div>'
+                            + '<div><img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + upMovies[i].poster_path + '" alt="Card image cap"></div>'
+                            + '<div class="card-body">'
+                            + '<h5 class="card-title">' + upMovies[i].title + '</h5>'
+                            + '<p class="card-text">' + upMovies[i].release_date + ' 개봉</p>'
+                            + '<div class="d-flex justify-content-between align-items-center">'
+                            + '<div class="btn-group">'
+                            + '<a href="movieDetails?movieId=' + upMovieId + '" class="btn btn-sm btn-outline-secondary">View</a>'
+                         	  + '<form action="reservationById" method="get">'
+                            + '<input type="hidden" value="' + upMovieId + '" name="movieId">'
+                            + '<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
+                            + '</form>'
+                            + '</div>'
+                            + '<small class="text-muted"> popularity ' + upMovies[i].popularity + '</small>'
+                            + '</div>'
+                            + '</div>'
+                            + '</div>'
+                            + '</div>'
+                            + '</div>';
+                          rank++;
+                    }
+                }
+                movieUpList.html(upMovieHtml);
+            } else {
+            	movieUpList.append('<li>No movies currently playing.</li>');
+            }
+        }
+
+        function changeUpPage(pageUpNo) {
+            currentPage = pageUpNo;
+            fetchUpMovies(pageUpNo);
+        }
+
+        window.changeUpPage = changeUpPage;
+        window.nextUpPage = function() {
+            changeUpPage(currentPage + 1);
+        }
+        window.previousUpPage = function() {
+        	changeUpPage(currentPage - 1);				
+		}	
+
+         fetchUpMovies(currentPage);
+     });
     </script>
+    
 </body>
 </html>
