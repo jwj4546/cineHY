@@ -50,4 +50,12 @@ public class MemberRepository {
 	public int changePw(SqlSessionTemplate sqlSession, Member member) {
 		return sqlSession.update("MemberMapper.changePw", member);
 	}
+
+	public int update(SqlSessionTemplate sqlSession, Member member) {
+		return sqlSession.update("MemberMapper.myInfoChange", member);
+	}
+
+	public int delete(SqlSessionTemplate sqlSession2, String userId) {
+		return sqlSession.update("MemberMapper.resign", userId);
+	}
 }

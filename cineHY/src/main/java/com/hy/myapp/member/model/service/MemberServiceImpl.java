@@ -37,12 +37,12 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public int update(Member member) {
-				return 0;
+		return memberRepository.update(sqlSession, member);
 	}
 
 	@Override
 	public int delete(String userId) {
-				return 0;
+		return memberRepository.delete(sqlSession, userId);
 	}
 
 	@Override
