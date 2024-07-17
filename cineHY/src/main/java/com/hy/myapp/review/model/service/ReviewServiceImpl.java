@@ -55,6 +55,39 @@ public class ReviewServiceImpl implements ReviewService {
 		return null;
 	}
 
+	@Override
+	public int updateReview(Review review) {
+		return reviewRepository.updateReview(sqlSession, review);
+	}
+
+	@Override
+	public int deleteReview(int reviewNo) {
+		return reviewRepository.deleteReview(sqlSession, reviewNo);
+	}
+
+	@Override
+	public List<Review> selectMyReview(String userId) {
+		return reviewRepository.selectMyReview(sqlSession, userId);
+	}
+	
+	@Override
+	public List<Review> selectNoReview(String userId) {
+		return reviewRepository.selectNoReview(sqlSession, userId);
+	}
+
+
+	@Override
+	public Double getStarAvg(int movieCode) {
+		return reviewRepository.getStarAvg(sqlSession, movieCode);
+	}
+
+	@Override
+	public int reviewCount() {
+		return reviewRepository.reviewCount(sqlSession);
+	}
+
+	
+
 	
 
 }

@@ -89,6 +89,7 @@
     <title>영화등록 페이지</title>
 </head>
 <body>
+
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -142,6 +143,7 @@
           </div>
         </nav>
       </header>
+
      
 </body>
 </html>

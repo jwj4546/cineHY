@@ -26,4 +26,35 @@ public class ReviewRepository {
 	public int insertReview(SqlSessionTemplate sqlSession, Review review) {
 		return sqlSession.insert("reviewMapper.insertReview", review);
 	}
-}
+
+	public int updateReview(SqlSessionTemplate sqlSession, Review review) {
+		return sqlSession.insert("reviewMapper.updateReview", review);
+	}
+
+	public int deleteReview(SqlSessionTemplate sqlSession, int reviewNo) {
+		return sqlSession.update("reviewMapper.deleteReview", reviewNo);
+	}
+
+	public List<Review> selectMyReview(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("reviewMapper.selectMyReview", userId);
+	}
+	
+	public List<Review> selectNoReview(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("reviewMapper.selectNoReview", userId);
+
+	}
+	public Double getStarAvg(SqlSessionTemplate sqlSession, int movieCode) {
+		return sqlSession.selectOne("reviewMapper.starAvg", movieCode);
+	}
+
+	public int reviewCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("reviewMapper.reviewCount");
+
+	}
+
+	
+	}
+
+//	public Double getRatingAvg(SqlSessionTemplate sqlSession, int reviewNo) {
+//		return sqlSession.;
+//	}
