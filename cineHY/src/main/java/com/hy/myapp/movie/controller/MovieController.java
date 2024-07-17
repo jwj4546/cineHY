@@ -27,5 +27,6 @@ public class MovieController {
 		return "movie/movieDetails";
 	}
 	
+	
 
 }

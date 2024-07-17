@@ -35,7 +35,7 @@ public class MovieServiceImpl implements MovieService {
 
 	@Override
 	public int delete(int movieCode) {
-		return movieRepository.deleteMoive(sqlSession, movieCode);
+		return movieRepository.deleteMovie(sqlSession, movieCode);
 	}
 
 	

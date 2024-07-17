@@ -9,7 +9,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
-            <a href="#" class="navbar-brand d-flex align-items-center" style="color: #29b9a5;">
+            <a href="${pageContext.servletContext.contextPath }" class="navbar-brand d-flex align-items-center" style="color: #29b9a5;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2" color="white">
                     <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
                     <path d="M16 3l-4 4H3L7 3z"></path>
@@ -22,10 +22,10 @@
                     <a class="nav-link" href="movieList">영화</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">극장</a>
+                    <a class="nav-link" href="theater">극장</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="#">예매</a>
+                    <a class="nav-link " href="reservation">예매</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " href="#">스토어</a>

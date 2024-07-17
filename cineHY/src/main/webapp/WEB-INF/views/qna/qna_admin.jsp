@@ -449,7 +449,7 @@
             $("#textmsg").append(chatBox);
         }
     });
-
+/*
     $(document).on("keydown", ".type_msg", function(event) {
         if (event.keyCode === 13) {
             $("#sendBtn").trigger("click");
@@ -457,6 +457,7 @@
         }
         return true;
     });
+    */
 
     function sendFile(){
         var file = document.getElementById('file').files[0];
