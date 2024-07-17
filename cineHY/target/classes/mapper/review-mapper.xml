@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="reviewMapper">
+    <select id="findAllReview" resultType="review">
+        SELECT
+			REVIEW_NO reviewNo,
+			REVIEW_CONTENT reviewContent,
+			REVIEW_DATE reviewDate,
+			STAR star,
+			STATUS status,
+			USER_ID userId,
+			MOVIE_CODE movieCode
+		FROM
+			TB_REVIEW
+    </select>
+    
+    <select id="getMovieOfReview" resultType="review" parameterType="_int">
+    	SELECT 
+    		REVIEW_NO reviewNo,
+			REVIEW_CONTENT reviewContent,
+			REVIEW_DATE reviewDate,
+			STAR star,
+			STATUS status,
+			USER_ID userId,
+			MOVIE_CODE movieCode,
+			TICKET_NO ticketNo
+		FROM
+			TB_REVIEW
+		WHERE
+			MOVIE_CODE=#{movieCode}
+		 AND 
+		 	STATUS = 'Y'
+	ORDER BY
+    		REVIEW_DATE DESC
+    
+    
+    </select>
+    
+    
+    <insert id="insertReview"  parameterType="review">
+    	INSERT INTO 
+    			TB_REVIEW
+						(
+						REVIEW_NO, 
+						REVIEW_CONTENT, 
+						REVIEW_DATE, 
+						STAR, 
+						STATUS, 
+						USER_ID, 
+						MOVIE_CODE,
+						TICKET_NO
+						)
+				VALUES
+						(
+						SEQ_RNO.NEXTVAL,
+						#{reviewContent},
+						SYSDATE,
+						#{star },
+						DEFAULT, 
+						#{userId }, 
+						#{movieCode}, 
+						'TICK00007'
+						)
+    
+    </insert>
+    
+    <update id="updateReview" parameterType="review">
+    
+    	UPDATE 
+    		   TB_REVIEW
+			SET 
+				REVIEW_CONTENT = #{reviewContent},
+    			STAR = #{star },
+    			REVIEW_DATE = SYSDATE
+		  WHERE
+				REVIEW_NO = #{reviewNo }
+    
+    
+    </update>
+    
+    
+    <update id="deleteReview" parameterType="_int">
+		UPDATE
+			   TB_REVIEW
+		   SET	
+		       STATUS = 'N'
+		  WHERE
+			   REVIEW_NO = #{reviewNo}
+	
+	</update>
+	
+	<resultMap id="reviewResultMap" type="com.hy.myapp.review.model.vo.Review">
+	    <result property="movieTitle" column="movieTitle"/>
+	    <result property="userId" column="userId"/>
+	    <result property="star" column="star"/>
+	    <result property="reviewDate" column="reviewDate"/>
+	    <result property="reviewContent" column="reviewContent"/>
+	    <result property="star" column="star"/>
+	</resultMap>
+
+	<select id="selectMyReview" resultMap="reviewResultMap" parameterType="String">
+	    
+	    SELECT 
+	        M.MOVIE_TITLE AS movieTitle,
+	        R.REVIEW_NO AS reviewNo,
+	        R.USER_ID AS userId,
+	        R.REVIEW_DATE AS reviewDate,
+	        R.REVIEW_CONTENT AS reviewContent,
+	        R.STAR AS star
+	    FROM 
+	        TB_REVIEW R
+	    JOIN 
+	        TB_MOVIE M ON R.MOVIE_CODE = M.MOVIE_CODE
+	    WHERE 
+	        R.USER_ID = #{userId}
+	        
+	</select>
+	
+	<select id="starAvg" resultType="Double" parameterType="_int">
+		
+		 SELECT 
+				ROUND(AVG(STAR), 1) AS AVG_STAR
+		   FROM 
+		   		TB_REVIEW 
+		  WHERE 
+		   		MOVIE_CODE = #{movieCode}
+		GROUP BY 
+				 MOVIE_CODE
+	
+	
+	</select>
+	
+	<select id="reviewCount" resultType="_int"> 
+		SELECT
+			COUNT(REVIEW_NO)
+		FROM
+			TB_REVIEW
+		WHERE
+			USER_ID = #{userId}
+	
+	</select>
+	
+	<select id="selectNoReview"  resultType="review" parameterType="String">
+	
+		SELECT 
+				MOVIE_CODE movieCode,
+				MOVIE_TITLE movieTitle,
+				PAYMENT_TIME paymentTime
+			FROM 
+				TB_TICKETLIST
+			WHERE 
+				USER_ID =  #{userId}
+			AND 
+				MOVIE_CODE 
+		NOT IN (
+			SELECT 
+					MOVIE_CODE 
+				FROM 
+					TB_REVIEW 
+				WHERE 
+					USER_ID = #{userId}
+					)
+	
+	
+	</select>
+    
+    
+    
+</mapper>
