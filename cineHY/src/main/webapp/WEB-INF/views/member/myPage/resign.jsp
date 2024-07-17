@@ -297,6 +297,41 @@ ul.CTAs a {
     padding: 20px; 
     color: #333; 
 }
+.fifth>div {
+  width: 100%;
+  height : 100%;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 0px 5%;
+  padding-bottom: 50px;
+  padding-top: 30px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.fifth h3 {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 10px 0;
+}
+
+.fifth p {
+  line-height: 1rem;
+  color: #555;
+  padding-bottom: 20px;
+  font-size:smaller;
+}
+
+.fifth button {
+  width: 10%;
+  background: #eee;
+  color: black;
+}
+
+.fifth button:hover {
+  background: #999;
+}
 
 
 
@@ -444,24 +479,23 @@ ul.CTAs a {
             
            <div id = "innerCont">
            
-           <!-- 여기에 컨텐트를 넣어주세요!!!
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-            -->
+			<article>
+			    <h1>Remove Account</h1>
+			  </article>
+			
+			  <!--회원탈퇴-->
+			   <form action="resign.do" method="post">
+			  <article class="fifth">
+			    <div>
+			      <h3>회원탈퇴</h3>
+			      <h3>정말로 탈퇴하시겠습니까?</h3>
+			      <p>탈퇴 시 이용내역이 삭제되며<br>서비스이용이 제한됩니다.<br>또한 삭제된 계정은 복구되지 않습니다.</p>
+			      <div>
+			          <button id="resign-btn" class="btn btn-danger" type="submit">회원탈퇴</button>
+			      </div>
+			    </div>
+			  </article>
+			  </form>
            </div>
             
 

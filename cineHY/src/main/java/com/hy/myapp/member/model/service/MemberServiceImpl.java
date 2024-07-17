@@ -16,8 +16,6 @@ public class MemberServiceImpl implements MemberService {
 	private final SqlSessionTemplate sqlSession;
 	private final MemberRepository memberRepository;
 	
-	
-	
 	public int returnNum() {
 		
 		return 1;
@@ -38,12 +36,12 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public int update(Member member) {
-				return 0;
+		return memberRepository.update(sqlSession, member);
 	}
 
 	@Override
 	public int delete(String userId) {
-				return 0;
+		return memberRepository.delete(sqlSession, userId);
 	}
 
 	@Override
@@ -56,5 +54,25 @@ public class MemberServiceImpl implements MemberService {
 	public int nickCheck(String checkNick) {
 		return memberRepository.nickCheck(sqlSession, checkNick);
 	}
+
+	@Override
+    public Member findMyId(String userName, String phoneNo, String email) {
+        return memberRepository.findMyId(userName, phoneNo, email);
+    }
+
+	@Override
+	public Member findMyPw(String userId, String userName, String phoneNo) {
+		return memberRepository.findMyPw(userId, userName, phoneNo);
+	}
+
+	@Override
+	public int changePw(Member member) {
+		return memberRepository.changePw(sqlSession, member);
+	}
+	
+	
+
+
+	
 
 }
