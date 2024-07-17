@@ -102,9 +102,9 @@
 	        	<c:forEach items="${ list }" var="cart">
 		            <tr>
 		                <td><input type="checkbox" class="checkbox" onclick="changePrice()" checked></td>
-		                <td><img src="${ cart.changeImage }" alt="" style="width: auto; height: 100px;"></td>
+		                <td><img src="${ cart.changeImage }" class="changeImage" alt="" style="width: auto; height: 100px;"></td>
 		                <td>
-		                    <div>${ cart.productName }</div>
+		                    <div class="productName">${ cart.productName }</div>
 		                </td>
 		                <td>
 		                	<fmt:formatNumber value="${ cart.productPrice }" pattern="#,###"/>원
@@ -117,21 +117,22 @@
 		                	<input type="hidden"  class="oneTotal" />
 		                </td>
 		                <td>
-		                	<input type="hidden" id="productId" value="${ cart.productId }" />
+			                <input type="hidden" id="productId" class="productId" value="${ cart.productId }" />
+		    				<input type="hidden" class="cartNo" value="${ cart.cartNo }" />
+		                	<input type="hidden" class="productComment" value="${ cart.productComment }" />
 		                	<button type="button" class="btn btn-danger btn-sm" onclick="del()" >삭제</button>
 		             	</td>	
 		            </tr>
 	        	</c:forEach>
 	        </tbody>
     </table>
-
     <div class="text-right mt-3">
         <h4 >결제 예정 금액: <span id="total"></span>원</h4>
     </div>
-
-    <div class="text-center mt-4">
-        <button class="btn btn-primary">구매하기</button>
-    </div>
+	
+	    <div class="text-center mt-4">
+	        <button type="button" class="btn btn-primary" onclick="pay()">구매하기</button>
+	    </div>
 </div>
 
 <script>
@@ -220,9 +221,63 @@
 			} else {
 				
 			}
-			
-			
 		}
+		
+		
+	/* 	function pay() {
+			document.getElementById("payForm").submit();
+		} */
+		
+		function pay() {
+			
+			
+			// 반복되는 checkbox의 길이를 count에 저장
+			const count = document.getElementsByClassName("checkbox").length;
+			
+			const form = $("#payForm");
+
+			const infoArray = new Array();
+			for(let i=0; i<count; i++) {
+				if(document.getElementsByClassName("checkbox")[i].checked == true) {
+					
+					var pay = {
+						productId : document.getElementsByClassName("productId")[i].value,
+						cartNo : document.getElementsByClassName("cartNo")[i].value,
+						productComment : document.getElementsByClassName("productComment")[i].value,
+						changeImage : document.getElementsByClassName("changeImage")[i].src,
+						productName : document.getElementsByClassName("productName")[i].innerHTML,
+						productPrice : document.getElementsByClassName("productPrice")[i].value,
+						cartAmount : document.getElementsByClassName("productAmount")[i].value 
+					};
+					infoArray.push(pay);
+					console.log(infoArray);
+				}
+				console.log(infoArray);
+            }
+			const arr = JSON.stringify(infoArray);
+			window.sessionStorage.setItem('list', '');
+			window.sessionStorage.setItem('list', arr);
+			location.href = "payCart";
+			
+			/* $.ajax({
+				url : "payCart",
+				type : "post",
+				data : JSON.stringify(infoArray),
+				dataType : "json",
+				contentType : "application/json",
+				success : function(data) {
+					alert(data);
+				},
+				error : function(e) {
+					alert("error: "+e);
+				}
+			}); */
+			
+
+        } 
+		
+		
+		
  	</script>
 
 
