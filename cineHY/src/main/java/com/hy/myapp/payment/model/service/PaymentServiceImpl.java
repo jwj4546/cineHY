@@ -26,14 +26,14 @@ public class PaymentServiceImpl implements PaymentService {
 
 	
 	public PaymentServiceImpl() {
-		this.api = new IamportClient("12312", "123123");
+		this.api = new IamportClient("8006731832536307", "Rzaw0rU4BFImk2cqDjAGXcGywGGgAzLfy16909OPBxtvdxzEe1zzWonqmoQwdbiJN45sSaGqTXc1BMJs");
 	}
 
 	public void postPrepare(PrePaymentVO request) throws IamportResponseException, IOException {
 		PrepareData prepareData = new PrepareData(request.getMerchantUid(), request.getAmount());
 		api.postPrepare(prepareData);			// 사전 등록 API
 		
-		prePaymentRepository.save(request);			// 주문번호와 결제 에정 금액 DB 저장
+		prePaymentRepository.save(request);			// 주문번호와 결제 예정 금액 DB 저장
 		
 	}
 

@@ -19,12 +19,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					)
 	</insert>
 	
-	<select id="findById" parameterType="_int" resultType="prePayment">
+	<select id="findById" parameterType="merchantUid" resultType="prePayment">
 		SELECT
 					MERCHANT_UID merchantUid,
 					AMOUNT amount
 		  FROM
 		  			TB_PREPAYMENT
+		WHERE
+					MERCHANT_UID = #{merchantUid}
 	</select>
 
 </mapper>

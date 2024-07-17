@@ -14,6 +14,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+	
 </head>
 <body>
 
@@ -155,7 +156,7 @@
     		}
     	 	document.getElementById("total").innerHTML = total.toLocaleString();
     	 	
-    	 	const totalPrice = document.createElement("input");
+    	 	var totalPrice = document.createElement("input");
     	 	totalPrice.setAttribute("type", "hidden");
     	 	totalPrice.setAttribute("name", "total");
     	 	totalPrice.setAttribute("value", oneTotal);
@@ -164,12 +165,16 @@
     	 	document.querySelector("#total").append(totalPrice);
     	});
     	
+    	</script>
+    	
+    	<script>
     	
     	// 결제 버튼 클릭시
     	$("#orderBtn").on("click", function() {
 			// 사전검증
-   	    	var merchant_uid = "0" + new Date().getTime();
-   	    	var totalPrice = $("#totalPrice").value;
+   	    	var merchant_uid = "O" + new Date().getTime();
+   	    	var totalPrice = $("#totalPrice").val();
+   	    	console.log(totalPrice);
    	    	
    	    	$.ajax({
    	    		url : "payment/prepare",
