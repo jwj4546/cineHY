@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hy.myapp.member.model.service.MemberService;
@@ -66,6 +65,11 @@ public class MemberController {
 			
 		return viewName;
 		
+	}
+	
+	@GetMapping("terms")
+	public String terms() {
+		return "member/terms";
 	}
 	
 	@GetMapping("checkId")
@@ -175,6 +179,38 @@ public class MemberController {
 	
 	}
 	
+	@PostMapping("resign.do")
+	public String resign(Member member, HttpSession session, Model model) {
+	    try {
+	        // 회원 탈퇴 처리
+	        if (memberService.delete(member.getUserId()) > 0) {
+	            session.setAttribute("alertMsg", "탈퇴 성공");
+	            session.removeAttribute("loginUser");
+	            return "redirect:/"; 
+	        } else {
+	            model.addAttribute("errorMsg", "회원 탈퇴 실패");
+	            return "common/errorPage";
+	        }
+	    } catch (Exception e) {
+	        model.addAttribute("errorMsg", "회원 탈퇴 중 오류가 발생했습니다.");
+	        return "common/errorPage";
+	    }
+	}
+	
+	@PostMapping("myInfoUpdate")
+	public String myInfoUpdate(Member member, HttpSession session, Model model) {
+		if(memberService.update(member) > 0) {
+			session.setAttribute("loginUser", memberService.login(member));
+			session.setAttribute("alertMsg", "회원정보가 업데이트 되었습니다!");
+			
+			return "redirect:/";
+		} else {
+			model.addAttribute("errorMsg","실패!");
+			return "common/errPage";
+		}
+	}
+	
+	
 	@GetMapping("findMyId")
 	public String findMyId() {
 		
@@ -231,27 +267,36 @@ public class MemberController {
 	}
 	
 	@PostMapping("changeMyPw.do")
-    public String changePw(HttpSession session, Model model) {
-		
-		Member member = memberService.findMyPw(userId, userName, phoneNo);
-			
-			log.info("수정요청멤버 : {}", member);
-			
-			if(memberService.changePw(member) > 0) {
-				//DB로부터 수정된 회원정보를 다시 조회해서
-				//sessionScope에 loginUser라는 키값으로 덥ㅍ어씌워줄것
-				session.setAttribute("loginUser", memberService.login(member));
-				//회원정보 수정시 띄우는 alert메세지
-				session.setAttribute("alertMsg", "회원정보를 수정하였습니다.");
-				
-				return "redirect:/";
-			} else {
-				model.addAttribute("errorMsg","정보 수정에 실패했습니다");
-				return "common/errorPage";
-			}
-			
-		}
-	
+    public String changePw(@RequestParam("userId") String userId,
+                           @RequestParam("userName") String userName,
+                           @RequestParam("phoneNo") String phoneNo,
+                           @RequestParam("newPwd") String newPwd,
+                           Model model) {
+        System.out.println("Received Parameters - userId: " + userId + ", userName: " + userName + ", phoneNo: " + phoneNo);
+
+        // 새로운 비밀번호 암호화
+        String encPwd = bcryptPasswordEncoder.encode(newPwd);
+        System.out.println("Encoded Password: " + encPwd);
+
+        // Member 객체에 정보 설정
+        Member member = new Member();
+        member.setUserId(userId);
+        member.setUserName(userName);
+        member.setPhoneNo(phoneNo);
+        member.setUserPwd(encPwd);
+
+        String viewName;
+        if (memberService.changePw(member) > 0) {
+            System.out.println("Password changed successfully for userId: " + userId);
+            model.addAttribute("member", member);
+            return "redirect:/";
+        } else {
+            System.out.println("Failed to change password for userId: " + userId);
+            model.addAttribute("errorMessage", "비밀번호 변경에 실패했습니다.");
+            viewName = "common/errorPage";
+        }
+        return viewName;
+    }
 	
 	
 	

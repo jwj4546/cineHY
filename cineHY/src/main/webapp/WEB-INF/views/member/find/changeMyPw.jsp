@@ -9,6 +9,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
     <style>
         @import url("http://fonts.googleapis.com/earlyaccess/nanumgothic.css");
         body {
@@ -17,15 +19,18 @@
             padding-top: 100px;
             padding-bottom: 200px;
         }
+        
         .card {
             margin: 0 auto; 
             float: none; 
             margin-bottom: 10px; 
         }
+        
         #btn-Yes {
             background-color: #555;
             border: none;
         }
+        
         .form-signin .form-control {
             position: relative;
             height: auto;
@@ -35,12 +40,15 @@
             padding: 10px;
             font-size: 16px;
         }
+        
         .card-title {
             margin-left: 30px;
         }
+        
         a { 
             color: #555; text-decoration: none; 
         }
+        
         .links {
             text-align: center;
             margin-bottom: 10px;
@@ -50,19 +58,12 @@
             display: flex;
             justify-content: space-between;
         }
-
-        .btn-custom {
-            width: 48%;
-            display: inline-block;
-            text-align: center;
-            padding: 10px;
-            font-size: 16px;
-        }
     </style>
+    
     <script>
         function pwCheck() {
-            const $pwdInput = $('#userPwd');
-            const $pwdInput2 = $('#userPwd2');
+            const $pwdInput = $('#newPwd');
+            const $pwdInput2 = $('#newPwd2');
             const regPw = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%&*^?]).{8,16}$/;
 
             if (regPw.test($pwdInput.val())) {
@@ -78,8 +79,8 @@
 
         function formsub(event) {
             event.preventDefault();
-            const $pwdInput = $('#userPwd');
-            const $pwdInput2 = $('#userPwd2');
+            const $pwdInput = $('#newPwd');
+            const $pwdInput2 = $('#newPwd2');
             const regPw = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%&*^?]).{8,16}$/;
 
             if (regPw.test($pwdInput.val())) {
@@ -94,7 +95,7 @@
         }
 
         $(document).ready(function() {
-            $('#userPwd, #userPwd2').on('input', pwCheck);
+            $('#newPwd, #newPwd2').on('input', pwCheck);
             $('#change-btn').on('click', formsub);
         });
     </script>
@@ -106,10 +107,14 @@
         </div>
         <div class="card-body">
             <form id="changeMyPwForm" action="changeMyPw.do" class="form-signin" method="POST">     
-                <label for="userPwd">새 비밀번호:</label>
-                <input type="password" class="form-control" id="userPwd" placeholder="새로운 비밀번호를 입력해주세요" name="userPwd" required><br>
-                <label for="userPwd2">새 비밀번호 재입력:</label>
-                <input type="password" class="form-control" id="userPwd2" placeholder="새로운 비밀번호를 다시 입력해주세요" name="userPwd2" required><br>
+                <input type="hidden" id="userId" name="userId" value="userIdValue">
+                <input type="hidden" id="userName" name="userName" value="userNameValue">
+                <input type="hidden" id="phoneNo" name="phoneNo" value="phoneNoValue">
+                
+                <label for="newPwd">새 비밀번호:</label>
+                <input type="password" class="form-control" id="newPwd" name="newPwd" required><br>
+                <label for="newPwd2">새 비밀번호 재입력:</label>
+                <input type="password" class="form-control" id="newPwd2" name="newPwd2" required><br>
                 <div>
                     <span id="pwdCheckResult" style="font-size:12px; font-weight:bold;"></span>
                 </div>

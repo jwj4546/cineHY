@@ -1,6 +1,5 @@
 package com.hy.myapp.member.model.service;
 
-import org.apache.catalina.mapper.Mapper;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 

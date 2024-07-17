@@ -114,6 +114,7 @@
 
     </select>
     
+
 	<update id="changePw" parameterType="member">
 	    UPDATE 
 	    		TB_MEMBER
@@ -122,8 +123,10 @@
 	            MODIFY_DATE = SYSDATE
 	     WHERE 
 	    		USER_ID = #{userId}
-	            AND USER_NAME = #{userName}
-	            AND PHONE_NO = #{phoneNo}
+	       AND 	
+	       		USER_NAME = #{userName}
+	       AND 
+	       		PHONE_NO = #{phoneNo}
 	</update>
 	
 	<update id="myInfoChange" parameterType = "member">
@@ -156,6 +159,8 @@
 		 WHERE
 				USER_ID = #{userId}
 	</update>
+
+
     
     
     

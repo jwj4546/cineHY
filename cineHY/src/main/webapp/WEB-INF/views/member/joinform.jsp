@@ -443,15 +443,15 @@ article input {
                 <div>
                     <div>
                         <input type="checkbox" name="agree" id="hy-agree" onclick="agCheck()">이용약관 동의 <span>(필수)</span>
-                        <a href = "terms">약관보기 ></a>
+                         <a href="terms">약관 보기 ></a>
                     </div>
                     <div>
                         <input type="checkbox" name="agree" id="info-agree" onclick="agCheck()">개인정보 수집 및 이용 동의 <span>(필수)</span>
-                       <a href = "terms">약관보기 ></a>
+                       <a href="terms">약관 보기 ></a>
                     </div>
                     <div>
                         <input type="checkbox" name="agree" id="pro-agree" onclick="agCheck()">프로모션 정보 수신 동의 <span>(필수)</span>
-                        <a href = "terms">약관보기 ></a>
+                         <a href="terms">약관 보기 ></a>
                     </div>
                     
                     
