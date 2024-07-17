@@ -13,6 +13,7 @@ public interface CartRepository {
 	
 	int findByCart(CartVO cart);
 
+
 	int apply(CartVO cart);
 	
 	int delete(CartVO cart);

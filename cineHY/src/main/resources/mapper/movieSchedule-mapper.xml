@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="movieScheduleMapper">
+
+<select id="getTheaterList" resultType="theater">
+
+	SELECT
+		   THEATER_CODE theaterCode,
+		   THEATER_NAME theaterName,
+		   THEATER_ADDR theaterAddr,
+		   LOCATION_X locationX,
+		   LOCATION_Y locationY
+	  FROM
+	  	   TB_THEATER
+	 
+</select>
+
+<select id="getScheduleList" resultType="movieSchedule" parameterType="hashmap">
+	
+	SELECT
+		   SCREENING_ID screeningId,
+		   SCREEN_CODE screenCode,
+		   STARTTIME startTime,
+		   ENDTIME endTime,
+		   STARTDATE startDate, 
+		   ENDDATE endDate,
+		   MOVIE_CODE movieCode,
+		   THEATER_CODE theaterCode
+	  FROM
+	  	   TB_MOVIE_SCHEDULE
+	 WHERE
+	       MOVIE_CODE = #{movieCode}
+	   AND THEATER_CODE = #{theaterCode}
+	   AND (
+	        (#{startDate} BETWEEN STARTDATE AND ENDDATE)
+            OR (#{endDate} BETWEEN STARTDATE AND ENDDATE)
+            OR (STARTDATE BETWEEN #{startDate} AND #{endDate})
+            OR (ENDDATE BETWEEN #{startDate} AND #{endDate})
+		   )
+	   
+</select>
+
+	
+<select id="allScheduleListByDate" resultType="movieScheduleVO" parameterType="hashmap">
+    SELECT
+        MS.SCREENING_ID screeningId,
+        MS.SCREEN_CODE screenCode,
+        MS.STARTTIME startTime,
+        MS.ENDTIME endTime, 
+        MS.STARTDATE startDate,
+        MS.ENDDATE endDate,
+        MS.MOVIE_CODE movieCode,
+        MS.THEATER_CODE theaterCode,
+        M.MOVIE_TITLE movieTitle 
+    FROM
+        TB_MOVIE_SCHEDULE MS
+        INNER JOIN TB_MOVIE M ON MS.MOVIE_CODE = M.MOVIE_CODE
+    WHERE
+        MS.THEATER_CODE = #{theaterCode} 
+        AND #{date} BETWEEN MS.STARTDATE AND MS.ENDDATE 
+    ORDER BY
+        M.MOVIE_TITLE ASC,
+        MS.SCREEN_CODE ASC,
+        MS.STARTTIME ASC,
+        MS.ENDTIME ASC
+</select>	   
+
+<select id="checkSchedule" resultType="int">
+    SELECT 
+        COUNT(*) AS schedule_count
+    FROM 
+        TB_MOVIE_SCHEDULE MS
+    JOIN 
+        TB_SCREEN S ON MS.SCREEN_CODE = S.SCREEN_CODE
+    JOIN 
+        TB_THEATER T ON MS.THEATER_CODE = T.THEATER_CODE
+    WHERE 
+        T.THEATER_CODE = #{theaterCode}
+        AND MS.SCREEN_CODE = #{screenCode}
+        AND (
+            (#{startDate} &lt; MS.ENDDATE AND #{endDate} &gt; MS.STARTDATE) OR
+            (#{startDate} = MS.STARTDATE AND #{startTime} &lt; MS.ENDTIME) OR
+            (#{endDate} = MS.ENDDATE AND #{endTime} &gt; MS.STARTTIME) OR
+            (MS.STARTDATE BETWEEN #{startDate} AND #{endDate}) OR
+            (MS.ENDDATE BETWEEN #{startDate} AND #{endDate})
+        )
+        <if test="startTime != null and endTime != null">
+            AND NOT (
+                (#{startTime} &gt;= MS.ENDTIME OR #{endTime} &lt;= MS.STARTTIME)
+            )
+        </if>
+</select>
+
+<insert id="insert" parameterType="movieSchedule" >
+
+	INSERT INTO
+				TB_MOVIE_SCHEDULE
+	     VALUES
+	     		(
+	     		SEQ_MOVIE_SCHEDULE.NEXTVAL,
+				#{screenCode},
+				#{theaterCode},
+				#{startTime},
+				#{endTime},
+				#{startDate},
+				#{endDate},
+				#{movieCode}		
+	     		)
+
+</insert>
+
+<delete id="delete" parameterType="_int">
+	DELETE
+		   TB_MOVIE_SCHEDULE
+	 WHERE
+	 	   SCREENING_ID = #{screeningId}
+
+</delete>
+	
+
+</mapper>

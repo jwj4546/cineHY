@@ -105,9 +105,9 @@ button:hover {
   <button class="btn btn-lg btn-primary btn-block" type="submit">로그인</button>
   
   <div class = "member_add mt-3">
-    <a href="">회원가입&nbsp;|</a> 
-    <a href="">아이디 찾기&nbsp;|</a> 
-    <a href="">비밀번호 찾기</a>
+    <a href="join">회원가입&nbsp;|</a> 
+    <a href="findMyId">아이디 찾기&nbsp;|</a> 
+    <a href="findMyPw">비밀번호 찾기</a>
     </div>
   
 </form>

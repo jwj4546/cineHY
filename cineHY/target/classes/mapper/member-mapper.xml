@@ -91,5 +91,77 @@
     
     
     </select>
+    
+    <select id="findMyId" parameterType="map" resultType="member">
+       
+        SELECT 
+        		USER_ID AS userId
+        			
+        FROM 
+        		TB_MEMBER
+        WHERE 
+        		USER_NAME = #{userName} AND PHONE_NO = #{phoneNo} AND EMAIL = #{email}
+    </select>
+    
+    <select id = "findMyPw" parameterType = "map" resultType = "member">
+    	
+    	SELECT
+    			USER_PWD AS userPwd
+    	  FROM
+    	  		TB_MEMBER
+    	 WHERE	
+    	 		USER_ID = #{userId} AND USER_NAME = #{userName} AND PHONE_NO = #{phoneNo}
 
+    </select>
+    
+
+	<update id="changePw" parameterType="member">
+	    UPDATE 
+	    		TB_MEMBER
+	       SET 
+	    		USER_PWD = #{userPwd},
+	            MODIFY_DATE = SYSDATE
+	     WHERE 
+	    		USER_ID = #{userId}
+	       AND 	
+	       		USER_NAME = #{userName}
+	       AND 
+	       		PHONE_NO = #{phoneNo}
+	</update>
+	
+	<update id="myInfoChange" parameterType = "member">
+	
+		UPDATE
+			    TB_MEMBER
+		SET
+				USER_NAME = #{userName},
+				EMAIL = #{email},
+				PHONE_No = #{phoneNo},
+				ADDRESS = #{address},
+				USER_NICK = #{userNick},
+				GENDER = #{gender},
+				PRE_GENRE1 = #{preGenre1},
+				PRE_GENRE2 = #{preGenre2},
+				MODIFY_DATE = SYSDATE
+		WHERE
+				USER_ID = #{userId}
+	
+	
+	</update>
+	
+	<update id="resign" parameterType = "String">
+	
+		UPDATE
+				TB_MEMBER
+		   SET
+				STATUS = 'N',
+				MODIFY_DATE = SYSDATE
+		 WHERE
+				USER_ID = #{userId}
+	</update>
+
+
+    
+    
+    
 </mapper>

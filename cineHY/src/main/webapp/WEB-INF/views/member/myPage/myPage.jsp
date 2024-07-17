@@ -417,8 +417,8 @@ ul.CTAs a {
 				<li>
                     <a href="chatAdmin">관리자와 1:1 채팅 </a>
                 </li>
-                <li>
-                    <a href="myNearby">내 주변 영화관 찾기</a>
+                <li class="highlighted-item">
+                    <a href="myNearby">내 주변 영화관 찾기 </a>
                 </li>
                 <li>
                     <a href="resign">회원탈퇴</a>

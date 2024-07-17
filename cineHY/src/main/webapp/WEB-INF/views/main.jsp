@@ -49,9 +49,8 @@
           gap: 10px;
         }
         
-        .welcome {
-          color : white;
-        
+         .welcome {
+            color: white;
         }
 
         #select-movie {
@@ -120,9 +119,9 @@
             <ul class="navbar-nav" style="justify-content: flex-end;">
                 <c:choose>
                     <c:when test="${not empty sessionScope.loginUser}">
-                    	<div class = "welcome">
-                        <label>${sessionScope.loginUser.userNick}님 환영합니다</label> &nbsp;&nbsp;
-                        </div>
+                    	<div class="welcome">
+					        <label>${sessionScope.loginUser.userNick}님 환영합니다</label> &nbsp;&nbsp;
+					    </div>
                         <li class="nav-item active" style="float: right;">
                           <a class="nav-link" href="myPage">마이페이지</a>
                         </li>

@@ -28,6 +28,6 @@ public class Member {
 	private Date joinDate;
 	private Date modifyDate;
 	private String status;
-	private String  profileUrl;
+	private String profileUrl;
 	
 }
