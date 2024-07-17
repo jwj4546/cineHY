@@ -18,14 +18,20 @@
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp"></jsp:include>
-	<main>
+	 <main>
 		<div id="page1"></div>
+		
 		<div id="page2">
-			<h1>하이하이</h1>
-			<li><a href="reviews">전체 리뷰조회</a></li>
-			<li><a href="getReview">특정 영화의 리뷰조회</a></li>
+		<a href="getQnauser" >1:1 문의 유저용</a>
+		<a href="getQna" >1:1 문의 관리자용 </a>
+		<a href="group-chat">오픈톡</a>
+		
+		</div>
+		<div id="page3">
+           
 		</div>
 	</main>
+    
 	<jsp:include page="../common/footer.jsp"></jsp:include>
 </body>
 </html>
