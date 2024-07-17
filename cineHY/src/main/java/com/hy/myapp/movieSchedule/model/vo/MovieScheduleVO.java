@@ -13,8 +13,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @Setter
 @Getter
-public class MovieSchedule {
+public class MovieScheduleVO {
 	
+	private String movieTitle;
 	private int screeningId;
 	private String theaterCode;
 	private int screenCode;
