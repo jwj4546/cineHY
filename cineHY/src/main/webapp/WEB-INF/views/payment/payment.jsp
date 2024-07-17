@@ -259,7 +259,7 @@
 								"productId" : rsp.product_id,
 								"productName" : rsp.name,
 								"productAmount" : rsp.paid.amount,
-								"productImg" :  rsp.img
+								"productImg" :  rsp.img,
 								"phoneNo" : rsp.buyer_tel,
 								"orderDay" : rsp.day
 							}

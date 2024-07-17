@@ -6,6 +6,11 @@ import com.hy.myapp.cart.model.vo.CartVO;
 
 public interface CartService {
 
-	/* List<CartVO> findById(CartVO cart); */
+	List<CartVO> findById(String userId);
 
+	int findByCart(CartVO cart);
+	
+	int apply(CartVO cart);
+
+	int delete(CartVO cart);
 }

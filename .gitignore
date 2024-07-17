@@ -48,10 +48,13 @@ local.properties
 .springBeans
 servers/
 target/
+
 /target
 /target/
 .project
 .classpath
+*.properties
+
 
 # Code Recommenders
 .recommenders/

@@ -19,6 +19,11 @@ public class ProductServiceImpl implements ProductService {
 	public List<ProductVO> findAll() {
 		return productRepository.findAll();
 	}
+	
+	@Override
+	public int findCount(String id) {
+		return productRepository.findCount(id);
+	}
 
 	@Override
 	public int save(ProductVO productVO) {
@@ -39,5 +44,7 @@ public class ProductServiceImpl implements ProductService {
 	public int delete(int productId) {
 		return productRepository.delete(productId);
 	}
+
+
 
 }
