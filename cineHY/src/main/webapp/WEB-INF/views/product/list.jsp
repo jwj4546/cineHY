@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -97,16 +99,34 @@
                 <button type="button" class="btn btn-secondary">스낵</button>
             </div><br><br>
             <div class="float-right">
-            <a href="productForm"><button type="button" class="btn btn-warning">상품 등록</button></a>
-              <button type="button" class="btn btn-info">
-                장바구니<span class="badge badge-light">5</span>
-              </button>
+            
+              	<!-- userId별 장바구니 품목 개수 설정  -->
+	            	<input type="hidden" name="userId" value="${ sessionScope.loginUser.userId }" />
+					<!-- 상품 등록 페이지로 이동 -->	            	
+	            	<a href="productForm"><button type="button" class="btn btn-warning">상품 등록</button></a>
+	            	
+	            	<!-- 장바구니 개수 출력 및 장바구니로 이동 -->
+	            	<c:set var="count" value="${ count }" />
+	            	<c:choose>
+	            	<c:when test="${ not empty sessionScope.loginUser }">
+	              		<a href="cartlist">
+		              		<button type="button" class="btn btn-info">
+		               		 장바구니<span class="badge badge-light">${ count }</span>
+		              		</button>
+	              		</a>
+	              	</c:when>
+	              	<c:otherwise>
+	              		<button type="button" class="btn btn-info">
+		               		 장바구니<span class="badge badge-light">0</span>
+		              		</button>
+	              	</c:otherwise>
+	              	</c:choose>
             </div>
           </div>
         </div>
-      </div>
-    
-      <!-- Product Grid -->
+      </div><br><br><br><br>
+      
+      <!-- Product 데이터를 반복 출력 -->
 	      <div class="container">
 	        <div class="row">
 	        	<c:forEach items="${ list }" var="product">
@@ -114,7 +134,7 @@
 		            <div class="product-card">
 		              <div style="height:300px; overflow:hidden;"><img src="${ product.changeImage }" alt="영화관람권" style="height:100%; width:auto;"></div>
 		              <div class="product-name">${ product.productName }</div>
-		              <div class="product-price">${ product.productPrice }원</div>
+		              <div class="product-price"><fmt:formatNumber value="${ product.productPrice }" pattern="#,###" />원</div>
 		            </div>
 		          </div>
 	          	</c:forEach>
@@ -122,12 +142,14 @@
 	      </div>
       
       <script>
+      <%-- 상품 상세보기로 이동하는 스크립트 --%>
       	$(() => {
       		$('.col-md-4').click(e => {
       			location.href = 'product-detail?productId=' + e.currentTarget.id.split('-')[1];
       		});
       	});
       	
+      	<%-- 카테고리 별로 이동하는 함수 --%>
       	function category() {
       		
       	}
