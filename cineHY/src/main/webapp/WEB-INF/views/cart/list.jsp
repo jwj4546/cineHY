@@ -102,7 +102,7 @@
 	        	<c:forEach items="${ list }" var="cart">
 		            <tr>
 		                <td><input type="checkbox" class="checkbox" onclick="changePrice()" checked></td>
-		                <td><img src="${ cart.changeImage }" class="changeImage" alt="" style="width: auto; height: 100px;"></td>
+		                <td style="text-align:center;"><img src="${ cart.changeImage }" class="changeImage" alt="" style="width: auto; height: 100px;"></td>
 		                <td>
 		                    <div class="productName">${ cart.productName }</div>
 		                </td>

@@ -101,38 +101,63 @@
 	        </tbody>
     </table>
 
+	<div class="text-right mt-3">
+        <h5>결제 금액: <span id="total"></span>원</h5>
+    </div>
 
         <div class="text-center mt-4">
             <button class="btn btn-primary">구매하기</button>
         </div>
     </div>
 
-    <div class="text-right mt-4">
-        <h5>결제 금액: <span id="total"></span></h5>
-    </div>
+    
     
     <script>
     	window.onload = function() {
     		const lists = JSON.parse(window.sessionStorage.getItem('list'));
-    		console.log(lists);
     		
     		let text = '';
+    		const formatter = new Intl.NumberFormat('ko-KR');
     		
     		for(let i in lists) {
     			
     			const list = lists[i];
     			
     			text += '<tr>'
-    					 + '<td><img src="' + list.changeImage + '" /></td>'
-    					 + '<td>' + list.productName + '</td>'
-    					 + '<td>' + list.productPrice + '</td>'
+    					 + '<td style="text-align:center; width:200px;"><img src="' + list.changeImage + '" style="height:100px; width=auto;"/></td>'
+    					 + '<td>' 
+    					 + list.productName
+    					 + '<input type="hidden" name="productPrice" class="productPrice" value="' + list.productPrice + '" />'
+    					 + '<input type="hidden" name="cartAmount" class="cartAmount" value="' + list.cartAmount + '" />'
+    					 + '<input type="hidden" name="oneTotal" class="oneTotal" value="' + (list.productPrice * list.cartAmount) + '" />'
+    					 + '</td>'
+    					 + '<td>' 
+    					 + formatter.format(list.productPrice) 
+    					 + '원</td>'
     					 + '<td>' + list.cartAmount + '</td>'
-    					 + '<td>' + list.changeImage + '</td>'
+    					 + '<td>' + formatter.format((list.productPrice * list.cartAmount)) + '원</td>'
     					 + '</tr>'
+    					 
     		};
     		document.getElementById("reLoad").innerHTML = text;
-    		
     	}
+    	
+    	window.addEventListener('load', function () {
+    		const lists = JSON.parse(window.sessionStorage.getItem('list'));
+    		// 금액 계산
+    		const count = lists.length;
+    		
+    		var total = 0;
+    		console.log(document.getElementsByClassName("oneTotal")[0]);
+    		console.log(document.getElementsByClassName("oneTotal")[1]);
+    	 	for(let i=0;i<count;i++) {
+    			var oneTotal = Number(document.getElementsByClassName("oneTotal")[i].value);
+    			console.log(oneTotal);
+    			total += oneTotal;
+    			console.log(total);
+    		}
+    	 	document.getElementById("total").innerHTML = total.toLocaleString();	
+    	});
     </script>
 
 <footer class="bg-light py-3 mt-5">
