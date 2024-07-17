@@ -142,6 +142,26 @@
           </div>
         </nav>
       </header>
+    <jsp:include page="./common/menubar.jsp"></jsp:include>
+    
+    
+    <main>
+		<div id="page1"></div>
+		
+		<div id="page2">
+		<a href="getQnauser" >1:1 문의 유저용</a>
+		<a href="getQna" >1:1 문의 관리자용 </a>
+		<a href="group-chat">오픈톡</a>
+		
+		</div>
+		<div id="page3">
+           
+		</div>
+	</main>
+    
+    
+    <jsp:include page="./common/footer.jsp"></jsp:include>
+    
      
 </body>
 </html>

@@ -15,4 +15,5 @@ public interface ProductService {
 	int update(ProductVO productVO);
 
 	int delete(int productId);
+	
 }

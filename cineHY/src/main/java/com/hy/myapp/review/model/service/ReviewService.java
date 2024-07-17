@@ -27,7 +27,7 @@ public interface ReviewService {
 	//ajax를 활용한 댓글 목록조회
 	List<Review> getMovieOfReview(int movieCode);
 
-	//댓글 작성
+	//리뷰 작성
 	int insertReview(Review review);
 
 	//board랑 board에 딸린 reply랑 같이 조회할거임ㅋㅋ
@@ -35,6 +35,23 @@ public interface ReviewService {
 
 	//다섯개의 개시글 정보
 	List<Review> findTopBoard();
+
+	int updateReview(Review review);
+	
+	//리뷰 삭제
+	int deleteReview(int reviewNo);
+
+	//마이 리뷰
+	List<Review> selectMyReview(String userId);
+	
+	//미작성 리뷰
+	List<Review> selectNoReview(String userId);
+
+	//평균별점
+	Double getStarAvg(int movieCode);
+	
+	int reviewCount();
+	
 
 	
 
