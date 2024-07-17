@@ -61,7 +61,7 @@
     <main>
     	<div id="page1"></div>
     	<div id="page2">
-	      	<h2>박스오피스</h2>
+	      	<h2>무비차트</h2>
 	    	<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 			  <li class="nav-item" role="presentation">
 			    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">상영중인 영화</button>
@@ -139,6 +139,7 @@
 	            dataType: 'json',
 	            success: function(data) {
 	                displayMovies(data);
+	                console.log(data);
 	            },
 	            error: function(jqXHR, textStatus, errorThrown) {
 	                console.error('영화 데이터를 불러오는 중 오류 발생:', textStatus, errorThrown);
@@ -148,7 +149,7 @@
 	
 	    function displayMovies(data) {
 	        var movieList = $('#movieList');
-	        movieList.empty(); // 기존 내용 비우기
+	       	movieList.empty(); // 기존 내용 비우기
 	        var rank = 1; // 순위 초기화
 	        for (var j = 0; j < data.length; j++) {
 	            if (data[j].results && data[j].results.length > 0) {
@@ -157,6 +158,7 @@
 	                for (var i = 0; i < movies.length; i++) {
 	                    var movieId = movies[i].id;
 	                    if (movieIdList.includes(movieId)) {
+	                    	//console.log(movies[i].title);
 	                        movieHtml += '<div class="col-md-4">'
 	                            + '<div class="card mb-4 box-shadow">'
 	                            + '<div class="rank">No ' + rank + '</div>'
@@ -181,9 +183,12 @@
 	                    }
 	                }
 	                movieList.append(movieHtml);
-	            } else {
-	                movieList.html('<li>현재 상영 중인 영화가 없습니다.</li>');
 	            }
+	        }
+
+	        // 모든 데이터를 처리한 후, movieHtml이 비어 있으면 '현재 상영 중인 영화가 없습니다.' 메시지를 추가
+	        if (movieList.children().length === 0) {
+	            movieList.html('<li>현재 상영 중인 영화가 없습니다.</li>');
 	        }
 	    }
 	
@@ -204,43 +209,71 @@
 	    function displayUpMovies(data) {
 	        var movieUpList = $('#movieUpList');
 	        movieUpList.empty();
-	        var rank = 1; // 순위 초기화
+	        
+	     	// 모든 영화 목록을 하나의 배열로 합치기
+	        var allMovies = [];
 	        for (var j = 0; j < data.length; j++) {
 	            if (data[j].results && data[j].results.length > 0) {
-	                var upMovies = data[j].results;
-	                var upMovieHtml = '';
-	                for (var i = 0; i < upMovies.length; i++) {
-	                    var upMovieId = upMovies[i].id;
-	                    if (movieIdList.includes(upMovieId)) {
-	                        upMovieHtml += '<div class="col-md-4">'
-	                            + '<div class="card mb-4 box-shadow">'
-	                            + '<div class="rank">No ' + rank + '</div>'
-	                            + '<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + upMovies[i].poster_path + '" alt="Card image cap">'
-	                            + '<div class="card-body">'
-	                            + '<h5 class="card-title">' + upMovies[i].title + '</h5>'
-	                            + '<p class="card-text">' + upMovies[i].release_date + ' 개봉</p>'
-	                            + '<div class="d-flex justify-content-between align-items-center">'
-	                            + '<div class="btn-group">'
-	                            + '<a href="movieDetails?movieId=' + upMovieId + '" class="btn btn-sm btn-outline-secondary">View</a>'
-	                            + '<form action="reservationById" method="get">'
-	                            + '<input type="hidden" value="' + upMovieId + '" name="movieId">'
-	                            + '<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
-	                            + '</form>'
-	                            + '</div>'
-	                            + '<small class="text-muted">인기도 ' + upMovies[i].popularity + '</small>'
-	                            + '</div>'
-	                            + '</div>'
-	                            + '</div>'
-	                            + '</div>';
-	                        rank++;
-	                    }
-	                }
-	                movieUpList.append(upMovieHtml);
-	            } else {
-	                movieUpList.html('<li>현재 상영 예정인 영화가 없습니다.</li>');
+	                allMovies = allMovies.concat(data[j].results);
 	            }
 	        }
+
+	        // 빠른 날짜 순으로 정렬 (release_date 기준)
+	        allMovies.sort(function(a, b) {
+	            return new Date(a.release_date) - new Date(b.release_date);
+	        });
+	        
+	     	// 날짜별로 영화 그룹화
+	        var groupedMovies = {};
+			for (var i = 0; i < allMovies.length; i++) {
+			    var releaseDate = allMovies[i].release_date;
+			    var upMovieId = allMovies[i].id;
+			    
+			    if (releaseDate && upMovieId && movieIdList.includes(upMovieId)) {
+			        if (!groupedMovies[releaseDate]) {
+			            groupedMovies[releaseDate] = [];
+			        }
+			        groupedMovies[releaseDate].push(allMovies[i]);
+			    }
+			}
+			
+			var upMovieHtml = '';
+			for (var releaseDate in groupedMovies) {
+			    upMovieHtml += '<h3>' + releaseDate + '</h3>';
+			    for (var i = 0; i < groupedMovies[releaseDate].length; i++) {
+			        var movie = groupedMovies[releaseDate][i];
+			        var upMovieId = movie.id;
+			        upMovieHtml += '<div class="col-md-4">'
+			            + '<div class="card mb-4 box-shadow">'
+			            + '<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + movie.poster_path + '" alt="Card image cap">'
+			            + '<div class="card-body">'
+			            + '<h5 class="card-title">' + movie.title + '</h5>'
+			            + '<p class="card-text">' + movie.release_date + ' 개봉</p>'
+			            + '<div class="d-flex justify-content-between align-items-center">'
+			            + '<div class="btn-group">'
+			            + '<a href="movieDetails?movieId=' + upMovieId + '" class="btn btn-sm btn-outline-secondary">View</a>'
+			            + '<form action="reservationById" method="get">'
+			            + '<input type="hidden" value="' + upMovieId + '" name="movieId">'
+			            + '<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
+			            + '</form>'
+			            + '</div>'
+			            + '<small class="text-muted">인기도 ' + movie.popularity + '</small>'
+			            + '</div>'
+			            + '</div>'
+			            + '</div>'
+			            + '</div>';
+			    }
+			}
+
+	        // 정렬된 영화 목록 추가
+	        movieUpList.append(upMovieHtml);
+
+	        // 모든 데이터를 처리한 후, movieUpHtml이 비어 있으면 '현재 상영 중인 영화가 없습니다.' 메시지를 추가
+	        if (movieUpList.children().length === 0) {
+	            movieUpList.html('<li>현재 상영 중인 영화가 없습니다.</li>');
+	        }
 	    }
+	    
 	
 	    getMovieDB();
 	    fetchMovies();
