@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hy.myapp.member.model.service.MemberService;
@@ -174,26 +175,6 @@ public class MemberController {
 	
 	}
 	
-	@PostMapping("resign.do")
-	public String resign(Member member, HttpSession session, Model model) {
-	    try {
-	        // 회원 탈퇴 처리
-	        if (memberService.delete(member.getUserId()) > 0) {
-	            session.setAttribute("alertMsg", "탈퇴 성공");
-	            session.removeAttribute("loginUser");
-	            return "redirect:/"; 
-	        } else {
-	            model.addAttribute("errorMsg", "회원 탈퇴 실패");
-	            return "common/errorPage";
-	        }
-	    } catch (Exception e) {
-	        model.addAttribute("errorMsg", "회원 탈퇴 중 오류가 발생했습니다.");
-	        return "common/errorPage";
-	    }
-	}
-	
-	
-	
 	@GetMapping("findMyId")
 	public String findMyId() {
 		
@@ -250,10 +231,9 @@ public class MemberController {
 	}
 	
 	@PostMapping("changeMyPw.do")
-    public String changePw(Member member, HttpSession session, Model model) {
-		String encPwd = bcryptPasswordEncoder.encode(member.getUserPwd());
-		//log.info("암호문 : {}", encPwd);
-		member.setUserPwd(encPwd);
+    public String changePw(HttpSession session, Model model) {
+		
+		Member member = memberService.findMyPw(userId, userName, phoneNo);
 			
 			log.info("수정요청멤버 : {}", member);
 			
@@ -271,19 +251,6 @@ public class MemberController {
 			}
 			
 		}
-	
-	@PostMapping("myInfoUpdate")
-	public String myInfoUpdate(Member member, HttpSession session, Model model) {
-		if(memberService.update(member) > 0) {
-			session.setAttribute("loginUser", memberService.login(member));
-			session.setAttribute("alertMsg", "회원정보가 업데이트 되었습니다!");
-			
-			return "redirect:/";
-		} else {
-			model.addAttribute("errorMsg","실패!");
-			return "common/errPage";
-		}
-	}
 	
 	
 	
