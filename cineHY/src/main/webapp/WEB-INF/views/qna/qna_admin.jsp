@@ -398,6 +398,7 @@
 		
 		const currentTime = new Date().toLocaleTimeString();
         
+		//유저가 접속했을때 알려줌
         if (node.status === "visit") {
             let form = $("#template").html();
             form = $("<div class='float-left'></div>").attr("data-key", node.key).append(form);
