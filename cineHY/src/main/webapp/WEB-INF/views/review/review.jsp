@@ -14,76 +14,34 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
-.content {
-	background-color: rgb(237, 249, 255);
-	width: 80%;
-	margin: auto;
-	height: 800px;
-}
-
 #test {
 	background-color: white;
 	width: 1000px;
 	height: 1100px;
 	margin-top: 50px;
 	padding: 20px auto;
+	
 }
-
 #test01 {
 	
 	height: 1400px;
 	margin-top: 100px;
 }
-
-#boardList {
-	text-align: center;
-}
-
-#boardList>tbody>tr:hover {
-	cursor: pointer;
-}
-
 #pagingArea {
 	width: fit-content;
 	margin: auto;
 }
-
-#searchForm {
-	width: 80%;
-	margin: auto;
-}
-
-#searchForm>* {
-	float: left;
-	margin: 5px;
-}
-
-.select {
-	width: 20%;
-}
-
-.text {
-	width: 53%;
-}
-
-.searchBtn {
-	width: 20%;
-}
-
 .rv {
 	display: block;
 }
-
 .rv>p {
 	margin: 0px;
 }
-
-.dd {
+.date {
 	margin: 0px;
-	padding-top: 25px;
+	padding-top: 5px;
 	padding-right: 0px;
 }
-
 .popup-wrap {
 	background-color: rgba(0, 0, 0, .7);
 	justify-content: center;
@@ -97,7 +55,6 @@
 	padding: 15px;
 	z-index: 1000; /* z-index 값 추가 */
 }
-
 .popup {
 	width: 500px;
 	background-color: #ffffff;
@@ -107,19 +64,16 @@
 	box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, .3);
 	margin: auto;
 }
-
 .body-contentbox {
 	word-break: break-word;
 	overflow-y: auto;
 	height: 300px;
 	text-align: center;
 }
-
 .popup-foot {
 	width: 100%;
 	height: 50px;
 }
-
 .pop-btn {
 	display: inline-flex;
 	width: 49.5%;
@@ -131,11 +85,9 @@
 	cursor: pointer;
 	border-top: 1px solid #000000;
 }
-
 .pop-btn.confirm {
 	border-right: 1px solid #000000;
 }
-
 .star_rating {
 	width: 100%;
 	align-items: center;
@@ -145,7 +97,6 @@
 	float: left;
 	flex-direction: row;
 }
-
 .star_rating .star {
 	width: 25px;
 	height: 25px;
@@ -158,7 +109,6 @@
 	background-size: 100%;
 	box-sizing: border-box;
 }
-
 .star_rating .starUp {
 	width: 25px;
 	height: 25px;
@@ -171,7 +121,6 @@
 	background-size: 100%;
 	box-sizing: border-box;
 }
-
 .star_rating .star.on {
 	width: 25px;
 	height: 25px;
@@ -194,7 +143,6 @@
 	background-size: 100%;
 	box-sizing: border-box;
 }
-
 .star_box {
 	width: 400px;
 	box-sizing: border-box;
@@ -209,8 +157,7 @@
 	font-size: 13px;
 	font-family: sans-serif;
 }
-
-.btn02 {
+.reveiw_button {
 	display: inline-flex;
 	width: 250px;
 	font-weight: bold;
@@ -224,16 +171,13 @@
 	float: left;
 	cursor: pointer;
 }
-
-.btn02.confirm {
+.reveiw_button.confirm {
 	border-right: 1px solid #000000;
 }
-
 .right {
 	padding-right: 0px;
 	text-align: right;
 }
-
 #bubble_sp {
 	position: absolute;
 	background: #d6d6d6;
@@ -244,7 +188,6 @@
 	justify-content: center;
 	align-items: center;
 }
-
 #bubble_sp:after {
 	content: '';
 	position: absolute;
@@ -258,7 +201,6 @@
 	margin-left: -10px;
 	margin-bottom: -10px;
 }
-
 #bubble_up {
 	position: absolute;
 	background: #d6d6d6;
@@ -269,7 +211,6 @@
 	justify-content: center;
 	align-items: center;
 }
-
 #bubble_up:after {
 	content: '';
 	position: absolute;
@@ -283,50 +224,53 @@
 	margin-left: -10px;
 	margin-bottom: -10px;
 }
-
 #id2 {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	padding-left: 5px;
 }
-
 .info {
 	text-align: center;
 }
-
 .user_img {
 	height: 70px;
 	width: 70px;
 	border: 1.5px solid #f5f6fa;
 }
-
 .user_img_msg {
 	height: 40px;
 	width: 40px;
 	border: 1.5px solid #f5f6fa;
 }
-
 .img_cont {
 	position: relative;
 	height: 70px;
 	width: 70px;
 	margin-right: 20px;
 }
-
 .img_cont_msg {
 	height: 40px;
 	width: 40px;
 }
-
 .user_info>p {
 	margin: 0px;
 }
-
 #insertmodal-open {
 	background-color: rgb(41, 185, 165);
 	color: #ffffff;
 }
+.center1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+        .info {
+            display: flex;
+            align-items: center;
+        }
+
 </style>
 </head>
 <body>
@@ -339,15 +283,19 @@
 
 
 	<div class="container" id="test01">
-	
-	 <h2>Reviews for Movie ID: <%= movieId %></h2>
+	 <!-- <h2>Reviews for Movie ID: <%= movieId %></h2> -->
 		<br>
 		<br>
 		<main role="main" class="container" id="test">
 
-			<br>
-			<div class="info">
-				<h4>|</h4>
+			
+			<div class="center1">
+				<br>
+				<div class="info" >
+					<h2 style="float:left" id="avgInfo"></h2>
+					<h2 style="float:left">|</h2>
+					<h2 style="float:left" id="avgStar"></h2>
+				</div>
 			</div>
 			<div class="modal-btn-box">
 				<c:if test="${ empty sessionScope.ticketNo}">
@@ -374,8 +322,8 @@
 						</div>
 
 						<div class="popup-foot">
-							<input type="button" class="btn02" id="insert_confirm" onclick="saveReview()" value="리뷰등록" /> 
-							<input type="button" class="btn02" id="insert_close" value="취소" />
+							<input type="button" class="reveiw_button" id="insert_confirm" onclick="saveReview()" value="리뷰등록" /> 
+							<input type="button" class="reveiw_button" id="insert_close" value="취소" />
 						</div>
 					</form>
 				</div>
@@ -393,13 +341,13 @@
 								<span class="starUp" value="4"> </span> 
 								<span class="starUp" value="5"> </span>
 								<input type="hidden" id="starUp" name="star" />
-								<input type="" id="getreviewNo" name="reviewNo" />
+								<input type="hidden" id="getreviewNo" name="reviewNo" />
 							</div>
 							<textarea id="ReviewUpdate" class="star_box" name="ReviewUpdate" placeholder="리뷰를 수정해주세요."></textarea>
 						</div>
 						<div class="popup-foot">
-							<input type="button" class="btn02" id="update_confirm" onclick="Review_Update()"  value="리뷰 수정" /> 
-							<input type="button" class="btn02" id="update_close" value="취소" />
+							<input type="button" class="reveiw_button" id="update_confirm" onclick="Review_Update()"  value="리뷰 수정" /> 
+							<input type="button" class="reveiw_button" id="update_close" value="취소" />
 						</div>
 					</form>
 				</div>
@@ -451,40 +399,24 @@
 
 	<script>
 	
-	
-	
-	
 	 const movieId = "<%= movieId %>";
      console.log("Movie ID:", movieId);
-
-	
-	
      
-	
 		window.onload =()=>{
-			
-			
 			const searchParams = new URLSearchParams(window.location.href);
-		    
-			let movieId;  // 외부 변수 선언
-
+			let movieId;
 		    for (var param of searchParams) {
 		        const parsedMovieId = parseInt(param[1]);
 		        console.log("parsedMovieId",parsedMovieId);
 		        console.log(typeof parsedMovieId);
 		        if (!isNaN(parsedMovieId)) {
-		            movieId = parsedMovieId;  // 외부 변수에 할당
+		            movieId = parsedMovieId;  
 		        }
 		    }
-		    
 		    selectReview(movieId);
 		}
 	
 		$(() => {
-			
-			
-			
-			
 			$("#update_confirm").click(() => {
 	            modalClose();
 	            enableScroll();
@@ -497,13 +429,10 @@
 	            $("#update_popup").fadeOut();
 	        }
 
-	        function starInfo(starInput){
-	        	let starTotal = '';
-                for (let i = 0; i < starInput; i++) {
-                	starTotal += '⭐';
-                }
-	        }
+	        
 		})
+		
+		
 		
 		window.updatemodal_No=function(reviewNo) {
 			
@@ -520,14 +449,10 @@
 			}
 		
 		
-		let reviewData = [];
-		
 		//const reviewNo1 = data.children().eq(4).text();  
 	
-		
 		var starCount=0;
-		
-		//바로 호출되게 하려고 ( 쓰면 업데이트도 되어야함)  
+		//리뷰 조회
 		function selectReview(movieId) {
 		    $.ajax({
 		        url: 'selectReview',
@@ -535,22 +460,23 @@
 		        data: { movieCode: movieId }, 
 		        dataType:"json",
 		        success: result => {
+		        	
+		        	
 		            console.log(result);  // json 타입의 배열 출력됨
-		            reviewData = result;
+		            
 		            //var data = JSON.parse(JSON.stringify(result));
 		            //console.log("data[key].reviewNo:{}", data[0].reviewNo);
-		           // var data2= data[0].reviewNo
+		            // var data2= data[0].reviewNo
 		           
-		            console.log(reviewData);
 		            var reviewListHtml = '';
 		            let resultStr = '';
-		            
+		            //starAvg(movieId);
+		            console.log(movieId);
+		            starAvg(movieId);
 		            
 		            for (let i = 0; i < result.length; i++) {
 		                const review = result[i];
-		                
 		                starCount = review.star;
-		                //console.log("data2: {}",data[i].reviewNo);
 		                
 		                //별 출력 for문
 		                let stars = '';
@@ -590,33 +516,23 @@
 		                            +     		'<input class="btn btn-light" type="button" onclick="call_confirm_up_de(\'' + review.reviewNo + '\')" value="리뷰 삭제">'		                            
 		                            + 		'</div>'
 		                            
-		                            +     '<p class="dd">' + review.reviewDate + '</p>'
+		                            +     '<p class="date">' + review.reviewDate + '</p>'
 		                            + '</td>'
 		                            
 		                           
 		                            + '</tr>';
 		            }
-		            
 		            $('#reviewList tbody').html(resultStr);
 		            $('#rcount').html(result.length);
-		            //$('#reviewList').html(reviewListHtml); 
 		        },
 		        error: err => {
 		            console.error('Error fetching reviews:', err);
 		        }
-		        
-		        
 		    });
-		    
-		    
 		}
-		    
-		    
-		
 		
 		// 리뷰쓴 id가 세션의 아이디와 같을 때 => 리뷰 수정, 삭제 버튼
 		// 다를때 => 스포일러 신고버튼
-		
         window.test = function(reviewUserId) {
         	var offset = $(".plus").offset();
             var loggedInUserId = '${sessionScope.loginUser.userId}'; // 세션의 사용자 ID
@@ -648,9 +564,7 @@
 	            alert("리뷰가 삭제되었습니다.");
 	        }
 	    }
-	
-    
-    
+		
     	//모달뜨면 스크롤 안되게하는 함수
         function disableScroll() {
             document.body.style.overflow = 'hidden';
@@ -659,10 +573,7 @@
             document.body.style.overflow = 'visible';
         }
         
-        
-        
-        
-        //class로 지정된 star을 누르면 id로 지정된 star값의 value값을 
+        //class로 지정된 star을 누르면 id로 지정된 star값의 value값을 변수에 할당
     	document.addEventListener('DOMContentLoaded', function () {
     		
             const stars = document.querySelectorAll('.star');
@@ -676,10 +587,6 @@
             });
             
         });
-        
-		
-        
-        
 
         $('.star_rating > .star').click(function () {
             $(this).parent().children('span').removeClass('on');
@@ -695,7 +602,6 @@
         	
         	//빈 문자열이 아닐때만 요청 보낼거임 (빈 게시글작성 막기 위해)trim(): 앞 뒤 공백 제거
         	if($('#textReview').val().trim() != ''){
-        		
         		$.ajax({
             		url : 'insertReview',
             		data : {
@@ -709,7 +615,6 @@
             		success : function(result)  {
             			console.log(result);
             			
-            			
             			if(result == 'success'){
             				selectReview(movieId);
             				$('#textReview').val('');
@@ -721,15 +626,27 @@
         	}
         }
         
-        
-        
-        
-        
+    	//리뷰 추가하는 모달 
+	    $("#insert_confirm").click(() => {
+            modalClose();
+            enableScroll();
+        });
+        $("#insertmodal-open").click(() => {
+            $("#insert_popup").css('display', 'flex').hide().fadeIn();
+            disableScroll();
+        });
+        $("#insert_close").click(() => {
+            modalClose();
+            enableScroll();
+        });
+        function modalClose() {
+            $("#insert_popup").fadeOut();
+        }
         
         //리뷰 수정
         function Review_Update(){
-        	//수정모달에서 리뷰번호 받아옴
-        	const reviewNo = $('#reviewNo').val();
+        	
+        	const reviewNo = $('#reviewNo').val(); //수정모달에서 리뷰번호 받아옴
         	console.log(reviewNo);
         
         	if($('#ReviewUpdate').val().trim() != ''){
@@ -771,34 +688,6 @@
            });
         });
         
-   		//리뷰 수정 모달 
-	    window.call_confirm_up= function(){
-	
-            $(() => {
-            
-            });
-   		}
-        
-         
-	            
-	   	//리뷰 추가하는 모달 
-	    $("#insert_confirm").click(() => {
-            modalClose();
-            enableScroll();
-        });
-        $("#insertmodal-open").click(() => {
-            $("#insert_popup").css('display', 'flex').hide().fadeIn();
-            disableScroll();
-        });
-        $("#insert_close").click(() => {
-            modalClose();
-            enableScroll();
-        });
-        function modalClose() {
-            $("#insert_popup").fadeOut();
-        }
-        
-        
         
         //리뷰 삭제
         function deleteById(reviewNo) {
@@ -816,8 +705,49 @@
         	            console.error('Error deleting review:', err);
         	        }
         	    });
-    		
     	}
+        
+        function generateStars(starCount) {
+            let stars = '';
+            for (let i = 0; i < Math.floor(starCount); i++) {
+                stars += '⭐';
+            }
+            if (starCount % 1 !== 0) {  // 소수점이 있을 경우 반개 별 추가
+                stars += '✨';
+            }
+            return stars;
+        }
+        
+       
+
+
+        
+        //평균 별점
+        function starAvg(movieId) {
+    		
+       	 $.ajax({
+       	        url: 'starAvg',
+       	        data: {
+       	        	movieCode: movieId
+       	        },
+       	        type: 'get',
+       	        success: function(response) {
+       	        	console.log("response{}", response);
+                    $('#avgInfo').html(response);  // avgInfo에 응답값을 넣음
+
+                    let starCount = parseFloat(response); // 필요시 적절히 변환
+                    let stars = generateStars(starCount); // 별을 생성하는 함수 호출
+
+                    console.log("stars{}", stars);
+                    let starContainer = document.getElementById('avgStar'); // 별을 삽입할 <h2> 요소를 찾음
+                    starContainer.innerHTML = stars; // 별을 <h2> 요소에 삽입
+       	        },
+       	        error: function(err) {
+       	            console.error('Error deleting review:', err);
+       	        }
+       	    });
+   	}
+       
         
     </script>
 </body>

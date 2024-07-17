@@ -26,6 +26,10 @@ public class ReviewController {
 	
 	private final ReviewService reviewService;
 	
+	
+	
+	
+	
 	@GetMapping("/reviews")
 	public String forwarding(Model model) {
 		
@@ -51,15 +55,6 @@ public class ReviewController {
 	public String MyReviewTest() {
 		return "review/myReview";
 	}
-	
-	
-	
-	
-//	@ResponseBody      
-//	@GetMapping(value="insertTReview22", produces="application/json; charset=UTF-8")
-//	public String insertTReview(int movieCode) {
-//		return new Gson().toJson(reviewService.getMovieOfReview(movieCode));
-//	}
 	
 	
 	@ResponseBody
@@ -117,12 +112,44 @@ public class ReviewController {
 	    public List<Review> MyReview(@RequestParam(value = "userId", required = false) String userId) {
 	        log.info("userId : {}", userId); // 로그로 userId 확인
 	        List<Review> selectMyReview = reviewService.selectMyReview(userId);
-	        //List<TEST> selectMyReview = reviewService.selectMyReview(userId);
+	        
 	        
 	        log.info("마이리뷰 : {}", selectMyReview);
 			return reviewService.selectMyReview(userId);
 
 	    }
+	    
+	    @ResponseBody
+	    @GetMapping(value = "NoReview", produces = "application/json; charset=UTF-8")
+	    public List<Review> NoReview(@RequestParam(value = "userId", required = false) String userId) {
+	        log.info("userId : {}", userId); // 로그로 userId 확인
+	        List<Review> selectNoReview = reviewService.selectNoReview(userId);
+	        
+	        
+	        log.info("미리뷰 : {}", selectNoReview);
+			return reviewService.selectNoReview(userId);
+
+	    }
+	    
+	    
+	    @ResponseBody
+		@GetMapping(value="starAvg", produces="application/json; charset=UTF-8")
+		public double selectStarAvg(int movieCode) {
+			
+			//review = (Review) session.getAttribute("review");
+
+			//List<Review> ReviewList = reviewService.getMovieOfReview(review.getMovieCode());
+			
+			log.info("movieCode : {}", movieCode);
+			//log.info("ReviewList : {}", ReviewList);
+			double StarAvg = reviewService.getStarAvg(movieCode);
+			log.info("StarAvgList : {}", StarAvg);
+		
+			
+			return reviewService.getStarAvg(movieCode);
+			
+			
+		}
 }
 
 

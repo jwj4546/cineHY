@@ -101,21 +101,71 @@
 	    <result property="star" column="star"/>
 	</resultMap>
 
-<select id="selectMyReview" resultMap="reviewResultMap" parameterType="String">
-    SELECT 
-        M.MOVIE_TITLE AS movieTitle,
-        R.REVIEW_NO AS reviewNo,
-        R.USER_ID AS userId,
-        R.REVIEW_DATE AS reviewDate,
-        R.REVIEW_CONTENT AS reviewContent,
-        R.STAR AS star
-    FROM 
-        TB_REVIEW R
-    JOIN 
-        TB_MOVIE M ON R.MOVIE_CODE = M.MOVIE_CODE
-    WHERE 
-        R.USER_ID = #{userId}
-</select>
+	<select id="selectMyReview" resultMap="reviewResultMap" parameterType="String">
+	    
+	    SELECT 
+	        M.MOVIE_TITLE AS movieTitle,
+	        R.REVIEW_NO AS reviewNo,
+	        R.USER_ID AS userId,
+	        R.REVIEW_DATE AS reviewDate,
+	        R.REVIEW_CONTENT AS reviewContent,
+	        R.STAR AS star
+	    FROM 
+	        TB_REVIEW R
+	    JOIN 
+	        TB_MOVIE M ON R.MOVIE_CODE = M.MOVIE_CODE
+	    WHERE 
+	        R.USER_ID = #{userId}
+	        
+	</select>
+	
+	<select id="starAvg" resultType="Double" parameterType="_int">
+		
+		 SELECT 
+				ROUND(AVG(STAR), 1) AS AVG_STAR
+		   FROM 
+		   		TB_REVIEW 
+		  WHERE 
+		   		MOVIE_CODE = #{movieCode}
+		GROUP BY 
+				 MOVIE_CODE
+	
+	
+	</select>
+	
+	<select id="reviewCount" resultType="_int"> 
+		SELECT
+			COUNT(REVIEW_NO)
+		FROM
+			TB_REVIEW
+		WHERE
+			USER_ID = #{userId}
+	
+	</select>
+	
+	<select id="selectNoReview"  resultType="review" parameterType="String">
+	
+		SELECT 
+				MOVIE_CODE movieCode,
+				MOVIE_TITLE movieTitle,
+				PAYMENT_TIME paymentTime
+			FROM 
+				TB_TICKETLIST
+			WHERE 
+				USER_ID =  #{userId}
+			AND 
+				MOVIE_CODE 
+		NOT IN (
+			SELECT 
+					MOVIE_CODE 
+				FROM 
+					TB_REVIEW 
+				WHERE 
+					USER_ID = #{userId}
+					)
+	
+	
+	</select>
     
     
     

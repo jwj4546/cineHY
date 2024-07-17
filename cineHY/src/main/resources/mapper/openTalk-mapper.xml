@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="openTalkMapper">
+    <select id="selectMessage" resultType="openTalk">
+        SELECT
+        		TALK_ID talkId,
+        		TALK_CONTENT talkContent,
+        		TALK_SENDDATE talkSendDate,
+        		USER_ID userId,
+        		STATUS status
+		FROM
+				TB_OPEN_TALK
+		
+    </select>
+    
+    
+    <insert id="insertMessage" parameterType="openTalk">
+    INSERT INTO 
+    			TB_OPEN_TALK (
+			    			TALK_ID, 
+			    			TALK_CONTENT, 
+			    			TALK_SENDDATE, 
+			    			USER_ID, 
+			    			STATUS
+			    			)
+			    	VALUES (
+			    			SEQ_ONO.NEXTVAL, 
+			    			#{talkContent},
+			    			SYSDATE, 
+			    			#{userId},
+			    			'Y'
+			    			)
+	    
+    
+    </insert>
+    
+</mapper>

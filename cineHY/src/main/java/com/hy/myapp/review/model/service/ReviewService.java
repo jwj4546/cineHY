@@ -41,12 +41,16 @@ public interface ReviewService {
 	//리뷰 삭제
 	int deleteReview(int reviewNo);
 
-	//마이리뷰
+	//마이 리뷰
 	List<Review> selectMyReview(String userId);
 	
-	//평균 평점 구하기
-//	Double getRatingAverage(int reviewNo);
+	//미작성 리뷰
+	List<Review> selectNoReview(String userId);
+
+	//평균별점
+	Double getStarAvg(int movieCode);
 	
+	int reviewCount();
 	
 
 	

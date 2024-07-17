@@ -100,7 +100,7 @@
     .col-md-9 {
         width: 650px;
     }
-    #review_go{
+    #review_btn{
       background-color: rgb(41, 185,165);
       color: #ffffff;
     }
@@ -126,7 +126,7 @@
     <div class="container" id="test01">
     <h4 class="fst-italic" id="title">작성한 리뷰</h4>
     <main role="main" class="container" id="test">
-        <div id="row">
+        
             <div id="user_div" class="col-md-3">
                 <div class="card" id="cardId">
                     <div class="card-body" id="member_info">
@@ -138,7 +138,7 @@
                                 <a id="aa" href="#tab1">작성한 리뷰 : <span id="rcount">0</span>건</a>
                             </li>
                             <li id="rr2" class="tab__item">
-                                <a id="aa" href="#tab2">미작성 리뷰 : 2건</a>
+                                <a id="aa" href="#tab1">미작성 리뷰 : <span id="ncount">0</span>건</a>
                             </li>
                         </ul>
                     </div>
@@ -148,7 +148,7 @@
             <div id="tab1" class="tab__content active">
                 <div class="col-md-9">
                     <ul class="reviewList">
-                        <!-- AJAX  -->
+                        <!-- 리뷰조회 AJAX  -->
                     </ul>
                 </div>
             </div>
@@ -157,39 +157,57 @@
             	<div class="col-md-9">
                 	<div>
                     	<ul class="reviewList_tab2" >
-                        	<li class="list_style">
-                            	<a class="d-flex flex-column flex-lg-row  align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-bottom" href="#">
-                                	<svg class="bd-placeholder-img" width="120" height="150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"></rect></svg>
-                                	<div class="col-lg-8">
-                                		<h6 class="mb-0">인사이드 아웃 2</h6>
-                                		<small class="text-body-secondary">t5328  |  2024.06.19</small>
-                                		<br>
-                                		<br>
-                                		<button type="button" class="btn btn-sm"  id="review_go">리뷰쓰러가기</button>
-                                	</div>
-                                </a>
-                             </li>
+                        	<!-- 리뷰 미작성 조회 AJAX  -->
                         </ul>
                     </div>
                 </div>
             </div>
-        </div>
+        
     </main>
         <div id="pagingArea">
-            <ul class="pagination">
-                <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
-                <c:forEach begin="${pageInfo.startPage}" end="${pageInfo.endPage}" var="p">
-                    <li class="page-item">
-                        <a class="page-link" href="boardlist?page=${p}">${p}</a>
-                    </li>
-                </c:forEach>
+                <ul class="pagination">
                 <c:choose>
-                    <c:when test="${pageInfo.currentPage ne pageInfo.maxPage}">
-                        <li class="page-item"><a class="page-link" href="=${pageInfo.currentPage + 1}">다음</a></li>
-                    </c:when>
-                </c:choose>
-            </ul>
-        </div>
+					<c:when test="${ pageInfo.currentPage eq 1 }"> 
+					   <li class="page-item disabled">
+					      <a class="page-link" href="#">이전</a>
+					   </li>
+					</c:when>
+					<c:when test="${ not empty condition }">
+					   <li class="page-item">
+					      <a class="page-link" 
+					         href="search.do?page=${ pageInfo.currentPage - 1 }&condition=${condition}&keyword=${keyword}">이전</a>
+					   </li>
+					</c:when>
+                 </c:choose>
+                 <c:forEach begin="${pageInfo.startPage }" end="${ pageInfo.endPage }" var="p">
+					<c:choose>
+						<c:when test="${ not empty condition }">
+							<li class="page-item">
+								<a class="page-link" 
+								href="search.do?page=${p }&condition=${condition}&${keyword}">${p }</a>
+							</li>
+						</c:when>
+						<c:otherwise>
+							<li class="page-item">
+								<a class="page-link" href="boardList?page=${p }">${p }</a>
+							</li>
+						</c:otherwise>
+					</c:choose>
+                  </c:forEach>
+                    <c:choose>
+                    	<c:when test="${ pageInfo.maxPage eq pageInfo.currentPage }">
+		                    <li class="page-item disabled">
+		                    <a class="page-link" href="#">다음</a>
+		                    </li>
+	                    </c:when>
+	                    <c:otherwise>
+	                     	<li class="page-item">
+		                    <a class="page-link" href="boardList?page=${pageInfo.currentPage +1 }">다음</a>
+		                    </li>
+	                    </c:otherwise>
+                    </c:choose>
+                </ul>
+            </div>
     </div>
     
 
@@ -203,6 +221,7 @@
     
     $(document).ready(() => {
         selectMyReview();
+        
 
         const tabItems = document.querySelectorAll(".tab__item");
         const tabContents = document.querySelectorAll(".tab__content");
@@ -216,13 +235,25 @@
                 });
 
                 tabItems.forEach((item) => {
+                	
                     item.classList.remove("active");
                 });
 
                 item.classList.add("active");
                 tabContents[index].classList.add("active");
+                
+                if (index === 1) {
+                    selectNoReview();
+                }
+                
             });
         });
+        
+        function reviewPage(movieCode){
+        	
+        }
+        
+        
     });
 
     function selectMyReview() {
@@ -245,24 +276,67 @@
                     	stars += '⭐';
                     }
                     const item = data[i];
-                    text += '<li class="list_style" style="width: 700px;">' +
-                        '<a style="width: 700px;" class="d-flex flex-row gap-3 align-items-start py-3 link-body-emphasis text-decoration-none border-bottom" href="#">' +
-                            '<svg class="bd-placeholder-img" width="120" height="150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">' +
-                                '<rect width="100%" height="100%" fill="#777"></rect>' +
-                            '</svg>' +
-                            '<div class="col-lg-8" style="width: 500px;">' +
-                                '<h6 class="mb-0">' + item.movieTitle + '</h6>' +
-                                '<br>' +
-                                '<p class="mb-0">' + stars + '</p>' +
-                                '<p class="mb-0">' + item.reviewContent + '</p>' +
-                                '<br>' +
-                                '<small class="text-body-secondary">' + item.userId + ' | ' + item.reviewDate + '</small>' +
-                            '</div>' +
-                        '</a>' +
-                    '</li>';
+                    
+                    text += '<li class="list_style" style="width: 700px;">' 
+		                    +    '<a style="width: 700px;" class="d-flex flex-row gap-3 align-items-start py-3 link-body-emphasis text-decoration-none border-bottom" href="#">' 
+		                    +        '<svg class="bd-placeholder-img" width="120" height="150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">' 
+		                    +            '<rect width="100%" height="100%" fill="#777"></rect>' 
+		                    +       '</svg>' 
+		                    +        '<div class="col-lg-8" style="width: 500px;">' 
+		                    +            '<h6 class="mb-0">' + item.movieTitle + '</h6>' 
+		                    +            '<br>' 
+		                    +            '<p class="mb-0">' + stars + '</p>' 
+		                    +            '<p class="mb-0">' + item.reviewContent + '</p>' 
+		                    +            '<br>' 
+		                    +            '<small class="text-body-secondary">' + item.userId + ' | ' + item.reviewDate + '</small>' 
+		                    +        '</div>' 
+		                    +    '</a>' 
+		                    +'</li>';
+                    
                 }
                 $('.reviewList').html(text);
                 $('#rcount').html(data.length);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+            }
+        });
+    }
+    
+    //미작성리뷰 조회
+    function selectNoReview() {
+        $.ajax({
+            url: 'NoReview',
+            type: 'GET',
+            data: {
+                userId: '${sessionScope.loginUser.userId}'
+            },
+            dataType: "json",
+            success: function(data) {
+                console.log("미작성data:", data);
+                let Noreview = '';
+                
+                for (let i in data) {
+                	
+                    const item = data[i];
+                    Noreview += '<li class="list_style">'
+		            		+	'<a class="d-flex flex-column flex-lg-row  align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-bottom" href="#">'
+		                	+		'<svg class="bd-placeholder-img" width="120" height="150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"></rect></svg>'
+		                	+		'<div class="col-lg-8">'
+		                	+		'<h6 class="mb-0">' + item.movieTitle + '</h6>'
+		                	+		'<br>'
+		                	+		'<br>'
+                            + 		'<button type="button" id="review_btn" class="btn btn-sm" onclick="window.location.href=\'movieDetails?movieId=' + item.movieCode + '\'">리뷰쓰러가기</button>'
+
+		                	+		'<br>'
+		                    +       '<small class="text-body-secondary">' + '${sessionScope.loginUser.userId}' + ' | ' + item.paymentTime + '</small>' 
+				           
+		            		+	'</div>'
+		            		+	'</a>'
+		     				+'</li>';
+                }
+                $('.reviewList_tab2').html(Noreview);
+                $('#ncount').html(data.length);
             },
             error: function(xhr, status, error) {
                 console.error("Error:", error);

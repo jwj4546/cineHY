@@ -38,8 +38,23 @@ public class ReviewRepository {
 	public List<Review> selectMyReview(SqlSessionTemplate sqlSession, String userId) {
 		return sqlSession.selectList("reviewMapper.selectMyReview", userId);
 	}
+	
+	public List<Review> selectNoReview(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("reviewMapper.selectNoReview", userId);
+
+	}
+	public Double getStarAvg(SqlSessionTemplate sqlSession, int movieCode) {
+		return sqlSession.selectOne("reviewMapper.starAvg", movieCode);
+	}
+
+	public int reviewCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("reviewMapper.reviewCount");
+
+	}
+
+	
+	}
 
 //	public Double getRatingAvg(SqlSessionTemplate sqlSession, int reviewNo) {
 //		return sqlSession.;
 //	}
-}

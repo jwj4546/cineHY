@@ -21,5 +21,6 @@ public class Review {
 	private String ticketNo;
 	private double ratingAvg;
 	private String movieTitle;
+    private String paymentTime;
 
 }
