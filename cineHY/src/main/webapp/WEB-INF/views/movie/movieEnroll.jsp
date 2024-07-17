@@ -96,8 +96,8 @@
 	            </div>
 	            <form class="form-inline mt-2 mt-md-0">
 	                <span class="input-group-text">영화검색</span>
-	                <input type="text" class="form-control">
-	                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
+	                <input type="text" class="form-control" name="keyword" id="keyword" value="" onkeypress="handleKeyPress(event)">
+	                <button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="searchMovies()">검색</button>
 	            </form>
 	        </div>
 	        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -164,7 +164,16 @@
     
     <script>
     
+    
 	    $(document).ready(function() {
+	    	
+	    	
+	    	function handleKeyPress(event) {
+	            if (event.key === 'Enter') {
+	                searchMovies();
+	            }
+	        }
+         
 	    	
 	    	findAll();
 	    	
@@ -183,34 +192,7 @@
 	                }
 	            });
 	        }
-	
-	        function displayMovies(data) {
-	            var movieList = $('#movieList');
-	            movieList.empty();
-	            if (data.results && data.results.length > 0) {
-	                const movies = data.results;
-	                let movieHtml = '';
-	                for(let i in movies) {
-	                	const movieId = movies[i].id;
-	                    movieHtml += '<div class="card" style="width: 12rem;">'
-	                      + '<img src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" class="card-img-top" >'
-	                      + '<div class="card-body">'
-	                      + '<h5 class="card-title">' + movies[i].title + '</h5>'
-	                      + '<p class="card-text">' + movies[i].title + '</p>'
-	                      + '</div>'
-	                      + '<ul class="list-group list-group-flush">'
-	                      + '<li class="list-group-item">' + movies[i].release_date + ' 개봉</li>'
-	                      + '</ul>'
-	                      + '<div class="card-body">'
-	                      + '<button type="button" class="btn btn-outline-secondary" onclick="viewDetail('+movieId+')">View</button>'
-	                      + '</div>'
-	                      + '</div>';
-	                }
-	                movieList.html(movieHtml);
-	            } else {
-	                movieList.append('<li>No movies currently playing.</li>');
-	            }
-	        }
+	        
 	
 	        function changePage(pageNo) {
 	            currentPage = pageNo;
@@ -229,6 +211,7 @@
 	        
 	        
 	        window.viewDetail = function(movieId) {
+	        	scrollDownView();
 	        	
 	            $.ajax({
 	                url: 'movieList/details',
@@ -314,6 +297,7 @@
 	        
 	    });
 	    
+	    
 	    function findAll() {
     		
     		$.ajax({
@@ -321,9 +305,9 @@
     			method : 'get',
     			dataType : 'json',
     			success: function(data) {
-    				console.log(data);
+    				//console.log(data);
     				const movieEList = data.data;
-    				console.log(data.data)
+    				//console.log(data.data)
     				let ListHtml = '';
     				ListHtml += '<li class="list-group-item" style="font-size:25px; color:white; background-color:#29b9a5;"><p>등록한 영화</p></li>'
     				for(let i in movieEList) {
@@ -362,7 +346,6 @@
 	            rating: $('#rating').val(),
 	            openedDate: $('#openedDate').val()
 	        };
-	        console.log(requestData);
 
 	        $.ajax({
 	            url: "movieList/movieInsert",
@@ -371,10 +354,10 @@
 	            data: JSON.stringify(requestData),
 	            dataType: "json",
 	            success: function(response) {
-	                console.log(response);
+	                //console.log(response);
 	                if (response.message === '서비스요청성공') {
-	                	console.log(response.message);
 	                	findAll();
+	                alert("영화가 상영리스트에 등록되었습니다.")
 	                }
 	                
 	            },
@@ -386,13 +369,16 @@
 	        
 	    }
 	    
+	    
 	    function deleteByCode(movieCode) {
+	    	
+	    	alert("삭제하시겠습니까?");
 			
 			$.ajax ({
 				url : 'movieList/'+movieCode,
 				type : 'delete',
 				success : data => {
-					console.log(data)
+					//console.log(data)
 					findAll();
 				},
 				error: function(xhr, status, error) {
@@ -402,73 +388,124 @@
 			
 		}
 	    
-	</script>
-    
-    <script>
-        $(document).ready(function() {
+	    //view 클릭 시 해당 화면으로 스크롤
+	    function scrollDownView() {
+	        let location = document.querySelector('#movieDetails').offsetTop;
+	        //console.log(location);
+	        window.scrollTo({ top: location - 80, behavior: 'smooth' });
+	    }
+	    
         	
-            var currentPage = 1;
-            function fetchUpMovies(pageUpNo) {
-                $.ajax({
-                    url: 'movieList/upComming/Admin',
-                    method: 'get',
-                    dataType: 'json',
-                    data: { pageNo: pageUpNo },
-                    success: function(data) {
-                        displayUpMovies(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.error('Error fetching movie data:', textStatus, errorThrown);
-                    }
-                });
-            }
-            
-            function displayUpMovies(data) {
-                var movieList = $('#movieUpList');
-                movieList.empty();
-                if (data.results && data.results.length > 0) {
-                    const movies = data.results;
-                    let movieHtml = '';
-                    for(let i in movies) {
-                    	const movieId = movies[i].id;
-                        movieHtml += '<div class="card" style="width: 12rem;">'
-                          + '<img src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" class="card-img-top">'
-                          + '<div class="card-body">'
-                          + '<h5 class="card-title">' + movies[i].title + '</h5>'
-                          + '<p class="card-text">' + movies[i].title + '</p>'
-                          + '</div>'
-                          + '<ul class="list-group list-group-flush">'
-                          + '<li class="list-group-item">' + movies[i].release_date + ' 개봉</li>'
-                          + '</ul>'
-                          + '<div class="card-body">'
-                          + '<div class="btn-group">'
-                          + '<button type="button" class="btn btn-sm btn-outline-secondary" onclick=viewDetail('+ movieId +')>View</button>'
-                          + '</div>'
-                          + '</div>'
-                          + '</div>';
-                    }
-                    movieList.html(movieHtml);
-                } else {
-                    movieList.append('<li>No movies currently playing.</li>');
+         var currentPage = 1;
+         function fetchUpMovies(pageUpNo) {
+             $.ajax({
+                 url: 'movieList/upComming/Admin',
+                 method: 'get',
+                 dataType: 'json',
+                 data: { pageNo: pageUpNo },
+                 success: function(data) {
+                     displayUpMovies(data);
+                 },
+                 error: function(jqXHR, textStatus, errorThrown) {
+                     console.error('Error fetching movie data:', textStatus, errorThrown);
+                 }
+             });
+         }
+         
+         function displayUpMovies(data) {
+             var movieList = $('#movieUpList');
+             movieList.empty();
+             if (data.results && data.results.length > 0) {
+                 const movies = data.results;
+                 let movieHtml = '';
+                 for(let i in movies) {
+                 	const movieId = movies[i].id;
+                     movieHtml += '<div class="card" style="width: 12rem;">'
+                       + '<img src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" class="card-img-top">'
+                       + '<div class="card-body">'
+                       + '<h5 class="card-title">' + movies[i].title + '</h5>'
+                       + '<p class="card-text">' + movies[i].title + '</p>'
+                       + '</div>'
+                       + '<ul class="list-group list-group-flush">'
+                       + '<li class="list-group-item">' + movies[i].release_date + ' 개봉</li>'
+                       + '</ul>'
+                       + '<div class="card-body">'
+                       + '<div class="btn-group">'
+                       + '<button type="button" class="btn btn-sm btn-outline-secondary" onclick=viewDetail('+ movieId +')>View</button>'
+                       + '</div>'
+                       + '</div>'
+                       + '</div>';
+                 }
+                 movieList.html(movieHtml);
+             } else {
+                 movieList.append('<li>No movies currently playing.</li>');
+             }
+         }
+
+        function changeUpPage(pageUpNo) {
+            currentPage = pageUpNo;
+            fetchUpMovies(pageUpNo);
+        }
+
+        window.changeUpPage = changeUpPage;
+        window.nextUpPage = function() {
+            changeUpPage(currentPage + 1);
+        }
+        window.previousUpPage = function() {
+       		changeUpPage(currentPage - 1);				
+		}
+
+        fetchUpMovies(currentPage);
+
+        
+        
+      	//관리자 영화 검색 
+	    function searchMovies() {
+	    	var keyword = $('#keyword').val();
+	        $.ajax({
+	            url: 'movieList/searchMovie',
+	            method: 'GET',
+	            data : { keyword : keyword },
+	            dataType: 'json',
+	            success: function(data) {
+	                displayMovies(data);
+	                console.log(data);
+	            },
+	            error: function(jqXHR, textStatus, errorThrown) {
+	                console.error('영화 데이터를 불러오는 중 오류 발생:', textStatus, errorThrown);
+	            }
+	        });
+	    }
+      
+	    function displayMovies(data) {
+            var movieList = $('#movieList');
+            movieList.empty();
+            if (data.results && data.results.length > 0) {
+                const movies = data.results;
+                let movieHtml = '';
+                for(let i in movies) {
+                	const movieId = movies[i].id;
+                    movieHtml += '<div class="card" style="width: 12rem;">'
+                      + '<img src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" class="card-img-top" >'
+                      + '<div class="card-body">'
+                      + '<h5 class="card-title">' + movies[i].title + '</h5>'
+                      + '<p class="card-text">' + movies[i].title + '</p>'
+                      + '</div>'
+                      + '<ul class="list-group list-group-flush">'
+                      + '<li class="list-group-item">' + movies[i].release_date + ' 개봉</li>'
+                      + '</ul>'
+                      + '<div class="card-body">'
+                      + '<button type="button" class="btn btn-outline-secondary" onclick="viewDetail('+movieId+')">View</button>'
+                      + '</div>'
+                      + '</div>';
                 }
+                movieList.html(movieHtml);
+            } else {
+                movieList.append('<li>No movies currently playing.</li>');
             }
-
-            function changeUpPage(pageUpNo) {
-                currentPage = pageUpNo;
-                fetchUpMovies(pageUpNo);
-            }
-
-            window.changeUpPage = changeUpPage;
-            window.nextUpPage = function() {
-                changeUpPage(currentPage + 1);
-            }
-            window.previousUpPage = function() {
-            	changeUpPage(currentPage - 1);				
-			}
-
-            fetchUpMovies(currentPage);
-        });
-    </script>
+        }
+        
+	</script>
     	
    
     		

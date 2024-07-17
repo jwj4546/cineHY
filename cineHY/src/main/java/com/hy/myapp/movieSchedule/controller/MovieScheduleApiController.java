@@ -188,4 +188,5 @@ public class MovieScheduleApiController {
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
 	
+	
 }

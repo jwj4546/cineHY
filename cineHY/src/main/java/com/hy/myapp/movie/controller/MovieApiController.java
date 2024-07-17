@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.hy.myapp.movie.model.service.MovieService;
 import com.hy.myapp.movie.model.vo.Message;
 import com.hy.myapp.movie.model.vo.Movie;
+import com.siot.IamportRestClient.response.Schedule;
 
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -46,7 +47,7 @@ public class MovieApiController {
 
         for (int pageNumber = 1; pageNumber <= TOTAL_PAGES; pageNumber++) {
             Request request = new Request.Builder()
-                    .url(API_URL + "now_playing?language=ko-KR&page=" + pageNumber + "&include_image_language=en,null&sort_by=popularity.desc")
+                    .url(API_URL + "now_playing?language=ko-KR&region=KR&page=" + pageNumber + "&include_image_language=en,null&sort_by=popularity.desc")
                     .get()
                     .addHeader("accept", "application/json")
                     .addHeader("Authorization", BEARER_TOKEN)
@@ -73,7 +74,7 @@ public class MovieApiController {
 
         for (int pageNumber = 1; pageNumber <= TOTAL_PAGES; pageNumber++) {
             Request request = new Request.Builder()
-                    .url(API_URL + "upcoming?language=ko-KR&page=" + pageNumber+"&sort_by=popularity.desc")
+                    .url(API_URL + "upcoming?language=ko-KR&region=KR&page=" + pageNumber+"")
                     .get()
                     .addHeader("accept", "application/json")
                     .addHeader("Authorization", BEARER_TOKEN)
@@ -101,7 +102,7 @@ public class MovieApiController {
 
 		//get 요청
 		Request request = new Request.Builder()
-		  .url("https://api.themoviedb.org/3/movie/now_playing?append_to_response=images&language=ko-KR&page="+pageNo+"&sort_by=popularity.desc&include_image_language=en,null")
+		  .url( API_URL + "now_playing?append_to_response=images&language=ko-KR&region=KR&page="+pageNo+"&sort_by=popularity.desc&include_image_language=en,null")
 		  .get()
 		  .addHeader("accept", "application/json")
 		  .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcxOTk4Mzc5NS40NDkyODMsInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qMXzz1zFbiC7Mct5mGb96DwMT3Tjtuo1HFjLE_b_kZ0")
@@ -125,7 +126,7 @@ public class MovieApiController {
 		OkHttpClient client = new OkHttpClient();
 
 		Request request = new Request.Builder()
-		  .url("https://api.themoviedb.org/3/movie/upcoming?language=ko-KR&page="+pageUpNo+"&sort_by=popularity.desc")
+		  .url("https://api.themoviedb.org/3/movie/upcoming?language=ko-KR&region=KR&page="+pageUpNo+"&sort_by=popularity.desc")
 		  .get()
 		  .addHeader("accept", "application/json")
 		  .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcyMDA2Mjc5Ni41OTIxNDksInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WfXqF4gZs0s7v7N9TyGhAUHP_ut6LgIEjSs_Bge8vH0")
@@ -196,7 +197,7 @@ public class MovieApiController {
 		Request request = new Request.Builder()
 		  .url(API_URL + movieId +"/credits?language=ko-KR")
 		  .get()
-		  .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcyMDA2Mjc5Ni41OTIxNDksInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WfXqF4gZs0s7v7N9TyGhAUHP_ut6LgIEjSs_Bge8vH0")
+		  .addHeader("Authorization", BEARER_TOKEN)
 		  .addHeader("accept", "application/json")
 		  .build();
 
@@ -218,7 +219,7 @@ public class MovieApiController {
 		Request request = new Request.Builder()
 		  .url(API_URL + movieId +"/images")
 		  .get()
-		  .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcyMDA2Mjc5Ni41OTIxNDksInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WfXqF4gZs0s7v7N9TyGhAUHP_ut6LgIEjSs_Bge8vH0")
+		  .addHeader("Authorization", BEARER_TOKEN)
 		  .addHeader("accept", "application/json")
 		  .build();
 
@@ -296,5 +297,28 @@ public class MovieApiController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
+	
+	@GetMapping(value="searchMovie", produces="application/json; charset=UTF-8")
+	public String searchMovie(@RequestParam("keyword") String query) throws IOException {
 		
+		OkHttpClient client = new OkHttpClient();
+
+		Request request = new Request.Builder()
+		  .url("https://api.themoviedb.org/3/search/movie?query="+ query +"&include_adult=false&language=ko-KR&primary_release_year=2024&page=1&region=KR")
+		  .get()
+		  .addHeader("Authorization", BEARER_TOKEN)
+		  .addHeader("accept", "application/json")
+		  .build();
+
+		try (Response response = client.newCall(request).execute()) {
+	            // 응답 본문 추출
+	            okhttp3.ResponseBody responseBody = response.body();
+	            if (responseBody != null) {
+	                return responseBody.string();
+	            } else {
+	                return "{}"; // 응답 본문이 없는 경우 빈 JSON 객체 반환
+	            }
+	        }
+	}
+	
 }
