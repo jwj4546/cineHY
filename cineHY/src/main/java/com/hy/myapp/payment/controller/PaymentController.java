@@ -14,7 +14,9 @@ import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.Payment;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class PaymentController {
@@ -27,15 +29,16 @@ public class PaymentController {
 		return "payment/payment";
 	}
 	
-	@PostMapping("/payment/prepare")
+	@PostMapping("payment/prepare")
 	public void preparePayment(@RequestBody PrePaymentVO request) throws IamportResponseException, IOException {
 		paymentServiceImpl.postPrepare(request);
+		log.info("이게 뭔데 : {}", request);
+		
 	}
 	
-	@PostMapping("/payment/validate")
+	@PostMapping("payment/validate")
 	public Payment validatePayment(@RequestBody PaymentVO request) throws IamportResponseException, IOException {
-		
+		log.info("이게 뭔데 : {}", request);
 		return paymentServiceImpl.validatePayment(request);
-		
 	}
 }
