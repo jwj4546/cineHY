@@ -143,26 +143,30 @@
 	
 	</select>
 	
-	<select id="selectNoReview"  resultType="review" parameterType="String">
+	<select id="selectNoReview"  resultType="review" >
 	
 		SELECT 
-				MOVIE_CODE movieCode,
-				MOVIE_TITLE movieTitle,
-				PAYMENT_TIME paymentTime
-			FROM 
-				TB_TICKETLIST
-			WHERE 
-				USER_ID =  #{userId}
+			    m.MOVIE_CODE,
+			    m.MOVIE_TITLE,
+			    t.PAYMENT_TIME
+		   FROM 
+			    TB_TICKETLIST t
+		   JOIN 
+			    TB_MOVIE_SCHEDULE ms ON t.SCREENING_ID = ms.SCREENING_ID
+		   JOIN 
+			    TB_MOVIE m ON ms.MOVIE_CODE = m.MOVIE_CODE
+		  WHERE 
+			    t.USER_ID = #{userId}
 			AND 
-				MOVIE_CODE 
-		NOT IN (
-			SELECT 
-					MOVIE_CODE 
-				FROM 
-					TB_REVIEW 
-				WHERE 
-					USER_ID = #{userId}
-					)
+			    m.MOVIE_CODE NOT IN (
+							        SELECT 
+							            r.MOVIE_CODE 
+							        FROM 
+							            TB_REVIEW r
+							        WHERE 
+							            r.USER_ID = #{userId}
+							    	)
+								
 	
 	
 	</select>

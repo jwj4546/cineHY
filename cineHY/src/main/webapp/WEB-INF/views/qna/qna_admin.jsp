@@ -319,15 +319,15 @@
                 <div class="card-footer"></div>
             </div>
         </div>
-        <div class="col-md-8 col-xl-6 chat">
-            <div class="card">
+        <div id="newCard"  class="col-md-8 col-xl-6 chat">
+            <div  class="card">
                 <div class="card-header msg_head">
                     <div class="d-flex bd-highlight">
                         <div class="img_cont">
                             <img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img">
                         </div>
                         <div class="user_info">
-                            <span>유저1 채팅방</span>
+                            <span>관리자</span>
                             <p>1767 Messages</p>
                         </div>
                     </div>
@@ -343,14 +343,7 @@
                 </div>
                 <div id="textmsg" class="card-body msg_card_body">
                     
-                    <div class="d-flex justify-content-end mb-4">
-                        <div class="msg_cotainer_send">
-                            <span class="msg_time_send">8:55 AM, Today</span>
-                        </div>
-                        <div class="img_cont_msg">
-                            <img src="" class="rounded-circle user_img_msg">
-                        </div>
-                    </div>
+                    
                 </div>
                 <div class="card-footer">
                     <div class="input-group">
@@ -368,6 +361,8 @@
 </div>
 
 <script>
+
+	var userkey="";
     $(document).ready(function(){
         $('#action_menu_btn').click(function(){
             $('.action_menu').toggle();
@@ -375,6 +370,7 @@
     });
 
     var webSocket = new WebSocket("ws://localhost:82/cineHY/admin");
+    
 
     webSocket.onopen = function(message) {
         console.log('서버에 연결 성공');
@@ -390,21 +386,42 @@
 
     webSocket.onmessage = function(message) {
     	
-        let node = JSON.parse(message.data);
-        const userId = node.userId;
+    	console.log("message",message);
+    	const node = JSON.parse(message.data);  // 유저한테 받아옴 
+        //const userId = node.userId;
 		const sendmessage = node.message;
-		console.log(userId);
-		console.log(message);
+		//console.log(userId);
+		//console.log(message);
+		console.log(node);    // staus, key 출력됨
+		//console.log(node.key);
+		
+		userkey=node.key;
+		console.log("userkey",userkey);
 		
 		const currentTime = new Date().toLocaleTimeString();
         
-		//유저가 접속했을때 알려줌
-        if (node.status === "visit") {
-            let form = $("#template").html();
-            form = $("<div class='float-left'></div>").attr("data-key", node.key).append(form);
-            $("section").append(form);
+		console.log("node.status",node.status);
+		
+        if (node.status === "visit") {// node상태가 visit면 유저가 접속한것. 새 채팅 영역 만듦
+        	
+        	const key = node.key;
+        	
+        	//let userKeyDiv = document.getElementById('newCard');
+        	
+        	let userKeyDiv = $("#newCard").html();                 
+        	userKeyDiv = $("<div style='float:left;'></div>").attr("data-key",node.key).append(userKeyDiv);   // div를 감싸고 속성 data-key에 unique키 넣음.           
+			$("body").append(userKeyDiv);      // body에 추가한다.  
+			
+        	/*
+        	if (userKeyDiv) {
+        		console.log("userKeyDiv",userKeyDiv);
+            } else {
+                console.error("Element with ID 'userKeys' not found.");
+            }
+        	*/
             
-        } else if (node.status === "message") {
+        } 
+        else if (node.status === "message") {  //메세지 받음
         	
             const msgHTML = $(`
                     <div class="d-flex justify-content-start mb-4">
@@ -419,11 +436,9 @@
                     </div>
                 `);
                 msgHTML.find('.message-text').text(sendmessage);
-                msgHTML.find('.userID').text(userId);
+                //msgHTML.find('.userID').text(userId);
                 msgHTML.find('.msg_time').text(currentTime);
                 $("#textmsg").append(msgHTML);
-            
-            
             
         } else if (node.status === "bye") {
             $("[data-key='" + node.key + "']").remove();
@@ -431,13 +446,28 @@
     };
 
     $(document).on("click", "#sendBtn", function() {
-    	const message = document.getElementById('textMessageArea').value;
         
-    	console.log(message);
-    	
-        if (message.trim() !== "") {
-            webSocket.send(JSON.stringify({ status: "message", message: message }));
+        
+    	const messageMM = document.getElementById('textMessageArea').value;
+        
+        if (messageMM.trim() !== "") {
+        	let $div = $(this).closest("#newCard"); // .chat-container로 변경하여 올바른 div를 찾도록 합니다.
+             
+             
+             //let message = $div.find(".message").val();
+        	
+            
 
+            console.log("관리자 key:", userkey);
+            console.log("관리자 jsp:", messageMM);
+            
+            //let key = $div.data("key"); // 유저 key를 data-key 속성에서 가져옵니다.
+           // let log = $div.find("#textmsg").val();  // 메시지 텍스트 박스를 찾아서 값을 취득한다.
+            //$div.find("#textmsg").val(log + "(me) => " + message + "\n");
+            
+            
+            
+            // 메시지를 채팅 박스에 추가
             const chatBox = $(`
                 <div class="d-flex justify-content-end mb-4">
                     <div class="msg_cotainer_send">
@@ -446,11 +476,34 @@
                     </div>
                 </div>
             `);
-            chatBox.find('.message-text').text(message);
+            
+            chatBox.find('.message-text').text(messageMM);
             $("#textmsg").append(chatBox);
+            
+            /*
+            const jsonMessage = {
+                    status: userkey,
+                    message: messageMM.replace(/[\u0000-\u001F\u007F-\u009F]/g, "")
+                };
+			*/
+                // 웹소켓으로 JSON 메시지를 문자열로 변환하여 보낸다.
+                //webSocket.send(JSON.stringify(jsonMessage));
+            
+			/*
+            const jsonMessage = {
+                    key: userkey,
+                    message: messageMM
+                };
+            */
+            webSocket.send(userkey+"#####"+messageMM);
+            
+            // JSON 메시지를 문자열로 변환하여 전송
+           // webSocket.send(jsonMessage);
+            //console.log(jsonMessage);
         }
     });
-/*
+
+
     $(document).on("keydown", ".type_msg", function(event) {
         if (event.keyCode === 13) {
             $("#sendBtn").trigger("click");
@@ -458,7 +511,7 @@
         }
         return true;
     });
-    */
+    
 
     function sendFile(){
         var file = document.getElementById('file').files[0];
@@ -476,6 +529,8 @@
 
         reader.readAsArrayBuffer(file);
     }
+    
+  
 </script>
 		
 		

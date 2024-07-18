@@ -54,58 +54,35 @@ public class adminHandler {
   
   
   // 운영자 유저가 메시지를 보내면 발생하는 이벤트
-  /*
   @OnMessage
   public void handleMessage(String message, Session userSession) throws IOException {
-
-	  String[] split = message.split("#####", 2);
-    // 앞은 key 데이터
-    String key = split[0];
-    // 뒤 정보는 메시지
-    String msg = split[1];
-    // 일반 유저의 key로 탐색후 메시지 전송
-    UserHandler.sendMessage(key, msg);
-  }
-  
-  */
-  
-  @OnMessage
-  public void handleMessage(String message, Session userSession) throws IOException {
-      // 메시지를 "#####"로 나눕니다.
+      // 메시지를 "#####"로 나누기.
       String[] split = message.split("#####", 2);
       
-      // split 배열의 길이를 확인하여 오류를 방지합니다.
+      // split 배열의 길이를 확인하여 오류를 방지
       if (split.length < 2) {
-          // 배열의 길이가 2보다 작으면 예외를 발생시키지 않고 로그를 남깁니다.
+          // 배열의 길이가 2보다 작으면 예외를 발생시키지 않고 로그
           System.err.println("Invalid message format: " + message);
-          return;  // 처리를 중단하고 반환합니다.
+          return;  // 처리를 중단후 반환
+      }else {
+    	  
+
+          // 앞은 key 데이터
+          String key = split[0];
+          // 뒤 정보는 메시지
+          String msg = split[1];
+          
+          // 일반 유저의 key로 탐색 후 메시지 전송
+          UserHandler.sendMessage(key, msg);
+    	  
+    	  
+          System.err.println("성공: " + message);
+          System.err.println("key: " + key);
+          System.err.println("msg: " + msg);
+          //분리 성공!
       }
       
-      // 앞은 key 데이터
-      String key = split[0];
-      // 뒤 정보는 메시지
-      String msg = split[1];
-      
-      // 일반 유저의 key로 탐색 후 메시지 전송
-      UserHandler.sendMessage(key, msg);
   }
-  
-  
-  //수정필요
-  //바이너리 데이터 들어오면 호출(이미지 전송)
-  @OnMessage
-  public void processUpload(ByteBuffer msg, boolean last, Session session) {
-      
-      while(msg.hasRemaining()){
-          try {
-              bos.write(msg.get());
-          } catch (IOException e) {
-              e.printStackTrace();
-          }
-      }
-  }
-
-
   
   
   // 접속이 끊기면 위 운영자 세션을 null 처리
@@ -113,6 +90,7 @@ public class adminHandler {
   public void handleClose(Session userSession) {
     admin = null;
   }
+  
   // 운영자 유저로 메시지를 보내는 함수
   private static void send(String message) {
     if (admin != null) {
