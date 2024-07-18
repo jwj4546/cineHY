@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hy.myapp.payment.model.service.PaymentServiceImpl;
 import com.hy.myapp.payment.model.vo.PaymentVO;
@@ -36,9 +37,20 @@ public class PaymentController {
 		
 	}
 	
+	@ResponseBody
 	@PostMapping("payment/validate")
 	public Payment validatePayment(@RequestBody PaymentVO request) throws IamportResponseException, IOException {
 		log.info("이게 뭔데 : {}", request);
+		log.info("asd {}", paymentServiceImpl.validatePayment(request));
 		return paymentServiceImpl.validatePayment(request);
 	}
+	
+	@ResponseBody
+	@PostMapping("savePay")
+	public String savePay(@RequestBody Payment payment) {
+		
+		return paymentServiceImpl.savePay(payment) > 0 ? "true" : "false";
+	}
+	
+	
 }

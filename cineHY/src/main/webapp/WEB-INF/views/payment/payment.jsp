@@ -287,10 +287,133 @@
                 }
             });
         });
-        
-    
-    
-	   
     </script>
+    
+    
+    <script>
+    
+    // 문서가 로딩되면 사전 검증을 위한 결제 데이터 insert
+	    $(document).ready(function () {
+	        var merchant_uid = "O" + new Date().getTime();
+	        var totalPrice = $("#totalPrice").text();
+	
+	        $.ajax({
+	            url: "payment/prepare",
+	            method: "post",
+	            contentType: "application/json",
+	            data: JSON.stringify({
+	                merchant_uid: merchant_uid, // 가맹점 주문번호
+	                amount: totalPrice // 결제 예정금액
+	            })
+	        });
+	    }
+    	
+	    
+	    
+	    
+	    
+	    // 결제 버튼 클릭시 결제 진행
+	    
+	    $("#orderBtn").on("click", function () {
+                var userid = $("#userid").val();
+                var username = $("#username").val();
+       
+                var merchant_uid = "O" + new Date().getTime(); // 고유한 주문번호 생성 
+ 
+                var IMP = window.IMP;
+                IMP.init('impXXXXX'); // 가맹점 식별코드 입력 
+
+                IMP.request_pay({
+                    pg: "html5_inicis",           // 등록된 pg사 (적용된 pg사는 KG이니시스)
+                    pay_method: "card",           // 결제방식: card(신용카드), trans(실시간계좌이체), vbank(가상계좌), phone(소액결제)
+                    merchant_uid: merchant_uid,   // 주문번호
+                    name: gname,                  // 상품명
+                    amount: totalPrice,           // 금액
+                    buyer_name: username,         // 주문자
+                    buyer_tel: phone,             // 전화번호 (필수입력)
+                    buyer_addr: addr,    		  // 주소
+                    buyer_postcode: post          // 우편번호
+                }, function (rsp) {
+                    if (rsp.success) {
+                    	$.ajax({
+                            url: "payment/validate",
+                            method: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify({
+                                imp_uid: rsp.imp_uid,
+                                merchant_uid: rsp.merchant_uid,
+                            }),
+                        }).done(function (data) {
+                        	var mesg = '결제가 완료되었습니다.';
+                        	 var buyerInfo = {
+                                     "merchant_uid": rsp.merchant_uid,
+                                     "userid": rsp.buyer_name,
+                                     "pay_method": rsp.pay_method,
+                                     "name": rsp.name,
+                                     "amount": rsp.paid_amount,
+                                     "phone": rsp.buyer_tel,
+                                     "addr": rsp.buyer_addr,
+                                     "post": rsp.buyer_postcode,
+                                     "recipient": recipient
+                                 };
+                        	  $.ajax({
+                                  type: "post",
+                                  url: "save_buyerInfo",
+                                  contentType: "application/json",
+                                  data: JSON.stringify(buyerInfo),
+                                  success: function (response) {
+                                      console.log("결제정보 저장 완료");
+                                  }
+                              });
+                        	 
+                        	  var orderInfo = {
+                                      "merchant_uid": rsp.merchant_uid,
+                                      "userid": userid,
+                                      "gcode": rsp.pay_method,
+                                      "gname": rsp.name,
+                                      "gprice": totalPrice,
+                                      "gimage": $("#gimage").val(),
+                                      "gcolor": $("#gcolor").val(),
+                                      "gsize": $("#gsize").val(),
+                                      "gamount": $("#gamount").val(),
+                                      "recipient": recipient,
+                                      "post": rsp.buyer_postcode,
+                                      "addr": rsp.buyer_addr,
+                                      "phone": rsp.buyer_tel,
+                                      "cartid": $("#cartid").val()
+                                  };
+
+                                  $.ajax({
+                                      type: "post",
+                                      url: "save_orderInfo",
+                                      contentType: "application/json",
+                                      data: JSON.stringify(orderInfo),
+                                      success: function (response) {
+                                          console.log("주문완료");
+                                          Swal.fire({
+                                              text: mesg,
+                                              icon: 'success',
+                                              confirmButtonColor: '#3085d6',
+                                              button: {
+                                                  text: '확인',
+                                                  closeModal: true
+                                              }
+                                          }).then(() => {
+                                              window.location.href = 'orderDone?merchant_uid=' + response;
+                                          });
+                                      }
+                                  });
+                              });
+                          } else {
+                              var mesg = '결제를 실패하였습니다.';
+                              alert(mesg);
+                          }
+                      });
+                  });
+    </script>
+    
+    
+    
+    
 </body>
 </html>

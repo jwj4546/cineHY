@@ -2,7 +2,29 @@
 <!DOCTYPE mapper 
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="paymentMapper">
+<mapper namespace="com.hy.myapp.payment.model.repository.PaymentRepository">
 
+	<insert id="savePay" parameterType="payment">
+	
+		INSERT 
+		   INTO
+       				 TB_PAYMENT
+        			(
+        			MERCHANT_UID, 
+        			USER_ID, 
+			        PAY_METHOD,
+			        AMOUNT, 
+			        PHONE_NO
+			        )
+		VALUES
+			        (
+			        SEQ_PNO.NEXTVAL,
+			        #{userId},
+			        #{payMethod},
+			        #{amount},
+			        #{phoneNo}
+			        )
+			        
+	</insert>
 
 </mapper>
