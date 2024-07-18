@@ -16,7 +16,10 @@ import com.siot.IamportRestClient.request.PrepareData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class PaymentServiceImpl implements PaymentService {
 
 	private IamportClient api;
@@ -33,6 +36,8 @@ public class PaymentServiceImpl implements PaymentService {
 		PrepareData prepareData = new PrepareData(request.getMerchantUid(), request.getAmount());
 		api.postPrepare(prepareData);			// 사전 등록 API
 		
+		//log.info("이게 뭔데 : {}", request.getMerchantUid());
+		
 		prePaymentRepository.save(request);			// 주문번호와 결제 예정 금액 DB 저장
 		
 	}
@@ -47,6 +52,8 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		IamportResponse<Payment> iamportResponse = api.paymentByImpUid(request.getImpUid());
 		BigDecimal paidAmount = iamportResponse.getResponse().getAmount();			// 사용자가 실제 결제한 금액
+		
+		//log.info("이게 뭔데 : {}", request.getImpUid());
 		
 		if(preAmount.compareTo(paidAmount) == 0) {
 			CancelData cancelData = cancelPayment(iamportResponse);
