@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Payment {
+public class Pay {
 
 	private String merchantUid;
 	private String userId;

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hy.myapp.payment.model.service.PaymentServiceImpl;
+import com.hy.myapp.payment.model.vo.Pay;
 import com.hy.myapp.payment.model.vo.PaymentVO;
 import com.hy.myapp.payment.model.vo.PrePaymentVO;
 import com.siot.IamportRestClient.exception.IamportResponseException;
@@ -47,9 +48,9 @@ public class PaymentController {
 	
 	@ResponseBody
 	@PostMapping("savePay")
-	public String savePay(@RequestBody Payment payment) {
+	public String savePay(@RequestBody Pay pay) {
 		
-		return paymentServiceImpl.savePay(payment) > 0 ? "true" : "false";
+		return paymentServiceImpl.savePay(pay) > 0 ? "true" : "false";
 	}
 	
 	

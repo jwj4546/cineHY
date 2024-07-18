@@ -105,6 +105,9 @@
 
 	<div class="text-right mt-3">
         <h5>결제 금액: <span id="total"></span>원</h5>
+        <input type="hidden" id="userId" value="${ sessionScope.loginUser.userId }" />
+        <input type="hidden" id="userName" value="${ sessionScope.loginUser.userName }" />
+        <input type="hidden" id="phoneNo" value="${ sessionScope.loginUser.phoneNo }" />
     </div>
 
         <div class="text-center mt-4">
@@ -129,12 +132,14 @@
     					 + '<td style="text-align:center; width:200px;"><img src="' + list.changeImage + '" style="height:100px; width=auto;"/></td>'
     					 + '<td>' 
     					 + list.productName
-    					 + '<input type="hidden" name="productPrice" class="productPrice" value="' + list.productPrice + '" />'
-    					 + '<input type="hidden" name="cartAmount" class="cartAmount" value="' + list.cartAmount + '" />'
-    					 + '<input type="hidden" name="oneTotal" class="oneTotal" value="' + (list.productPrice * list.cartAmount) + '" />'
+    					 + '<input type="hidden" class="productId" value="' + list.productId + '" />'
+    					 + '<input type="hidden" class="productPrice" value="' + list.productPrice + '" />'
+    					 + '<input type="hidden" class="productName" value="' + list.productName + '" />'
+    					 + '<input type="hidden" class="cartAmount" value="' + list.cartAmount + '" />'
+    					 + '<input type="hidden" class="oneTotal" value="' + (list.productPrice * list.cartAmount) + '" />'
     					 + '</td>'
     					 + '<td>' 
-    					 + formatter.format(list.productPrice) 
+    					 + formatter.format(list.productPrice)
     					 + '원</td>'
     					 + '<td>' + list.cartAmount + '</td>'
     					 + '<td>' + formatter.format((list.productPrice * list.cartAmount)) + '원</td>'
@@ -172,15 +177,15 @@
     	// 결제 버튼 클릭시
     	$("#orderBtn").on("click", function() {
 			
+    		
+    		
     		// 사전검증
    	    	var merchant_uid = "O" + new Date().getTime();
    	    	var totalPrice = $("#totalPrice").val();
    	    	var productName = $(".productName").val();
-   	    	//var userName = $("#userName").val();
-   	    	var userPhone = $("#userPhone").val();
-   	    	var userAddr = $("#userAddr").val();
-   	    	var userPostCode = $("#userPostcode").val();
-   	    	var changeImage = $(".changeImage").attr("src");
+   	    	var userId = $("#userId").val();
+   	    	var userName = $("#userName").val();
+   	    	var phoneNo = $("#phoneNo").val();
    	    	var day = new Date();
    	    	var productId = $(".productId").val();
    	    	
@@ -245,7 +250,7 @@
 								"userName" : rsp.buyer_name,
 								"pay_method" : rsp.pay_method,
 								"productName" : rsp.name,
-								"amount" : rsp.paid.amount,
+								"amount" : rsp.amount,
 								"phoneNo" : rsp.buyer_tel,
 								"receipt" : rsp.receipt_url
 						};
@@ -269,7 +274,7 @@
 								"payMethod" : rsp.pay_method,
 								"productId" : rsp.product_id,
 								"productName" : rsp.name,
-								"amount" : rsp.paid.amount,
+								"amount" : rsp.amount,
 								"movieCode" : rsp.movie_code,
 								"movieTitle" : rsp.movie_title,
 								"price" : rsp.price,

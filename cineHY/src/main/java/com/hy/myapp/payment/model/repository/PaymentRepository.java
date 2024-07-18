@@ -2,11 +2,12 @@ package com.hy.myapp.payment.model.repository;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.siot.IamportRestClient.response.Payment;
+import com.hy.myapp.payment.model.vo.Pay;
+
 
 @Mapper
 public interface PaymentRepository {
 
-	int savePay(Payment payment);
+	int savePay(Pay pay);
 
 }

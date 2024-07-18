@@ -15,7 +15,7 @@
   		<typeAlias type="com.hy.myapp.movieSchedule.model.vo.MovieScheduleVO" alias="movieScheduleVO" />
   		<typeAlias type="com.hy.myapp.theater.model.vo.Theater" alias="theater" />
   		<typeAlias type="com.hy.myapp.screen.model.vo.Screen" alias="screen" />
-  		<typeAlias type="com.hy.myapp.payment.model.vo.Payment" alias="payment"/>
+  		<typeAlias type="com.hy.myapp.payment.model.vo.Pay" alias="payment"/>
   		<typeAlias type="com.hy.myapp.payment.model.vo.PrePaymentVO" alias="prePayment"/>
   		<typeAlias type="com.hy.myapp.product.model.vo.ProductVO" alias="product"/>
   		<typeAlias type="com.hy.myapp.cart.model.vo.CartVO" alias="cart"/>

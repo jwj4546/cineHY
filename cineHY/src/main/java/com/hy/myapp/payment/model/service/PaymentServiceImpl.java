@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.hy.myapp.payment.model.repository.PaymentRepository;
 import com.hy.myapp.payment.model.repository.PrePaymentRepository;
+import com.hy.myapp.payment.model.vo.Pay;
 import com.hy.myapp.payment.model.vo.PaymentVO;
 import com.hy.myapp.payment.model.vo.PrePaymentVO;
 import com.siot.IamportRestClient.IamportClient;
@@ -43,7 +44,7 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	
 	public PaymentServiceImpl() {
-		this.api = new IamportClient("8006731832536307", "Rzaw0rU4BFImk2cqDjAGXcGywGGgAzLfy16909OPBxtvdxzEe1zzWonqmoQwdbiJN45sSaGqTXc1BMJs");
+		this.api = new IamportClient(key, secret);
 	}
 
 	public void postPrepare(PrePaymentVO request) throws IamportResponseException, IOException {
@@ -67,6 +68,7 @@ public class PaymentServiceImpl implements PaymentService {
 		BigDecimal paidAmount = iamportResponse.getResponse().getAmount();			// 사용자가 실제 결제한 금액
 		
 		//log.info("이게 뭔데 : {}", request.getImpUid());
+
 		
 		if(!(preAmount.compareTo(paidAmount) == 0)) {
 			CancelData cancelData = cancelPayment(iamportResponse);
@@ -80,7 +82,7 @@ public class PaymentServiceImpl implements PaymentService {
 		return new CancelData(response.getResponse().getImpUid(), true);
 	}
 
-	public int savePay(Payment payment) {
-		return paymentRepository.savePay(payment);
+	public int savePay(Pay pay) {
+		return paymentRepository.savePay(pay);
 	}
 }
