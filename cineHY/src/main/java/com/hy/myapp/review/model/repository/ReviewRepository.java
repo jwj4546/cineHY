@@ -32,7 +32,7 @@ public class ReviewRepository {
 	}
 
 	public int deleteReview(SqlSessionTemplate sqlSession, int reviewNo) {
-		return sqlSession.update("reviewMapper.deleteReview", reviewNo);
+		return sqlSession.delete("reviewMapper.deleteReview", reviewNo);
 	}
 
 	public List<Review> selectMyReview(SqlSessionTemplate sqlSession, String userId) {
