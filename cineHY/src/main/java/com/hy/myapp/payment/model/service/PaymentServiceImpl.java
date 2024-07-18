@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import com.hy.myapp.payment.model.repository.PrePaymentRepository;
@@ -16,24 +18,37 @@ import com.siot.IamportRestClient.request.PrepareData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
+@PropertySource("classpath:api.properties")
 public class PaymentServiceImpl implements PaymentService {
 
 	private IamportClient api;
 	
 	@Autowired
 	private PrePaymentRepository prePaymentRepository;
+	
+	@Value("${ IAMPORT_API }")
+	private String API_KEY;
+	
+	@Value("${IAMPORT_API_SECRET")
+	private String API_SECRET;
+	
 
 	
 	public PaymentServiceImpl() {
-		this.api = new IamportClient("12312", "123123");
+		this.api = new IamportClient(API_KEY, API_SECRET);
 	}
 
 	public void postPrepare(PrePaymentVO request) throws IamportResponseException, IOException {
 		PrepareData prepareData = new PrepareData(request.getMerchantUid(), request.getAmount());
 		api.postPrepare(prepareData);			// 사전 등록 API
 		
-		prePaymentRepository.save(request);			// 주문번호와 결제 에정 금액 DB 저장
+		//log.info("이게 뭔데 : {}", request.getMerchantUid());
+		
+		prePaymentRepository.save(request);			// 주문번호와 결제 예정 금액 DB 저장
 		
 	}
 
@@ -45,8 +60,14 @@ public class PaymentServiceImpl implements PaymentService {
 		PrePaymentVO prePayment = prePaymentRepository.findById(request.getMerchantUid());
 		BigDecimal preAmount = prePayment.getAmount();			// DB에 저장된 결제요청 금액
 		
+		log.info("이게 뭔데 : {}", prePayment);
+		
 		IamportResponse<Payment> iamportResponse = api.paymentByImpUid(request.getImpUid());
 		BigDecimal paidAmount = iamportResponse.getResponse().getAmount();			// 사용자가 실제 결제한 금액
+		
+		log.info("이게 뭔데 : {}", iamportResponse);
+		
+		//log.info("이게 뭔데 : {}", request.getImpUid());
 		
 		if(preAmount.compareTo(paidAmount) == 0) {
 			CancelData cancelData = cancelPayment(iamportResponse);

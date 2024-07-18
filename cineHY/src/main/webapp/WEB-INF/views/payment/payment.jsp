@@ -170,7 +170,7 @@
     
     // 사전 검증
 	    $(document).ready(function() {
-	    	var merchant_uid = "0" + new Date().getTime();
+	    	var merchant_uid = "O" + new Date().getTime();
 	    	var totalPrice = $("#totalPrice").text();
 	    	
 	    	$.ajax({

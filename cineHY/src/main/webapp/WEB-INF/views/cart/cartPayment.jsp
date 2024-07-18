@@ -14,6 +14,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+	
 </head>
 <body>
 
@@ -155,7 +156,7 @@
     		}
     	 	document.getElementById("total").innerHTML = total.toLocaleString();
     	 	
-    	 	const totalPrice = document.createElement("input");
+    	 	var totalPrice = document.createElement("input");
     	 	totalPrice.setAttribute("type", "hidden");
     	 	totalPrice.setAttribute("name", "total");
     	 	totalPrice.setAttribute("value", oneTotal);
@@ -164,13 +165,17 @@
     	 	document.querySelector("#total").append(totalPrice);
     	});
     	
+    	</script>
+    	
+    	<script>
     	
     	// 결제 버튼 클릭시
     	$("#orderBtn").on("click", function() {
 			// 사전검증
-   	    	var merchant_uid = "0" + new Date().getTime();
-   	    	var totalPrice = $("#totalPrice").value;
-   	    	
+   	    	var merchant_uid = "O" + new Date().getTime();
+   	    	var totalPrice = $("#totalPrice").val();
+   	    	console.log(totalPrice);
+   	    	console.log(merchant_uid);
    	    	$.ajax({
    	    		url : "payment/prepare",
    	    		method : "post",
@@ -182,7 +187,6 @@
    	    	});
    	    	
    	    	
-   	    	var merchant_uid = "O" + new Date().getTime(); // 고유한 주문번호 생성 
 
             var IMP = window.IMP;
             IMP.init("imp33642125"); // 가맹점 식별코드 입력 
@@ -205,6 +209,9 @@
            
             // 사후 검증
             }, function (rsp) {
+            	console.log(rsp);
+            	console.log(rsp.imp_uid);
+            	console.log(rsp.merchant_uid);
                 if (rsp.success) {
 					$.ajax({
 						url : "payment/validate",
@@ -212,8 +219,8 @@
 						contentType : "application/json",
 						data : JSON.stringify({
 							impUid : rsp.imp_uid,
-							merchantUid : rsp.merchant_uid,
-						}),
+							merchantUid : rsp.merchant_uid
+						})
 					}).done(function (data) {
 						// 결제 정보 DB 저장
 						//주문 상품 정보 DB 저장
