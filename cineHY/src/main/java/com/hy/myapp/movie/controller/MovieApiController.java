@@ -38,7 +38,7 @@ public class MovieApiController {
 	
 	private static final String API_URL = "https://api.themoviedb.org/3/movie/";
     private static final String BEARER_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcyMDA2Mjc5Ni41OTIxNDksInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WfXqF4gZs0s7v7N9TyGhAUHP_ut6LgIEjSs_Bge8vH0"; // 여기에 실제 Bearer Token을 입력하세요
-    private static final int TOTAL_PAGES = 20; // 가져올 페이지 수
+    private static final int TOTAL_PAGES = 10; // 가져올 페이지 수
 	
     @GetMapping(value = "nowPlaying", produces = "application/json; charset=UTF-8")
     public String getNowPlayingMovie() throws IOException {

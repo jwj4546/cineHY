@@ -81,7 +81,7 @@
 			</ul>
 		</div>
 		<div class="tab-content" id="pills-tabContent">
-		  <!-- 상영중인 영화 -->
+		  	<!-- 상영중인 영화 -->
 			<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
 				<div class="album py-5 bg-light">
 					<div class="container">
@@ -94,36 +94,37 @@
 		  	
 			</div>
 		 
-		<!-- 상영예정 영화 -->
-		<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
-	  		<div class="album py-5 bg-light">
-				<div class="container">
-				   	<div class="row" id="movieUpList">
-				   	<!-- 영화 출력 -->
-					
+			<!-- 상영예정 영화 -->
+			<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+		  		<div class="album py-5 bg-light">
+					<div class="container">
+					   	<div class="row" id="movieUpList">
+					   	<!-- 영화 출력 -->
+						
+						</div>
 					</div>
-				</div>
-			</div>   
-		</div>  
-		  
-		<!-- 선호도별 추천영화 -->
-		<div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
-			<div class="album py-5 bg-light">
-				<div class="container">
-					<div id="likeMovie-title" class="text-center">
-					<c:choose>
-						<c:when test="${not empty sessionScope.loginUser}">
-							<h4>${sessionScope.loginUser.userNick}님을 위한 추천영화</h4>
-						</c:when>
-						<c:otherwise>
-							<h4>로그인 후 추천영화 리스트를 확인하세요.</h4>
-						</c:otherwise>
-					</c:choose>
-					</div>
-				   	<div class="row" id="movieLikeList">
-				   		
-				   	<!-- 영화 출력 -->
-					
+				</div>   
+			</div>  
+			  
+			<!-- 선호도별 추천영화 -->
+			<div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
+				<div class="album py-5 bg-light">
+					<div class="container">
+						<div id="likeMovie-title" class="text-center">
+						<c:choose>
+							<c:when test="${not empty sessionScope.loginUser}">
+								<h4>${sessionScope.loginUser.userNick}님을 위한 추천영화</h4>
+							</c:when>
+							<c:otherwise>
+								<h4>로그인 후 추천영화 리스트를 확인하세요.</h4>
+							</c:otherwise>
+						</c:choose>
+						</div>
+					   	<div class="row" id="movieLikeList">
+					   		
+					   	<!-- 영화 출력 -->
+						
+						</div>
 					</div>
 				</div>
 			</div>
