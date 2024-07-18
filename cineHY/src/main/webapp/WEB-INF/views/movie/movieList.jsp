@@ -147,14 +147,14 @@
     <script>
 	$(document).ready(function() {
 	    var movieIdList = []; // DB movieCode 리스트 전역 변수로 선언
-		
+		var movieRatings = {};
+	    
 	    function getMovieDB() {
 	        $.ajax({
 	            url: 'movieList/movieDB',
 	            method: 'GET',
 	            dataType: 'json',
 	            success: function(result) {
-	                console.log(result);
 	                movieIdList = result; // movieIdList에 결과 할당
 	            },
 	            error: function() {
@@ -162,26 +162,47 @@
 	            }
 	        });
 	    }
-	
+	    
+	    
+	    function getMovieRatings() {
+	        return $.ajax({
+	            url: 'movieList/movieEnrollList',
+	            method: 'GET',
+	            dataType: 'json',
+	            success: function(response) {
+	                var data = response.data; // response에서 data 배열 가져오기
+	                if (!Array.isArray(data)) {
+	                    data = [data]; // data가 배열이 아닌 경우 배열로 변환
+	                }
+	                data.forEach(function(movie) {
+	                    movieRatings[movie.movieCode] = movie.rating; // movieCode와 rating 매핑
+	                });
+	            },
+	            error: function() {
+	                console.log('데이터를 불러올 수 없습니다.');
+	            }
+	        });
+	    }
+	    
+
 	    function fetchMovies() {
 	        $.ajax({
 	            url: 'movieList/nowPlaying',
 	            method: 'GET',
 	            dataType: 'json',
 	            success: function(data) {
-	                displayMovies(data); //상영중인 영화
-	                displayLikeMovies(data); //선호도별 추천영화
+	                displayMovies(data); // 상영중인 영화
+	                displayLikeMovies(data); // 선호도별 추천영화
 	            },
 	            error: function(jqXHR, textStatus, errorThrown) {
 	                console.error('영화 데이터를 불러오는 중 오류 발생:', textStatus, errorThrown);
 	            }
 	        });
 	    }
-	    
-	
+
 	    function displayMovies(data) {
 	        var movieList = $('#movieList');
-	       	movieList.empty(); // 기존 내용 비우기
+	        movieList.empty(); // 기존 내용 비우기
 	        var rank = 1; // 순위 초기화
 	        for (var j = 0; j < data.length; j++) {
 	            if (data[j].results && data[j].results.length > 0) {
@@ -190,13 +211,14 @@
 	                for (var i = 0; i < movies.length; i++) {
 	                    var movieId = movies[i].id;
 	                    if (movieIdList.includes(movieId)) {
-	                    	//console.log(movies[i].title);
+	                        var rating = movieRatings[movieId] || 'N/A'; // rating 가져오기
+	                        //console.log(rating);
 	                        movieHtml += '<div class="col-md-4">'
 	                            + '<div class="card mb-4 box-shadow">'
 	                            + '<div class="rank">No ' + rank + '</div>'
 	                            + '<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" alt="Card image cap">'
 	                            + '<div class="card-body">'
-	                            + '<h5 class="card-title">' + movies[i].title + '</h5>'
+	                            + '<h5 class="card-title">' + movies[i].title + '<span class="badge text-bg-dark">' + rating + '</span></h5>'
 	                            + '<p class="card-text">' + movies[i].release_date + ' 개봉</p>'
 	                            + '<div class="d-flex justify-content-between align-items-center">'
 	                            + '<div class="btn-group">'
@@ -233,7 +255,7 @@
 	        // DB 회원 선호장르 리스트 전역 변수
 	        var MemberGenre1 = '${sessionScope.loginUser.preGenre1}';
 	        var MemberGenre2 = '${sessionScope.loginUser.preGenre2}';
-			
+
 	        for (var j = 0; j < data.length; j++) {
 	            if (data[j].results && data[j].results.length > 0) {
 	                var likeMovies = data[j].results; // 1페이지에 할당된 영화들
@@ -253,9 +275,11 @@
 	                                    });
 	                                    // 회원의 선호 장르와 영화 장르 비교
 	                                    if (genres.includes(MemberGenre1) || genres.includes(MemberGenre2)) {
+	                                        var likeRating = movieRatings[likeMovieId] || 'N/A'; // rating 가져오기
 	                                        return {
 	                                            movie: movie, // movie[i] 대신 movie 사용
-	                                            genres: genres
+	                                            genres: genres,
+	                                            rating: likeRating // rating 추가
 	                                        };
 	                                    } else {
 	                                        return null;
@@ -267,21 +291,20 @@
 	                }
 	            }
 	        }
-	       
 
 	        // 모든 AJAX 요청이 완료된 후 처리
 	        $.when.apply($, promises).done(function() {
 	            var likeResults = Array.prototype.slice.call(arguments);
 	            var movieLikeHtml = '';
-
 	            likeResults.forEach(function(result) {
 	                if (result !== null && result.movie) {
 	                    var likeMovie = result.movie;
+	                    var likeRating = result.rating; // 각 영화의 rating 가져오기
 	                    movieLikeHtml += '<div class="col-md-4">'
 	                        + '<div class="card mb-4 box-shadow">'
 	                        + '<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + likeMovie.poster_path + '" alt="Card image cap">'
 	                        + '<div class="card-body">'
-	                        + '<h5 class="card-title">' + likeMovie.title + '</h5>'
+	                        + '<h5 class="card-title">' + likeMovie.title + '<span class="badge text-bg-dark">' + likeRating + '</span></h5>'
 	                        + '<p class="card-text">' + likeMovie.release_date + ' 개봉</p>'
 	                        + '<div class="d-flex justify-content-between align-items-center">'
 	                        + '<div class="btn-group">'
@@ -362,11 +385,12 @@
 			    for (var i = 0; i < groupedMovies[releaseDate].length; i++) {
 			        var movie = groupedMovies[releaseDate][i];
 			        var upMovieId = movie.id;
+			        var rating = movieRatings[upMovieId] || 'N/A'; // rating 가져오기
 			        upMovieHtml += '<div class="col-md-4">'
 			            + '<div class="card mb-4 box-shadow">'
 			            + '<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + movie.poster_path + '" alt="Card image cap">'
 			            + '<div class="card-body">'
-			            + '<h5 class="card-title">' + movie.title + '</h5>'
+			            + '<h5 class="card-title">' + movie.title + '<span class="badge text-bg-dark">' + rating + '</span></h5>'
 			            + '<p class="card-text">' + movie.release_date + ' 개봉</p>'
 			            + '<div class="d-flex justify-content-between align-items-center">'
 			            + '<div class="btn-group">'
@@ -395,6 +419,7 @@
 	    
 	
 	    getMovieDB();
+	    getMovieRatings();
 	    fetchMovies();
 	    fetchUpMovies();
 	});
