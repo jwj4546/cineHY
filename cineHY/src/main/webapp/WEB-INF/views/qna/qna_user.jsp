@@ -23,7 +23,7 @@
 		}
 		.card{
 			height: 700px;
-            
+            width: 900px;
 			border-radius: 15px !important;
 			background-color: rgba(0,0,0,0.4) !important;
 		}
@@ -271,6 +271,20 @@
                         </div>
                     </div>
                     <div id="textmsg" class="card-body msg_card_body">
+                    
+                    
+                    
+                    <div class="d-flex justify-content-start mb-4">
+		            		<div class="img_cont_msg">
+		                    	<img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img_msg">
+		                	</div>
+	                        <div class="msg_cotainer">
+	                            <span class="message-text">편하게 문의하세요.</span>
+	                            <span class="msg_time"></span>
+	                            <span class="userID"></span>
+	                        </div>
+	                    </div>
+                    
                         
                         
                     </div>
@@ -296,7 +310,7 @@
   
     
         $(document).ready(function() {
-        	var webSocket = new WebSocket("ws://localhost:82/cineHY/user");
+        	var webSocket = new WebSocket("ws://localhost:82/myapp/user");
             var messageTextArea = document.getElementById("textMessageArea");  
 
             webSocket.onopen = function(message) {
