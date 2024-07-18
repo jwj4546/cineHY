@@ -38,7 +38,7 @@ public class MovieApiController {
 	
 	private static final String API_URL = "https://api.themoviedb.org/3/movie/";
     private static final String BEARER_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcyMDA2Mjc5Ni41OTIxNDksInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WfXqF4gZs0s7v7N9TyGhAUHP_ut6LgIEjSs_Bge8vH0"; // 여기에 실제 Bearer Token을 입력하세요
-    private static final int TOTAL_PAGES = 20; // 가져올 페이지 수
+    private static final int TOTAL_PAGES = 10; // 가져올 페이지 수
 	
     @GetMapping(value = "nowPlaying", produces = "application/json; charset=UTF-8")
     public String getNowPlayingMovie() throws IOException {
@@ -320,5 +320,32 @@ public class MovieApiController {
 	            }
 	        }
 	}
+	
+	@GetMapping(value="search", produces="application/json; charset=UTF-8")
+	public String search(@RequestParam("keyword") String query) throws IOException {
+		
+		OkHttpClient client = new OkHttpClient();
+		List<String> allMoviesResponses = new ArrayList<>();
+
+		for (int pageNumber = 1; pageNumber <= 3; pageNumber++) {
+			Request request = new Request.Builder()
+			  .url("https://api.themoviedb.org/3/search/multi?query="+ query +"&include_adult=false&language=ko-KR&page=" + pageNumber + "&region=KR")
+			  .get()
+			  .addHeader("Authorization", BEARER_TOKEN)
+			  .addHeader("accept", "application/json")
+			  .build();
+
+			try (Response response = client.newCall(request).execute()) {
+                okhttp3.ResponseBody responseBody = response.body();
+                if (responseBody != null) {
+                    allMoviesResponses.add(responseBody.string());
+                }
+            }
+        }
+
+        // 각 응답을 하나의 JSON 배열로 결합
+        String combinedResponse = "[" + String.join(",", allMoviesResponses) + "]";
+        return combinedResponse;
+    }
 	
 }

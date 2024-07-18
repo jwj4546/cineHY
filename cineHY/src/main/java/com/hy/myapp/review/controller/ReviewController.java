@@ -121,12 +121,12 @@ public class ReviewController {
 	    
 	    @ResponseBody
 	    @GetMapping(value = "NoReview", produces = "application/json; charset=UTF-8")
-	    public List<Review> NoReview(@RequestParam(value = "userId", required = false) String userId) {
+	    public List<Review> NoReview(@RequestParam(value = "userId") String userId) {
 	        log.info("userId : {}", userId); // 로그로 userId 확인
 	        List<Review> selectNoReview = reviewService.selectNoReview(userId);
 	        
 	        
-	        log.info("미리뷰 : {}", selectNoReview);
+	        log.info("미작성 리뷰 : {}", selectNoReview);
 			return reviewService.selectNoReview(userId);
 
 	    }

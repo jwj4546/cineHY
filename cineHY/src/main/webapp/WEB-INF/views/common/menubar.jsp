@@ -31,8 +31,8 @@
                     <a class="nav-link " href="productlist">스토어</a>
                 </li>
             </ul>
-            <form class="form-inline mt-2 mt-md-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <form class="form-inline mt-2 mt-md-0" action="multiSearch">
+                <input type="text" class="form-control" name="keyword" id="keyword" value="" onkeypress="handleKeyPress(event)" placeholder="영화제목 또는 영화인">
                 <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
             </form>
 

@@ -271,20 +271,8 @@
                         </div>
                     </div>
                     <div id="textmsg" class="card-body msg_card_body">
-                        <div class="d-flex justify-content-start mb-4">
-                            <div class="img_cont_msg">
-                                <img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img_msg">
-                            </div>
-                            <div id="startmsg" class="msg_cotainer">
-                                huuuuuu
-                                <span class="msg_time">8:40 AM, Today</span>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-end mb-4">
-                            <div id="endmsg" class="msg_cotainer_send">
-                                <span class="msg_time_send">8:55 AM, Today</span>
-                            </div>
-                        </div>
+                        
+                        
                     </div>
                     <div class="card-footer">
                         <div class="input-group">
@@ -323,41 +311,35 @@
                 console.log('연결 문제');
             };
 
-            webSocket.onmessage = e=> {  //메세지 받으면 출력
+            webSocket.onmessage =function(message) {  //메세지 받으면 출력
             	
-            	const node = JSON.parse(e.data);
+            	
+            	console.log("message:",message);
+            
+            	const node = message.data;  //여기가문제
                 const userId = node.userId;
-				const message = node.message;
-				//console.log("message",message)
+				const sendmessage = node.message;
+				console.log("node",node);
                 
-                    let msgHTML = `
-                    <div class="d-flex justify-content-end mb-4">
-                        <div class="msg_cotainer_send">
-                            ${message}
-                            <span class="msg_time_send">, Today</span>
-                        </div>
-                    </div>`;
-                    $("#textmsg").append(msgHTML);
+				const msgHTML = $(`
+	                    <div class="d-flex justify-content-start mb-4">
+		            		<div class="img_cont_msg">
+		                    	<img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img_msg">
+		                	</div>
+	                        <div class="msg_cotainer">
+	                            <span class="message-text"></span>
+	                            <span class="msg_time"></span>
+	                            <span class="userID"></span>
+	                        </div>
+	                    </div>
+	                `);
+	                msgHTML.find('.message-text').text(node);
+	                //msgHTML.find('.userID').text(userId);
+	                //msgHTML.find('.msg_time').text(currentTime);
+	                $("#textmsg").append(msgHTML);
                
             };
-        /*
-        function sendMessage() {
-            const message = document.getElementById('textMessageArea').value;
-          	console.log("message",message)
-            webSocket.send(message); //메세지 전송하고
-            
-          //현재 화면에도 출력
-            let msgHTML = ` 						
-            <div class="d-flex justify-content-end mb-4">
-                <div class="msg_cotainer_send">
-                    ${message}
-                    <span class="msg_time_send">, Today</span>
-                </div>
-            </div>`;
-            $("#textmsg").append(msgHTML);
-            document.getElementById('textMessageArea').value = '';
-        }
-        */
+       
         
         $(document).on("click", "#sendBtn", function() {
         	const message = document.getElementById('textMessageArea').value;
@@ -377,6 +359,7 @@
                 `);
                 msgHTML.find('.message-text').text(message);
                 $("#textmsg").append(msgHTML);
+                message.value = "";  
             }
             send();
         });
