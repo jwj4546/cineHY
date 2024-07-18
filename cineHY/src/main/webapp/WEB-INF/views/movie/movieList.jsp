@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -109,7 +110,16 @@
 		<div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
 			<div class="album py-5 bg-light">
 				<div class="container">
-					<div id="likeMovie-title" class="text-center"><h4>${sessionScope.loginUser.userNick}님을 위한 추천영화</h4></div>
+					<div id="likeMovie-title" class="text-center">
+					<c:choose>
+						<c:when test="${not empty sessionScope.loginUser}">
+							<h4>${sessionScope.loginUser.userNick}님을 위한 추천영화</h4>
+						</c:when>
+						<c:otherwise>
+							<h4>로그인 후 추천영화 리스트를 확인하세요.</h4>
+						</c:otherwise>
+					</c:choose>
+					</div>
 				   	<div class="row" id="movieLikeList">
 				   		
 				   	<!-- 영화 출력 -->
@@ -282,7 +292,7 @@
 
 	            // 모든 데이터를 처리한 후, movieHtml이 비어 있으면 '현재 상영 중인 영화가 없습니다.' 메시지를 추가
 	            if (movieLikeList.children().length === 0) {
-	                movieLikeList.html('<li>현재 상영 중인 영화가 없습니다.</li>');
+	                movieLikeList.html('<p class="text-center">추천영화가 없습니다.</p>');
 	            }
 	        });
 	    }
@@ -368,7 +378,7 @@
 
 	        // 모든 데이터를 처리한 후, movieUpHtml이 비어 있으면 '현재 상영 중인 영화가 없습니다.' 메시지를 추가
 	        if (movieUpList.children().length === 0) {
-	            movieUpList.html('<li>현재 상영 중인 영화가 없습니다.</li>');
+	            movieUpList.html('<p class="text-center">현재 상영 중인 영화가 없습니다.</p>');
 	        }
 	    }
 	    
