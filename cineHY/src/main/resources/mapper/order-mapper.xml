@@ -19,14 +19,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			        AMOUNT,
 			        MOVIE_CODE,
 			        MOVIE_TITLE,
-			        PRICE, 
-			        PHONE_NO, 
+			        PRICE,
+			        PHONE_NO,
 			        ORDER_DAY
 			        )
 		VALUES
         			(
         			ONO_SEQ.NEXTVAL,
-			        #{cartNo}
+			        #{cartNo},
 			        #{userId},
 			        #{userName},
 			        #{productId},
@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			        #{phoneNo},
 			        SYSDATE
 			        )
-			        ;
+			        
 	</insert>
 	
 </mapper>

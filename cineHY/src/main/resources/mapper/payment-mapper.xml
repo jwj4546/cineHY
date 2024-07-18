@@ -10,10 +10,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		   INTO
        				 TB_PAYMENT
         			(
-        			MERCHANT_UID, 
-        			USER_ID, 
+        			MERCHANT_UID,
+        			USER_ID,
 			        PAY_METHOD,
-			        AMOUNT, 
+			        AMOUNT,
 			        PHONE_NO
 			        )
 		VALUES
