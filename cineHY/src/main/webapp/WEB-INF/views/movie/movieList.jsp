@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,6 +50,11 @@
        	justify-content: center;
        	margin-top : 50px;
     }
+    
+    #likeMovie-title {
+    	margin-bottom: 50px;
+    	font-weight: 500;
+    }
 	
 }
      
@@ -89,7 +95,7 @@
 			</div>
 		 
 		<!-- 상영예정 영화 -->
-		<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">...
+		<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
 	  		<div class="album py-5 bg-light">
 				<div class="container">
 				   	<div class="row" id="movieUpList">
@@ -100,12 +106,27 @@
 			</div>   
 		</div>  
 		  
-		  
 		<!-- 선호도별 추천영화 -->
-		<div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">...</div>
-		
-		
-		
+		<div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
+			<div class="album py-5 bg-light">
+				<div class="container">
+					<div id="likeMovie-title" class="text-center">
+					<c:choose>
+						<c:when test="${not empty sessionScope.loginUser}">
+							<h4>${sessionScope.loginUser.userNick}님을 위한 추천영화</h4>
+						</c:when>
+						<c:otherwise>
+							<h4>로그인 후 추천영화 리스트를 확인하세요.</h4>
+						</c:otherwise>
+					</c:choose>
+					</div>
+				   	<div class="row" id="movieLikeList">
+				   		
+				   	<!-- 영화 출력 -->
+					
+					</div>
+				</div>
+			</div>
 		</div>
 	    
     </main>
@@ -114,8 +135,8 @@
     
     <script>
 	$(document).ready(function() {
-	    var movieIdList = []; // 전역 변수로 선언
-	
+	    var movieIdList = []; // DB movieCode 리스트 전역 변수로 선언
+		
 	    function getMovieDB() {
 	        $.ajax({
 	            url: 'movieList/movieDB',
@@ -124,7 +145,6 @@
 	            success: function(result) {
 	                console.log(result);
 	                movieIdList = result; // movieIdList에 결과 할당
-	                fetchMovies(); // 데이터 로딩 후 영화 목록 가져오기
 	            },
 	            error: function() {
 	                console.log('데이터를 불러올 수 없습니다.');
@@ -138,14 +158,15 @@
 	            method: 'GET',
 	            dataType: 'json',
 	            success: function(data) {
-	                displayMovies(data);
-	                console.log(data);
+	                displayMovies(data); //상영중인 영화
+	                displayLikeMovies(data); //선호도별 추천영화
 	            },
 	            error: function(jqXHR, textStatus, errorThrown) {
 	                console.error('영화 데이터를 불러오는 중 오류 발생:', textStatus, errorThrown);
 	            }
 	        });
 	    }
+	    
 	
 	    function displayMovies(data) {
 	        var movieList = $('#movieList');
@@ -191,7 +212,94 @@
 	            movieList.html('<li>현재 상영 중인 영화가 없습니다.</li>');
 	        }
 	    }
+	    
+	    
+	    function displayLikeMovies(data) {
+	        var movieLikeList = $('#movieLikeList');
+	        movieLikeList.empty(); // 기존 내용 비우기
+	        var promises = [];
+
+	        // DB 회원 선호장르 리스트 전역 변수
+	        var MemberGenre1 = '${sessionScope.loginUser.preGenre1}';
+	        var MemberGenre2 = '${sessionScope.loginUser.preGenre2}';
+			
+	        for (var j = 0; j < data.length; j++) {
+	            if (data[j].results && data[j].results.length > 0) {
+	                var likeMovies = data[j].results; // 1페이지에 할당된 영화들
+	                for (var i = 0; i < likeMovies.length; i++) {
+	                    (function(movie) {
+	                        var likeMovieId = movie.id; // API 영화ID (movieCode)
+	                        if (movieIdList.includes(likeMovieId)) {
+	                            promises.push(
+	                                $.ajax({
+	                                    url: 'movieList/details',
+	                                    method: 'get',
+	                                    dataType: 'json',
+	                                    data: { movie_id: likeMovieId }
+	                                }).then(function(movieDetails) {
+	                                    var genres = movieDetails.genres.map(function(genre) {
+	                                        return genre.name;
+	                                    });
+	                                    // 회원의 선호 장르와 영화 장르 비교
+	                                    if (genres.includes(MemberGenre1) || genres.includes(MemberGenre2)) {
+	                                        return {
+	                                            movie: movie, // movie[i] 대신 movie 사용
+	                                            genres: genres
+	                                        };
+	                                    } else {
+	                                        return null;
+	                                    }
+	                                })
+	                            );
+	                        }
+	                    })(likeMovies[i]); // IIFE 사용
+	                }
+	            }
+	        }
+	       
+
+	        // 모든 AJAX 요청이 완료된 후 처리
+	        $.when.apply($, promises).done(function() {
+	            var likeResults = Array.prototype.slice.call(arguments);
+	            var movieLikeHtml = '';
+
+	            likeResults.forEach(function(result) {
+	                if (result !== null && result.movie) {
+	                    var likeMovie = result.movie;
+	                    movieLikeHtml += '<div class="col-md-4">'
+	                        + '<div class="card mb-4 box-shadow">'
+	                        + '<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + likeMovie.poster_path + '" alt="Card image cap">'
+	                        + '<div class="card-body">'
+	                        + '<h5 class="card-title">' + likeMovie.title + '</h5>'
+	                        + '<p class="card-text">' + likeMovie.release_date + ' 개봉</p>'
+	                        + '<div class="d-flex justify-content-between align-items-center">'
+	                        + '<div class="btn-group">'
+	                        + '<a href="movieDetails?movieId=' + likeMovie.id + '" class="btn btn-sm btn-outline-secondary">View</a>'
+	                        + '<form action="reservationById" method="get">'
+	                        + '<input type="hidden" value="' + likeMovie.id + '" name="movieId">'
+	                        + '<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
+	                        + '</form>'
+	                        + '</div>'
+	                        + '<small class="text-muted">인기도 ' + likeMovie.popularity + '</small>'
+	                        + '</div>'
+	                        + '</div>'
+	                        + '</div>'
+	                        + '</div>';
+	                }
+	            });
+
+	            movieLikeList.append(movieLikeHtml);
+
+	            // 모든 데이터를 처리한 후, movieHtml이 비어 있으면 '현재 상영 중인 영화가 없습니다.' 메시지를 추가
+	            if (movieLikeList.children().length === 0) {
+	                movieLikeList.html('<p class="text-center">추천영화가 없습니다.</p>');
+	            }
+	        });
+	    }
+	    
+	    
 	
+	  	//상영예정작 영화 API
 	    function fetchUpMovies() {
 	        $.ajax({
 	            url: 'movieList/upComming',
@@ -270,7 +378,7 @@
 
 	        // 모든 데이터를 처리한 후, movieUpHtml이 비어 있으면 '현재 상영 중인 영화가 없습니다.' 메시지를 추가
 	        if (movieUpList.children().length === 0) {
-	            movieUpList.html('<li>현재 상영 중인 영화가 없습니다.</li>');
+	            movieUpList.html('<p class="text-center">현재 상영 중인 영화가 없습니다.</p>');
 	        }
 	    }
 	    
