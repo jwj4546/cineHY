@@ -242,6 +242,8 @@
 	    fetchMovies();
 	    fetchUpMovies();
 	});
+	
+	
 	    
 	    
 	    

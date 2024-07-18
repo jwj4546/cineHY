@@ -55,6 +55,15 @@
     	margin-bottom: 50px;
     	font-weight: 500;
     }
+    
+    #noMovieLike {
+    	margin: 0 auto;
+    	width: 200px;
+    }
+    
+    #noMovieLike img { 
+    	width: 100%;
+    }
 	
 }
      
@@ -117,6 +126,7 @@
 							</c:when>
 							<c:otherwise>
 								<h4>로그인 후 추천영화 리스트를 확인하세요.</h4>
+								<div id="noMovieLike"><img alt="noMovieLike" src="${pageContext.servletContext.contextPath }/resources/images/noMovieLike2.png"></div>
 							</c:otherwise>
 						</c:choose>
 						</div>

@@ -321,4 +321,31 @@ public class MovieApiController {
 	        }
 	}
 	
+	@GetMapping(value="search", produces="application/json; charset=UTF-8")
+	public String search(@RequestParam("keyword") String query) throws IOException {
+		
+		OkHttpClient client = new OkHttpClient();
+		List<String> allMoviesResponses = new ArrayList<>();
+
+		for (int pageNumber = 1; pageNumber <= 3; pageNumber++) {
+			Request request = new Request.Builder()
+			  .url("https://api.themoviedb.org/3/search/multi?query="+ query +"&include_adult=false&language=ko-KR&page=" + pageNumber + "&region=KR")
+			  .get()
+			  .addHeader("Authorization", BEARER_TOKEN)
+			  .addHeader("accept", "application/json")
+			  .build();
+
+			try (Response response = client.newCall(request).execute()) {
+                okhttp3.ResponseBody responseBody = response.body();
+                if (responseBody != null) {
+                    allMoviesResponses.add(responseBody.string());
+                }
+            }
+        }
+
+        // 각 응답을 하나의 JSON 배열로 결합
+        String combinedResponse = "[" + String.join(",", allMoviesResponses) + "]";
+        return combinedResponse;
+    }
+	
 }
