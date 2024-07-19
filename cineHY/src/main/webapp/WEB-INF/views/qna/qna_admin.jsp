@@ -369,7 +369,7 @@
         });
     });
 
-    var webSocket = new WebSocket("ws://localhost:82/myapp/admin");
+    var webSocket = new WebSocket("ws://localhost:82/cineHY/admin");
     
 
     webSocket.onopen = function(message) {
@@ -421,7 +421,7 @@
         	*/
             
         } 
-        else if (node.status === "message") {  //메세지 받음  같은 유저한테만 어떻게 보냄..
+        else if (node.status === "message") {  //메세지 받음
         	
             const msgHTML = $(`
                     <div class="d-flex justify-content-start mb-4">

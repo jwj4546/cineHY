@@ -391,7 +391,7 @@
 				
 				function connect(){
 					//접속주소(매핑값)
-					const uri='ws://localhost:82/cineHY/group';
+					const uri='ws://localhost:82/myapp/group';
 					phone = new WebSocket(uri);
 					
 					phone.onopen =()=>{ //소켓이 연결되었을때 수행되는 핸들러
