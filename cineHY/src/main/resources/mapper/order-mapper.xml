@@ -9,12 +9,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   		   INTO
         			TB_ORDER
        				 (
-			        ORDER_ID,
+			        MERCHANT_UID,
 			        CART_NO,
 			        USER_ID,
 			        USER_NAME,
 			        PRODUCT_ID,
 			        PRODUCT_NAME,
+			        PRODUCT_COMMENT,
+			        CHANGE_IMAGE,
 			        PAY_METHOD,
 			        AMOUNT,
 			        MOVIE_CODE,
@@ -25,12 +27,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			        )
 		VALUES
         			(
-        			ONO_SEQ.NEXTVAL,
+        			#{merchantUid},
 			        #{cartNo},
 			        #{userId},
 			        #{userName},
 			        #{productId},
 			        #{productName},
+			        #{productComment},
+			        #{changeImage},
 			        #{payMethod},
 			        #{amount},
 			        #{movieCode},
@@ -41,5 +45,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			        )
 			        
 	</insert>
+	
+	<delete id="deleteCart" parameterType="order">
+		DELETE
+		   FROM 
+        			TB_CART
+		 WHERE
+        			CART_NO = #{cartNo}
+			 AND
+        			USER_ID = #{userId}
+	</delete>
+	
+	<select id="findById" resultType="order">
+		SELECT
+					MERCHANT_UID merchantUid,
+					PRODUCT_NAME productName,
+					PRODUCT_COMMENT productComment,
+					CHANGE_IMAGE changeImage,
+					AMOUNT * PRICE amount,
+					PAY_METHOD payMethod
+		  FROM
+		  			TB_ORDER
+		WHERE
+					MERCHANT_UID = #{merchantUid}
+	</select>
 	
 </mapper>

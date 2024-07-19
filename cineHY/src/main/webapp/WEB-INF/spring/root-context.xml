@@ -69,7 +69,6 @@
 	  	  
 	  	  <context:property-placeholder location="classpath:api.properties"/>
 	  	  
-	  	  
 </beans>
 
 

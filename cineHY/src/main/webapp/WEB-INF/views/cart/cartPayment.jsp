@@ -133,9 +133,12 @@
     					 + '<td>' 
     					 + list.productName
     					 + '<input type="hidden" class="productId" value="' + list.productId + '" />'
+    					 + '<input type="hidden" class="cartNo" value="' + list.cartNo + '" />'
     					 + '<input type="hidden" class="productPrice" value="' + list.productPrice + '" />'
     					 + '<input type="hidden" class="productName" value="' + list.productName + '" />'
+    					 + '<input type="hidden" class="changeImage" value="' + list.changeImage + '" />'
     					 + '<input type="hidden" class="cartAmount" value="' + list.cartAmount + '" />'
+    					 + '<input type="hidden" class="productComment" value="' + list.productComment + '" />'
     					 + '<input type="hidden" class="oneTotal" value="' + (list.productPrice * list.cartAmount) + '" />'
     					 + '</td>'
     					 + '<td>' 
@@ -188,6 +191,10 @@
    	    	var phoneNo = $("#phoneNo").val();
    	    	var day = new Date();
    	    	var productId = $(".productId").val();
+   	    	var productComment = $(".productComment").val();
+   	    	var changeImage = $(".changeImage").val();
+   	    	var cartAmount = $(".cartAmount").val();
+   	    	var cartNo = $(".cartNo").val();
    	    	
    	    	console.log(totalPrice);
    	    	console.log(merchant_uid);
@@ -213,15 +220,15 @@
                 pg: "html5_inicis",           // 등록된 pg사 (적용된 pg사는 KG이니시스)
                 pay_method: "card",           // 결제방식: card(신용카드), trans(실시간계좌이체), vbank(가상계좌), phone(소액결제)
                 merchant_uid: merchant_uid,   // 주문번호
-                name: "영화티켓",                  // 상품명
+                name: productName,                  // 상품명
                 amount: totalPrice,           // 금액
-                buyer_name: "조우진",         // 주문자
-                buyer_tel: "01033479535",             // 전화번호 (필수입력)
-                buyer_addr: "대현동",    		  // 주소
-                buyer_postcode: "12703",          // 우편번호
+                buyer_name: userName,         // 주문자
+                buyer_tel: phoneNo,             // 전화번호 (필수입력)
+                buyer_addr: "",    		  // 주소
+                buyer_postcode: "",          // 우편번호
                 img : "aasdfasdf",
                 day : "2024-07-09",
-                product_id : "티켓",
+                product_id : productId,
                 movie_code : "영화",
                 movie_title : "인사이드 아웃2"
            
@@ -272,17 +279,18 @@
 								"userName" : rsp.buyer_name,
 								"receipt" : rsp.receipt_url,
 								"payMethod" : rsp.pay_method,
-								"productId" : rsp.product_id,
+								"productId" : productId,		//
 								"productName" : rsp.name,
-								"amount" : rsp.amount,
-								"movieCode" : rsp.movie_code,
-								"movieTitle" : rsp.movie_title,
-								"price" : rsp.price,
+								"productComment" : productComment,
+								"changeImage" : changeImage,
+								"price" : rsp.paid_amount,						//
 								"phoneNo" : rsp.buyer_tel,
-								"orderDay" : rsp.day
+								"amount" : cartAmount,
+								"cartNo" : cartNo
 							
 							};
 							
+							console.log(orderInfo);
 							$.ajax({
                                 type: "post",
                                 url: "saveOrder",
@@ -290,17 +298,12 @@
                                 data: JSON.stringify(orderInfo),
                                 success: function (response) {
                                     console.log("주문완료");
-                                    Swal.fire({
-                                        text: msg,
-                                        icon: 'success',
-                                        confirmButtonColor: '#3085d6',
-                                        button: {
-                                            text: '확인',
-                                            closeModal: true
-                                        }
-                                    }).then(() => {
-                                        window.location.href = 'productlist';
-                                    });
+                                    if(confirm("결제 완료")) {
+                                    window.location.href = "orderResult?merchantUid=" + response;	
+                                    } 
+                                    else {
+                                    window.location.href = 'productlist';
+                                    }
                                 }
                             });
                         });

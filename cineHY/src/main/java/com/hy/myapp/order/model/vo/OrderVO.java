@@ -13,12 +13,14 @@ import lombok.ToString;
 @AllArgsConstructor
 public class OrderVO {
 	
-	private int orderId;
+	private String merchantUid;
 	private int cartNo;
 	private String userId;
 	private String userName;
 	private int productId;
 	private String productName;
+	private String productComment;
+	private String changeImage;
 	private String payMethod;
 	private int amount;
 	private int movieCode;
