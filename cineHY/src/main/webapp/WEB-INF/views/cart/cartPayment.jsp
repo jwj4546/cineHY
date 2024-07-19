@@ -248,13 +248,13 @@
 								"merchantUid" : rsp.merchant_uid,
 								"userId" : userId,
 								"userName" : rsp.buyer_name,
-								"pay_method" : rsp.pay_method,
+								"payMethod" : rsp.pay_method,
 								"productName" : rsp.name,
-								"amount" : rsp.amount,
+								"amount" : rsp.paid_amount,
 								"phoneNo" : rsp.buyer_tel,
 								"receipt" : rsp.receipt_url
 						};
-						
+						console.log(payInfo);
 						$.ajax({
 							type : "POST",
 							url : "savePay",

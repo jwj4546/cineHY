@@ -30,7 +30,6 @@ public interface ReviewService {
 	//리뷰 작성
 	int insertReview(Review review);
 
-	//board랑 board에 딸린 reply랑 같이 조회할거임ㅋㅋ
 	Review reviewAndReview(int boardNo);
 
 	//다섯개의 개시글 정보

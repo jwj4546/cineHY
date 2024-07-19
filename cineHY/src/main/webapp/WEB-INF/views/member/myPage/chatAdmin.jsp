@@ -443,7 +443,20 @@ ul.CTAs a {
             
            <div id = "innerCont">
            
-           <!-- 여기에 컨텐트를 넣어주세요!!!
+           <!-- 여기에 컨텐트를 넣어주세요!!!-->
+           
+            <%
+		        String userId = (String) session.getAttribute("loginUser.userId");
+		        request.setAttribute("userId", userId);
+		        System.out.println("Received userId: " + userId);
+    		%>
+           
+		    <div id="review-section">
+		    	<jsp:include page="/WEB-INF/views/qna/qna_user.jsp">
+        			<jsp:param name="userId" value="${sessionScope.loginUser.userId}" />
+	    		</jsp:include>
+			</div>
+	           
            
            
            
@@ -459,8 +472,7 @@ ul.CTAs a {
            
            
            
-           
-            -->
+            
            </div>
             
 

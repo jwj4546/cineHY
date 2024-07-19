@@ -298,8 +298,8 @@
 	            var movieLikeHtml = '';
 	            likeResults.forEach(function(result) {
 	                if (result !== null && result.movie) {
-	                    var likeMovie = result.movie;
-	                    var likeRating = result.rating; // 각 영화의 rating 가져오기
+	                    let likeMovie = result.movie;
+	                    let likeRating = result.rating; // 각 영화의 rating 가져오기
 	                    movieLikeHtml += '<div class="col-md-4">'
 	                        + '<div class="card mb-4 box-shadow">'
 	                        + '<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + likeMovie.poster_path + '" alt="Card image cap">'

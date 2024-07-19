@@ -80,7 +80,7 @@ public class UserHandler {
 	    user.session = userSession;
 	    // 유저 리스트에 등록한다.
 	    sessionUsers.add(user);
-	    System.out.println(user);
+	    log.info("user 리스트:{}", user);
 	    // 운영자 Client에 유저가 접속한 것을 알린다.
 	    adminHandler.visit(user.key);
 	  }
@@ -92,7 +92,7 @@ public class UserHandler {
 	  public void handleMessage(String message, Session userSession) throws IOException {
 	    // Session으로 접속 리스트에서 User 클래스를 탐색
 	    User user = getUser(userSession);
-	    
+	    log.info("user 세션:{}", user);
 	    // 접속 리스트에 User가 있으면(당연히 있다. 없으면 버그..)
 	    if (user != null) {
 	      // 운영자 Client에 유저 key와 메시지를 보낸다.
