@@ -29,17 +29,19 @@ public class PaymentServiceImpl implements PaymentService {
 
 	private IamportClient api;
 	
+	@Value("${api.key}")
+	private String key;
+	
+	@Value("${api.secret}")
+	private String secret;
+	
 	@Autowired
 	private PrePaymentRepository prePaymentRepository;
 	
 	@Autowired
 	private PaymentRepository paymentRepository;
 	
-	@Value("${api.key}")
-	private String key;
-	
-	@Value("${api.secret}")
-	private String secret;
+
 	
 	
 	
