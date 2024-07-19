@@ -145,12 +145,14 @@
 	    function displayMovies(data) {
 	        var movieList = $('#movieList');
 	       	movieList.empty(); // 기존 내용 비우기
+	       	var totalRankMoviesDisplayed = 0; // 총 출력한 영화 수
 	        var rank = 1; // 순위 초기화
-	        for (var j = 0; j < data.length; j++) {
+	        var movieHtml = '';
+	        
+	        for (var j = 0; j < data.length && totalRankMoviesDisplayed < 5; j++) {
 	            if (data[j].results && data[j].results.length > 0) {
 	                var movies = data[j].results;
-	                var movieHtml = '';
-	                for (var i = 0; i < 5; i++) {
+	                for (var i = 0; i < movies.length && totalRankMoviesDisplayed < 5; i++) {
 	                    var movieId = movies[i].id;
 	                    if (movieIdList.includes(movieId)) {
 	                    	//console.log(movies[i].title);
@@ -170,11 +172,12 @@
 	                            + '</div>'
 	                            + '</div>';
 	                        rank++;
+	                        totalRankMoviesDisplayed++;
 	                    }
 	                }
-	                movieList.append(movieHtml);
 	            }
 	        }
+	        movieList.append(movieHtml);
 
 	        // 모든 데이터를 처리한 후, movieHtml이 비어 있으면 '현재 상영 중인 영화가 없습니다.' 메시지를 추가
 	        if (movieList.children().length === 0) {
