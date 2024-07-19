@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hy.myapp.order.model.repository.OrderRepository">
+
+	<insert id="saveOrder" parameterType="order">
+		INSERT
+  		   INTO
+        			TB_ORDER
+       				 (
+			        ORDER_ID,
+			        CART_NO,
+			        USER_ID,
+			        USER_NAME,
+			        PRODUCT_ID,
+			        PRODUCT_NAME,
+			        PAY_METHOD,
+			        AMOUNT,
+			        MOVIE_CODE,
+			        MOVIE_TITLE,
+			        PRICE,
+			        PHONE_NO,
+			        ORDER_DAY
+			        )
+		VALUES
+        			(
+        			ONO_SEQ.NEXTVAL,
+			        #{cartNo},
+			        #{userId},
+			        #{userName},
+			        #{productId},
+			        #{productName},
+			        #{payMethod},
+			        #{amount},
+			        #{movieCode},
+			        #{movieTitle},
+			        #{price},
+			        #{phoneNo},
+			        SYSDATE
+			        )
+			        
+	</insert>
+	
+</mapper>

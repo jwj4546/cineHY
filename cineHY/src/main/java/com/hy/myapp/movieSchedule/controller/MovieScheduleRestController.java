@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("movieSchedule/")
-public class MovieScheduleApiController {
+public class MovieScheduleRestController {
 	
 	@Autowired
 	private MovieScheduleService movieScheduleService;

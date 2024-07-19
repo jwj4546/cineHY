@@ -330,37 +330,6 @@
         });
     }
     
-
-    function fetchMovieDetails(movieCode, callback) {
-        $.ajax({
-            url: 'movieList/rating',
-            method: 'get',
-            dataType: 'json',
-            data: { movie_id: movieCode },
-            success: function(releaseData) {
-                let countries = releaseData.results;
-                for (let i = 0; i < countries.length; i++) {
-                    if (countries[i].iso_3166_1 === 'KR') {
-                        let releases = countries[i].release_dates;
-                        for (let j = 0; j < releases.length; j++) {
-                            if (releases[j].certification) {
-                                rating = releases[j].certification; // Update the global rating variable
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-                callback({ rating: rating }); // Callback with the movie details
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error fetching movie rating data:', textStatus, errorThrown);
-                callback({ certification: 'N/A' }); // Default to 'N/A' on error
-            }
-        });
-    }
-    
-    
     
     function displayScheduleForDate(data) {
     	
@@ -370,27 +339,28 @@
         const theaterCode = $('input[name="theater"]:checked').val();
         scheduleTable.empty();
         if (data && data.data.length > 0) {
-            data.data.forEach(schedule => {
-            	fetchMovieDetails(schedule.movieCode, function(movieDetails) {
-	                const row = '<tr>' +
-	                                '<td>' + schedule.movieTitle + ' (' + movieDetails.rating + ')' + '</td>' +
-	                                '<td>' + schedule.screenCode + '</td>' +
-	                                '<td>' + schedule.startTime + ' - ' + schedule.endTime + '</td>' +
-	                                '<td>' +
-		                                '<form action="reservationFromTheater" method="post">' +
-		                                '<input type="hidden" value="' + schedule.movieCode + '" id="tableMovieCode" name="movieCode">' +
-		                                '<input type="hidden" value="'+ selectedTabDate +'" name="ticketDate">' +
-		                                '<input type="hidden" value="'+ schedule.screenCode +'" name="screenCode">' +
-		                                '<input type="hidden" value="'+ theaterCode +'" name="theaterCode">' +
-		                                '<input type="hidden" value="'+ schedule.startTime +'" name="startTime">' +
-		                                '<input type="hidden" value="'+ schedule.screeningId+'" name="screeningId">' +
-		                                '<button class="btn btn-danger btn-sm float-right delete-btn" type="submit">예매</button>' +
-		                                '</form>' +
-	                                '</td>' +
-	                            '</tr>';
-	                scheduleTable.append(row);
+        	data.data.forEach(schedule => {
+                const row = '<tr>' +
+                                '<td>' + schedule.movieTitle + 
+                                '<span class="badge text-bg-dark"">'+ schedule.rating +'</span>' +
+                                '</td>' +
+                                '<td>' + schedule.screenCode + '</td>' +
+                                '<td>' + schedule.startTime + ' - ' + schedule.endTime + '</td>' +
+                                '<td>' +
+	                                '<form action="reservationFromTheater" method="post">' +
+	                                '<input type="hidden" value="' + schedule.movieCode + '" id="tableMovieCode" name="movieCode">' +
+	                                '<input type="hidden" value="'+ selectedTabDate +'" name="ticketDate">' +
+	                                '<input type="hidden" value="'+ schedule.screenCode +'" name="screenCode">' +
+	                                '<input type="hidden" value="'+ theaterCode +'" name="theaterCode">' +
+	                                '<input type="hidden" value="'+ schedule.startTime +'" name="startTime">' +
+	                                '<input type="hidden" value="'+ schedule.screeningId+'" name="screeningId">' +
+	                                '<button class="btn btn-danger btn-sm float-right delete-btn" type="submit">예매</button>' +
+	                                '</form>' +
+                                '</td>' +
+                            '</tr>';
+                scheduleTable.append(row);
                 });
-            });
+           
         } else {
             const noScheduleMessage = '<tr><td colspan="4">선택한 날짜에 해당하는 스케줄이 없습니다.</td></tr>';
             scheduleTable.append(noScheduleMessage);

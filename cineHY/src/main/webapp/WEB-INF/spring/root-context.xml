@@ -2,8 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
-		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+		
+		
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	
@@ -31,6 +35,7 @@
 	 	dataSource.setPassword("BCLASS");
 	 	
 	  -->
+	  
 	  
 	  <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
 	  	<property name="configLocation" value="classpath:mybatis-config.xml" />
@@ -60,5 +65,11 @@
 	  	  <mybatis-spring:scan base-package="com.hy.myapp.payment.model.repository"/>
 	  	  <mybatis-spring:scan base-package="com.hy.myapp.product.model.repository"/>
 	  	  <mybatis-spring:scan base-package="com.hy.myapp.cart.model.repository"/>
+	  	  <mybatis-spring:scan base-package="com.hy.myapp.order.model.repository"/>
+	  	  
+	  	  <context:property-placeholder location="classpath:api.properties"/>
+	  	  
 	  	  
 </beans>
+
+

@@ -1,8 +1,5 @@
 package com.hy.myapp.payment.model.vo;
 
-
-import java.math.BigDecimal;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +11,12 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentVO {
+public class Pay {
 
 	private String merchantUid;
-	private BigDecimal paidAmount;
-	private String impUid;
+	private String userId;
+	private String userName;
+	private String payMethod;
+	private int amount;
+	private String phoneNo;
 }

@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
+import com.hy.myapp.payment.model.repository.PaymentRepository;
 import com.hy.myapp.payment.model.repository.PrePaymentRepository;
+import com.hy.myapp.payment.model.vo.Pay;
 import com.hy.myapp.payment.model.vo.PaymentVO;
 import com.hy.myapp.payment.model.vo.PrePaymentVO;
 import com.siot.IamportRestClient.IamportClient;
@@ -27,49 +29,50 @@ public class PaymentServiceImpl implements PaymentService {
 
 	private IamportClient api;
 	
+	@Value("${api.key}")
+	private String key;
+	
+	@Value("${api.secret}")
+	private String secret;
+	
 	@Autowired
 	private PrePaymentRepository prePaymentRepository;
 	
-	@Value("${ IAMPORT_API }")
-	private String API_KEY;
-	
-	@Value("${IAMPORT_API_SECRET")
-	private String API_SECRET;
+	@Autowired
+	private PaymentRepository paymentRepository;
 	
 
 	
+	
+	
 	public PaymentServiceImpl() {
-		this.api = new IamportClient(API_KEY, API_SECRET);
+		this.api = new IamportClient(key, secret);
 	}
 
 	public void postPrepare(PrePaymentVO request) throws IamportResponseException, IOException {
 		PrepareData prepareData = new PrepareData(request.getMerchantUid(), request.getAmount());
 		api.postPrepare(prepareData);			// 사전 등록 API
 		
+		//log.info("key {}", key);
+		//log.info("key {}", secret);
 		//log.info("이게 뭔데 : {}", request.getMerchantUid());
 		
 		prePaymentRepository.save(request);			// 주문번호와 결제 예정 금액 DB 저장
 		
 	}
 
-	public Payment validatePayment(Payment request) {
-		return request;
-	}
-	
 	public Payment validatePayment(PaymentVO request) throws IamportResponseException, IOException {
 		PrePaymentVO prePayment = prePaymentRepository.findById(request.getMerchantUid());
 		BigDecimal preAmount = prePayment.getAmount();			// DB에 저장된 결제요청 금액
 		
-		log.info("이게 뭔데 : {}", prePayment);
 		
 		IamportResponse<Payment> iamportResponse = api.paymentByImpUid(request.getImpUid());
 		BigDecimal paidAmount = iamportResponse.getResponse().getAmount();			// 사용자가 실제 결제한 금액
 		
-		log.info("이게 뭔데 : {}", iamportResponse);
-		
 		//log.info("이게 뭔데 : {}", request.getImpUid());
+
 		
-		if(preAmount.compareTo(paidAmount) == 0) {
+		if(!(preAmount.compareTo(paidAmount) == 0)) {
 			CancelData cancelData = cancelPayment(iamportResponse);
 			api.cancelPaymentByImpUid(cancelData);
 		} 
@@ -79,5 +82,9 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	public CancelData cancelPayment(IamportResponse<Payment> response) {
 		return new CancelData(response.getResponse().getImpUid(), true);
+	}
+
+	public int savePay(Pay pay) {
+		return paymentRepository.savePay(pay);
 	}
 }

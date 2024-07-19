@@ -24,5 +24,6 @@ public class MovieScheduleVO {
 	private String startDate;
 	private String endDate;
 	private int movieCode;
+	private String rating;
 
 }

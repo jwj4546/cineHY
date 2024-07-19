@@ -53,7 +53,8 @@
         MS.ENDDATE endDate,
         MS.MOVIE_CODE movieCode,
         MS.THEATER_CODE theaterCode,
-        M.MOVIE_TITLE movieTitle 
+        M.MOVIE_TITLE movieTitle, 
+        M.RATING rating
     FROM
         TB_MOVIE_SCHEDULE MS
         INNER JOIN TB_MOVIE M ON MS.MOVIE_CODE = M.MOVIE_CODE

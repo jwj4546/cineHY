@@ -105,6 +105,9 @@
 
 	<div class="text-right mt-3">
         <h5>결제 금액: <span id="total"></span>원</h5>
+        <input type="hidden" id="userId" value="${ sessionScope.loginUser.userId }" />
+        <input type="hidden" id="userName" value="${ sessionScope.loginUser.userName }" />
+        <input type="hidden" id="phoneNo" value="${ sessionScope.loginUser.phoneNo }" />
     </div>
 
         <div class="text-center mt-4">
@@ -129,12 +132,14 @@
     					 + '<td style="text-align:center; width:200px;"><img src="' + list.changeImage + '" style="height:100px; width=auto;"/></td>'
     					 + '<td>' 
     					 + list.productName
-    					 + '<input type="hidden" name="productPrice" class="productPrice" value="' + list.productPrice + '" />'
-    					 + '<input type="hidden" name="cartAmount" class="cartAmount" value="' + list.cartAmount + '" />'
-    					 + '<input type="hidden" name="oneTotal" class="oneTotal" value="' + (list.productPrice * list.cartAmount) + '" />'
+    					 + '<input type="hidden" class="productId" value="' + list.productId + '" />'
+    					 + '<input type="hidden" class="productPrice" value="' + list.productPrice + '" />'
+    					 + '<input type="hidden" class="productName" value="' + list.productName + '" />'
+    					 + '<input type="hidden" class="cartAmount" value="' + list.cartAmount + '" />'
+    					 + '<input type="hidden" class="oneTotal" value="' + (list.productPrice * list.cartAmount) + '" />'
     					 + '</td>'
     					 + '<td>' 
-    					 + formatter.format(list.productPrice) 
+    					 + formatter.format(list.productPrice)
     					 + '원</td>'
     					 + '<td>' + list.cartAmount + '</td>'
     					 + '<td>' + formatter.format((list.productPrice * list.cartAmount)) + '원</td>'
@@ -171,14 +176,27 @@
     	
     	// 결제 버튼 클릭시
     	$("#orderBtn").on("click", function() {
-			// 사전검증
+			
+    		
+    		
+    		// 사전검증
    	    	var merchant_uid = "O" + new Date().getTime();
    	    	var totalPrice = $("#totalPrice").val();
+   	    	var productName = $(".productName").val();
+   	    	var userId = $("#userId").val();
+   	    	var userName = $("#userName").val();
+   	    	var phoneNo = $("#phoneNo").val();
+   	    	var day = new Date();
+   	    	var productId = $(".productId").val();
+   	    	
    	    	console.log(totalPrice);
    	    	console.log(merchant_uid);
+   	    	
+   	    	
+   	    	
    	    	$.ajax({
    	    		url : "payment/prepare",
-   	    		method : "post",
+   	    		method : "POST",
    	    		contentType : "application/json",
    	    		data : JSON.stringify({
    	    			merchantUid : merchant_uid,
@@ -215,39 +233,40 @@
                 if (rsp.success) {
 					$.ajax({
 						url : "payment/validate",
-						method : "post",
+						method : "POST",
 						contentType : "application/json",
 						data : JSON.stringify({
 							impUid : rsp.imp_uid,
 							merchantUid : rsp.merchant_uid
 						})
 					}).done(function (data) {
+						console.log(data);
 						// 결제 정보 DB 저장
 						//주문 상품 정보 DB 저장
 						var msg = '결제가 완료되었습니다.';
-						var buyerInfo = {
+						var payInfo = {
 								"merchantUid" : rsp.merchant_uid,
 								"userId" : userId,
 								"userName" : rsp.buyer_name,
-								"pay_method" : rsp.pay_method,
+								"payMethod" : rsp.pay_method,
 								"productName" : rsp.name,
-								"amount" : rsp.paid.amount,
+								"amount" : rsp.paid_amount,
 								"phoneNo" : rsp.buyer_tel,
-								"address" : rsp.buyer_addr,
 								"receipt" : rsp.receipt_url
-						}
+						};
+						console.log(payInfo);
 						$.ajax({
-							type : "post",
-							url : "save_buy",
+							type : "POST",
+							url : "savePay",
 							contentType : "application/json",
-							data : JSON.Stringify(buy),
+							data : JSON.stringify(payInfo),
 							success : function(response) {
 								console.log("결제정보 저장 완료");
 							}
 						});
 						
-						if(rsp.product_id == null) {
-							var orderProduct = {
+						
+							var orderInfo = {
 								"merchantUid" : rsp.merchant_uid,
 								"userId" : userId,
 								"userName" : rsp.buyer_name,
@@ -255,37 +274,42 @@
 								"payMethod" : rsp.pay_method,
 								"productId" : rsp.product_id,
 								"productName" : rsp.name,
-								"productAmount" : rsp.paid.amount,
-								"productImg" :  rsp.img,
+								"amount" : rsp.amount,
+								"movieCode" : rsp.movie_code,
+								"movieTitle" : rsp.movie_title,
+								"price" : rsp.price,
 								"phoneNo" : rsp.buyer_tel,
 								"orderDay" : rsp.day
-							}
-						}
-						else {
-							var orderMovie = {
-									"merchantUid" : rsp.merchant_uid,
-									"userId" : userId,
-									"userName" : rsp.buyer_name,
-									"receipt" : rsp.receipt_url,
-									"payMethod" : rsp.pay_method,
-									"movieCode" : rsp.movie_code,
-									"movieTitle" : rsp.movie_title,
-									"ticketPrice" : rsp.ticket_price,
-									"ticketAmount" : rsp.paid.amount,
-									"posterUrl" : rsp.img,
-									"phoneNo" : rsp.buyer_tel,
-									"orderDay" : rsp.day
-							}
-						}
-					});
-                } else {
-                    var msg = '결제를 실패하였습니다.';
-                    alert(msg);
-                }
+							
+							};
+							
+							$.ajax({
+                                type: "post",
+                                url: "saveOrder",
+                                contentType: "application/json",
+                                data: JSON.stringify(orderInfo),
+                                success: function (response) {
+                                    console.log("주문완료");
+                                    Swal.fire({
+                                        text: msg,
+                                        icon: 'success',
+                                        confirmButtonColor: '#3085d6',
+                                        button: {
+                                            text: '확인',
+                                            closeModal: true
+                                        }
+                                    }).then(() => {
+                                        window.location.href = 'productlist';
+                                    });
+                                }
+                            });
+                        });
+                    } else {
+                        var msg = '결제를 실패하였습니다.';
+                        alert(msg);
+                    }
+                });
             });
-   	    	
-    		
-    	});
     </script>
 
 <footer class="bg-light py-3 mt-5">
