@@ -779,8 +779,8 @@ article input {
 		
 		$(document).ready(function() {
   
-		    var preGenre1 = "${sessionScope.loginUser.preGenre1}";
-		    var preGenre2 = "${sessionScope.loginUser.preGenre2}";
+		    const preGenre1 = "${sessionScope.loginUser.preGenre1}";
+		    const preGenre2 = "${sessionScope.loginUser.preGenre2}";
 		
 		    
 		    $('#preGenre1').val(preGenre1);
