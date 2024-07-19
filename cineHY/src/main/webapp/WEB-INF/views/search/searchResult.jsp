@@ -68,6 +68,7 @@
 	            url: 'movieList/movieDB',
 	            method: 'GET',
 	            dataType: 'json',
+	            async : false,
 	            success: function(result) {
 	                movieIdList = result; // movieIdList에 결과 할당
 	            },
@@ -82,6 +83,7 @@
 	            url: 'movieList/movieEnrollList',
 	            method: 'GET',
 	            dataType: 'json',
+	            async : false,
 	            success: function(response) {
 	                var data = response.data; // response에서 data 배열 가져오기
 	                if (!Array.isArray(data)) {
