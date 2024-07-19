@@ -21,7 +21,7 @@
 		function connect(){
 			//접속주소(매핑값)
 			
-			const uri='ws://localhost:82/cineHY/phone';
+			const uri='ws://localhost:82/myapp/phone';
 			phone = new WebSocket(uri); //자바에 존재하는 웹 소켓 객체생성
 			
 			phone.onopen =()=>{ //소켓이 연결되었을때 수행되는 핸들러

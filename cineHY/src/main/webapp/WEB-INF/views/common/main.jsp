@@ -21,7 +21,10 @@
     }
     
     #pills-tab { margin-top: 20px; }
-    #page2 { height: 600px;}   
+    #page2 { 
+       	height: 600px;
+    	padding-top: 120px;
+    }   
     
     .card {
     	background-color: transparent;
@@ -70,33 +73,79 @@
 		  </li>
 		</ul>
 		
-			<div class="tab-content" id="pills-tabContent">
-			  	<!-- 상영중인 영화 -->
-				<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
-					<div class="album py-5">
-						<div class="container">
-						   	<div class="row" id="movieList">
-						   	<!-- 영화 출력 -->
+		<div class="tab-content" id="pills-tabContent">
+			<!-- 상영중인 영화 -->
+			<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+				<div class="album py-5">
+					<div class="container">
+						<div class="row" id="movieList">
+							<!-- 영화 출력 -->
 							
-							</div>
 						</div>
-					</div>   
-				</div>
+					</div>
+				</div>   
+			</div>
 				<!-- 상영예정 영화 -->
-				<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
-			  		<div class="album py-5">
-						<div class="container">
+			<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+			  	<div class="album py-5">
+					<div class="container">
 						   	<div class="row" id="movieUpList">
 						   	<!-- 영화 출력 -->
 							
 							</div>
-						</div>
-					</div>   
-				</div>  
-	      </div>
-      </div>
-      <div id="page2">
-      <a href="getQnauser" >1:1 문의 유저용</a>
+					</div>
+				</div>   
+			</div>  
+		</div>
+	</div>
+	<div id="page2" class="container">
+      
+	<div class="row align-items-md-stretch">
+		<div class="col-md-6">
+			<div class="h-100 p-5 text-white bg-dark rounded-3">
+	          <h3>POPCORN & GIFT</h3>
+	          	<div class="list-group">
+				  <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+				    <img src="${pageContext.servletContext.contextPath }/resources/uploadFiles/HY_20240718000207_905.jpg" alt="twbs" width="50" height="50" class="rounded-circle flex-shrink-0">
+				    <div class="d-flex gap-2 w-100 justify-content-between">
+				      <div>
+				        <h6 class="mb-0"><strong>치즈팝콘</strong></h6>
+				        <p class="mb-0 opacity-75">11,000원</p>
+				      </div>
+				      <small class="opacity-50 text-nowrap">더보기</small>
+				    </div>
+				  </a>
+				  <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+				    <img src="https://img.freepik.com/free-photo/fresh-cola-drink-in-glass_144627-16201.jpg" alt="twbs" width="50" height="50" class="rounded-circle flex-shrink-0">
+				    <div class="d-flex gap-2 w-100 justify-content-between">
+				      <div>
+				        <h6 class="mb-0"><strong>콜라</strong></h6>
+				        <p class="mb-0 opacity-75">5,000원</p>
+				      </div>
+				      <small class="opacity-50 text-nowrap">더보기</small>
+				    </div>
+				  </a>
+				  <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+				    <img src="https://cdn.cokeplay.cocacola.co.kr/prod/pointShop/202304/c59ef208-8ef0-410e-9abf-be6ad99b9971.png" alt="twbs" width="50" height="50" class="rounded-circle flex-shrink-0">
+				    <div class="d-flex gap-2 w-100 justify-content-between">
+				      <div>
+				        <h6 class="mb-0"><strong>영화관람권</strong></h6>
+				        <p class="mb-0 opacity-75">18,000원</p>
+				      </div>
+				      <small class="opacity-50 text-nowrap">더보기</small>
+				    </div>
+				  </a>
+				</div>
+	        </div>
+		</div>
+		<div class="col-md-6">
+		    <div class="h-100 p-5 bg-light border rounded-3">
+		      <h3>공지사항</h3>
+		      <p>Or, keep it light and add a border for some added definition to the boundaries of your content. Be sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing of both column's content for equal-height.</p>
+		      <a href="getQnauser" class="btn btn-outline-secondary" type="button" >1:1 문의</a>
+		    </div>
+		</div>
+	</div>
       <a href="getQna" >1:1 문의 관리자용 </a>
       <a href="group-chat">오픈톡</a>
       
@@ -145,12 +194,14 @@
 	    function displayMovies(data) {
 	        var movieList = $('#movieList');
 	       	movieList.empty(); // 기존 내용 비우기
+	       	var totalRankMoviesDisplayed = 0; // 총 출력한 영화 수
 	        var rank = 1; // 순위 초기화
-	        for (var j = 0; j < data.length; j++) {
+	        var movieHtml = '';
+	        
+	        for (var j = 0; j < data.length && totalRankMoviesDisplayed < 5; j++) {
 	            if (data[j].results && data[j].results.length > 0) {
 	                var movies = data[j].results;
-	                var movieHtml = '';
-	                for (var i = 0; i < 5; i++) {
+	                for (var i = 0; i < movies.length && totalRankMoviesDisplayed < 5; i++) {
 	                    var movieId = movies[i].id;
 	                    if (movieIdList.includes(movieId)) {
 	                    	//console.log(movies[i].title);
@@ -170,11 +221,12 @@
 	                            + '</div>'
 	                            + '</div>';
 	                        rank++;
+	                        totalRankMoviesDisplayed++;
 	                    }
 	                }
-	                movieList.append(movieHtml);
 	            }
 	        }
+	        movieList.append(movieHtml);
 
 	        // 모든 데이터를 처리한 후, movieHtml이 비어 있으면 '현재 상영 중인 영화가 없습니다.' 메시지를 추가
 	        if (movieList.children().length === 0) {

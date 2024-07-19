@@ -77,20 +77,23 @@
     			REVIEW_DATE = SYSDATE
 		  WHERE
 				REVIEW_NO = #{reviewNo }
+				
+				
+		
     
     
     </update>
     
     
-    <update id="deleteReview" parameterType="_int">
-		UPDATE
-			   TB_REVIEW
-		   SET	
-		       STATUS = 'N'
-		  WHERE
-			   REVIEW_NO = #{reviewNo}
+    <delete id="deleteReview" parameterType="_int">
+    
+    
+		DELETE FROM 
+					TB_REVIEW
+				WHERE 
+						REVIEW_NO = #{reviewNo }
 	
-	</update>
+	</delete>
 	
 	<resultMap id="reviewResultMap" type="com.hy.myapp.review.model.vo.Review">
 	    <result property="movieTitle" column="movieTitle"/>
@@ -99,6 +102,9 @@
 	    <result property="reviewDate" column="reviewDate"/>
 	    <result property="reviewContent" column="reviewContent"/>
 	    <result property="star" column="star"/>
+	    <result property="paymentTime" column="paymentTime"/>
+    	<result property="movieCode" column="movieCode"/>
+	    
 	</resultMap>
 
 	<select id="selectMyReview" resultMap="reviewResultMap" parameterType="String">
@@ -143,34 +149,31 @@
 	
 	</select>
 	
-	<select id="selectNoReview"  resultType="review" >
-	
-		SELECT 
-			    m.MOVIE_CODE,
-			    m.MOVIE_TITLE,
-			    t.PAYMENT_TIME
-		   FROM 
-			    TB_TICKETLIST t
-		   JOIN 
-			    TB_MOVIE_SCHEDULE ms ON t.SCREENING_ID = ms.SCREENING_ID
-		   JOIN 
-			    TB_MOVIE m ON ms.MOVIE_CODE = m.MOVIE_CODE
-		  WHERE 
-			    t.USER_ID = #{userId}
-			AND 
-			    m.MOVIE_CODE NOT IN (
-							        SELECT 
-							            r.MOVIE_CODE 
-							        FROM 
-							            TB_REVIEW r
-							        WHERE 
-							            r.USER_ID = #{userId}
-							    	)
-								
 	
 	
-	</select>
-    
-    
+<select id="selectNoReview" resultMap="reviewResultMap" parameterType="String">
+    SELECT 
+           m.MOVIE_CODE AS movieCode,
+           m.MOVIE_TITLE AS movieTitle,
+           t.PAYMENT_TIME AS paymentTime
+      FROM 
+           TB_TICKETLIST t
+      JOIN 
+           TB_MOVIE_SCHEDULE ms ON t.SCREENING_ID = ms.SCREENING_ID
+      JOIN 
+           TB_MOVIE m ON ms.MOVIE_CODE = m.MOVIE_CODE
+     WHERE 
+           t.USER_ID = #{userId}
+       AND 
+           m.MOVIE_CODE NOT IN (
+    SELECT 
+           r.MOVIE_CODE 
+      FROM 
+           TB_REVIEW r
+      WHERE 
+            r.USER_ID = #{userId}
+        )
+</select>
+
     
 </mapper>

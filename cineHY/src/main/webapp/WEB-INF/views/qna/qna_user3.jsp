@@ -23,7 +23,7 @@
 		}
 		.card{
 			height: 700px;
-            
+            width: 900px;
 			border-radius: 15px !important;
 			background-color: rgba(0,0,0,0.4) !important;
 		}
@@ -242,12 +242,9 @@
     </head>
 	<!--Coded With Love By Mutiullah Samim-->
 	
-	  
+	 
 <body>
-	
-	
-    
-	<div class="container-fluid h-100">
+    <div class="container-fluid h-100">
         <div class="row justify-content-center h-100">
             <div class="col-md-8 col-xl-6 chat">
                 <div class="card">
@@ -271,33 +268,39 @@
                         </div>
                     </div>
                     <div id="textmsg" class="card-body msg_card_body">
-                        
-                        
+                        <div class="d-flex justify-content-start mb-4">
+                            <div class="img_cont_msg">
+                                <img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img_msg">
+                            </div>
+                            <div class="msg_cotainer">
+                                <textarea id=messageTextArea class="message-text">편하게 문의하세요.</textarea>
+                                <span class="msg_time"></span>
+                                <span class="userID"></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-footer">
                         <div class="input-group">
                             <div class="input-group-append">
                                 <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
                             </div>
-                            <textarea id="textMessageArea" class="form-control type_msg" placeholder="메시지를 입력하세요..."></textarea>
-                            <div class="input-group-append">
-                                <button  id="sendBtn" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></button>
-                            </div>
+                            <form>
+	                            <input id="inputText" class="form-control type_msg" placeholder="메시지를 입력하세요...">
+	                            <div class="input-group-append">
+	                                <input type="button" onclick="sendMessage()" class="input-group-text send_btn">
+	                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    
+
     <script>
-    
-  
-    
         $(document).ready(function() {
-        	var webSocket = new WebSocket("ws://localhost:82/cineHY/user");
-            var messageTextArea = document.getElementById("textMessageArea");  
+            var webSocket = new WebSocket("ws://localhost:82/myapp/user");
+            var messageTextArea = document.getElementById("textMessageArea");
 
             webSocket.onopen = function(message) {
                 console.log('서버에 연결 성공');
@@ -311,106 +314,50 @@
                 console.log('연결 문제');
             };
 
-            webSocket.onmessage =function(message) {  //메세지 받으면 출력
+            webSocket.onmessage = function(message) {  //서버에서 메세지 옴(관리자가 보냄)
             	
             	
-            	console.log("message:",message);
-            
-            	const node = message.data;  //여기가문제
-                const userId = node.userId;
-				const sendmessage = node.message;
-				console.log("node",node);
                 
-				const msgHTML = $(`
-	                    <div class="d-flex justify-content-start mb-4">
-		            		<div class="img_cont_msg">
-		                    	<img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img_msg">
-		                	</div>
-	                        <div class="msg_cotainer">
-	                            <span class="message-text"></span>
-	                            <span class="msg_time"></span>
-	                            <span class="userID"></span>
-	                        </div>
-	                    </div>
-	                `);
-	                msgHTML.find('.message-text').text(node);
-	                //msgHTML.find('.userID').text(userId);
-	                //msgHTML.find('.msg_time').text(currentTime);
-	                $("#textmsg").append(msgHTML);
-               
-            };
-       
-        
-        $(document).on("click", "#sendBtn", function() {
-        	const message = document.getElementById('textMessageArea').value;
-        	
-        	console.log(message);
-        	
-            if (message.trim() !== "") {
-                //webSocket.send(JSON.stringify({ status: "message", message: message }));
-               
-                const msgHTML = $(`
-                    <div class="d-flex justify-content-end mb-4">
-                        <div class="msg_cotainer_send">
-                            <span class="message-text"></span>
-                            <span class="msg_time"></span>
+                    const msgHTML = $(`
+                        <div class="d-flex justify-content-start mb-4">
+                            <div class="img_cont_msg">
+                                <img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img_msg">
+                            </div>
+                            <div class="msg_cotainer">
+                            	<textarea id="messageTextArea" class="message-text"></textarea>
+                                <span class="msg_time"></span>
+                                <span class="userID"></span>
+                            </div>
                         </div>
-                    </div>
-                `);
-                msgHTML.find('.message-text').text(message);
-                $("#textmsg").append(msgHTML);
-                message.value = "";  
-            }
-            send();
-        });
-
-        function loadPreviousMessages() {
-            $.ajax({
-                url: '/getPreviousMessages',
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    displayMessages(data);
-                },
-                error: function(error) {
-                    console.error('이전 메시지 로드 에러:', error);
+                    `);
+                    messageTextArea.value += message.data + "\n"  // 전달받은 메세지 출력
+                    //msgHTML.find('.message-text').text(sendmessage);
+                    //msgHTML.find('.userID').text(userId);
+                    $("#textmsg").append(msgHTML);
+             }
+            
+            
+            function sendMessage() {
+                const message = document.getElementId("inputText");  //전달할 메세지 가져옴 
+                if (message.trim() !== "") {
+                    const msgHTML = $(`
+                        <div class="d-flex justify-content-end mb-4">
+                            <div class="msg_cotainer_send">
+                            	<textarea id="messageTextArea" class="message-text"></textarea>
+                                <span class="msg_time"></span>
+                            </div>
+                        </div>
+                    `);
+                    messageTextArea.value += message.value+"\n";
+                    //msgHTML.find('.message-text').text(message);
+                    $("#textmsg").append(msgHTML);
+                    webSocket.send( message.value );
+                    message.value = "";
                 }
-            });
-        }
-
-        function displayMessages(messages) {
-            let messageTextArea = document.getElementById('messageTextArea');
-            messages.forEach(message => {
-                messageTextArea.value += `${message.sender} => ${message.chatMsg}\n`;
-            });
-        }
-
-        $(document).ready(function() {
-            // 이전 메시지 로드
-            // loadPreviousMessages();
+            };
         });
-
-       
-
-        function enter() {
-            if (event.keyCode === 13) {
-                sendMessage();
-                return false;
-            }
-            return true;
-        }
-
-        function disconnect() {
-            webSocket.close();
-        }
-
-        function send() {
-            const message = document.getElementById('textMessageArea').value;
-            webSocket.send(message);
-            console.log("message보냄", message);
-        }
-        });
-
     </script>
-	</body>
+</body>
+
+
 </html>

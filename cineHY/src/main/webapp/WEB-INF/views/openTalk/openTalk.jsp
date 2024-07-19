@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
+<c:set var="path0" value="<%=request.getContextPath() %>" />    
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,6 +12,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+   
+    
     <style>
         #page1 { height: 80px;}
         #page2 { 
@@ -387,7 +391,7 @@
 				
 				function connect(){
 					//접속주소(매핑값)
-					const uri='ws://localhost:82/cineHY/group';
+					const uri='ws://localhost:82/myapp/group';
 					phone = new WebSocket(uri);
 					
 					phone.onopen =()=>{ //소켓이 연결되었을때 수행되는 핸들러

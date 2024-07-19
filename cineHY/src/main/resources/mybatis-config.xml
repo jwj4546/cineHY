@@ -21,6 +21,10 @@
   		<typeAlias type="com.hy.myapp.member.model.vo.Member" alias="member" />
   		<typeAlias type="com.hy.myapp.qna.model.vo.Qna" alias="qna" />
   		<typeAlias type="com.hy.myapp.openTalk.model.vo.OpenTalk" alias="openTalk" />
+  		<typeAlias type="com.hy.myapp.notice.model.vo.Notice" alias="notice" />
+  		
+  		<typeAlias type="com.hy.myapp.review.model.vo.Review" alias="NoreviewResultMap" />
+  		
   		<typeAlias type="com.hy.myapp.order.model.vo.OrderVO" alias="order"/>
   	</typeAliases>
   	<!-- 주의할 점! : 별칭 등록을 하기 위해서는 반드시 해당 클래스가 존재해야 함! -->
@@ -36,6 +40,8 @@
   		<mapper resource="/mapper/member-mapper.xml"/>
   		<mapper resource="/mapper/openTalk-mapper.xml"/>
   		<mapper resource="/mapper/qna-mapper.xml"/>
+  		<mapper resource="/mapper/notice-mapper.xml"/>
+  		
 		<mapper resource="/mapper/order-mapper.xml"/>
   	</mappers>
   	<!-- 주의할 점! : 매퍼 파일을 등록하기 위해서는 반드시 해당 경로에 파일이 존재해야하며 namespace 속성값도 존재해야함! -->

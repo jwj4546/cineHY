@@ -20,7 +20,7 @@ public class OpenTalkRepository {
 		return sqlSession.insert("openTalkMapper.insertMessage", opentalk);
 	}
 
-	//채팅 내역 조회
+
 	
 	
 }
