@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			        )
 		VALUES
 			        (
-			        SEQ_PNO.NEXTVAL,
+			        #{merchantUid},
 			        #{userId},
 			        #{payMethod},
 			        #{amount},
