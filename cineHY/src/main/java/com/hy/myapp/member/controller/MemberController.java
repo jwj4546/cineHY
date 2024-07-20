@@ -266,37 +266,37 @@ public class MemberController {
 		return "member/find/changeMyPw";
 	}
 	
-	@PostMapping("changeMyPw.do")
-    public String changePw(@RequestParam("userId") String userId,
-                           @RequestParam("userName") String userName,
-                           @RequestParam("phoneNo") String phoneNo,
-                           @RequestParam("newPwd") String newPwd,
-                           Model model) {
-        System.out.println("Received Parameters - userId: " + userId + ", userName: " + userName + ", phoneNo: " + phoneNo);
+	 @PostMapping("changeMyPw.do")
+	    public String changePw(@RequestParam("userId") String userId,
+	                           @RequestParam("userName") String userName,
+	                           @RequestParam("phoneNo") String phoneNo,
+	                           @RequestParam("newPwd") String newPwd,
+	                           Model model) {
+	        System.out.println("Received Parameters - userId: " + userId + ", userName: " + userName + ", phoneNo: " + phoneNo);
 
-        // 새로운 비밀번호 암호화
-        String encPwd = bcryptPasswordEncoder.encode(newPwd);
-        System.out.println("Encoded Password: " + encPwd);
+	        // 새로운 비밀번호 암호화
+	        String encPwd = bcryptPasswordEncoder.encode(newPwd);
+	        System.out.println("Encoded Password: " + encPwd);
 
-        // Member 객체에 정보 설정
-        Member member = new Member();
-        member.setUserId(userId);
-        member.setUserName(userName);
-        member.setPhoneNo(phoneNo);
-        member.setUserPwd(encPwd);
+	        // Member 객체에 정보 설정
+	        Member member = new Member();
+	        member.setUserId(userId);
+	        member.setUserName(userName);
+	        member.setPhoneNo(phoneNo);
+	        member.setUserPwd(encPwd);
 
-        String viewName;
-        if (memberService.changePw(member) > 0) {
-            System.out.println("Password changed successfully for userId: " + userId);
-            model.addAttribute("member", member);
-            return "redirect:/";
-        } else {
-            System.out.println("Failed to change password for userId: " + userId);
-            model.addAttribute("errorMessage", "비밀번호 변경에 실패했습니다.");
-            viewName = "common/errorPage";
-        }
-        return viewName;
-    }
+	        String viewName;
+	        if (memberService.changePw(member) > 0) {
+	            System.out.println("Password changed successfully for userId: " + userId);
+	            model.addAttribute("member", member);
+	            return "redirect:/";
+	        } else {
+	            System.out.println("Failed to change password for userId: " + userId);
+	            model.addAttribute("errorMessage", "비밀번호 변경에 실패했습니다.");
+	            viewName = "common/errorPage";
+	        }
+	        return viewName;
+	    }
 	
 	
 	
