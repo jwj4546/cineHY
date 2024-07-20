@@ -152,6 +152,7 @@ public class NoticeController {
 	    @GetMapping("notice-detail")
 	    public String findById(@RequestParam int noticeNo, Model model) {
 	    	log.info("게시글 정보 : {}", noticeNo);
+	    	
 	        Notice notice = noticeService.findbyId(noticeNo);
 	        
 	        log.info("게시글 정보 : {}", notice);
@@ -162,7 +163,9 @@ public class NoticeController {
 	            
 	            return "errorPage"; // 에러 페이지로 이동
 	        }
+	        
 	        model.addAttribute("notice", notice);
+	        
 	        System.out.println(model);
 	        
 	        return "notice/notiDetail"; // 뷰 이름 반환
