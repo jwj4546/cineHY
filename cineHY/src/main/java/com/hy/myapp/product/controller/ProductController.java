@@ -21,6 +21,7 @@ import com.hy.myapp.product.model.service.ProductService;
 import com.hy.myapp.product.model.vo.ProductVO;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
@@ -103,8 +104,25 @@ public class ProductController {
 	
 	@GetMapping("product-detail")
 	public ModelAndView findById(int productId,
-											  ModelAndView mv) {
-		mv.addObject("product", productService.findById(productId)).setViewName("product/detail");
+											  ModelAndView mv,
+											  HttpServletRequest request) {
+		
+		// 상품 조회 시 session의 id 값을 받아 장바구니 품목 값 가져오는 process
+				HttpSession session = request.getSession();
+				Member userId = (Member)(session.getAttribute("loginUser"));
+				
+				// login id가 있을 시 장바구니 품목 개수도 함께 조회
+				if(userId != null) {
+					String id = (String)userId.getUserId();
+					
+					int cartCount = productService.findCount(id);
+					
+					mv.addObject("count", cartCount);
+					mv.addObject("product", productService.findById(productId)).setViewName("product/detail");
+				} else {
+					mv.addObject("product", productService.findById(productId)).setViewName("product/detail");
+				}
+		
 		return mv;
 	}
 	

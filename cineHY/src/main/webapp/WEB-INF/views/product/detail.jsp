@@ -61,9 +61,22 @@
 		  	</form>
 		  	<button type="submit" class="btn btn-primary" onclick="postSubmit()">수정하기</button>
 		  	<button type="button" data-toggle="modal" class="btn btn-danger" data-target="#deleteForm">삭제하기</button>
-			  	<button type="button" class="btn btn-secondary">
-            		장바구니<span class="badge badge-light">5</span>
-          		</button>
+			  	<!-- 장바구니 개수 출력 및 장바구니로 이동 -->
+	            	<c:set var="count" value="${ count }" />
+	            	<c:choose>
+	            	<c:when test="${ not empty sessionScope.loginUser }">
+	              		<a href="cartlist">
+		              		<button type="button" class="btn btn-info">
+		               		 장바구니<span class="badge badge-light">${ count }</span>
+		              		</button>
+	              		</a>
+	              	</c:when>
+	              	<c:otherwise>
+	              		<button type="button" class="btn btn-info">
+		               		 장바구니<span class="badge badge-light">0</span>
+		              		</button>
+	              	</c:otherwise>
+	              	</c:choose>
         </div>
       </div>
     </div>
