@@ -18,48 +18,7 @@
 </head>
 <body>
 
-    <header>
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-          
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <a href="#" class="navbar-brand d-flex align-items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
-                stroke-linecap="round" stroke-linejoin="round" class="mr-2">
-                <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
-                <path d="M16 3l-4 4H3L7 3z"></path>
-                <path d="M22 3l-4 4h-9L17 3z"></path>
-            </svg>
-              <strong>Cine HY</strong>
-            </a>
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
-              </li>
-            </ul>
-            <form class="form-inline mt-2 mt-md-0">
-              <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-            <ul class="navbar-nav" style="justify-content: flex-end;">
-                <li class="nav-item active" style="float: right;">
-                  <a class="nav-link" href="#">로그인 </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">회원가입</a>
-                </li>
-            </ul>
-          </div>
-        </nav>
-      </header>
+    <jsp:include page="../common/menubar.jsp"></jsp:include>
       <br><br><br><br>
 
 <div class="container mt-5">
@@ -133,9 +92,12 @@
     					 + '<td>' 
     					 + list.productName
     					 + '<input type="hidden" class="productId" value="' + list.productId + '" />'
+    					 + '<input type="hidden" class="cartNo" value="' + list.cartNo + '" />'
     					 + '<input type="hidden" class="productPrice" value="' + list.productPrice + '" />'
     					 + '<input type="hidden" class="productName" value="' + list.productName + '" />'
+    					 + '<input type="hidden" class="changeImage" value="' + list.changeImage + '" />'
     					 + '<input type="hidden" class="cartAmount" value="' + list.cartAmount + '" />'
+    					 + '<input type="hidden" class="productComment" value="' + list.productComment + '" />'
     					 + '<input type="hidden" class="oneTotal" value="' + (list.productPrice * list.cartAmount) + '" />'
     					 + '</td>'
     					 + '<td>' 
@@ -188,6 +150,10 @@
    	    	var phoneNo = $("#phoneNo").val();
    	    	var day = new Date();
    	    	var productId = $(".productId").val();
+   	    	var productComment = $(".productComment").val();
+   	    	var changeImage = $(".changeImage").val();
+   	    	var cartAmount = $(".cartAmount").val();
+   	    	var cartNo = $(".cartNo").val();
    	    	
    	    	console.log(totalPrice);
    	    	console.log(merchant_uid);
@@ -213,15 +179,15 @@
                 pg: "html5_inicis",           // 등록된 pg사 (적용된 pg사는 KG이니시스)
                 pay_method: "card",           // 결제방식: card(신용카드), trans(실시간계좌이체), vbank(가상계좌), phone(소액결제)
                 merchant_uid: merchant_uid,   // 주문번호
-                name: "영화티켓",                  // 상품명
+                name: productName,                  // 상품명
                 amount: totalPrice,           // 금액
-                buyer_name: "조우진",         // 주문자
-                buyer_tel: "01033479535",             // 전화번호 (필수입력)
-                buyer_addr: "대현동",    		  // 주소
-                buyer_postcode: "12703",          // 우편번호
+                buyer_name: userName,         // 주문자
+                buyer_tel: phoneNo,             // 전화번호 (필수입력)
+                buyer_addr: "",    		  // 주소
+                buyer_postcode: "",          // 우편번호
                 img : "aasdfasdf",
                 day : "2024-07-09",
-                product_id : "티켓",
+                product_id : productId,
                 movie_code : "영화",
                 movie_title : "인사이드 아웃2"
            
@@ -272,17 +238,18 @@
 								"userName" : rsp.buyer_name,
 								"receipt" : rsp.receipt_url,
 								"payMethod" : rsp.pay_method,
-								"productId" : rsp.product_id,
+								"productId" : productId,		//
 								"productName" : rsp.name,
-								"amount" : rsp.amount,
-								"movieCode" : rsp.movie_code,
-								"movieTitle" : rsp.movie_title,
-								"price" : rsp.price,
+								"productComment" : productComment,
+								"changeImage" : changeImage,
+								"price" : rsp.paid_amount,						//
 								"phoneNo" : rsp.buyer_tel,
-								"orderDay" : rsp.day
+								"amount" : cartAmount,
+								"cartNo" : cartNo
 							
 							};
 							
+							console.log(orderInfo);
 							$.ajax({
                                 type: "post",
                                 url: "saveOrder",
@@ -290,17 +257,12 @@
                                 data: JSON.stringify(orderInfo),
                                 success: function (response) {
                                     console.log("주문완료");
-                                    Swal.fire({
-                                        text: msg,
-                                        icon: 'success',
-                                        confirmButtonColor: '#3085d6',
-                                        button: {
-                                            text: '확인',
-                                            closeModal: true
-                                        }
-                                    }).then(() => {
-                                        window.location.href = 'productlist';
-                                    });
+                                    if(confirm("결제 완료")) {
+                                    window.location.href = "orderResult?merchantUid=" + response;	
+                                    } 
+                                    else {
+                                    window.location.href = 'productlist';
+                                    }
                                 }
                             });
                         });
@@ -312,14 +274,7 @@
             });
     </script>
 
-<footer class="bg-light py-3 mt-5">
-    <div class="container text-center">
-        <p class="mb-0">Cine HY</p>
-        <p class="mb-0">(04377) 서울특별시 용산구 한강대로 23길 55, 아이파크몰 6층 (한강로동)</p>
-        <p class="mb-0">대표이사:허민회 사업자등록번호:104-81-45690 통신판매업신고번호:2017-서울용산-0662</p>
-        <p class="mb-0">© CJ CGV. All Rights Reserved.</p>
-    </div>
-</footer>
+<jsp:include page="../common/footer.jsp"></jsp:include>
 
 
 </body>

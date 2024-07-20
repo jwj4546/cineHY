@@ -19,7 +19,8 @@
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-
+	 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a49ed31c89f651ea1d5bd9593161c160&libraries=services"></script>
+   
     <style>
        #page1 { height: 80px;}
         #page2 { 
@@ -298,6 +299,20 @@ ul.CTAs a {
     color: #333; 
 }
 
+#map {
+            width: 100%;
+            height: 350px;
+        }
+        #placesList {
+            margin-top: 10px;
+        }
+        .placeItem {
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+
 
 
 
@@ -332,7 +347,8 @@ ul.CTAs a {
     #sidebarCollapse.active span:last-of-type {
         transform: rotate(-45deg) translate(1px, -1px);
     }
-
+    
+   
 
 }
 
@@ -444,39 +460,114 @@ ul.CTAs a {
             
            <div id = "innerCont">
            
-           <!-- 여기에 컨텐트를 넣어주세요!!!
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-            -->
+        <h1>내 주변 영화관 찾기</h1>
+		   <div id="map"></div>
+   			 <div id="placesList"></div>
            </div>
-            
+         </div>
+         
 
-           
-    	</div>
+   <script>
+   		document.addEventListener("DOMContentLoaded", function() {
+	    const mapContainer = document.getElementById('map');
+	    const placesList = document.getElementById('placesList');
 
-   
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
-                $(this).toggleClass('active');
-            });
-        });
-    </script>
+	    // 기본 지도 옵션 설정
+	    const mapOption = {
+	        center: new kakao.maps.LatLng(33.450701, 126.570667), // 초기 중심좌표
+	        level: 10 // 초기 확대 레벨
+	    };
+
+	    // 지도 생성
+	    const map = new kakao.maps.Map(mapContainer, mapOption);
+
+	    // HTML5의 geolocation으로 현재 위치를 사용할 수 있는지 확인합니다
+	    if (navigator.geolocation) {
+	        navigator.geolocation.getCurrentPosition(function(position) {
+	            const lat = position.coords.latitude; // 위도
+	            const lon = position.coords.longitude; // 경도
+	            const locPosition = new kakao.maps.LatLng(lat, lon); // 현재 위치
+
+	            const message = '<div style="padding:5px;">여기에 계신가요?!</div>';
+
+	            
+	            displayMarker(locPosition, message);
+
+	            // 주변 영화관을 검색합니다
+	            searchPlaces(locPosition);
+	        }, function(error) {
+	            console.error('Error occurred. Error code: ' + error.code);
+	            alert('위치 정보를 가져올 수 없습니다.');
+	        });
+	    } else {
+	        const locPosition = new kakao.maps.LatLng(33.450701, 126.570667);
+	        const message = 'geolocation을 사용할 수 없어요..';
+
+	        displayMarker(locPosition, message);
+	    }
+
+	    // 마커와 인포윈도우를 지도에 표시하는 함수
+	    function displayMarker(locPosition, message) {
+	        const marker = new kakao.maps.Marker({
+	            map: map,
+	            position: locPosition
+	        });
+
+	        const infowindow = new kakao.maps.InfoWindow({
+	            content: message,
+	            removable: true
+	        });
+
+	        infowindow.open(map, marker);
+
+	        map.setCenter(locPosition);
+	    }
+
+	    
+	    function searchPlaces(locPosition) {
+	        const ps = new kakao.maps.services.Places();
+
+	        ps.keywordSearch('영화관', function(data, status, pagination) {
+	            if (status === kakao.maps.services.Status.OK) {
+	                displayPlaces(data);
+	            } else {
+	                alert('검색 결과가 없습니다.');
+	            }
+	        }, {
+	            location: locPosition,
+	            radius: 5000 // 5km 반경 내에서 검색
+	        });
+	    }
+
+	   
+	    function displayPlaces(places) {
+	        const bounds = new kakao.maps.LatLngBounds();
+
+	        placesList.innerHTML = '';
+	        for (let i = 0; i < places.length; i++) {
+	            const placePosition = new kakao.maps.LatLng(places[i].y, places[i].x);
+	            const marker = addMarker(placePosition);
+
+	            bounds.extend(placePosition);
+
+	            const itemEl = document.createElement('div');
+	            itemEl.innerHTML = `${places[i].place_name}`;
+	            placesList.appendChild(itemEl);
+	        }
+
+	        map.setBounds(bounds);
+	    }
+
+	  
+	    function addMarker(position) {
+	        const marker = new kakao.maps.Marker({
+	            map: map,
+	            position: position
+	        });
+	        return marker;
+	    }
+	});
+</script>
      
 </body>
 </html>

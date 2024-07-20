@@ -24,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@PropertySource("classpath:api.properties")
 public class PaymentServiceImpl implements PaymentService {
 
 	private IamportClient api;
@@ -43,8 +42,6 @@ public class PaymentServiceImpl implements PaymentService {
 	
 
 	
-	
-	
 	public PaymentServiceImpl() {
 		this.api = new IamportClient(key, secret);
 	}
@@ -53,8 +50,8 @@ public class PaymentServiceImpl implements PaymentService {
 		PrepareData prepareData = new PrepareData(request.getMerchantUid(), request.getAmount());
 		api.postPrepare(prepareData);			// 사전 등록 API
 		
-		//log.info("key {}", key);
-		//log.info("key {}", secret);
+		log.info("key {}", key);
+		log.info("key {}", secret);
 		//log.info("이게 뭔데 : {}", request.getMerchantUid());
 		
 		prePaymentRepository.save(request);			// 주문번호와 결제 예정 금액 DB 저장
