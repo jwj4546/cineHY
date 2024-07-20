@@ -80,26 +80,13 @@
     <jsp:include page="../common/footer.jsp"></jsp:include>
     
     <script>
+    
+   
     $(document).ready(function() {
-        const searchParams = new URLSearchParams(window.location.href);
+    	
+    	 <%-- const movieId = "<%= movieId %>"; --%> //리뷰에서 호출한 movieID 있음
+    	 getDetails(movieId);  // getDetails 호출
         
-        let movieId;  // 외부 변수 선언
-
-        for (var param of searchParams) {
-            const parsedMovieId = parseInt(param[1]);
-            //console.log(parsedMovieId);
-            //console.log(typeof parsedMovieId);
-            if (!isNaN(parsedMovieId)) {
-                movieId = parsedMovieId;  // 외부 변수에 할당
-            }
-        }
-        //console.log(movieId);  // 외부 변수 사용
-        //console.log(typeof movieId);
-        
-        if (movieId !== undefined) {  // movieId가 정의되어 있는지 확인
-            getDetails(movieId);  // getDetails 호출
-        }
-
         
 	    function getDetails(movieId) {
 	        $.ajax({
@@ -204,7 +191,7 @@
                         console.error('Error fetching movie rating data:', textStatus, errorThrown);
                         InfoHtml += '<p><strong>관람 등급:</strong> N/A</p>'
                             + '<p><strong>상영 시간: </strong>'+ data.runtime +'분</p>'
-                            + '<p><strong>평점: </strong>'+ data.vote_average +'</p>'
+                            + '<p><strong>평점: </strong>'+ StarAvgList +'</p>'
                             + '<div class="mt-4">'
                             + '<a href="#" class="btn btn-primary mr-3">예매하기</a>'
                             + '<a href="movieList" class="btn btn-outline-primary">영화 목록으로 돌아가기</a>'

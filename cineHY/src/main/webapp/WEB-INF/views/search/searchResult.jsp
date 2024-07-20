@@ -117,7 +117,8 @@
 	        var peopleListHtml = '';
 	        for (var i = 0; i < resultsM.length; i++) {
 	            let people = resultsM[i];
-	            if (people && people.media_type == 'person') {
+	            console.log(people);
+	            if (people && people.media_type == 'person' && people.adult == false) {
 	                let knownFor = resultsM[i].known_for.slice(0, 3);
 	                peopleListHtml += '<div class="card mb-3" style="max-width: 700px;">'
 	                                + '<div class="row g-0">'
@@ -131,14 +132,16 @@
 	                                + '<div class="row">';
 	                                
 	                for (var j = 0; j < knownFor.length; j++) {
+	                	if(knownFor[j].media_type == "movie" && !knownFor[j].genre_ids.includes(10749)){
 	                    peopleListHtml += '<div class="col-md-4">'
 	                                    + '<div class="card mb-4 shadow-sm">'
 	                                    + '<img src="https://image.tmdb.org/t/p/w500' + knownFor[j].poster_path + '" class="card-img-top" alt="영화 포스터">'
 	                                    + '<div class="card-body">'
-	                                    + '<p class="card-title">' + knownFor[j].title + '</p>'
+	                                    + '<p class="card-text"><small class="text-body-secondary">' + knownFor[j].title + '</small></p>'
 	                                    + '</div>'
 	                                    + '</div>'
 	                                    + '</div>';
+	                	}
 	                }
 	                        
 	                peopleListHtml += '</div>'
@@ -165,22 +168,22 @@
 	                var rating = movieRatings[movie.id] || 'N/A';
 	                movieListHtml += '<div class="col-md-4">'
 	                                + '<div class="card mb-4 box-shadow">'
-	                                + '<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + movie.poster_path + '" alt="Card image cap">'
-	                                + '<div class="card-body">'
-	                                + '<h5 class="card-title">' + movie.title + '<span class="badge text-bg-dark">' + rating + '</span></h5>'
-	                                + '<p class="card-text">' + movie.release_date + ' 개봉</p>'
-	                                + '<div class="d-flex justify-content-between align-items-center">'
-	                                + '<div class="btn-group">'
-	                                + '<a href="movieDetails?movieId=' + movie.id + '" class="btn btn-sm btn-outline-secondary">View</a>'
-	                                + '<form action="reservationById" method="get">'
-	                                + '<input type="hidden" value="' + movie.id + '" name="movieId">'
-	                                + '<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
-	                                + '</form>'
-	                                + '</div>'
-	                                + '<small class="text-muted">인기도 ' + movie.popularity + '</small>'
-	                                + '</div>'
-	                                + '</div>'
-	                                + '</div>'
+	                                + 	'<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + movie.poster_path + '" alt="Card image cap">'
+	                                + 		'<div class="card-body">'
+	                                + 			'<h5 class="card-title">' + movie.title + '<span class="badge text-bg-dark">' + rating + '</span></h5>'
+	                                + 			'<p class="card-text">' + movie.release_date + ' 개봉</p>'
+	                                + 			'<div class="d-flex justify-content-between align-items-center">'
+	                                + 				'<div class="btn-group">'
+	                                + 					'<a href="movieDetails?movieId=' + movie.id + '" class="btn btn-sm btn-outline-secondary">View</a>'
+	                                + 					'<form action="reservationById" method="get">'
+	                                + 						'<input type="hidden" value="' + movie.id + '" name="movieId">'
+	                                + 						'<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
+	                                + 					'</form>'
+	                                + 				'</div>'
+	                                + 				'<small class="text-muted">인기도 ' + movie.popularity + '</small>'
+	                                + 			'</div>'
+	                                + 		'</div>'
+	                                + 	'</div>'
 	                                + '</div>';
 	            }
 	        }
