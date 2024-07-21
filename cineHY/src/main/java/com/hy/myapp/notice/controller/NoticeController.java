@@ -171,7 +171,5 @@ public class NoticeController {
 	        return "notice/notiDetail"; // 뷰 이름 반환
 	    }
 	
-	
-	
 
 }

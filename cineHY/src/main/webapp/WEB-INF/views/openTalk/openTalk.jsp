@@ -9,86 +9,8 @@
 <head>
     <meta charset="UTF-8">
     <title>오픈톡메인</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-   
-    
     <style>
-        #page1 { height: 80px;}
-        #page2 { 
-          height: 80px;
-          display: flex;
-          justify-content: space-around;
-          margin-right: 30px;
 
-        }
-
-        .Movie-enroll-title { 
-          height: 60px;
-          width: 600px;
-          display: flex;
-        }
-        .Movie-enroll-title h2 {
-          font-weight: 600;
-          float: left;
-          line-height: 1.7em;
-        }
-
-
-        #page3{
-          height: 340px;
-          width: 1200px;
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          margin: 0 auto;
-          gap: 10px;
-        }
-
-
-        #select-movie {
-          grid-column: 2/3;
-          grid-column-start: 1;
-          grid-column-end: 3;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: darkslategrey;
-        }
-
-        #Movie-enroll-list {
-          grid-column: 3/3;
-          grid-column-start: 3;
-          grid-column-end: 4;
-          background-color: rgb(231, 231, 231);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        #Movie-enroll-title-pagination {
-          display: flex;
-          justify-content: center;
-          margin-top: 50px;
-          margin-bottom: 50px;
-        }
-
-        #Movie-enroll-list-card {
-          display: flex;
-
-
-        }
-
-        .card{
-			height: 700px;
-            
-			border-radius: 15px !important;
-			background-color: rgba(0,0,0,0.4) !important;
-		}
-
-       
 
         .chat-icon {
             z-index: 0;
@@ -171,18 +93,18 @@
            outline:0px !important;
 		}
 		.attach_btn{
-	border-radius: 15px 0 0 15px !important;
-	background-color: rgba(0,0,0,0.3) !important;
+			border-radius: 15px 0 0 15px !important;
+			background-color: rgba(0,0,0,0.3) !important;
 			border:0 !important;
 			color: white !important;
 			cursor: pointer;
 		}
 		.send_btn{
-	border-radius: 0 15px 15px 0 !important;
-	background-color: rgba(0,0,0,0.3) !important;
-			border:0 !important;
-			color: white !important;
-			cursor: pointer;
+		border-radius: 0 10px 10px 0 ;
+		background-color: rgba(0,0,0,0.3) ;
+			border:0 ;
+			color: white;
+			
 		}
 		.search_btn{
 			border-radius: 0 15px 15px 0 !important;
@@ -200,9 +122,9 @@
 			padding: 5px 10px;
 			margin-bottom: 15px !important;
 		}
-	.active{
-			background-color: rgba(0,0,0,0.3);
-	}
+		/* .active{
+				background-color: rgba(0,0,0,0.3);
+		} */
 		.user_img{
 			height: 70px;
 			width: 70px;
@@ -354,38 +276,15 @@
     
 </head>
 <body>
-    <header>
-		<jsp:include page="../common/menubar.jsp"></jsp:include>
-    </header>
-      
-  
-     
-      <div class="album py-5 bg-light">
+    <main>
         <div class="container">
-
 			<!-- chat아이콘 -->
-            <button class="chat-icon" id="chatIcon" onclick="chatAlert();">
+            <button class="chat-icon" id="chatIcon" >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-right-text-fill" viewBox="0 0 16 16">
                     <path d="M16 2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9.586a1 1 0 0 1 .707.293l2.853 2.853a.5.5 0 0 0 .854-.353zM3.5 3h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1 0-1m0 2.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1 0-1m0 2.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1"/>
                   </svg>
             </button>
-            <button onclick="disconnect();">전화끊기</button>
-            
             <script>
-            
-            	//처음에 채팅 이모티콘 눌렀을때만 소켓 접속하도록
-                let firstConnect = false; 
-
-                window.chatAlert = function() {
-                    if (!firstConnect) { 
-                        if (confirm("오픈톡에 참여하시겠습니까?")) {
-                            connect();
-                            firstConnect = true;
-                        }
-                    }
-                };
-
-                
 	
 				var phone;
 				
@@ -394,10 +293,10 @@
 					const uri='ws://localhost:82/myapp/group';
 					phone = new WebSocket(uri);
 					
-					phone.onopen =()=>{ //소켓이 연결되었을때 수행되는 핸들러
+					phone.onopen =()=>{ 
 						console.log('서버에 연결 성공');
 					};
-					phone.onclose =()=>{ //소켓이 연결종료 되었을때 수행되는 핸들러
+					phone.onclose =()=>{ 
 						console.log('서버와 연결 종료');
 					};
 					phone.onerror =e=>{ //
@@ -408,17 +307,14 @@
 						console.log("e",e);
 						
 						 const currentTime = new Date().toLocaleTimeString();
-						 
-						 //session에 있는 아이디와 메세지로 받은 아이디가 같으면 msg_cotainer_send 영역에 받기 -- 걍 1:1에만 적용할까
-						 
-					        // 채팅 메시지 출력할 부분
-					        
+					       		
 					        	const data = JSON.parse(e.data);
             					const userId = data.userId;
             					const message = data.message;
 								console.log(userId);
 								console.log(message);
-					        	
+								
+								// 채팅 메시지 출력할 부분
 					        	const chatBox = $(`
 							            <div class="d-flex justify-content-start mb-4">
 							                <div class="img_cont_msg">
@@ -438,24 +334,27 @@
 							        chatBox.find('.msg_time').text(currentTime);  //보낸 시간 담음
 							        $('#contentArea').append(chatBox);  
 					        	
-					        
+							        scrollToBottom();
 					};
 				};
 				
+				//소켓 끊음
 				function disconnect(){
 					phone.close();
 				}
+				
+				//메세지 전송
 				function send(){
-					const message = document.getElementById('message').value;
-					phone.send(message);
-			
+					const messageInput = document.getElementById('message');
+				    const message = messageInput.value;
+				    phone.send(message);
+				    reset();
+				    scrollToBottom();
 				}
-			
-			
+				
 			</script>
                 <div class="container-fluid h-100">
                     <div class="row justify-content-center h-100">
-        
         
                         <div class="col-md-8 col-xl-6 chat">
                             
@@ -502,13 +401,14 @@
         							</c:forEach>
                                     
                                 </div>
+                                
                                 <!--입력 창-->
                                 <div class="card-footer">
                                     <div class="input-group">
                                         
-                                        <textarea id="message" class="form-control type_msg" placeholder="Type your message..."></textarea>
+                                        <textarea id="message" class="form-control type_msg" onkeydown="return enter()" placeholder="Type your message..."></textarea>
                                         <div class="input-group-append">
-                                            <button class="input-group-text send_btn" onclick="send();"><i class="fas fa-location-arrow"></i></button>
+                                            <button class="input-group-text send_btn" onclick="send();">send</button>
                                         </div>
                                     </div>
                                 </div>
@@ -517,22 +417,64 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
     </main>
 
     <script>    
-        document.getElementById('chatIcon').addEventListener('click', function() {
-            var chatBox = document.getElementById('chatCard');
-            if (chatBox.style.display === 'none' || chatBox.style.display === '') {
-                chatBox.style.display = 'block';
-            } else {
-                chatBox.style.display = 'none';
+    
+    	
+	    let isLoggedIn = ${not empty sessionScope.loginUser};
+	    let firstConnect = false;
+	
+	 	 //로그인한 사용자만 참여가능
+	    document.getElementById('chatIcon').addEventListener('click', function() {
+	        if (!isLoggedIn) {
+	            alert("로그인이 필요합니다.");
+	            return;
+	        }
+	
+	        var chatBox = document.getElementById('chatCard');
+	        if (chatBox.style.display === 'none' || chatBox.style.display === '') {
+	            chatBox.style.display = 'block';
+	            scrollToBottom();
+	            if (!firstConnect) {
+	                if (confirm("오픈톡에 참여하시겠습니까?")) {
+	                    connect();
+	                    firstConnect = true;
+	                }
+	            }
+	        } else {
+	            chatBox.style.display = 'none';
+	        }
+	    });
+	    
+   
+        //엔터누르면 전송
+        function enter() {
+            if (event.keyCode === 13) {
+                send();
+                scrollToBottom();
+                reset();
+                return false;
+                
             }
-        });
+            return true;
+        }
         
+        //스크롤 제일 밑으로
+        function scrollToBottom() {
+	        const chatBox = document.getElementById('contentArea');
+	        chatBox.scrollTop = chatBox.scrollHeight;
+	    }
         
-
+        //입력창 초기화
+        function reset(){
+        	document.getElementById('message').value = "";
+		}
+        
+        //전부 로드된 후 scrollToBottom
+        window.onload = function() {
+            scrollToBottom();
+        };
 
 
     </script>

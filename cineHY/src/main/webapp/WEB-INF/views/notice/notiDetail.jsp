@@ -67,25 +67,11 @@
 
             <div align="center">
             
-            	<c:if test="${sesseionScope.loginUser.userId eq requestScope.notice.noticeWriter }">
-                	<!-- 수정하기, 삭제하기 버튼은 이 글이 본인이 작성한 글일 경우에만 보여져야 함 -->
-                    <!-- a태그에 herf로 적었다? ->get방식 매핑이다(즉 url를 알고있는 클라이언트가 맘대로 삭제할 수 있다.) -->
+            	<c:if test="${ sessionScope.loginUser.userId == 'admin' }">
+				    <a class="btn btn-primary" onclick="postSubmit(this.innerHTML)">수정하기</a>
+	                <a class="btn btn-danger" onclick="postSubmit(this.innerHTML)">삭제하기</a>
+				</c:if>
                 
-               		<!-- 
-	                <form action= "board-update.do" method="post">
-	                	<input type= "hidden" name="boardNo" value="${board.boardNo }">
-	                	<a class="btn btn-primary">수정하기</a>
-	                </form>
-	                <form action= "board-delete.do" method="post">
-	                	<input type= "hidden" name="boardNo" value="${board.boardNo }">
-	                </form>
-	                 -->
-                	<!-- 쓰고보니 자바스크립트가 나음 -->
-                	
-                	
-                	 </c:if>
-                <a class="btn btn-primary" onclick="postSubmit(this.innerHTML)">수정하기</a>
-                <a class="btn btn-danger" onclick="postSubmit(this.innerHTML)">삭제하기</a>
                 
                 
                 
@@ -116,19 +102,14 @@
 	                }
 	                
 	                
-	                
-	                
-                }
+                });
                 
                 </script>
                 
             </div>
             <br><br>
-
-           
         </div>
         <br><br>
-
     </div>
     
     <script>
@@ -142,7 +123,7 @@
     		$.ajax({
         		url : 'reply',
         		data : {
-        			refBoardNo : ${ board.boardNo },
+        			refBoardNo : ${ notice.noticeNo },
         			replyContent : $('#content').val(),
         			replyWriter : '${ sessionScope.loginUser.userId }'
         			
@@ -157,27 +138,12 @@
         				$('#content').val('');
         			};
         		}
-        		
         	});
     		
     	}else {
     		alertify.alert('내용 쓰셈');
     	}
-    	
-    	
     }
-    /*
-    		data : {
-        			refBoardNo : ${ board.boardNo },
-        			replyContent : $('#content').val(),
-        			replyWriter : ${ sessionScope.loginUser.userId }   
-        			//이렇게하면 admin 이 바로 담겨버려서 변수로 인식함.. 'admin' 이렇게 되어야함
-        			
-        		},
-    */
-    
-    
-    
     
     
     	$(() =>{
@@ -186,14 +152,13 @@
     	})
     
     
-    	//바로 호출되게 하려고 (댓글 쓰면 업데이트도 되어야함)
     	function selectReply(){
     		
     		$.ajax({
     			url:'reply',
     			type :'get',
     			data : {
-    				boardNo : ${board.boardNo}
+    				noticeNo : ${notice.noticeNo}
     			},
     			
     			success : result => {
@@ -213,10 +178,6 @@
     				$('#rcount').html(result.length);
     			}
     			
-    			
-    			//error : e=>{
-    				//console.log(e);
-    			//}
     		});
     		
     		
@@ -224,25 +185,7 @@
     	
     </script>
     
-    
-    
-    
-    
      <jsp:include page="../common/footer.jsp" />
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     

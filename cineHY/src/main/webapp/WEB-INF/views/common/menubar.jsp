@@ -3,6 +3,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
+<head>
+<style>
+    .navbar-nav .nav-item.active .nav-link {
+        font-weight: bold;
+        color: #29b9a5; /* 선택된 항목 색상 */
+    }
+</style>
+</head>
 <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
@@ -18,7 +26,7 @@
                 <strong>Cine HY</strong>
             </a>
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="movieList">영화</a>
                 </li>
                 <li class="nav-item">
@@ -43,18 +51,26 @@
                     	<div class = "welcome">
                         <label>${sessionScope.loginUser.userNick}님 환영합니다</label> &nbsp;&nbsp;
                         </div>
-                        <li class="nav-item active" style="float: right;">
-
-                          <a class="nav-link" href="myPage">마이페이지</a>
-
+                         <c:choose>
+                            <c:when test="${sessionScope.loginUser.userId == 'admin'}">
+                                <li class="nav-item active" style="float: right;">
+                                    <a class="nav-link" href="adminPage">관리자 페이지</a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li class="nav-item" style="float: right;">
+                                    <a class="nav-link text-light" href="myPage">마이페이지</a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="logout">로그아웃</a>
                         </li>
                     </c:when>
                     <c:otherwise>
-                        <li class="nav-item active" style="float: right;">
-                          <a class="nav-link" href="login">로그인</a>
+                        <li class="nav-item" style="float: right;">
+                          <a class="nav-link text-light" href="login">로그인</a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="join">회원가입</a>
@@ -65,4 +81,6 @@
         </div>
     </nav>
 </header>
+
+
 </html>

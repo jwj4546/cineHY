@@ -137,6 +137,11 @@ public class MemberController {
 		return "member/myPage/myPage";
 	}
 	
+	@GetMapping("adminPage")
+	public String adminPage() {
+		return "member/myPage/adminPage";
+	}
+	
 	@GetMapping("myReview")
 	public String myReview() {
 		

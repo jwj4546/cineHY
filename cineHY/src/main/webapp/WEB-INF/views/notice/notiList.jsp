@@ -50,10 +50,10 @@
             <h2>게시판</h2>
             <br>
 
-            <c:if test="${ not empty sessionScope.loginUser }">
-                <!-- 로그인 후 상태일 경우만 보여지는 글쓰기 버튼 -->
-                <a class="btn btn-secondary" style="float:right;" href="noticeForm.do">글쓰기</a>
-            </c:if>
+            <c:if test="${ sessionScope.loginUser.userId == 'admin' }">
+			    <a class="btn btn-secondary" style="float:right;" href="noticeForm.do">글쓰기</a>
+			</c:if>
+
             <br>
             <br>
             <table id="noticeList" class="table table-hover" align="center">
