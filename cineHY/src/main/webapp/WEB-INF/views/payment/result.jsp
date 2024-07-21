@@ -81,12 +81,12 @@
 			                        <td>${ order.payMethod }</td>
 			                    </tr>
 	                </table>
-	                <div class="text-right">
-	                    <a href="productlist"><button class="btn btn-secondary">결제확인</button></a>
-	                    <button class="btn btn-danger">결제취소</button>
-	                </div>
 	            </div>
             </c:forEach>
+            <div class="text-right">
+	            <a href="productlist"><button class="btn btn-secondary">결제확인</button></a>
+	            <button class="btn btn-danger">결제취소</button>
+            </div>	
         </div>
     </div>
 
