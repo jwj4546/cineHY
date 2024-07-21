@@ -178,11 +178,11 @@
 			cursor: pointer;
 		}
 		.send_btn{
-	border-radius: 0 15px 15px 0 !important;
-	background-color: rgba(0,0,0,0.3) !important;
-			border:0 !important;
-			color: white !important;
-			cursor: pointer;
+		border-radius: 0 10px 10px 0 ;
+		background-color: rgba(0,0,0,0.3) ;
+			border:0 ;
+			color: white;
+			
 		}
 		.search_btn{
 			border-radius: 0 15px 15px 0 !important;
@@ -364,7 +364,7 @@
         <div class="container">
 
 			<!-- chat아이콘 -->
-            <button class="chat-icon" id="chatIcon" onclick="chatAlert();">
+            <button class="chat-icon" id="chatIcon" >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-right-text-fill" viewBox="0 0 16 16">
                     <path d="M16 2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9.586a1 1 0 0 1 .707.293l2.853 2.853a.5.5 0 0 0 .854-.353zM3.5 3h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1 0-1m0 2.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1 0-1m0 2.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1"/>
                   </svg>
@@ -373,17 +373,8 @@
             
             <script>
             
-            	//처음에 채팅 이모티콘 눌렀을때만 소켓 접속하도록
-                let firstConnect = false; 
-
-                window.chatAlert = function() {
-                    if (!firstConnect) { 
-                        if (confirm("오픈톡에 참여하시겠습니까?")) {
-                            connect();
-                            firstConnect = true;
-                        }
-                    }
-                };
+            	
+             
 
                 
 	
@@ -409,7 +400,7 @@
 						
 						 const currentTime = new Date().toLocaleTimeString();
 						 
-						 //session에 있는 아이디와 메세지로 받은 아이디가 같으면 msg_cotainer_send 영역에 받기 -- 걍 1:1에만 적용할까
+						
 						 
 					        // 채팅 메시지 출력할 부분
 					        
@@ -438,7 +429,7 @@
 							        chatBox.find('.msg_time').text(currentTime);  //보낸 시간 담음
 							        $('#contentArea').append(chatBox);  
 					        	
-					        
+							        scrollToBottom();
 					};
 				};
 				
@@ -448,6 +439,8 @@
 				function send(){
 					const message = document.getElementById('message').value;
 					phone.send(message);
+					message.value = "";
+					scrollToBottom();
 			
 				}
 			
@@ -502,13 +495,14 @@
         							</c:forEach>
                                     
                                 </div>
+                                
                                 <!--입력 창-->
                                 <div class="card-footer">
                                     <div class="input-group">
                                         
-                                        <textarea id="message" class="form-control type_msg" placeholder="Type your message..."></textarea>
+                                        <textarea id="message" class="form-control type_msg" onkeydown="return enter()" placeholder="Type your message..."></textarea>
                                         <div class="input-group-append">
-                                            <button class="input-group-text send_btn" onclick="send();"><i class="fas fa-location-arrow"></i></button>
+                                            <button class="input-group-text send_btn" onclick="send();">send</button>
                                         </div>
                                     </div>
                                 </div>
@@ -522,18 +516,57 @@
     </main>
 
     <script>    
-        document.getElementById('chatIcon').addEventListener('click', function() {
-            var chatBox = document.getElementById('chatCard');
-            if (chatBox.style.display === 'none' || chatBox.style.display === '') {
-                chatBox.style.display = 'block';
-            } else {
-                chatBox.style.display = 'none';
+    
+    
+    let isLoggedIn = ${not empty sessionScope.loginUser};
+
+    // 처음에 채팅 이모티콘을 눌렀을 때만 소켓 접속하도록
+    let firstConnect = false;
+
+    document.getElementById('chatIcon').addEventListener('click', function() {
+        if (!isLoggedIn) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        var chatBox = document.getElementById('chatCard');
+        if (chatBox.style.display === 'none' || chatBox.style.display === '') {
+            chatBox.style.display = 'block';
+            scrollToBottom();
+            if (!firstConnect) {
+                if (confirm("오픈톡에 참여하시겠습니까?")) {
+                    connect();
+                    firstConnect = true;
+                }
             }
-        });
-        
-        
+        } else {
+            chatBox.style.display = 'none';
+        }
+    });
+    
+   
 
 
+	    function scrollToBottom() {
+	        const chatBox = document.getElementById('contentArea');
+	        chatBox.scrollTop = chatBox.scrollHeight;
+	    }
+        
+        
+        //엔터누르면 전송
+        function enter() {
+            if (event.keyCode === 13) {
+                send();
+                scrollToBottom();
+                return false;
+                
+            }
+            return true;
+        }
+        
+        window.onload = function() {
+            scrollToBottom();
+        };
 
     </script>
     
