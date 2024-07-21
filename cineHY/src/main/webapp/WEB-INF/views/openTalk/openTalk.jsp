@@ -355,8 +355,7 @@
 </head>
 <body>
     
-      <div class="album py-5 bg-light">
-        <div class="container">
+     
 			<!-- chat아이콘 -->
             <button class="chat-icon" id="chatIcon" >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-right-text-fill" viewBox="0 0 16 16">
@@ -495,8 +494,7 @@
                         </div>
                         </div>
                     </div>
-                </div>
-            </div>
+               
     </main>
 
     <script>    
