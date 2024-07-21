@@ -61,8 +61,10 @@
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp"></jsp:include>
+	<jsp:include page="../openTalk/openTalk.jsp"></jsp:include>
 
 	<main>
+		<
       <div id="page1">
       
 		<ul class="nav mb-3 " id="pills-tab" role="tablist">
