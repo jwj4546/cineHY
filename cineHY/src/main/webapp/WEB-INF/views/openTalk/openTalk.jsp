@@ -354,29 +354,16 @@
     
 </head>
 <body>
-    <header>
-		<jsp:include page="../common/menubar.jsp"></jsp:include>
-    </header>
-      
-  
-     
+    
       <div class="album py-5 bg-light">
         <div class="container">
-
 			<!-- chat아이콘 -->
             <button class="chat-icon" id="chatIcon" >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-right-text-fill" viewBox="0 0 16 16">
                     <path d="M16 2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9.586a1 1 0 0 1 .707.293l2.853 2.853a.5.5 0 0 0 .854-.353zM3.5 3h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1 0-1m0 2.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1 0-1m0 2.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1"/>
                   </svg>
             </button>
-            <button onclick="disconnect();">전화끊기</button>
-            
             <script>
-            
-            	
-             
-
-                
 	
 				var phone;
 				
@@ -385,10 +372,10 @@
 					const uri='ws://localhost:82/myapp/group';
 					phone = new WebSocket(uri);
 					
-					phone.onopen =()=>{ //소켓이 연결되었을때 수행되는 핸들러
+					phone.onopen =()=>{ 
 						console.log('서버에 연결 성공');
 					};
-					phone.onclose =()=>{ //소켓이 연결종료 되었을때 수행되는 핸들러
+					phone.onclose =()=>{ 
 						console.log('서버와 연결 종료');
 					};
 					phone.onerror =e=>{ //
@@ -399,17 +386,14 @@
 						console.log("e",e);
 						
 						 const currentTime = new Date().toLocaleTimeString();
-						 
-						
-						 
-					        // 채팅 메시지 출력할 부분
-					        
+					       		
 					        	const data = JSON.parse(e.data);
             					const userId = data.userId;
             					const message = data.message;
 								console.log(userId);
 								console.log(message);
-					        	
+								
+								// 채팅 메시지 출력할 부분
 					        	const chatBox = $(`
 							            <div class="d-flex justify-content-start mb-4">
 							                <div class="img_cont_msg">
@@ -433,9 +417,12 @@
 					};
 				};
 				
+				//소켓 끊음
 				function disconnect(){
 					phone.close();
 				}
+				
+				//메세지 전송
 				function send(){
 					const messageInput = document.getElementById('message');
 				    const message = messageInput.value;
@@ -447,7 +434,6 @@
 			</script>
                 <div class="container-fluid h-100">
                     <div class="row justify-content-center h-100">
-        
         
                         <div class="col-md-8 col-xl-6 chat">
                             
@@ -515,10 +501,11 @@
 
     <script>    
     
-    
+    	
 	    let isLoggedIn = ${not empty sessionScope.loginUser};
 	    let firstConnect = false;
 	
+	 	 //로그인한 사용자만 참여가능
 	    document.getElementById('chatIcon').addEventListener('click', function() {
 	        if (!isLoggedIn) {
 	            alert("로그인이 필요합니다.");
@@ -553,11 +540,13 @@
             return true;
         }
         
+        //스크롤 제일 밑으로
         function scrollToBottom() {
 	        const chatBox = document.getElementById('contentArea');
 	        chatBox.scrollTop = chatBox.scrollHeight;
 	    }
         
+        //입력창 초기화
         function reset(){
         	document.getElementById('message').value = "";
 		}
@@ -566,11 +555,7 @@
         window.onload = function() {
             scrollToBottom();
         };
-        
-        
-       
-	
-	
+
 
     </script>
     
