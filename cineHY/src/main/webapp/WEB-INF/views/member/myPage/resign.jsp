@@ -373,6 +373,7 @@ ul.CTAs a {
 
 
     </style>
+     
     <title>영화등록 페이지</title>
 </head>
 <body>
@@ -484,18 +485,22 @@ ul.CTAs a {
 			  </article>
 			
 			  <!--회원탈퇴-->
-			   <form action="resign.do" method="post">
-			  <article class="fifth">
-			    <div>
-			      <h3>회원탈퇴</h3>
-			      <h3>정말로 탈퇴하시겠습니까?</h3>
-			      <p>탈퇴 시 이용내역이 삭제되며<br>서비스이용이 제한됩니다.<br>또한 삭제된 계정은 복구되지 않습니다.</p>
-			      <div>
-			          <button id="resign-btn" class="btn btn-danger" type="submit">회원탈퇴</button>
-			      </div>
-			    </div>
-			  </article>
-			  </form>
+			  <form action="resign.do" method="post">
+            <input type="hidden" value="${sessionScope.loginUser.userId}" name="userId" />
+            <article class="fifth">
+                <div>
+                    <h3>회원탈퇴</h3>
+                    <h3>정말로 탈퇴하시겠습니까?</h3>
+                    <p>탈퇴 시 이용내역이 삭제되며<br>서비스이용이 제한됩니다.<br>또한 삭제된 계정은 복구되지 않습니다.</p>
+                    <br>
+                    <label for="userPwd" class="mr-sm-2"> 비밀번호 : </label>
+                    <input type="password" class="resign" placeholder="비밀번호를 입력해주세요" id="userPwd" name="userPwd" required>
+                    <div class="mt-3">
+                        <button id="resign-btn" class="btn btn-danger" type="submit">회원탈퇴</button>
+                    </div>
+                </div>
+            </article>
+        </form>
            </div>
             
 
@@ -510,7 +515,29 @@ ul.CTAs a {
                 $(this).toggleClass('active');
             });
         });
+        
+        
+        
+        
     </script>
-     
+    
+     <script type="text/javascript">
+        $(document).ready(function () {
+          
+            var alertMsg = "${sessionScope.alertMsg}";
+
+            if (alertMsg) {
+                alert(alertMsg);
+               
+                <% 
+                    session.removeAttribute("alertMsg"); 
+                %>
+            }
+        });
+    </script>
+    
+  
+    
+   
 </body>
 </html>

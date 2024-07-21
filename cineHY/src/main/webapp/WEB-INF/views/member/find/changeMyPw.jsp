@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,8 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-   
+    
     <style>
         @import url("http://fonts.googleapis.com/earlyaccess/nanumgothic.css");
         body {
@@ -46,7 +44,8 @@
         }
         
         a { 
-            color: #555; text-decoration: none; 
+            color: #555; 
+            text-decoration: none; 
         }
         
         .links {
@@ -62,8 +61,8 @@
     
     <script>
         function pwCheck() {
-            const $pwdInput = $('#newPwd');
-            const $pwdInput2 = $('#newPwd2');
+            const $pwdInput = $('#userPwd');
+            const $pwdInput2 = $('#userPwd2');
             const regPw = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%&*^?]).{8,16}$/;
 
             if (regPw.test($pwdInput.val())) {
@@ -79,13 +78,13 @@
 
         function formsub(event) {
             event.preventDefault();
-            const $pwdInput = $('#newPwd');
-            const $pwdInput2 = $('#newPwd2');
+            const $pwdInput = $('#userPwd');
+            const $pwdInput2 = $('#userPwd2');
             const regPw = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%&*^?]).{8,16}$/;
 
             if (regPw.test($pwdInput.val())) {
                 if ($pwdInput.val() === $pwdInput2.val()) {
-                    $('#changeMyPwForm').submit();
+                    $('#changeMyPwForm').off('submit').submit(); // Prevent double submission
                 } else {
                     alert('비밀번호가 일치해야 합니다!');
                 }
@@ -95,7 +94,7 @@
         }
 
         $(document).ready(function() {
-            $('#newPwd, #newPwd2').on('input', pwCheck);
+            $('#userPwd, #userPwd2').on('input', pwCheck);
             $('#change-btn').on('click', formsub);
         });
     </script>
@@ -107,14 +106,14 @@
         </div>
         <div class="card-body">
             <form id="changeMyPwForm" action="changeMyPw.do" class="form-signin" method="POST">     
-                <input type="hidden" id="userId" name="userId" value="userIdValue">
-                <input type="hidden" id="userName" name="userName" value="userNameValue">
-                <input type="hidden" id="phoneNo" name="phoneNo" value="phoneNoValue">
+                <input type="hidden" id="userId" name="userId" value="${userId}">
+                <input type="hidden" id="userName" name="userName" value="${userName}">
+                <input type="hidden" id="phoneNo" name="phoneNo" value="${phoneNo}">
                 
-                <label for="newPwd">새 비밀번호:</label>
-                <input type="password" class="form-control" id="newPwd" name="newPwd" required><br>
-                <label for="newPwd2">새 비밀번호 재입력:</label>
-                <input type="password" class="form-control" id="newPwd2" name="newPwd2" required><br>
+                <label for="userPwd">새 비밀번호:</label>
+                <input type="password" class="form-control" id="userPwd" name="userPwd" required><br>
+                <label for="userPwd2">새 비밀번호 재입력:</label>
+                <input type="password" class="form-control" id="userPwd2" name="userPwd2" required><br>
                 <div>
                     <span id="pwdCheckResult" style="font-size:12px; font-weight:bold;"></span>
                 </div>
