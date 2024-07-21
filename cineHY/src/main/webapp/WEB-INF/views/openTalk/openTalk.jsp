@@ -437,14 +437,13 @@
 					phone.close();
 				}
 				function send(){
-					const message = document.getElementById('message').value;
-					phone.send(message);
-					message.value = "";
-					scrollToBottom();
-			
+					const messageInput = document.getElementById('message');
+				    const message = messageInput.value;
+				    phone.send(message);
+				    reset();
+				    scrollToBottom();
 				}
-			
-			
+				
 			</script>
                 <div class="container-fluid h-100">
                     <div class="row justify-content-center h-100">
@@ -512,61 +511,66 @@
                     </div>
                 </div>
             </div>
-
     </main>
 
     <script>    
     
     
-    let isLoggedIn = ${not empty sessionScope.loginUser};
-
-    // 처음에 채팅 이모티콘을 눌렀을 때만 소켓 접속하도록
-    let firstConnect = false;
-
-    document.getElementById('chatIcon').addEventListener('click', function() {
-        if (!isLoggedIn) {
-            alert("로그인이 필요합니다.");
-            return;
-        }
-
-        var chatBox = document.getElementById('chatCard');
-        if (chatBox.style.display === 'none' || chatBox.style.display === '') {
-            chatBox.style.display = 'block';
-            scrollToBottom();
-            if (!firstConnect) {
-                if (confirm("오픈톡에 참여하시겠습니까?")) {
-                    connect();
-                    firstConnect = true;
-                }
-            }
-        } else {
-            chatBox.style.display = 'none';
-        }
-    });
-    
+	    let isLoggedIn = ${not empty sessionScope.loginUser};
+	    let firstConnect = false;
+	
+	    document.getElementById('chatIcon').addEventListener('click', function() {
+	        if (!isLoggedIn) {
+	            alert("로그인이 필요합니다.");
+	            return;
+	        }
+	
+	        var chatBox = document.getElementById('chatCard');
+	        if (chatBox.style.display === 'none' || chatBox.style.display === '') {
+	            chatBox.style.display = 'block';
+	            scrollToBottom();
+	            if (!firstConnect) {
+	                if (confirm("오픈톡에 참여하시겠습니까?")) {
+	                    connect();
+	                    firstConnect = true;
+	                }
+	            }
+	        } else {
+	            chatBox.style.display = 'none';
+	        }
+	    });
+	    
    
-
-
-	    function scrollToBottom() {
-	        const chatBox = document.getElementById('contentArea');
-	        chatBox.scrollTop = chatBox.scrollHeight;
-	    }
-        
-        
         //엔터누르면 전송
         function enter() {
             if (event.keyCode === 13) {
                 send();
                 scrollToBottom();
+                reset();
                 return false;
                 
             }
             return true;
         }
         
+        function scrollToBottom() {
+	        const chatBox = document.getElementById('contentArea');
+	        chatBox.scrollTop = chatBox.scrollHeight;
+	    }
+        
+        function reset(){
+        	document.getElementById('message').value = "";
+		}
+        
+        //전부 로드된 후 scrollToBottom
         window.onload = function() {
             scrollToBottom();
         };
+        
+        
+       
+	
+	
 
     </script>
     
