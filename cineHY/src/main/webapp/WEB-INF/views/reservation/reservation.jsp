@@ -93,7 +93,7 @@
 	                
 	            </div>
 	            <div class="col d-flex justify-content-end align-items-center">
-	                <button class="btn btn-primary mx-2">좌석선택</button>
+	                <button class="btn btn-primary mx-2" id="seatBtn">좌석선택</button>
 	                <button class="btn btn-danger">취소</button>
 	            </div>
 	        </div>
@@ -279,6 +279,41 @@ $(document).ready(function() {
     
 	
 	    
+});
+
+// 좌석선택 버튼 클릭시 선택한 데이터를 sessionStorage에 저장 후 좌석 페이지로 이동
+$("#seatBtn").on("click", function() {
+	
+	
+	const movieCode = $('#movieSelect option:selected');
+    const theaterName = $('#theaterSelect option:selected');
+    const startDate = $('#dateSelect');
+    const startTime = $('#timeSelect option:selected');
+    const movie = $('#movieSelect option:selected').text();
+    const theater = $('#theaterSelect option:selected').text();
+    
+    if(movieCode.val() !== 0 && theaterName.val() !== "" && startDate.val() !== "" && startTime.text() !== "") {
+    	
+    	const res = {
+    			movieCode : movieCode.val(),
+    			theaterCode : theaterName.val(),
+    			ticketDate : startDate.val(),
+    			startTime : startTime.text(),
+    			movieName : movie,
+    			theaterName : theater
+    	};
+    	console.log(res);
+    
+    
+    const resInfo = JSON.stringify(res);
+    console.log(resInfo);
+    window.sessionStorage.setItem('resInfo', '');
+    window.sessionStorage.setItem('resInfo', resInfo);
+    location.href = "seat";
+    }
+    else {
+    	alert("모든 항목을 선택해줘잉");
+    }
 });
 
 
