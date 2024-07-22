@@ -219,7 +219,7 @@ public class MemberController {
 			session.setAttribute("loginUser", memberService.login(member));
 			session.setAttribute("alertMsg", "회원정보가 업데이트 되었습니다!");
 			
-			return "redirect:/";
+			return "redirect:/myInfoUpdate";
 		} else {
 			model.addAttribute("errorMsg","실패!");
 			return "common/errPage";
