@@ -50,7 +50,7 @@
             justify-content: center;
             margin: 0 auto;
         }
-    .row1 {
+    .cinema .row {
         background-color: #ccc;
         width: 50px;
         height: 50px;
@@ -87,14 +87,14 @@
     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="width: 800px; margin-left: 310px; display: flex;">
         <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 1200px;margin: 0 auto; float: left;">
             <button type="button" class="btn btn-light" style="width: 50px; margin-left: 50px;">인원</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(1)">1</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(2)">2</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(3)">3</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(4)">4</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(5)">5</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(6)">6</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(7)">7</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(8)">8</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(1)">1</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(2)">2</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(3)">3</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(4)">4</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(5)">5</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(6)">6</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(7)">7</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(8)">8</button>
             <div style="border-left: 1px solid#000; margin-left: 50px;padding: 20px;">
                 <div><p id="pointName">영화관 지점명 : </p></div>
                 <div><p id="startDate">상영일자 : </p></div>
@@ -110,169 +110,13 @@
     <div class="screen">Screen</div>
     <br><br><br><br><br>
         <div class="cinema">
-            <!-- 좌석 나열 A1 ~ A12 -->
-            <div class="row1">A</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-            
-            <!-- 좌석 나열 B1 ~ B12 -->
-            <div class="row1">B</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-
-
-            <!-- 좌석 나열 C1 ~ C12 -->
-            <div class="row1">C</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-
-
-            <!-- 좌석 나열 D1 ~ D12 -->
-            <div class="row1">D</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-
-
-            <!-- 좌석 나열 E1 ~ E12 -->
-            <div class="row1">E</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-
-
-            <!-- 좌석 나열 F1 ~ F12 -->
-            <div class="row1">F</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-
-
-            <!-- 좌석 나열 G1 ~ G12 -->
-            <div class="row1">G</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-
-
-            <!-- 좌석 나열 H1 ~ H12 -->
-            <div class="row1">H</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-
-
-            <!-- 좌석 나열 I1 ~ I12 -->
-            <div class="row1">I</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
+            <!-- 좌석 출력 A1 ~ J12 -->
+        
         </div><br><br>
+            
         
         <div class="col d-flex justify-content-end align-items-center">
-	        <button class="btn btn-primary mx-2">결제</button>
+	        <button class="btn btn-primary mx-2" id="payBtn">결제</button>
 	        <button class="btn btn-danger">취소</button>
        	</div>
         
@@ -280,17 +124,97 @@
         <br><br><br>
         
         <script>
+        	
+        	// 페이지가 로드되면 이전 페이지에서 선택한 데이터를 불러옴
         	$(document).ready(function() {
         		console.log(window.sessionStorage.getItem('resInfo'));
         		
         		const resInfo = JSON.parse(window.sessionStorage.getItem('resInfo'));
-        		
+        		console.log(resInfo);
         		$("#pointName").text("영화관 지점명 : " + resInfo.theaterName);
         		$("#startDate").text("상영일자 : " + resInfo.ticketDate);
         		$("#startTime").text("상영시간 / 상영관 : " + resInfo.startTime);
         		
+        		
+        		// 알파벳 대문자 A ~ J 배열 생성
+        		const row = Array.from({ length : 10}, (v, i) => String.fromCharCode(i + 65));
+        		
+        		let text = '';
+        		
+        		// 좌석 출력 반복문
+        		for(let char of row) {
+        			
+        			text += '<div class="row">' +char + '</div>'
+                    + '<div class="seat" id="'+ char + '1">1</div>'
+                    + '<div class="seat" id="'+ char + '2">2</div>'
+                    + '<div class="seat" id="'+ char + '3">3</div>'
+                    + '<div class="seat" id="'+ char + '4">4</div>'
+                    + '<div class="seat" id="'+ char + '5">5</div>'
+                    + '<div class="seat" id="'+ char + '6">6</div>'
+                    + '<div class="space"></div>'
+                    
+                    + '<div class="seat" id="'+ char + '7">7</div>'
+                    + '<div class="seat" id="'+ char + '8">8</div>'
+                    + '<div class="seat" id="'+ char + '9">9</div>'
+                    + '<div class="seat" id="'+ char + '10">10</div>'
+                    + '<div class="seat" id="'+ char + '11">11</div>'
+                    + '<div class="seat" id="'+ char + '12">12</div>'
+        			
+        		};
+        		$(".cinema").html(text);
+        		
         	});
-        
+        	
+        	
+        	
+        	let selectedPerson = 0;
+
+        	function selectPerson(number) {
+        	    selectedPerson = number;
+        	    $('.person-btn').removeClass('active');
+        	    $(event.target).addClass('active');
+        	    $('.seat').removeClass('selected');
+
+        	    
+        	    // 모든 seat class를 조회하여 click 이벤트를 추가함
+        	    $('.seat').off('click').on('click', function() {
+        	        const selectedSeats = $('.seat.selected').length;
+
+        	        if (selectedSeats < selectedPerson) {
+        	            $(this).toggleClass('selected');
+        	        } else if ($(this).hasClass('selected')) {
+        	            $(this).removeClass('selected');
+        	        }
+        	        
+        	    });
+        	}
+
+            
+            
+            // 결제 버튼 클릭시
+            $("#payBtn").on("click",  function() {
+            	
+				const count = $('.person-btn.active').text();
+				const seatNumber = $('.selected');
+				
+				// 선택한 좌석의 id값을 seatArr에 push
+            	const seatArr = new Array();
+            	for(let i=0; i<count ; i++) {
+            		seatArr.push($(seatNumber[i]).attr('id'));
+            	}
+            	
+            	// 세션에 있는 이전 페이지의 데이터 가공
+            	const res = window.sessionStorage.getItem("resInfo");
+            	const resInfo = JSON.parse(res);
+            	resInfo.seat = seatArr;
+            	
+				// sessionStorage에 JSON 형태의 예매 정보와 좌석 정보를 추가
+				const seatInfo = JSON.stringify(resInfo);
+				window.sessionStorage.setItem('seatInfo', '');
+				window.sessionStorage.setItem('seatInfo', seatInfo);
+				
+				location.href = "payTicket";
+            });
         </script>
         
 <jsp:include page="../common/footer.jsp"></jsp:include>

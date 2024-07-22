@@ -138,7 +138,7 @@
         
         <input type="hidden" id="userId" value="${ sessionScope.loginUser.userId }"/>
        	<button class="btn btn-secondary" id="cartInsert">장바구니 추가</button>
-        <button class="btn btn-info">구매하기</button>
+       	<button class="btn btn-info">구매하기</button>
       </div>
     </div>
   </div>
