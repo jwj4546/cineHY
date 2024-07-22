@@ -19,7 +19,7 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 
     <style>
-       #page1 { height: 80px;}
+       	#page1 { height: 80px;}
         #page2 { 
           height: 80px;
           display: flex;
@@ -349,7 +349,7 @@ ul.CTAs a {
             </div>
 
             <ul class="list-unstyled components">
-                <p>관리자기능</p>
+                <li><p>관리자기능</p></li>
                 <li >
                     <a href="movieEnroll" >상영할 영화 등록</a>                 
                 </li>
@@ -408,6 +408,7 @@ ul.CTAs a {
 
            
     	</div>
+	</div>
 	</div>
    	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
     <script type="text/javascript">

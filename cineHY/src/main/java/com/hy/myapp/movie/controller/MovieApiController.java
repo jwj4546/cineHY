@@ -7,10 +7,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,13 +20,11 @@ import com.google.gson.Gson;
 import com.hy.myapp.movie.model.service.MovieService;
 import com.hy.myapp.movie.model.vo.Message;
 import com.hy.myapp.movie.model.vo.Movie;
-import com.siot.IamportRestClient.response.Schedule;
 
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 @Slf4j
 @RestController
@@ -284,19 +282,22 @@ public class MovieApiController {
 		 return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
     }
 	
-	@DeleteMapping("{movieCode}")
-	public ResponseEntity<Message> deleteById(@PathVariable int movieCode) {
-		int result = movieService.delete(movieCode);
-		
-		if(result == 0) {
-			return ResponseEntity.status(HttpStatus.OK).body(Message.builder()
-																	.message("게시글 없음")
-																	.build());
+	@PutMapping(value = "delete", produces = "application/json; charset=UTF-8")
+	public ResponseEntity<Message> delete(@RequestBody Movie movie) {
+			
+			int result = movieService.delete(movie);
+			if (result == 0) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder()
+																 .message("삭제안됨")
+																 .build());
+	        }
+	
+			Message responseMsg = Message.builder().data("영화목록 삭제에 성공했습니다")
+												   .message("서비스요청성공")
+												   .build();
+	
+	        return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 		}
-		Message responseMsg = Message.builder().data("삭제성공!").message("서비스처리성공").build();
-		
-		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
-	}
 	
 	@GetMapping(value="searchMovie", produces="application/json; charset=UTF-8")
 	public String searchMovie(@RequestParam("keyword") String query) throws IOException {

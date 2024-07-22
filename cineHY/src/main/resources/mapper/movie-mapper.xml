@@ -10,13 +10,16 @@
 	    	    MOVIE_CODE
 	       FROM
 	       		TB_MOVIE
+	      WHERE
+      			STATUS = 'Y'
+	       		
 
 </select>
 
 
 <insert id="insertMovie" parameterType="movie">
 
-	INSERT INTO
+	<!-- INSERT INTO
 				TB_MOVIE
 		 VALUES
 		 		(
@@ -26,33 +29,79 @@
 		 		#{summary},
 		 		#{runningTime},
 		 		#{rating},
-		 		#{openedDate}
-		 		)
+		 		#{openedDate},
+		 		#{status}
+		 		) -->
+	MERGE INTO 
+				TB_MOVIE target
+	  	 USING (
+	    		SELECT  #{movieCode} MOVIE_CODE, 
+	           			#{movieTitle} MOVIE_TITLE, 
+           				#{genre} GENRE, 
+           				#{summary} SUMMARY, 
+           				#{runningTime} RUNNING_TIME, 
+           				#{rating} RATING, 
+          				#{openedDate} OPENED_DATE
+      	 	 	  FROM dual
+			   ) source
+			ON (target.MOVIE_CODE = source.MOVIE_CODE)
+		  WHEN 
+	   MATCHED
+	   	  THEN
+		UPDATE 
+		   SET
+		STATUS = 'Y'
+          WHEN 
+   NOT MATCHED
+   		  THEN
+		INSERT (
+				MOVIE_CODE, 
+				MOVIE_TITLE, 
+				GENRE, 
+				SUMMARY, 
+				RUNNING_TIME, 
+				RATING, 
+				OPENED_DATE, 
+				STATUS
+				)
+	    VALUES (
+	    		source.MOVIE_CODE, 
+	    		source.MOVIE_TITLE, 
+	    		source.GENRE, 
+	    		source.SUMMARY, 
+	    		source.RUNNING_TIME,
+	    		source.RATING, 
+	    		source.OPENED_DATE, 
+	    		'Y')
 
 </insert>
 
 <select id="getMovieList" resultType="movie">
 
-		 SELECT
-	    	    MOVIE_CODE movieCode,
-	    	    MOVIE_TITLE movieTitle,
-	    	    GENRE,
-	    	    SUMMARY,
-	    	    RUNNING_TIME runningTime,
-	    	    RATING,
-	    	    OPENED_DATE openedDate
-	       FROM
-	       		TB_MOVIE
+	 SELECT
+    	    MOVIE_CODE movieCode,
+    	    MOVIE_TITLE movieTitle,
+    	    GENRE,
+    	    SUMMARY,
+    	    RUNNING_TIME runningTime,
+    	    RATING,
+    	    OPENED_DATE openedDate
+       FROM
+       		TB_MOVIE
+      WHERE
+      		STATUS = 'Y'
 
 </select>
 
-<delete id="deleteMovie" parameterType="_int" >
-	DELETE
+<update id="deleteMovie" parameterType="_int" >
+	UPDATE
 		   TB_MOVIE
+	   SET
+	   	   STATUS = 'N'
 	 WHERE
 	 	   MOVIE_CODE = #{movieCode} 
 
-</delete>
+</update>
 
 
 </mapper>
