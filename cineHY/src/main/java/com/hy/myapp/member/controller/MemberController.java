@@ -31,11 +31,8 @@ public class MemberController {
 	  
 	
 	
-    @Autowired
-    private MemberService memberService;
-
-    @Autowired
-    private BCryptPasswordEncoder bcryptPasswordEncoder;
+	private final MemberService memberService;
+	private final BCryptPasswordEncoder bcryptPasswordEncoder;
 	
 	@GetMapping("join")
 	public String joinform() {
@@ -137,6 +134,11 @@ public class MemberController {
 		return "member/myPage/myPage";
 	}
 	
+	@GetMapping("adminPage")
+	public String adminPage() {
+		return "member/myPage/adminPage";
+	}
+	
 	@GetMapping("myReview")
 	public String myReview() {
 		
@@ -181,19 +183,33 @@ public class MemberController {
 	
 	@PostMapping("resign.do")
 	public String resign(Member member, HttpSession session, Model model) {
-	    try {
-	        // 회원 탈퇴 처리
-	        if (memberService.delete(member.getUserId()) > 0) {
-	            session.setAttribute("alertMsg", "탈퇴 성공");
-	            session.removeAttribute("loginUser");
-	            return "redirect:/"; 
-	        } else {
-	            model.addAttribute("errorMsg", "회원 탈퇴 실패");
-	            return "common/errorPage";
+	    Member loginUser = (Member) session.getAttribute("loginUser");
+
+	    if (loginUser == null) {
+	        session.setAttribute("alertMsg", "로그인이 필요합니다.");
+	        return "redirect:/login";
+	    }
+
+	    String plainPwd = member.getUserPwd();
+	    String encPwd = loginUser.getUserPwd();
+
+	    if (bcryptPasswordEncoder.matches(plainPwd, encPwd)) {
+	        try {
+	            if (memberService.delete(member.getUserId()) > 0) {
+	                session.setAttribute("alertMsg","허허");
+	                session.removeAttribute("loginUser");
+	                return "redirect:/";
+	            } else {
+	                session.setAttribute("alertMsg", "회원 탈퇴 실패");
+	                return "redirect:/errorPage"; // 실패 시 에러 페이지로 리다이렉트
+	            }
+	        } catch (Exception e) {
+	            session.setAttribute("alertMsg", "회원 탈퇴 중 오류가 발생했습니다.");
+	            return "redirect:/errorPage"; // 예외 발생 시 에러 페이지로 리다이렉트
 	        }
-	    } catch (Exception e) {
-	        model.addAttribute("errorMsg", "회원 탈퇴 중 오류가 발생했습니다.");
-	        return "common/errorPage";
+	    } else {
+	        session.setAttribute("alertMsg", "비밀번호가 일치하지 않습니다.");
+	        return "redirect:/resign"; // 비밀번호 불일치 시 재시도 페이지로 리다이렉트
 	    }
 	}
 	
@@ -203,7 +219,7 @@ public class MemberController {
 			session.setAttribute("loginUser", memberService.login(member));
 			session.setAttribute("alertMsg", "회원정보가 업데이트 되었습니다!");
 			
-			return "redirect:/";
+			return "redirect:/myInfoUpdate";
 		} else {
 			model.addAttribute("errorMsg","실패!");
 			return "common/errPage";
@@ -211,93 +227,59 @@ public class MemberController {
 	}
 	
 	
-	@GetMapping("findMyId")
-	public String findMyId() {
-		
-		return "member/find/findMyId";
-	
-	}
-	
-	@RequestMapping(value = "findMyId.do", method = RequestMethod.POST)
-    @ResponseBody
-    public String findMyId(@RequestParam("userName") String userName, 
-                           @RequestParam("phoneNo") String phoneNo, 
-                           @RequestParam("email") String email) {
-       // System.out.println("userName의 이름=" + userName);
-      //  System.out.println("phoneNo의 번호=" + phoneNo);
-     //   System.out.println("email의 주소=" + email);
+	@GetMapping("findMyPw")
+    public String findMyPwPage() {
+        return "member/find/findMyPw"; // JSP 파일 경로를 지정
+    }
 
-        Member member = memberService.findMyId(userName, phoneNo, email);
+    // 비밀번호 찾기 처리
+    @PostMapping("findMyPw.do")
+    @ResponseBody
+    public String findMyPw(@RequestParam("userId") String userId,
+                           @RequestParam("userName") String userName,
+                           @RequestParam("phoneNo") String phoneNo) {
+        Member member = memberService.findMyPw(userId, userName, phoneNo);
         if (member == null) {
-            return null;
+            return "not_found"; // 비밀번호를 찾을 수 없다는 메시지 반환
         } else {
-            return member.getUserId();
+            return "found"; // 비밀번호를 찾았다는 메시지 반환
         }
     }
-	
-	
-	@GetMapping("findMyPw")
-	public String findMyPw() {
-		return "member/find/findMyPw";
-	}
-	
-	@RequestMapping(value = "findMyPw.do", method = RequestMethod.POST)
-	@ResponseBody
-	public String findMyPw(@RequestParam("userId") String userId,
-						   @RequestParam("userName") String userName,
-						   @RequestParam("phoneNo") String phoneNo) {
-		
-	      // System.out.println("userName =" + userName);
-	       //System.out.println("userId=" + userId);
-	      // System.out.println("phoneNo =" + phoneNo);
-	       
-	      Member member = memberService.findMyPw(userId, userName, phoneNo);
-	      if (member == null) {
-	    	  return null;
-	      } else {
-	    	  return member.getUserPwd();
-	      }
-	     	      
-	      
-	}
-	
-	@GetMapping("changeMyPw")
-	public String changeMyPw() {
-		return "member/find/changeMyPw";
-	}
-	
-	 @PostMapping("changeMyPw.do")
-	    public String changePw(@RequestParam("userId") String userId,
-	                           @RequestParam("userName") String userName,
-	                           @RequestParam("phoneNo") String phoneNo,
-	                           @RequestParam("newPwd") String newPwd,
-	                           Model model) {
-	        System.out.println("Received Parameters - userId: " + userId + ", userName: " + userName + ", phoneNo: " + phoneNo);
 
-	        // 새로운 비밀번호 암호화
-	        String encPwd = bcryptPasswordEncoder.encode(newPwd);
-	        System.out.println("Encoded Password: " + encPwd);
+    // 비밀번호 변경 페이지를 위한 GET 요청 처리
+    @GetMapping("changeMyPw")
+    public String changeMyPwPage() {
+        return "member/find/changeMyPw"; // JSP 파일 경로를 지정
+    }
 
-	        // Member 객체에 정보 설정
-	        Member member = new Member();
-	        member.setUserId(userId);
-	        member.setUserName(userName);
-	        member.setPhoneNo(phoneNo);
-	        member.setUserPwd(encPwd);
+    // 비밀번호 변경 처리
+    @PostMapping("changeMyPw.do")
+    public String changePw(@RequestParam("userId") String userId,
+                           @RequestParam("userName") String userName,
+                           @RequestParam("phoneNo") String phoneNo,
+                           @RequestParam("userPwd") String userPwd,
+                           Model model) {
+        // 비밀번호 암호화
+        String encPwd = bcryptPasswordEncoder.encode(userPwd);
 
-	        String viewName;
-	        if (memberService.changePw(member) > 0) {
-	            System.out.println("Password changed successfully for userId: " + userId);
-	            model.addAttribute("member", member);
-	            return "redirect:/";
-	        } else {
-	            System.out.println("Failed to change password for userId: " + userId);
-	            model.addAttribute("errorMessage", "비밀번호 변경에 실패했습니다.");
-	            viewName = "common/errorPage";
-	        }
-	        return viewName;
-	    }
-	
+        // Member 객체에 정보 설정
+        Member member = new Member();
+        member.setUserId(userId);
+        member.setUserName(userName);
+        member.setPhoneNo(phoneNo);
+        member.setUserPwd(encPwd);
+
+        // 비밀번호 변경 시도
+        int result = memberService.changePw(member);
+
+        if (result > 0) {
+            model.addAttribute("member", member);
+            return "redirect:/"; // 비밀번호 변경 후 리다이렉트
+        } else {
+            model.addAttribute("errorMessage", "비밀번호 변경에 실패했습니다.");
+            return "common/errorPage"; // 오류 페이지로 리턴
+        }
+    }
 	
 	
 	

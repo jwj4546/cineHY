@@ -272,6 +272,7 @@ article input {
 	    const checkB1 = document.getElementById("hy-agree");    
 	    const checkB2 = document.getElementById("info-agree");
 	    const checkB3 = document.getElementById("pro-agree");
+	    
 
 	   
 	    if (!(checkB1.checked && checkB2.checked && checkB3.checked)) {

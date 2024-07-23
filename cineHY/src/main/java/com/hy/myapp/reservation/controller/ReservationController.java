@@ -42,4 +42,9 @@ public class ReservationController {
         return "reservation/reservation";
     }
 
+	@GetMapping("seat")
+	public String seat() {
+		return "reservation/seat";
+	}
+	
 }

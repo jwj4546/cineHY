@@ -741,12 +741,13 @@
                     console.log("stars{}", stars);
                     let starContainer = document.getElementById('avgStar'); // 별을 삽입할 <h2> 요소를 찾음
                     starContainer.innerHTML = stars; // 별을 <h2> 요소에 삽입
+                  
        	        },
        	        error: function(err) {
        	            console.error('Error deleting review:', err);
        	        }
        	    });
-   	}
+   		}
        
         
     </script>

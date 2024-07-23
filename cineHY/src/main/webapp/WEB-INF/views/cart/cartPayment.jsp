@@ -72,7 +72,7 @@
         <div class="text-center mt-4">
             <button type="button" class="btn btn-primary" id="orderBtn">구매하기</button>
         </div>
-    </div>
+    </div><br><br>
 
     
     

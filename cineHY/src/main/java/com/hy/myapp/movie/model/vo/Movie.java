@@ -21,5 +21,6 @@ public class Movie {
 	private int runningTime;
 	private String rating;
 	private String openedDate;
+	private String status;
 	
 }

@@ -789,6 +789,21 @@ article input {
 		
 	</script>
 	
+	  <script type="text/javascript">
+        $(document).ready(function () {
+          
+            var alertMsg = "${sessionScope.alertMsg}";
+
+            if (alertMsg) {
+                alert(alertMsg);
+               
+                <% 
+                    session.removeAttribute("alertMsg"); 
+                %>
+            }
+        });
+    </script>
+	
 	  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script>
 	    function execDaumPostcode() {

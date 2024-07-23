@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,8 +61,10 @@
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp"></jsp:include>
+	<jsp:include page="../openTalk/openTalk.jsp"></jsp:include>
 
 	<main>
+		<
       <div id="page1">
       
 		<ul class="nav mb-3 " id="pills-tab" role="tablist">
@@ -99,54 +103,35 @@
 		</div>
 	</div>
 	<div id="page2" class="container">
-      
 	<div class="row align-items-md-stretch">
 		<div class="col-md-6">
 			<div class="h-100 p-5 text-white bg-dark rounded-3">
 	          <h3>POPCORN & GIFT</h3>
-	          	<div class="list-group">
+	          	<div class="list-group" id="product-list">
+				  <c:forEach items="${ list }" var="product">
 				  <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-				    <img src="${pageContext.servletContext.contextPath }/resources/uploadFiles/HY_20240718000207_905.jpg" alt="twbs" width="50" height="50" class="rounded-circle flex-shrink-0">
+				    <img src="${ product.changeImage }" alt="twbs" width="50" height="50" class="rounded-circle flex-shrink-0">
 				    <div class="d-flex gap-2 w-100 justify-content-between">
 				      <div>
-				        <h6 class="mb-0"><strong>치즈팝콘</strong></h6>
-				        <p class="mb-0 opacity-75">11,000원</p>
+				        <h6 class="mb-0"><strong>${ product.productName }</strong></h6>
+				        <p class="mb-0 opacity-75"><fmt:formatNumber value="${ product.productPrice }" pattern="#,###" />원</p>
 				      </div>
 				      <small class="opacity-50 text-nowrap">더보기</small>
 				    </div>
 				  </a>
-				  <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-				    <img src="https://img.freepik.com/free-photo/fresh-cola-drink-in-glass_144627-16201.jpg" alt="twbs" width="50" height="50" class="rounded-circle flex-shrink-0">
-				    <div class="d-flex gap-2 w-100 justify-content-between">
-				      <div>
-				        <h6 class="mb-0"><strong>콜라</strong></h6>
-				        <p class="mb-0 opacity-75">5,000원</p>
-				      </div>
-				      <small class="opacity-50 text-nowrap">더보기</small>
-				    </div>
-				  </a>
-				  <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-				    <img src="https://cdn.cokeplay.cocacola.co.kr/prod/pointShop/202304/c59ef208-8ef0-410e-9abf-be6ad99b9971.png" alt="twbs" width="50" height="50" class="rounded-circle flex-shrink-0">
-				    <div class="d-flex gap-2 w-100 justify-content-between">
-				      <div>
-				        <h6 class="mb-0"><strong>영화관람권</strong></h6>
-				        <p class="mb-0 opacity-75">18,000원</p>
-				      </div>
-				      <small class="opacity-50 text-nowrap">더보기</small>
-				    </div>
-				  </a>
+				  </c:forEach>
+				  
 				</div>
 	        </div>
 		</div>
 		<div class="col-md-6">
 		    <div class="h-100 p-5 bg-light border rounded-3">
-		      <h3>공지사항</h3>
-		      <p>Or, keep it light and add a border for some added definition to the boundaries of your content. Be sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing of both column's content for equal-height.</p>
-		      <a href="getQnauser" class="btn btn-outline-secondary" type="button" >1:1 문의</a>
+				<h3>공지사항</h3>
+				<a href="notiList" class="btn btn-outline-secondary" type="button" >공지사항 보기</a>
+				<a href="getQnauser" class="btn btn-outline-secondary" type="button" >1:1 문의</a>
 		    </div>
 		</div>
 	</div>
-      <a href="getQna" >1:1 문의 관리자용 </a>
       <a href="group-chat">오픈톡</a>
       
       </div>
@@ -159,6 +144,8 @@
 	
 	<script>
 	$(document).ready(function() {
+		
+		
 	    var movieIdList = []; // DB movieCode 리스트 전역 변수로 선언
 		
 	    function getMovieDB() {
@@ -289,10 +276,42 @@
 	        }
 	    }
 	    
+	    function fetchProducts() {
+            $.ajax({
+                url: 'api/products',  // URL to fetch the products
+                method: 'GET',
+                dataType: 'json',
+                success: function(products) {
+                    var productList = $('#product-list');
+                    productList.empty();  // Clear any existing products
+                    var productItem='';
+                    $.each(products, function(index, product) {
+                    	console.log(products);
+                        productItem += '<a href="product-detail?productId=' + product.productId + '" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">'
+                            	+ '<img src="' + product.changeImage +'" alt="' + product.productName + '" width="50" height="50" class="rounded-circle flex-shrink-0">'
+                                + 	'<div class="d-flex gap-2 w-100 justify-content-between">'
+                                + 		'<div>'
+                                +        '<h6 class="mb-0"><strong>' +product.productName + '</strong></h6>'
+                                +        '<p class="mb-0 opacity-75">' + product.productPrice.toLocaleString() + '원</p>'
+                                +   	'</div>'
+                                +    '<small class="opacity-50 text-nowrap">더보기</small>'
+                                + '</div>'
+                            	+ '</a>';
+                        
+                    });
+                    productList.append(productItem);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching products:', error);
+                }
+            });
+        }
+	    
 	
 	    getMovieDB();
 	    fetchMovies();
 	    fetchUpMovies();
+	    fetchProducts();
 	});
 	
 	

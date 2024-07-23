@@ -271,7 +271,95 @@
 	                                + '<input type="hidden" id="runningTime" name="runningTime" value="' + data.runtime + '"/>' //영화 상영시간
 	                                + '<input type="hidden" id="rating" name="rating" value="' + rating + '"/>' //영화 등급
 	                                + '<input type="hidden" id="openedDate" name="openedDate" value="' + data.release_date + '"/>' //영화 개봉일 */
+	                                + '<input type="hidden" id="status" name="status" value="Y">' //상태
 	                                + '<button class="btn btn-primary mr-3" onclick="insert()" style="background-color:#29b9a5; border:1px #29b9a5;">등록하기</button>'
+	                                + '</div>';
+	                        
+	                            movieDetails.html(InfoHtml);
+	                        },
+	                        error: function(jqXHR, textStatus, errorThrown) {
+	                            console.error('Error fetching movie rating data:', textStatus, errorThrown);
+	                            InfoHtml += '<p><strong>관람 등급:</strong> N/A</p>'
+	                                + '<p><strong>상영 시간:</strong>'+ data.runtime +'분</p>'
+	                                + '<p><strong>평점:</strong>'+ data.vote_average +'</p>'
+	                                + '<div class="mt-4">'
+	                                + '<a href="#" class="btn btn-primary mr-3">등록하기</a>'
+	                                + '</div>';
+	                            movieDetails.html(InfoHtml);
+	                        }
+	                    });
+	                },
+	                error: function(jqXHR, textStatus, errorThrown) {
+	                    console.error('Error fetching movie data:', textStatus, errorThrown);
+	                }
+	                
+	            });
+	        }
+	        
+	        
+	        window.viewDetailFromList = function(movieId) {
+	        	scrollDownView();
+	        	
+	            $.ajax({
+	                url: 'movieList/details',
+	                method: 'get',
+	                dataType: 'json',
+	                data: { movie_id: movieId },
+	                success: function(data) {
+	                    var movieDetails = $('#movieDetails');
+	                    let InfoHtml = '';
+	                    InfoHtml += '<div class="col-md-4 mt-5">'
+	                        + '<img src="https://image.tmdb.org/t/p/w500' + data.poster_path + '"class="img-fluid" alt="Movie Poster" style="width:300px;">'
+	                        + '</div>'
+	                        + '<div class="col-md-6 mt-5" >'
+	                        + '<h4 class="mb-4">' + data.title + '</h4>'
+	                        + '<p>' + data.overview + '</p>'
+	                        + '<p><strong>개봉일:</strong>'+ data.release_date + '</p>';
+						
+	                    //장르 문자열 변환
+						var genre = data.genres.map(function(genre) {
+	                    	return genre.name;
+	                    });
+	                    var genres = genre.join(',');
+	                    
+	                    
+	                    InfoHtml += '<p><strong>장르:</strong>'+ genres +'</p>';
+	                   
+	                    //등급 정보 가져오기
+	                    $.ajax({
+	                        url: 'movieList/rating',
+	                        method: 'get',
+	                        dataType: 'json',
+	                        data: { movie_id: movieId },
+	                        success: function(releaseData) {
+	                            let rating = 'N/A';
+	                            let countries = releaseData.results;
+	                            for (let i = 0; i < countries.length; i++) {
+	                                if (countries[i].iso_3166_1 === 'KR') {
+	                                    let releases = countries[i].release_dates;
+	                                    for (let j = 0; j < releases.length; j++) {
+	                                        if (releases[j].certification) {
+	                                            rating = releases[j].certification;
+	                                            break;
+	                                        }
+	                                    }
+	                                    break;
+	                                }
+	                            }
+	                            console.log(genre[0])
+	                            InfoHtml += '<p><strong>관람 등급:</strong>'+ rating +'</p>'
+	                                + '<p><strong>상영 시간:</strong>'+ data.runtime +'분</p>'
+	                                + '<p><strong>평점:</strong>'+ data.vote_average +'</p>'
+	                                + '<div class="mt-4">'
+	                                + '<input type="hidden" id="movieCode" name="movieCode" value="' + movieId + '"/>' //영화 코드
+	                                + '<input type="hidden" id="movieTitle" name="movieTitle" value="' + data.title + '"/>' //영화 타이틀
+	                                + '<input type="hidden" id="genre" name="genre" value="' + genre[0] + '"/>' //영화 장르
+	                                + '<input type="hidden" id="summary" name="summary" value="' + data.overview + '"/>' //영화 설명
+	                                + '<input type="hidden" id="runningTime" name="runningTime" value="' + data.runtime + '"/>' //영화 상영시간
+	                                + '<input type="hidden" id="rating" name="rating" value="' + rating + '"/>' //영화 등급
+	                                + '<input type="hidden" id="openedDate" name="openedDate" value="' + data.release_date + '"/>' //영화 개봉일 */
+	                                + '<input type="hidden" id="status" name="status" value="N">' //상태
+	                                + '<button class="btn btn-danger mr-3" onclick="deleteByCode()">삭제하기</button>'
 	                                + '</div>';
 	                        
 	                            movieDetails.html(InfoHtml);
@@ -312,9 +400,9 @@
     				ListHtml += '<li class="list-group-item" style="font-size:25px; color:white; background-color:#29b9a5;"><p>등록한 영화</p></li>'
     				for(let i in movieEList) {
     					
-    					ListHtml += '<li class="list-group-item" data-code="'+ movieEList[i].movieCode + '">'+ movieEList[i].movieTitle                         
-	                      + '<button class="btn btn-danger btn-sm float-right delete-btn" onclick="deleteByCode('+ movieEList[i].movieCode +')">삭제</button>'
-	                      + '</li>';
+    					ListHtml += '<li class="list-group-item" data-code="'+ movieEList[i].movieCode + '">'+ movieEList[i].movieTitle 
+    							  + '<button class="btn btn-secondary btn-sm float-right delete-btn" onclick="viewDetailFromList('+ movieEList[i].movieCode +')">view</button>'
+    							  + '</li>';
     				}
     				
     				$('#movieEnrollList').html(ListHtml);
@@ -334,6 +422,8 @@
     	        }
     	    });
     	}
+	    
+	    
     	
 	    
 	    function insert() {
@@ -344,7 +434,8 @@
 	            summary: $('#summary').val(),
 	            runningTime: $('#runningTime').val(),
 	            rating: $('#rating').val(),
-	            openedDate: $('#openedDate').val()
+	            openedDate: $('#openedDate').val(),
+	            status: $('#status').val()
 	        };
 
 	        $.ajax({
@@ -372,14 +463,30 @@
 	    
 	    function deleteByCode(movieCode) {
 	    	
-	    	alert("삭제하시겠습니까?");
+	    	
+	    	confirm("삭제하시겠습니까?");
+	    	
+	    	const requestData = {
+		            movieCode: $('#movieCode').val(),
+		            movieTitle: $('#movieTitle').val(),
+		            genre: $('#genre').val(),
+		            summary: $('#summary').val(),
+		            runningTime: $('#runningTime').val(),
+		            rating: $('#rating').val(),
+		            openedDate: $('#openedDate').val(),
+		            status: $('#status').val()
+		        };
 			
 			$.ajax ({
-				url : 'movieList/'+movieCode,
-				type : 'delete',
+				url : "movieList/delete",
+				type : 'put',
+				data : JSON.stringify(requestData),
+				contentType : 'application/json',
 				success : data => {
 					//console.log(data)
+					alert("영화가 리스트에서 삭제되었습니다.")
 					findAll();
+					$('#movieDetails').empty();
 				},
 				error: function(xhr, status, error) {
 	                console.error("Error occurred while deleting movie:", error);

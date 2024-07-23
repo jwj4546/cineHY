@@ -26,11 +26,6 @@ public class PaymentController {
 
 	private final PaymentServiceImpl paymentServiceImpl;
 	
-	@GetMapping("payment")
-	public String payment() {
-		return "payment/payment";
-	}
-	
 	@PostMapping("payment/prepare")
 	public void preparePayment(@RequestBody PrePaymentVO request) throws IamportResponseException, IOException {
 		paymentServiceImpl.postPrepare(request);
@@ -53,6 +48,9 @@ public class PaymentController {
 		return paymentServiceImpl.savePay(pay) > 0 ? "true" : "false";
 	}
 	
-	
+	@GetMapping("payTicket")
+	public String payTicket() {
+		return "payment/payment";
+	}
 	
 }

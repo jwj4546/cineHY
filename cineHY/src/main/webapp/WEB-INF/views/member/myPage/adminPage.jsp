@@ -17,6 +17,7 @@
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
     <style>
        	#page1 { height: 80px;}
         #page2 { 
@@ -206,7 +207,7 @@ a[data-toggle="collapse"] {
     transform: translateY(-50%);
 }
 
-ul ul a {
+#sidebar ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
     background: #6d7fcc;
@@ -249,7 +250,7 @@ ul.CTAs a {
     cursor: pointer;
 }
 
-#sidebarCollapse span {
+#sidebarCollapse>span {
     width: 80%;
     height: 2px;
     margin: 0 auto;
@@ -335,7 +336,7 @@ ul.CTAs a {
 
 
     </style>
-    <title>마이페이지</title>
+    <title>영화등록 페이지</title>
 </head>
 <body>
     <jsp:include page="/WEB-INF/views/common/menubar.jsp"></jsp:include>
@@ -348,26 +349,20 @@ ul.CTAs a {
             </div>
 
             <ul class="list-unstyled components">
-                <li><p>마이페이지</p></li>
+                <li><p>관리자기능</p></li>
                 <li >
-                    <a href="myInfoUpdate" >나의 정보수정</a>                 
+                    <a href="movieEnroll" >상영할 영화 등록</a>                 
                 </li>
                 <li>
-                    <a href="myTicketList">나의 영화 예매내역</a>
+                    <a href="movieScheduleEnroll">상영 스케줄 등록</a>
                 <li>
-                    <a href="myProductList">나의 구매내역</a>
+                    <a href="#">회원관리</a>
                 </li>
                 <li >
-				    <a href="myReview">나의 영화 평점 & 리뷰</a>
+				    <a href="productForm">상품 등록</a>
 				</li>
 				<li>
-                    <a href="chatAdmin">관리자와 1:1 채팅 </a>
-                </li>
-                <li class="highlighted-item">
-                    <a href="myNearby">내 주변 영화관 찾기 </a>
-                </li>
-                <li>
-                    <a href="resign">회원탈퇴</a>
+                    <a href="getQna">1:1 채팅 관리</a>
                 </li>
             </ul>
 
@@ -383,7 +378,7 @@ ul.CTAs a {
                         <span></span>
                     </button>
                     <div>
-              		<label class="centered-label">안녕하세요! ${sessionScope.loginUser.userId}님의 마이페이지입니다</label>
+              		<label class="centered-label">안녕하세요! ${sessionScope.loginUser.userId}님의 관리자페이지입니다</label>
               		</div>
                 </div>
             </nav>
@@ -414,10 +409,8 @@ ul.CTAs a {
            
     	</div>
 	</div>
-   	</div>
-   	
+	</div>
    	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
-   	
     <script type="text/javascript">
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {

@@ -50,7 +50,7 @@
             justify-content: center;
             margin: 0 auto;
         }
-    .row {
+    .cinema .row {
         background-color: #ccc;
         width: 50px;
         height: 50px;
@@ -87,19 +87,19 @@
     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="width: 800px; margin-left: 310px; display: flex;">
         <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 1200px;margin: 0 auto; float: left;">
             <button type="button" class="btn btn-light" style="width: 50px; margin-left: 50px;">인원</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(1)">1</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(2)">2</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(3)">3</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(4)">4</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(5)">5</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(6)">6</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(7)">7</button>
-            <button type="button" class="btn btn-light" id="person" onclick="selectPerson(8)">8</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(1)">1</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(2)">2</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(3)">3</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(4)">4</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(5)">5</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(6)">6</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(7)">7</button>
+            <button type="button" class="btn btn-light person-btn" id="person" onclick="selectPerson(8)">8</button>
             <div style="border-left: 1px solid#000; margin-left: 50px;padding: 20px;">
-                <div><p>영화관 지점명</p></div>
-                <div><p>상영관</p></div>
-                <div><p>남은 좌석</p></div>
-                <div><p>상영일자 / 상영시간</p></div>
+                <div><p id="pointName">영화관 지점명 : </p></div>
+                <div><p id="startDate">상영일자 : </p></div>
+                <div><p id="remainingSeats">남은 좌석 : </p></div>
+                <div><p id="startTime">상영시간 / 상영관 : </p></div>
             </div>  
         </div>
         
@@ -110,353 +110,116 @@
     <div class="screen">Screen</div>
     <br><br><br><br><br>
         <div class="cinema">
-            <!-- 좌석 나열 A1 ~ A12 -->
-            <div class="row">A</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
+            <!-- 좌석 출력 A1 ~ J12 -->
+        
+        </div><br><br>
             
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-            
-            <!-- 좌석 나열 B1 ~ B12 -->
-            <div class="row">B</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-
-
-            <!-- 좌석 나열 C1 ~ C12 -->
-            <div class="row">C</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-
-
-            <!-- 좌석 나열 D1 ~ D12 -->
-            <div class="row">D</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-
-
-            <!-- 좌석 나열 E1 ~ E12 -->
-            <div class="row">E</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-
-
-            <!-- 좌석 나열 F1 ~ F12 -->
-            <div class="row">F</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-
-
-            <!-- 좌석 나열 G1 ~ G12 -->
-            <div class="row">G</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-
-
-            <!-- 좌석 나열 H1 ~ H12 -->
-            <div class="row">H</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-
-
-            <!-- 좌석 나열 I1 ~ I12 -->
-            <div class="row">I</div>
-            <div class="seat">1</div>
-            <div class="seat">2</div>
-            <div class="seat">3</div>
-            <div class="seat">4</div>
-            <div class="seat">5</div>
-            <div class="seat">6</div>
-            <div class="space"></div>
-            
-            <div class="seat">7</div>
-            <div class="seat">8</div>
-            <div class="seat">9</div>
-            <div class="seat">10</div>
-            <div class="seat">11</div>
-            <div class="seat">12</div>
-        </div>
-    </main>
+        
+        <div class="col d-flex justify-content-end align-items-center">
+	        <button class="btn btn-primary mx-2" id="payBtn">결제</button>
+	        <button class="btn btn-danger">취소</button>
+       	</div>
+        
+	</main>    
         <br><br><br>
         
+        <script>
+        	
+        	// 페이지가 로드되면 이전 페이지에서 선택한 데이터를 불러옴
+        	$(document).ready(function() {
+        		console.log(window.sessionStorage.getItem('resInfo'));
+        		
+        		const resInfo = JSON.parse(window.sessionStorage.getItem('resInfo'));
+        		console.log(resInfo);
+        		$("#pointName").text("영화관 지점명 : " + resInfo.theaterName);
+        		$("#startDate").text("상영일자 : " + resInfo.ticketDate);
+        		$("#startTime").text("상영시간 / 상영관 : " + resInfo.startTime);
+        		
+        		
+        		// 알파벳 대문자 A ~ J 배열 생성
+        		const row = Array.from({ length : 10}, (v, i) => String.fromCharCode(i + 65));
+        		
+        		let text = '';
+        		
+        		// 좌석 출력 반복문
+        		for(let char of row) {
+        			
+        			text += '<div class="row">' +char + '</div>'
+                    + '<div class="seat" id="'+ char + '1">1</div>'
+                    + '<div class="seat" id="'+ char + '2">2</div>'
+                    + '<div class="seat" id="'+ char + '3">3</div>'
+                    + '<div class="seat" id="'+ char + '4">4</div>'
+                    + '<div class="seat" id="'+ char + '5">5</div>'
+                    + '<div class="seat" id="'+ char + '6">6</div>'
+                    + '<div class="space"></div>'
+                    
+                    + '<div class="seat" id="'+ char + '7">7</div>'
+                    + '<div class="seat" id="'+ char + '8">8</div>'
+                    + '<div class="seat" id="'+ char + '9">9</div>'
+                    + '<div class="seat" id="'+ char + '10">10</div>'
+                    + '<div class="seat" id="'+ char + '11">11</div>'
+                    + '<div class="seat" id="'+ char + '12">12</div>'
+        			
+        		};
+        		$(".cinema").html(text);
+        		
+        	});
+        	
+        	
+        	
+        	let selectedPerson = 0;
+
+        	function selectPerson(number) {
+        	    selectedPerson = number;
+        	    $('.person-btn').removeClass('active');
+        	    $(event.target).addClass('active');
+        	    $('.seat').removeClass('selected');
+
+        	    
+        	    // 모든 seat class를 조회하여 click 이벤트를 추가함
+        	    $('.seat').off('click').on('click', function() {
+        	        const selectedSeats = $('.seat.selected').length;
+
+        	        if (selectedSeats < selectedPerson) {
+        	            $(this).toggleClass('selected');
+        	        } else if ($(this).hasClass('selected')) {
+        	            $(this).removeClass('selected');
+        	        }
+        	        
+        	    });
+        	}
+
+            
+            
+            // 결제 버튼 클릭시
+            $("#payBtn").on("click",  function() {
+            	
+				const count = $('.person-btn.active').text();
+				const seatNumber = $('.selected');
+				
+				// 선택한 좌석의 id값을 seatArr에 push
+            	const seatArr = new Array();
+            	for(let i=0; i<count ; i++) {
+            		seatArr.push($(seatNumber[i]).attr('id'));
+            	}
+            	
+            	// 세션에 있는 이전 페이지의 데이터 가공
+            	const res = window.sessionStorage.getItem("resInfo");
+            	const resInfo = JSON.parse(res);
+            	resInfo.seat = seatArr;
+            	
+				// sessionStorage에 JSON 형태의 예매 정보와 좌석 정보를 추가
+				const seatInfo = JSON.stringify(resInfo);
+				window.sessionStorage.setItem('seatInfo', '');
+				window.sessionStorage.setItem('seatInfo', seatInfo);
+				
+				location.href = "payTicket";
+            });
+        </script>
         
 <jsp:include page="../common/footer.jsp"></jsp:include>
 
-<script>
 
-$(document).ready(function() {
-	
-	let selectedMovieCode = '${movieCode}';
-    let selectedTheaterCode = '${theaterCode}';
-    const selectedTicketDate = '${ticketDate}';
-    const selectedScreenCode = '${screenCode}';
-    const selectedStartTime = '${startTime}';
-	
-	function findAllMovie() {
-		
-		$.ajax({
-			url : 'movieList/movieEnrollList',
-			method : 'get',
-			dataType : 'json',
-			success: function(data) {
-				const movieTitleList = data.data;
-				let ListHtml ='';
-				for(let i in movieTitleList) {
-					ListHtml += '<option value="'+ movieTitleList[i].movieCode +'">'+ movieTitleList[i].movieTitle +'</option>';
-				}
-				$('#movieSelect').html(ListHtml);
-				$('#movieSelect').val(selectedMovieCode); // 자동 선택
-	            fetchScheduleTime();
-				
-	            $('#movieSelect').change(function() {
-                    selectedMovieCode = $(this).val();
-                    getTheater();
-                });
-				
-			},
-			error: function(jqXHR, textStatus, errorThrown) {
-	            console.error('Error fetching movie data:', textStatus, errorThrown);
-	        }
-		});
-	}
-
-	findAllMovie();
-	
-	function getTheater() {
-    	
-    	$.ajax({
-    		url : 'movieSchedule/theater',
-    		method : 'get',
-    		dataType : 'json',
-    		success : function(data) {
-    			const theaterList = data.data;
-    			let TheaterHtml ='';
-    			for(let i in theaterList) {
-    				TheaterHtml += '<option value="'+ theaterList[i].theaterCode +'">'+ theaterList[i].theaterName +'</option>';
-    			}
-				
-    			$('#theaterSelect').html(TheaterHtml);
-    			$('#theaterSelect').val(selectedTheaterCode); // 극장 자동 선택
-    			fetchScheduleTime();
-    			
-    			// 극장 선택 시 스케줄을 업데이트하는 함수 호출
-    			$('#theaterSelect').change(function() {
-                    selectedTheaterCode = $(this).val();
-                    fetchScheduleTime();
-                });
-    		},
-    		error: function(jqXHR, textStatus, errorThrown) {
-	            console.error('Error fetching movie data:', textStatus, errorThrown);
-    		}
-    	});
-    }
-    getTheater();
-   
-	
-	function updateDate() {
-        // 오늘 날짜를 기준
-        const today = new Date();
-        const days = ['일', '월', '화', '수', '목', '금', '토'];
-        let optionHtml = '';
-
-        // 7일 동안의 날짜 생성
-        for (let i = 0; i < 7; i++) {
-            const date = new Date(today);
-            date.setDate(today.getDate() + i);
-
-            const dayOfWeek = days[date.getDay()];
-            const month = date.getMonth() + 1;
-            const day = date.getDate();
-            const formattedDate = date.getFullYear() + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
-        
-            optionHtml += '<option value="'+ formattedDate + '">' + month + '/' + day + ' (' + dayOfWeek + ')</option>';
-        
-        }
-        $('#dateSelect').html(optionHtml);
-        $('#dateSelect').val(selectedTicketDate); // 자동 선택
-        
-        $('#dateSelect').change(function() {
-            fetchScheduleTime();
-        });
-	}
-	
-	updateDate();
-	
-	function fetchScheduleTime() {
-		const movie = document.getElementById('movieSelect').value;
-	    const theater = document.getElementById('theaterSelect').value;
-	    const startdate = document.getElementById('dateSelect').value;
-	    const enddate = document.getElementById('dateSelect').value;
-		
-	    if (movie && theater && startdate && enddate) {
-		    $.ajax({
-	    		url : 'movieSchedule/schedule/' + movie + '/' + theater + '/' + startdate + '/' + enddate,
-	    		method : 'get',
-	    		dataType : 'json',
-	    		success : function(data) { // data => 
-	    			const scheduleResult = document.getElementById('timeSelect');
-		            scheduleResult.innerHTML = '';
-	    			if (data.data.length > 0) {
-		                data.data.forEach(s => {
-		                    scheduleResult.innerHTML += '<option value="${s.startTime}" data-screen-code="${s.screenCode}">' + s.startTime + ' ' + s.screenCode + '관</option>'
-		                  ;})
-		            }
-		            else {
-		                scheduleResult.innerHTML = '<option>스케줄이 없습니다.</option>';
-		            }
-	    			$('#timeSelect option:first').prop('selected', true);
-	    			displaySelectedMovie();
-	    		},
-	    		error: function(jqXHR, textStatus, errorThrown) {
-	                console.error('Error fetching schedule data:', textStatus, errorThrown);
-	    		}
-			});
-	    }
-	}
-	
-	
-	function displaySelectedMovie() {
-        const movie = $('#movieSelect option:selected').text();
-        const theater = $('#theaterSelect option:selected').text();
-        const startDate = $('#dateSelect').val();
-        const startTime = $('#timeSelect option:selected').text();
-        console.log('Selected Movie:', movie);
-        console.log('Selected Theater:', theater);
-        console.log('Selected Date:', startDate);
-        console.log('Selected Time:', startTime);
-
-        if (movie && theater && startDate && startTime) {
-        	console.log('Selected Movie:', movie);
-        	console.log('Selected Theater:', theater);
-        	console.log('Selected Date:', startDate);
-        	console.log('Selected Time:', startTime);
-            let infoHtml = '';
-            infoHtml += '<p class="card-text">영화 제목: ' + movie + '</p>'
-                      + '<p class="card-text">극장: ' + theater + '</p>'
-                      + '<p class="card-text">날짜: ' + startDate + '</p>'
-                      + '<p class="card-text">시간: ' + startTime + '</p>';
-
-            $('#selectedInfo').html(infoHtml);
-        } else {
-        	let infoHtml = '';
-            infoHtml += '<p class="card-text">영화 제목을 선택하세요 </p>'
-                      + '<p class="card-text">극장을 선택하세요 </p>'
-                      + '<p class="card-text">날짜를 선택하세요 </p>'
-                      + '<p class="card-text">시간을 선택하세요 </p>';
-
-            $('#selectedInfo').html(infoHtml);
-        }
-    }
-
-    // 페이지 로드 시 초기 한 번 호출
-    displaySelectedMovie();
-
-    // 선택 값이 변경될 때마다 호출
-    $('#movieSelect, #theaterSelect, #dateSelect, #timeSelect').change(function() {
-        displaySelectedMovie();
-    });
-
-    
-	
-	    
-});
-
-
-</script>
 
 </body>
 </html>

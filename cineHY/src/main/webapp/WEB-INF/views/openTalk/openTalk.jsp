@@ -9,86 +9,8 @@
 <head>
     <meta charset="UTF-8">
     <title>오픈톡메인</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-   
-    
     <style>
-        #page1 { height: 80px;}
-        #page2 { 
-          height: 80px;
-          display: flex;
-          justify-content: space-around;
-          margin-right: 30px;
 
-        }
-
-        .Movie-enroll-title { 
-          height: 60px;
-          width: 600px;
-          display: flex;
-        }
-        .Movie-enroll-title h2 {
-          font-weight: 600;
-          float: left;
-          line-height: 1.7em;
-        }
-
-
-        #page3{
-          height: 340px;
-          width: 1200px;
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          margin: 0 auto;
-          gap: 10px;
-        }
-
-
-        #select-movie {
-          grid-column: 2/3;
-          grid-column-start: 1;
-          grid-column-end: 3;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: darkslategrey;
-        }
-
-        #Movie-enroll-list {
-          grid-column: 3/3;
-          grid-column-start: 3;
-          grid-column-end: 4;
-          background-color: rgb(231, 231, 231);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        #Movie-enroll-title-pagination {
-          display: flex;
-          justify-content: center;
-          margin-top: 50px;
-          margin-bottom: 50px;
-        }
-
-        #Movie-enroll-list-card {
-          display: flex;
-
-
-        }
-
-        .card{
-			height: 700px;
-            
-			border-radius: 15px !important;
-			background-color: rgba(0,0,0,0.4) !important;
-		}
-
-       
 
         .chat-icon {
             z-index: 0;
@@ -171,8 +93,8 @@
            outline:0px !important;
 		}
 		.attach_btn{
-	border-radius: 15px 0 0 15px !important;
-	background-color: rgba(0,0,0,0.3) !important;
+			border-radius: 15px 0 0 15px !important;
+			background-color: rgba(0,0,0,0.3) !important;
 			border:0 !important;
 			color: white !important;
 			cursor: pointer;
@@ -200,9 +122,9 @@
 			padding: 5px 10px;
 			margin-bottom: 15px !important;
 		}
-	.active{
-			background-color: rgba(0,0,0,0.3);
-	}
+		/* .active{
+				background-color: rgba(0,0,0,0.3);
+		} */
 		.user_img{
 			height: 70px;
 			width: 70px;
@@ -354,8 +276,8 @@
     
 </head>
 <body>
-    
-     
+    <main>
+        <div class="container">
 			<!-- chat아이콘 -->
             <button class="chat-icon" id="chatIcon" >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-right-text-fill" viewBox="0 0 16 16">
@@ -494,7 +416,7 @@
                         </div>
                         </div>
                     </div>
-               
+                </div>
     </main>
 
     <script>    

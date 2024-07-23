@@ -115,21 +115,18 @@
     </select>
     
 
-	<update id="changePw" parameterType="member">
-	    UPDATE 
-	    		TB_MEMBER
-	       SET 
-	    		USER_PWD = #{userPwd},
-	            MODIFY_DATE = SYSDATE
-	     WHERE 
-	    		USER_ID = #{userId}
-	       AND 	
-	       		USER_NAME = #{userName}
-	       AND 
-	       		PHONE_NO = #{phoneNo}
-	</update>
+		<update id="changePw"  parameterType="Member">
+		    UPDATE 
+		        TB_MEMBER
+		    SET 
+		        USER_PWD = #{userPwd},
+		        MODIFY_DATE = SYSDATE
+		    WHERE 
+		        USER_ID = #{userId}
+		   
+		</update>
 	
-	<update id="myInfoChange" parameterType = "member">
+	<update id="myInfoChange" parameterType="Member">
 	
 		UPDATE
 			    TB_MEMBER
