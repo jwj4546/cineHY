@@ -2,6 +2,7 @@ package com.hy.myapp.review.model.repository;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,8 +16,8 @@ public class ReviewRepository {
 		return sqlSession.selectList("reviewMapper.findAllReview");
 	}
 
-	public List<Review> getMovieOfReview(SqlSessionTemplate sqlSession, int movieCode) {
-		return sqlSession.selectList("reviewMapper.getMovieOfReview", movieCode);
+	public List<Review> getMovieOfReview(SqlSessionTemplate sqlSession,Map<String, Object> map) {
+		return sqlSession.selectList("reviewMapper.getMovieOfReview", map);
 	}
 
 	public String getTicketNo(SqlSessionTemplate sqlSession) {
@@ -35,12 +36,12 @@ public class ReviewRepository {
 		return sqlSession.delete("reviewMapper.deleteReview", reviewNo);
 	}
 
-	public List<Review> selectMyReview(SqlSessionTemplate sqlSession, String userId) {
-		return sqlSession.selectList("reviewMapper.selectMyReview", userId);
+	public List<Review> selectMyReview(SqlSessionTemplate sqlSession, Map<String, Object> map) {
+		return sqlSession.selectList("reviewMapper.selectMyReview", map);
 	}
 	
-	public List<Review> selectNoReview(SqlSessionTemplate sqlSession, String userId) {
-		return sqlSession.selectList("reviewMapper.selectNoReview", userId);
+	public List<Review> selectNoReview(SqlSessionTemplate sqlSession, Map<String, Object> map) {
+		return sqlSession.selectList("reviewMapper.selectNoReview", map);
 
 	}
 	public Double getStarAvg(SqlSessionTemplate sqlSession, int movieCode) {
@@ -51,6 +52,20 @@ public class ReviewRepository {
 		return sqlSession.selectOne("reviewMapper.reviewCount");
 
 	}
+
+	public int myReviewCount(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectOne("reviewMapper.myReviewCount", userId);
+	}
+
+	public int NoReviewCount(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectOne("reviewMapper.NoReviewCount", userId);
+	}
+
+	public int MovieOfReviewCount(SqlSessionTemplate sqlSession, int movieId) {
+		return sqlSession.selectOne("reviewMapper.MovieOfReviewCount", movieId);
+
+	}
+	
 
 	
 	}

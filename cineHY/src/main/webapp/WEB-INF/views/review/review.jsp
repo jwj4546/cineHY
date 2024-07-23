@@ -377,21 +377,10 @@
 			<br>
 		</main>
 		<div id="pagingArea">
-			<ul class="pagination">
-				<li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
-				<c:forEach begin="${pageInfo.startPage}" end="${pageInfo.endPage}"
-					var="p">
-					<li class="page-item"><a class="page-link"
-						href="boardlist?page=${p}">${p}</a></li>
-				</c:forEach>
-				<c:choose>
-					<c:when test="${pageInfo.currentPage ne pageInfo.maxPage}">
-						<li class="page-item"><a class="page-link"
-							href="=${pageInfo.currentPage + 1}">다음</a></li>
-					</c:when>
-				</c:choose>
-			</ul>
-		</div>
+                <ul class="pagination">
+                    
+                </ul>
+            </div>
 		<br clear="both">
 		<br> <br>
 		<br>
@@ -428,8 +417,6 @@
 	        function modalClose() {
 	            $("#update_popup").fadeOut();
 	        }
-
-	        
 		})
 		
 		
@@ -449,87 +436,104 @@
 			}
 		
 		
-		//const reviewNo1 = data.children().eq(4).text();  
-	
-		var starCount=0;
-		//리뷰 조회
-		function selectReview(movieId) {
-		    $.ajax({
-		        url: 'selectReview',
-		        type: 'get',
-		        data: { movieCode: movieId }, 
-		        dataType:"json",
-		        success: result => {
-		        	
-		        	
-		            console.log(result);  // json 타입의 배열 출력됨
-		            
-		            //var data = JSON.parse(JSON.stringify(result));
-		            //console.log("data[key].reviewNo:{}", data[0].reviewNo);
-		            // var data2= data[0].reviewNo
-		           
-		            var reviewListHtml = '';
-		            let resultStr = '';
-		            //starAvg(movieId);
-		            console.log(movieId);
-		            starAvg(movieId);
-		            
-		            for (let i = 0; i < result.length; i++) {
-		                const review = result[i];
-		                starCount = review.star;
-		                
-		                //별 출력 for문
-		                let stars = '';
-                        for (let i = 0; i < starCount; i++) {
-                        	stars += '⭐';
-                        }
-		                
-		                resultStr +=  '<tr>'
-		                            + '<td class="rv">'
-		                            +     '<div class="d-flex bd-highlight">'
-		                            +         '<div class="img_cont">'
-		                            +             '<img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img">'
-		                            +         '</div>'
-		                            +         '<div class="user_info">'
-		                            +             '<p>' + stars + '</p>'
-		                            + 			  '<input type="hidden" id="stars" name="stars" value="' + stars + '"/>' 
-		                            +             '<p>' + review.userId + '</p>'
-		                            + 			  '<input type="hidden" id="user_id" name="user_id" value="' + review.userId + '"/>' 
+		var starCount = 0;
 
-						            +             '<p>' + review.reviewContent + '</p>'
-						            + 			  '<input type="hidden" id="reviewNo" name="reviewNo" value="' + review.reviewNo + '"/>' 
-						            + 			  '<input type="hidden" id="reviewContent" name="reviewContent" value="' + review.reviewContent + '"/>' 
-
-						            +         '</div>'
-		                            +     '</div>'
-		                            + '</td>'
-		                            
-		                            + '<td class="right">'
-		                            +     '<p class="plus" onclick="test(\'' + review.userId + '\')">...</p>'
-		                            +     	'<div id="bubble_sp" class="speech-bubble hidden">'
-		                            +         	'<input onclick="call_confirm_sp()" class="btn btn-light" type="button" id="id2" value="스포일러 신고">'
-		                            +     	'</div>'
-		                            
-		                            + 		'<div id="bubble_up" class="speech-bubble hidden">'
-		                            +     		'<button class="btn btn-light"  type="button" id="updatemodal-open" onclick="updatemodal_No(\'' + review.reviewNo + '\')"  >리뷰수정2</button>'
-
-		                            +     		'<input class="btn btn-light" type="button" onclick="call_confirm_up_de(\'' + review.reviewNo + '\')" value="리뷰 삭제">'		                            
-		                            + 		'</div>'
-		                            
-		                            +     '<p class="date">' + review.reviewDate + '</p>'
-		                            + '</td>'
-		                            
-		                           
-		                            + '</tr>';
-		            }
-		            $('#reviewList tbody').html(resultStr);
-		            $('#rcount').html(result.length);
-		        },
-		        error: err => {
-		            console.error('Error fetching reviews:', err);
-		        }
-		    });
-		}
+		// 리뷰 조회
+		 function selectReview(movieId, page = 1) {
+		     $.ajax({
+		         url: 'selectReview',
+		         type: 'get',
+		         data: { 
+		             movieId: movieId,
+		             page: page 
+		         }, 
+		         dataType: "json",
+		         success: result => {
+		             console.log(result);  // json 타입의 배열 출력됨
+		             
+		             let reviews = result.reviews;
+		             let pageInfo = result.pageInfo;
+		             
+		             console.log("pageInfo", pageInfo);
+		             console.log("reviews", reviews);
+		             
+		             let resultStr = '';
+		             starAvg(movieId);
+		             
+		             for (let i = 0; i < reviews.length; i++) {
+		                 const review = reviews[i];
+		                 starCount = review.star;
+		                 
+		                 // 별 출력 for문
+		                 let stars = '';
+		                 for (let j = 0; j < starCount; j++) {
+		                     stars += '⭐';
+		                 }
+		                 
+		                 resultStr +=  '<tr>'
+		                             + '<td class="rv">'
+		                             +     '<div class="d-flex bd-highlight">'
+		                             +         '<div class="img_cont">'
+		                             +             '<img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img">'
+		                             +         '</div>'
+		                             +         '<div class="user_info">'
+		                             +             '<p>' + stars + '</p>'
+		                             + 			  '<input type="hidden" id="stars" name="stars" value="' + stars + '"/>' 
+		                             +             '<p>' + review.userId + '</p>'
+		                             + 			  '<input type="hidden" id="user_id" name="user_id" value="' + review.userId + '"/>' 
+		                             +             '<p>' + review.reviewContent + '</p>'
+		                             + 			  '<input type="hidden" id="reviewNo" name="reviewNo" value="' + review.reviewNo + '"/>' 
+		                             + 			  '<input type="hidden" id="reviewContent" name="reviewContent" value="' + review.reviewContent + '"/>' 
+		                             +         '</div>'
+		                             +     '</div>'
+		                             + '</td>'
+		                             + '<td class="right">'
+		                             +     '<p class="plus" onclick="test(\'' + review.userId + '\')">...</p>'
+		                             +     	'<div id="bubble_sp" class="speech-bubble hidden">'
+		                             +         	'<input onclick="call_confirm_sp()" class="btn btn-light" type="button" id="id2" value="스포일러 신고">'
+		                             +     	'</div>'
+		                             + 		'<div id="bubble_up" class="speech-bubble hidden">'
+		                             +     		'<button class="btn btn-light"  type="button" id="updatemodal-open" onclick="updatemodal_No(\'' + review.reviewNo + '\')"  >리뷰수정2</button>'
+		                             +     		'<input class="btn btn-light" type="button" onclick="call_confirm_up_de(\'' + review.reviewNo + '\')" value="리뷰 삭제">'		                            
+		                             + 		'</div>'
+		                             +     '<p class="date">' + review.reviewDate + '</p>'
+		                             + '</td>'
+		                             + '</tr>';
+		             }
+		             //console.log(resultStr);
+		             $('#reviewList tbody').html(resultStr);
+		             $('#rcount').html(reviews.length);
+		             
+		             // 페이징 처리
+		             let pageText = '';
+		             if (pageInfo.startPage > 1) {
+		                 pageText += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectReview(' + movieId + ', 1)">First</a></li>';
+		                 pageText += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectReview(' + movieId + ', ' + (pageInfo.startPage - 1) + ')">Previous</a></li>';
+		             }
+		             
+		             for (let i = pageInfo.startPage; i <= pageInfo.endPage; i++) {
+		                 if (i === pageInfo.currentPage) {
+		                     pageText += '<li class="page-item active"><a class="page-link" href="javascript:void(0);">' + i + '</a></li>';
+		                 } else {
+		                     pageText += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectReview(' + movieId + ', ' + i + ')">' + i + '</a></li>';
+		                 }
+		             }
+		             
+		             
+		             
+		             if (pageInfo.endPage < pageInfo.maxPage) {
+		                 pageText += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectReview(' + movieId + ', ' + (pageInfo.endPage + 1) + ')">Next</a></li>';
+		                 pageText += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectReview(' + movieId + ', ' + pageInfo.maxPage + ')">Last</a></li>';
+		             }
+		             
+		             console.log("pageText:", pageText); // 페이지 텍스트 확인
+		             $('.pagination').html(pageText);
+		         },
+		         error: err => {
+		             console.error('Error fetching reviews:', err);
+		         }
+		     });
+		 }
 		
 		// 리뷰쓴 id가 세션의 아이디와 같을 때 => 리뷰 수정, 삭제 버튼
 		// 다를때 => 스포일러 신고버튼
@@ -585,7 +589,6 @@
                     ratingInput.value = ratingValue;
                 });
             });
-            
         });
 
         $('.star_rating > .star').click(function () {
@@ -718,9 +721,6 @@
             return stars;
         }
         
-       
-
-
         
         //평균 별점
         function starAvg(movieId) {
