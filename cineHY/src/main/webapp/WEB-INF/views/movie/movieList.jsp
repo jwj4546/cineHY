@@ -169,7 +169,7 @@
 	            url: 'movieList/movieEnrollList',
 	            method: 'GET',
 	            dataType: 'json',
-	            success: function(response) {
+	            success: response => {
 	                var data = response.data; // response에서 data 배열 가져오기
 	                if (!Array.isArray(data)) {
 	                    data = [data]; // data가 배열이 아닌 경우 배열로 변환
@@ -190,7 +190,7 @@
 	            url: 'movieList/nowPlaying',
 	            method: 'GET',
 	            dataType: 'json',
-	            success: function(data) {
+	            success: data => {
 	                displayMovies(data); // 상영중인 영화
 	                displayLikeMovies(data); // 선호도별 추천영화
 	            },
