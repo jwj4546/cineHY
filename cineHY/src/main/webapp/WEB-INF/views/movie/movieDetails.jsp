@@ -223,7 +223,7 @@
    	  }
             		 
 
-       const getMovieImages = (movieId) => {
+      const getMovieImages = (movieId) => {
            $.ajax({
                url: 'movieList/images',
                method: 'GET',
