@@ -15,6 +15,13 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 	
+	<style>
+	.imageArea {"text-align:center; width:200px;"}
+	
+	.productImage {"height:100px; width:auto;"}
+	
+	
+	</style>
 </head>
 <body>
 
@@ -88,7 +95,7 @@
     			const list = lists[i];
     			
     			text += '<tr class="cartItem">'
-    					 + '<td style="text-align:center; width:200px;"><img src="' + list.changeImage + '" style="height:100px; width=auto;"/></td>'
+    					 + '<td class="imageArea"><img src="' + list.changeImage + '" class="productImage" /></td>'
     					 + '<td>' 
     					 + list.productName
     					 + '<input type="hidden" class="productId" value="' + list.productId + '" />'
@@ -138,19 +145,16 @@
     	
     	// 결제 버튼 클릭시
     	$("#orderBtn").on("click", function() {
-			
     		
-    		
-    		// 사전검증
-   	    	var merchant_uid = "O" + new Date().getTime();
-   	    	var userId = $("#userId").val();
-   	    	var userName = $("#userName").val();
-   	    	var phoneNo = $("#phoneNo").val();
-   	    	var totalPrice = $("#totalPrice").val();
+   	    	const merchant_uid = "O" + new Date().getTime();
+   	    	const userId = $("#userId").val();
+   	    	const userName = $("#userName").val();
+   	    	const phoneNo = $("#phoneNo").val();
+   	    	const totalPrice = $("#totalPrice").val();
    	    	
-   	    	var cartItems = [];
+   	    	const cartItems = [];
    	    	$("tr.cartItem").each(function() {
-   	    		var item = {
+   	    		const item = {
    	    			oneTotal : $(this).find(".oneTotal").val(),
 	   	   	    	productName : $(this).find(".productName").val(),
 	   	   	    	day : new Date(),
@@ -163,9 +167,6 @@
    	    		cartItems.push(item);
    	    	});
     		
-			console.log(cartItems);   	    	
-   	    	
-   	    	
    	    	$.ajax({
    	    		url : "payment/prepare",
    	    		method : "POST",
@@ -178,27 +179,22 @@
    	    	
    	    	
 
-            var IMP = window.IMP;
-            IMP.init("imp33642125"); // 가맹점 식별코드 입력 
+            const IMP = window.IMP;
+            IMP.init("imp33642125"); 
             
 
 	            IMP.request_pay({
-	                pg: "html5_inicis",           // 등록된 pg사 (적용된 pg사는 KG이니시스)
-	                pay_method: "card",           // 결제방식: card(신용카드), trans(실시간계좌이체), vbank(가상계좌), phone(소액결제)
-	                merchant_uid: merchant_uid,   // 주문번호
-	                name: cartItems[0].productName+" 외 " + (cartItems.length-1),                  // 상품명
-	                amount: totalPrice,           // 금액
-	                buyer_name: userName,         // 주문자
-	                buyer_tel: phoneNo,             // 전화번호 (필수입력)
-	                buyer_addr: "",    		  // 주소
-	                buyer_postcode: "",          // 우편번호
+	                pg: "html5_inicis",          
+	                pay_method: "card",           
+	                merchant_uid: merchant_uid,  
+	                name: cartItems[0].productName+" 외 " + (cartItems.length-1),                 
+	                amount: totalPrice,           
+	                buyer_name: userName,         
+	                buyer_tel: phoneNo,             
 	                img : cartItems[0].changeImage,
-	                day : "2024-07-09",
 	                product_id : cartItems[0].productId,
-	                movie_code : "영화",
-	                movie_title : "인사이드 아웃2"
 	           
-	            // 사후 검증
+
 	            }, function (rsp) {
 	            	console.log(rsp);
 	                if (rsp.success) {
@@ -211,11 +207,8 @@
 								merchantUid : rsp.merchant_uid
 							})
 						}).done(function (data) {
-							console.log(data);
-							// 결제 정보 DB 저장
-							//주문 상품 정보 DB 저장
-							var msg = '결제가 완료되었습니다.';
-							var payInfo = {
+							let msg = '결제가 완료되었습니다.';
+							const payInfo = {
 									"merchantUid" : rsp.merchant_uid,
 									"userId" : userId,
 									"userName" : rsp.buyer_name,
@@ -225,35 +218,32 @@
 									"phoneNo" : rsp.buyer_tel,
 									"receipt" : rsp.receipt_url
 							};
-							console.log(payInfo);
 							$.ajax({
 								type : "POST",
 								url : "savePay",
 								contentType : "application/json",
 								data : JSON.stringify(payInfo),
 								success : function(response) {
-									console.log("결제정보 저장 완료");
 						
 						
-						var orderPromises = cartItems.map(function(item) {
-							var orderInfo = {
+						const orderPromises = cartItems.map(function(item) {
+							const orderInfo = {
 								"merchantUid" : rsp.merchant_uid,
 								"userId" : userId,
 								"userName" : rsp.buyer_name,
 								"receipt" : rsp.receipt_url,
 								"payMethod" : rsp.pay_method,
-								"productId" : item.productId,		//
+								"productId" : item.productId,		
 								"productName" : item.productName,
 								"productComment" : item.productComment,
 								"changeImage" : item.changeImage,
-								"price" : item.oneTotal,						//
+								"price" : item.oneTotal,						
 								"phoneNo" : rsp.buyer_tel,
 								"amount" : item.cartAmount,
 								"cartNo" : item.cartNo
 							
 							};
 							
-							console.log(orderInfo);
 							return $.ajax({
                                 type: "post",
                                 url: "saveOrder",
@@ -275,7 +265,7 @@
                 
             });
         } else {
-            var msg = '결제를 실패하였습니다.';
+            let msg = '결제를 실패하였습니다.';
             alert(msg);
         }
     });

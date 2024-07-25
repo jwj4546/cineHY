@@ -194,8 +194,10 @@
             // 결제 버튼 클릭시
             $("#payBtn").on("click",  function() {
             	
+            	const ticketPrice = 12000;
 				const count = $('.person-btn.active').text();
 				const seatNumber = $('.selected');
+				const totalPrice = ticketPrice * count;
 				
 				// 선택한 좌석의 id값을 seatArr에 push
             	const seatArr = new Array();
@@ -207,6 +209,7 @@
             	const res = window.sessionStorage.getItem("resInfo");
             	const resInfo = JSON.parse(res);
             	resInfo.seat = seatArr;
+            	resInfo.price = totalPrice;
             	
 				// sessionStorage에 JSON 형태의 예매 정보와 좌석 정보를 추가
 				const seatInfo = JSON.stringify(resInfo);
