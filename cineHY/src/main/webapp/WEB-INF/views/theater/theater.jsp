@@ -261,9 +261,9 @@
     <jsp:include page="../common/footer.jsp"></jsp:include>
     <script>
     
-    updateDateTabs(); // 페이지 로드 시 날짜 탭 업데이트
+    updateDateTabs();
     
-    $(document).ready(function() {
+    $(document).ready(() => {
         // 첫 번째 지역 버튼 자동 선택
         const firstTheaterButton = $('.btn-group-toggle .btn').first();
         firstTheaterButton.addClass('active');
@@ -276,7 +276,7 @@
         // 지역 및 날짜에 맞는 스케줄 자동 로드
         const selectedTabDate = firstDateTab.attr('data-date');
         const theaterCode = firstTheaterButton.find('input').val();
-        loadSchedule(); // 초기 스케줄 로드
+        loadSchedule();
         // 지역 선택 버튼 클릭 이벤트 처리
         $('.btn-group-toggle .btn').on('click', function() {
             $('.btn-group-toggle .btn').removeClass('active');
@@ -321,7 +321,7 @@
             url: 'movieSchedule/AllScheduleList/' + theaterCode + '/' + selectedTabDate,
             method: 'get',
             dataType: 'json',
-            success: function(data) {
+            success: data => {
                 displayScheduleForDate(data);
             },
             error: function(jqXHR, textStatus, errorThrown) {

@@ -100,10 +100,15 @@ public class MovieApiController {
 
 		//get 요청
 		Request request = new Request.Builder()
-		  .url( API_URL + "now_playing?append_to_response=images&language=ko-KR&region=KR&page="+pageNo+"&sort_by=popularity.desc&include_image_language=en,null")
+		  .url( API_URL + "now_playing?append_to_response=images"
+		  				+ "&language=ko-KR"
+		  				+ "&region=KR"
+		  				+ "&page="+pageNo+""
+		  				+ "&sort_by=popularity.desc"
+		  				+ "&include_image_language=en,null")
 		  .get()
 		  .addHeader("accept", "application/json")
-		  .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcxOTk4Mzc5NS40NDkyODMsInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qMXzz1zFbiC7Mct5mGb96DwMT3Tjtuo1HFjLE_b_kZ0")
+		  .addHeader("Authorization", BEARER_TOKEN)
 		  .build();
 
 		// 요청 실행 및 응답 받기
@@ -285,19 +290,19 @@ public class MovieApiController {
 	@PutMapping(value = "delete", produces = "application/json; charset=UTF-8")
 	public ResponseEntity<Message> delete(@RequestBody Movie movie) {
 			
-			int result = movieService.delete(movie);
-			if (result == 0) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder()
-																 .message("삭제안됨")
-																 .build());
-	        }
-	
-			Message responseMsg = Message.builder().data("영화목록 삭제에 성공했습니다")
-												   .message("서비스요청성공")
-												   .build();
-	
-	        return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
-		}
+		int result = movieService.delete(movie);
+		if (result == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Message.builder()
+															 .message("삭제안됨")
+															 .build());
+        }
+
+		Message responseMsg = Message.builder().data("영화목록 삭제에 성공했습니다")
+											   .message("서비스요청성공")
+											   .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+	}
 	
 	@GetMapping(value="searchMovie", produces="application/json; charset=UTF-8")
 	public String searchMovie(@RequestParam("keyword") String query) throws IOException {
