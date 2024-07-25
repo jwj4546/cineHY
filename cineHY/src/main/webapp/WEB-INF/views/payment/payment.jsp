@@ -66,36 +66,40 @@
     		let text = '';
     		const formatter = new Intl.NumberFormat('ko-KR');
     		
-    			
-    			
-    			text += '<tr class="ticketItem">'
-    					 + '<td style="text-align:center; width:200px;"><img src="" style="height:100px; width=auto;"/></td>'
-    					 + '<td>' 
-    					 + info.movieName
-    					 + '<input type="hidden" class="movieCode" value="' + info.movieCode + '" />'
-    					 + '</td>'
-    					 + '<td>' 
-    					 + info.theaterName
-    					 + '</td>'
-    					 + '<td>' + info.startTime + '</td>'
-    					 + '<td>' + info.seat + '</td>'
-    					 + '<td>24000원</td>'
-    					 + '</tr>'
-    					 
-    		document.getElementById("reLoad").innerHTML = text;
-
+    		text += '<tr class="ticketItem">'
+					 + '<td id="poster" style="text-align:center; width:200px;"></td>'
+					 + '<td>' 
+					 + info.movieName
+					 + '<input type="hidden" class="movieCode" value="' + info.movieCode + '" />'
+					 + '</td>'
+					 + '<td>' 
+					 + info.theaterName
+					 + '</td>'
+					 + '<td>' + info.startTime + '</td>'
+					 + '<td>' + info.seat + '</td>'
+					 + '<td>' + formatter.format(info.price) + '원</td>'
+					 + '</tr>'
+					 
+			 document.getElementById("reLoad").innerHTML = text;
+    		
     		$.ajax({
-    			url : "images",
-    			type : "get",
-    			dataType : "json",
+    			url : 'movieList/details',
+    			type : 'get',
+    			dataType : 'json',
     			data : {movie_id : parseInt(info.movieCode)},
-    			success : function() {
+    			success : function(data) {
     				console.log(data);
+    				$('#poster').html('<img src="https://image.tmdb.org/t/p/w500' + data.poster_path + '" style="height:200px; width=auto;"/>');
     			},
     			error: function(xhr, status, error) {
     		        console.error("AJAX Error: ", status, error);
     			}
     		});
+    		
+    		
+    		
+
+    		
     		
     	}
     	
