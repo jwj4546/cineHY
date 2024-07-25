@@ -28,7 +28,7 @@ import okhttp3.Response;
 
 @Slf4j
 @RestController
-@RequestMapping("movieList/")
+@RequestMapping(value = "movieList/", produces="application/json; charset=UTF-8")
 public class MovieApiController {
 	
 	@Autowired
@@ -38,7 +38,7 @@ public class MovieApiController {
     private static final String BEARER_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjU2OTQwNzBmNWI4MzJmMjVkYjRjNjZmY2JmZWExNSIsIm5iZiI6MTcyMDA2Mjc5Ni41OTIxNDksInN1YiI6IjY2N2NhYmNlMzQ3ZWM1MzNhYWViNGI3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WfXqF4gZs0s7v7N9TyGhAUHP_ut6LgIEjSs_Bge8vH0"; // 여기에 실제 Bearer Token을 입력하세요
     private static final int TOTAL_PAGES = 10; // 가져올 페이지 수
 	
-    @GetMapping(value = "nowPlaying", produces = "application/json; charset=UTF-8")
+    @GetMapping("nowPlaying")
     public String getNowPlayingMovie() throws IOException {
         OkHttpClient client = new OkHttpClient();
         List<String> allMoviesResponses = new ArrayList<>();
@@ -64,7 +64,7 @@ public class MovieApiController {
         return combinedResponse;
     }
 	
-	@GetMapping(value="upComming", produces="application/json; charset=UTF-8")
+	@GetMapping("upComming")
 	public String getUpcommingMovie() throws IOException {
 		
 		OkHttpClient client = new OkHttpClient();
@@ -92,7 +92,7 @@ public class MovieApiController {
     }
 	
 	
-	@GetMapping(value="nowPlaying/Admin", produces="application/json; charset=UTF-8")
+	@GetMapping("nowPlaying/Admin")
 	public String getNowPlayingMovieAdmin(@RequestParam("pageNo") int pageNo) throws IOException {
 		
 		//OkHttp 클라이언트 객체생성
@@ -123,7 +123,7 @@ public class MovieApiController {
         }
     }
 	
-	@GetMapping(value="upComming/Admin", produces="application/json; charset=UTF-8")
+	@GetMapping("upComming/Admin")
 	public String getUpcommingMovieAdmin(@RequestParam("pageNo") int pageUpNo) throws IOException {
 		
 		OkHttpClient client = new OkHttpClient();
@@ -146,7 +146,7 @@ public class MovieApiController {
 	        }
 	}
 	
-	@GetMapping(value="details", produces="application/json; charset=UTF-8")
+	@GetMapping("details")
 	public String getDetails(@RequestParam("movie_id") int movieId) throws IOException {
 		
 		OkHttpClient client = new OkHttpClient();
@@ -170,7 +170,7 @@ public class MovieApiController {
 	}
 	
 	
-	@GetMapping(value="rating", produces="application/json; charset=UTF-8")
+	@GetMapping("rating")
 	public String getRatings(@RequestParam("movie_id") int movieId) throws IOException {
 		
 		OkHttpClient client = new OkHttpClient();
@@ -193,7 +193,7 @@ public class MovieApiController {
 	        }
 	}
 	
-	@GetMapping(value="credits", produces="application/json; charset=UTF-8")
+	@GetMapping("credits")
 	public String getCredits(@RequestParam("movie_id") int movieId) throws IOException {
 		OkHttpClient client = new OkHttpClient();
 
@@ -215,7 +215,7 @@ public class MovieApiController {
 	        }
 	}
 	
-	@GetMapping(value="images", produces="application/json; charset=UTF-8")
+	@GetMapping("images")
 	public String getImages(@RequestParam("movie_id") int movieId) throws IOException {
 		OkHttpClient client = new OkHttpClient();
 
@@ -238,7 +238,7 @@ public class MovieApiController {
 	}
 	
 	
-	@GetMapping(value = "movieDB", produces = "application/json; charset=UTF-8")
+	@GetMapping("movieDB")
 	public String getMovieDB() {
 		 
 		 List<Integer> movieIdList = movieService.getMovieIdList();
@@ -249,7 +249,7 @@ public class MovieApiController {
 	
 	
 	
-	@PostMapping(value="movieInsert", produces = "application/json; charset=UTF-8")
+	@PostMapping("movieInsert")
 	public ResponseEntity<Message> save(@RequestBody Movie movie) {
 		
 		int result = movieService.save(movie);
@@ -267,7 +267,7 @@ public class MovieApiController {
 	}
 	
 	
-	@GetMapping(value = "movieEnrollList", produces = "application/json; charset=UTF-8")
+	@GetMapping("movieEnrollList")
 	public ResponseEntity<Message> getMovieList() {
 		 
 		 List<Movie> movieList = movieService.getMovieList();
@@ -287,7 +287,7 @@ public class MovieApiController {
 		 return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
     }
 	
-	@PutMapping(value = "delete", produces = "application/json; charset=UTF-8")
+	@PutMapping("delete")
 	public ResponseEntity<Message> delete(@RequestBody Movie movie) {
 			
 		int result = movieService.delete(movie);
@@ -304,7 +304,7 @@ public class MovieApiController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
 	
-	@GetMapping(value="searchMovie", produces="application/json; charset=UTF-8")
+	@GetMapping("searchMovie")
 	public String searchMovie(@RequestParam("keyword") String query) throws IOException {
 		
 		OkHttpClient client = new OkHttpClient();
@@ -327,7 +327,7 @@ public class MovieApiController {
 	        }
 	}
 	
-	@GetMapping(value="search", produces="application/json; charset=UTF-8")
+	@GetMapping("search")
 	public String search(@RequestParam("keyword") String query) throws IOException {
 		
 		OkHttpClient client = new OkHttpClient();
