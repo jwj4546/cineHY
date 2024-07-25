@@ -196,7 +196,7 @@ public class MemberController {
 	    if (bcryptPasswordEncoder.matches(plainPwd, encPwd)) {
 	        try {
 	            if (memberService.delete(member.getUserId()) > 0) {
-	                session.setAttribute("alertMsg","허허");
+	                session.setAttribute("alertMsg","회원 탈퇴 성공!");
 	                session.removeAttribute("loginUser");
 	                return "redirect:/";
 	            } else {
