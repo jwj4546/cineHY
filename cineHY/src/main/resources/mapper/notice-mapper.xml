@@ -27,6 +27,8 @@
 	
 	<select id = "findAll"  resultType="notice" parameterType ="map"> 
 		<include refid="selectNotice"/>
+
+
 FROM
     (SELECT 
         NOTICE_NO,

@@ -19,19 +19,6 @@
 
 <insert id="insertMovie" parameterType="movie">
 
-	<!-- INSERT INTO
-				TB_MOVIE
-		 VALUES
-		 		(
-		 		#{movieCode},
-		 		#{movieTitle},
-		 		#{genre},
-		 		#{summary},
-		 		#{runningTime},
-		 		#{rating},
-		 		#{openedDate},
-		 		#{status}
-		 		) -->
 	MERGE INTO 
 				TB_MOVIE target
 	  	 USING (

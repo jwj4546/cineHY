@@ -52,51 +52,25 @@ public class NoticeController {
 				
 				//currentPage : 현재 페이지(사용자가 요청한 페이지)
 				currentPage= page;
-				//log.info("게시글의 총 개수 :{},  현재 요청페이지 :{}", listCount , currentPage);
-				
-				
-				// maxPage : 가장 마지막 페이지ㅏ 몇번 메이지이지 (총 페이지 개수 )
-				
-				
-				//공식 구하기
-				//단 boardLimit100이라는 가정하에 규직을 찾아보자
-				//나눗셈 결과네 소수점을 붙여서 올림처리를 할 경우 
-				
 				
 				maxPage = (int)Math.ceil((double) listCount / noticeLimit);
 				
-				//Math math = new math();
-				
-				
-				// - startPage : 1, 11, 21, 31, 41, => n* 10+1
-				
 				startPage = (currentPage-1)/pageLimit * pageLimit +1;
-				//endPage = (currentPage-1)/pageLimit + pageLimit -1;
+				
 				endPage = startPage + pageLimit - 1;
-				//start, Limit에 영향을 받음 (단, maxPag도 마지막 페이징바에 대해 영향을 끼침)
-				
-				//endPage= startPage+pageLimit -1;
-				
-				//start페이지가 1이라서 end가 10이 들어갔는데 
-				//max가 다?
+			
 				if(endPage > maxPage) endPage = maxPage;
-				
-//				PageInfo pageInfo = new PageInfo(listCount, currentPage, pageLimit, boardLimit,
-//													maxPage, startPage, endPage);
 				
 				PageInfo pageInfo = PageInfo.builder() 
 											.listCount(listCount)
 											.currentPage(currentPage)
 											.pageLimit(pageLimit)
-											.boardLimit(noticeLimit)
+											.noticeLimit(noticeLimit)
 											.maxPage(maxPage)
 											.startPage(startPage)
 											.endPage(endPage)
 											.build();
 				
-				//boardLimit이 10이라는 가정하에 currentPage == 1/2/3  => 시작값은 1, 끝값 10 /11, 20 / 시작값 21, 끝값30
-				//시작값 = (currentPage -1) * boardLimit +1 ;
-				//끝값 = 시작값 + boardLimit -1;
 				
 				Map<String, Integer> map = new HashMap();
 				

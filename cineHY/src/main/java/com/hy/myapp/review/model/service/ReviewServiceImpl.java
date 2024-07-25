@@ -1,6 +1,7 @@
 package com.hy.myapp.review.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,8 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<Review> getMovieOfReview(int movieCode) {
-		return reviewRepository.getMovieOfReview(sqlSession, movieCode);
+	public List<Review> getMovieOfReview(Map<String, Object> map) {
+		return reviewRepository.getMovieOfReview(sqlSession, map);
 	}
 
 	@Override
@@ -66,13 +67,13 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<Review> selectMyReview(String userId) {
-		return reviewRepository.selectMyReview(sqlSession, userId);
+	public List<Review> selectMyReview(Map<String, Object> map) {
+		return reviewRepository.selectMyReview(sqlSession, map);
 	}
 	
 	@Override
-	public List<Review> selectNoReview(String userId) {
-		return reviewRepository.selectNoReview(sqlSession, userId);
+	public List<Review> selectNoReview(Map<String, Object> map) {
+		return reviewRepository.selectNoReview(sqlSession, map);
 	}
 
 
@@ -82,9 +83,29 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public int reviewCount() {
-		return reviewRepository.reviewCount(sqlSession);
+	public int myReviewCount(String userId) {
+		return reviewRepository.myReviewCount(sqlSession, userId);
 	}
+	
+	@Override
+	public int NoReviewCount(String userId) {
+		return reviewRepository.NoReviewCount(sqlSession, userId);
+	}
+
+
+	@Override
+	public int reviewCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int MovieOfReviewCount(int movieId) {
+		return reviewRepository.MovieOfReviewCount(sqlSession, movieId);
+	}
+
+	
+	
 
 	
 

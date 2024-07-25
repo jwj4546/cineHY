@@ -393,9 +393,7 @@
     			method : 'get',
     			dataType : 'json',
     			success: function(data) {
-    				//console.log(data);
     				const movieEList = data.data;
-    				//console.log(data.data)
     				let ListHtml = '';
     				ListHtml += '<li class="list-group-item" style="font-size:25px; color:white; background-color:#29b9a5;"><p>등록한 영화</p></li>'
     				for(let i in movieEList) {
@@ -407,7 +405,6 @@
     				
     				$('#movieEnrollList').html(ListHtml);
 
-    	            // 리스트 항목에 호버 효과와 클릭 이벤트 핸들러 추가
     	            $('#movieEnrollList .list-group-item').hover(
     	                function() {
     	                    $(this).addClass('hover');
@@ -445,7 +442,6 @@
 	            data: JSON.stringify(requestData),
 	            dataType: "json",
 	            success: function(response) {
-	                //console.log(response);
 	                if (response.message === '서비스요청성공') {
 	                	findAll();
 	                alert("영화가 상영리스트에 등록되었습니다.")
@@ -483,7 +479,6 @@
 				data : JSON.stringify(requestData),
 				contentType : 'application/json',
 				success : data => {
-					//console.log(data)
 					alert("영화가 리스트에서 삭제되었습니다.")
 					findAll();
 					$('#movieDetails').empty();
@@ -498,7 +493,6 @@
 	    //view 클릭 시 해당 화면으로 스크롤
 	    function scrollDownView() {
 	        let location = document.querySelector('#movieDetails').offsetTop;
-	        //console.log(location);
 	        window.scrollTo({ top: location - 80, behavior: 'smooth' });
 	    }
 	    

@@ -95,13 +95,13 @@
 
                     <c:forEach begin="${pageInfo.startPage}" end="${pageInfo.endPage}" var="p">
                         <li class="page-item">
-                            <a class="page-link" href="boardlist?page=${p}">${p}</a>
+                            <a class="page-link" href="notiList?page=${p}">${p}</a>
                         </li>
                     </c:forEach>
 
                     <c:choose>
                         <c:when test="${pageInfo.currentPage ne pageInfo.maxPage}">
-                            <li class="page-item"><a class="page-link" href="boardlist?page=${pageInfo.currentPage + 1}">다음</a></li>
+                            <li class="page-item"><a class="page-link" href="notiList?page=${pageInfo.currentPage + 1}">다음</a></li>
                         </c:when>
                     </c:choose>
                 </ul>
@@ -126,14 +126,14 @@
             <br><br>
 
            <script type="text/javascript">
-    $(() => {
-        $('#searchForm option[value="${condition}"]').prop('selected', true);
-
-        $('.notice-detail').click(e => {
-            location.href = 'notice-detail?noticeNo=' + e.currentTarget.id.split('-')[1];
-        });
-    });
-</script>
+			    $(() => {
+			        $('#searchForm option[value="${condition}"]').prop('selected', true);
+			
+			        $('.notice-detail').click(e => {
+			            location.href = 'notice-detail?noticeNo=' + e.currentTarget.id.split('-')[1];
+			        });
+			    });
+			</script>
 
         </div>
         <br><br>

@@ -316,7 +316,7 @@
             	
             	console.log("message:",message);
             
-            	const node = message.data;  //여기가문제
+            	const node = message.data;  
                 const userId = node.userId;
 				const sendmessage = node.message;
 				console.log("node",node);

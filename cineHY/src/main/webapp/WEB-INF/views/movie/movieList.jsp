@@ -145,16 +145,16 @@
     <jsp:include page="../common/footer.jsp"></jsp:include>
     
     <script>
-	$(document).ready(function() {
+	$(document).ready( () => {
 	    var movieIdList = []; // DB movieCode 리스트 전역 변수로 선언
 		var movieRatings = {};
 	    
-	    function getMovieDB() {
+	    const getMovieDB = () => {
 	        $.ajax({
 	            url: 'movieList/movieDB',
 	            method: 'GET',
 	            dataType: 'json',
-	            success: function(result) {
+	            success: result => {
 	                movieIdList = result; // movieIdList에 결과 할당
 	            },
 	            error: function() {
@@ -164,17 +164,17 @@
 	    }
 	    
 	    
-	    function getMovieRatings() {
+	    const getMovieRatings = () => {
 	        return $.ajax({
 	            url: 'movieList/movieEnrollList',
 	            method: 'GET',
 	            dataType: 'json',
-	            success: function(response) {
+	            success: response => {
 	                var data = response.data; // response에서 data 배열 가져오기
 	                if (!Array.isArray(data)) {
 	                    data = [data]; // data가 배열이 아닌 경우 배열로 변환
 	                }
-	                data.forEach(function(movie) {
+	                data.forEach(movie => {
 	                    movieRatings[movie.movieCode] = movie.rating; // movieCode와 rating 매핑
 	                });
 	            },
@@ -185,14 +185,14 @@
 	    }
 	    
 
-	    function fetchMovies() {
+	    const fetchMovies = () => {
 	        $.ajax({
 	            url: 'movieList/nowPlaying',
 	            method: 'GET',
 	            dataType: 'json',
-	            success: function(data) {
-	                displayMovies(data); // 상영중인 영화
-	                displayLikeMovies(data); // 선호도별 추천영화
+	            success: data => {
+	                displayMovies(data);
+	                displayLikeMovies(data);
 	            },
 	            error: function(jqXHR, textStatus, errorThrown) {
 	                console.error('영화 데이터를 불러오는 중 오류 발생:', textStatus, errorThrown);
@@ -200,54 +200,60 @@
 	        });
 	    }
 
-	    function displayMovies(data) {
-	        var movieList = $('#movieList');
-	        movieList.empty(); // 기존 내용 비우기
-	        var rank = 1; // 순위 초기화
-	        for (var j = 0; j < data.length; j++) {
-	            if (data[j].results && data[j].results.length > 0) {
-	                var movies = data[j].results;
-	                var movieHtml = '';
-	                for (var i = 0; i < movies.length; i++) {
-	                    var movieId = movies[i].id;
-	                    if (movieIdList.includes(movieId)) {
-	                        var rating = movieRatings[movieId] || 'N/A'; // rating 가져오기
-	                        //console.log(rating);
-	                        movieHtml += '<div class="col-md-4">'
-	                            + '<div class="card mb-4 box-shadow">'
-	                            + '<div class="rank">No ' + rank + '</div>'
-	                            + '<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" alt="Card image cap">'
-	                            + '<div class="card-body">'
-	                            + '<h5 class="card-title">' + movies[i].title + '<span class="badge text-bg-dark">' + rating + '</span></h5>'
-	                            + '<p class="card-text">' + movies[i].release_date + ' 개봉</p>'
-	                            + '<div class="d-flex justify-content-between align-items-center">'
-	                            + '<div class="btn-group">'
-	                            + '<a href="movieDetails?movieId=' + movieId + '" class="btn btn-sm btn-outline-secondary">View</a>'
-	                            + '<form action="reservationById" method="get">'
-	                            + '<input type="hidden" value="' + movieId + '" name="movieId">'
-	                            + '<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
-	                            + '</form>'
-	                            + '</div>'
-	                            + '<small class="text-muted">인기도 ' + movies[i].popularity + '</small>'
-	                            + '</div>'
-	                            + '</div>'
-	                            + '</div>'
-	                            + '</div>';
+	    const displayMovies = (data) => {
+	        const movieList = $('#movieList');
+	        movieList.empty();
+	        let rank = 1;
+
+	        const $fragment = $(document.createDocumentFragment());
+
+	        data.forEach((entry) => {
+	            if (entry.results && entry.results.length > 0) {
+	                entry.results.forEach((movie) => {
+	                    if (movieIdList.includes(movie.id)) {
+	                        const rating = movieRatings[movie.id] || 'N/A';
+	                        const movieCardHtml = `
+	                            <div class="col-md-4">
+	                                <div class="card mb-4 box-shadow">
+	                                    <div class="rank">No \${rank}</div>
+	                                    <img class="card-img-top" src="https://image.tmdb.org/t/p/w500\${movie.poster_path}" alt="\${movie.title} Poster">
+	                                    <div class="card-body">
+	                                        <h5 class="card-title">\${movie.title}<span class="badge text-bg-dark">\${rating}</span></h5>
+	                                        <p class="card-text">\${movie.release_date} 개봉</p>
+	                                        <div class="d-flex justify-content-between align-items-center">
+	                                            <div class="btn-group">
+	                                                <a href="movieDetails?movieId=\${movie.id}" class="btn btn-sm btn-outline-secondary">View</a>
+	                                                <form action="reservationById" method="get">
+	                                                    <input type="hidden" value="\${movie.id}" name="movieId">
+	                                                    <button type="submit" class="btn btn-sm btn-danger">예매하기</button>
+	                                                </form>
+	                                            </div>
+	                                            <small class="text-muted">인기도 ${movie.popularity}</small>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        `;
+
+	                        $fragment.append(movieCardHtml);
 	                        rank++;
 	                    }
-	                }
-	                movieList.append(movieHtml);
+	                });
 	            }
-	        }
+	        });
 
-	        // 모든 데이터를 처리한 후, movieHtml이 비어 있으면 '현재 상영 중인 영화가 없습니다.' 메시지를 추가
+	        movieList.append($fragment);
+
 	        if (movieList.children().length === 0) {
 	            movieList.html('<li>현재 상영 중인 영화가 없습니다.</li>');
 	        }
-	    }
+	    };
 	    
-	    
-	    function displayLikeMovies(data) {
+
+	     
+	
+	
+	    const displayLikeMovies = (data) => {
 	        var movieLikeList = $('#movieLikeList');
 	        movieLikeList.empty(); // 기존 내용 비우기
 	        var promises = [];
@@ -258,9 +264,9 @@
 
 	        for (var j = 0; j < data.length; j++) {
 	            if (data[j].results && data[j].results.length > 0) {
-	                var likeMovies = data[j].results; // 1페이지에 할당된 영화들
+	                var likeMovies = data[j].results;
 	                for (var i = 0; i < likeMovies.length; i++) {
-	                    (function(movie) {
+	                    ( movie => {
 	                        var likeMovieId = movie.id; // API 영화ID (movieCode)
 	                        if (movieIdList.includes(likeMovieId)) {
 	                            promises.push(
@@ -273,13 +279,12 @@
 	                                    var genres = movieDetails.genres.map(function(genre) {
 	                                        return genre.name;
 	                                    });
-	                                    // 회원의 선호 장르와 영화 장르 비교
 	                                    if (genres.includes(MemberGenre1) || genres.includes(MemberGenre2)) {
-	                                        var likeRating = movieRatings[likeMovieId] || 'N/A'; // rating 가져오기
+	                                        var likeRating = movieRatings[likeMovieId] || 'N/A'; 
 	                                        return {
-	                                            movie: movie, // movie[i] 대신 movie 사용
+	                                            movie: movie, 
 	                                            genres: genres,
-	                                            rating: likeRating // rating 추가
+	                                            rating: likeRating 
 	                                        };
 	                                    } else {
 	                                        return null;
@@ -287,44 +292,45 @@
 	                                })
 	                            );
 	                        }
-	                    })(likeMovies[i]); // IIFE 사용
+	                    })(likeMovies[i]);
 	                }
 	            }
 	        }
 
 	        // 모든 AJAX 요청이 완료된 후 처리
 	        $.when.apply($, promises).done(function() {
-	            var likeResults = Array.prototype.slice.call(arguments);
-	            var movieLikeHtml = '';
-	            likeResults.forEach(function(result) {
+	            let likeResults = Array.prototype.slice.call(arguments);
+	            let movieLikeHtml = '';
+	            likeResults.forEach(result => {
 	                if (result !== null && result.movie) {
 	                    let likeMovie = result.movie;
-	                    let likeRating = result.rating; // 각 영화의 rating 가져오기
-	                    movieLikeHtml += '<div class="col-md-4">'
-	                        + '<div class="card mb-4 box-shadow">'
-	                        + '<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + likeMovie.poster_path + '" alt="Card image cap">'
-	                        + '<div class="card-body">'
-	                        + '<h5 class="card-title">' + likeMovie.title + '<span class="badge text-bg-dark">' + likeRating + '</span></h5>'
-	                        + '<p class="card-text">' + likeMovie.release_date + ' 개봉</p>'
-	                        + '<div class="d-flex justify-content-between align-items-center">'
-	                        + '<div class="btn-group">'
-	                        + '<a href="movieDetails?movieId=' + likeMovie.id + '" class="btn btn-sm btn-outline-secondary">View</a>'
-	                        + '<form action="reservationById" method="get">'
-	                        + '<input type="hidden" value="' + likeMovie.id + '" name="movieId">'
-	                        + '<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
-	                        + '</form>'
-	                        + '</div>'
-	                        + '<small class="text-muted">인기도 ' + likeMovie.popularity + '</small>'
-	                        + '</div>'
-	                        + '</div>'
-	                        + '</div>'
-	                        + '</div>';
+	                    let likeRating = result.rating;
+	                    movieLikeHtml += `
+	                    <div class="col-md-4">
+	                    	<div class="card mb-4 box-shadow">
+	                        	<img class="card-img-top" src="https://image.tmdb.org/t/p/w500\${likeMovie.poster_path}" alt="Card image cap">
+	                        	<div class="card-body">
+	                       		<h5 class="card-title">\${likeMovie.title}<span class="badge text-bg-dark">\${likeRating}</span></h5>
+	                        	<p class="card-text">\${likeMovie.release_date} 개봉</p>
+	                        	<div class="d-flex justify-content-between align-items-center">
+	                        		<div class="btn-group">
+	                        			<a href="movieDetails?movieId=\${likeMovie.id}" class="btn btn-sm btn-outline-secondary">View</a>
+	                        			<form action="reservationById" method="get">
+		                       				<input type="hidden" value="\${likeMovie.id}" name="movieId">
+		                       				<button type="submit" class="btn btn-sm btn-danger">예매하기</button>
+	                        			</form>
+	                        		</div>
+	                       			<small class="text-muted">인기도 \${likeMovie.popularity}</small>
+                        		</div>
+                        	</div>
+                        </div>
+                    </div>
+                    `;
 	                }
 	            });
 
 	            movieLikeList.append(movieLikeHtml);
 
-	            // 모든 데이터를 처리한 후, movieHtml이 비어 있으면 '현재 상영 중인 영화가 없습니다.' 메시지를 추가
 	            if (movieLikeList.children().length === 0) {
 	                movieLikeList.html('<p class="text-center">추천영화가 없습니다.</p>');
 	            }
@@ -334,12 +340,12 @@
 	    
 	
 	  	//상영예정작 영화 API
-	    function fetchUpMovies() {
+	    const fetchUpMovies = () => {
 	        $.ajax({
 	            url: 'movieList/upComming',
 	            method: 'GET',
 	            dataType: 'json',
-	            success: function(data) {
+	            success: data => {
 	                displayUpMovies(data);
 	            },
 	            error: function(jqXHR, textStatus, errorThrown) {
@@ -348,12 +354,12 @@
 	        });
 	    }
 	
-	    function displayUpMovies(data) {
-	        var movieUpList = $('#movieUpList');
+	    const displayUpMovies = (data) => {
+	        const movieUpList = $('#movieUpList');
 	        movieUpList.empty();
 	        
 	     	// 모든 영화 목록을 하나의 배열로 합치기
-	        var allMovies = [];
+	        let allMovies = [];
 	        for (var j = 0; j < data.length; j++) {
 	            if (data[j].results && data[j].results.length > 0) {
 	                allMovies = allMovies.concat(data[j].results);
@@ -383,35 +389,35 @@
 			for (var releaseDate in groupedMovies) {
 			    upMovieHtml += '<h3>' + releaseDate + '</h3>';
 			    for (var i = 0; i < groupedMovies[releaseDate].length; i++) {
-			        var movie = groupedMovies[releaseDate][i];
-			        var upMovieId = movie.id;
-			        var rating = movieRatings[upMovieId] || 'N/A'; // rating 가져오기
-			        upMovieHtml += '<div class="col-md-4">'
-			            + '<div class="card mb-4 box-shadow">'
-			            + '<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + movie.poster_path + '" alt="Card image cap">'
-			            + '<div class="card-body">'
-			            + '<h5 class="card-title">' + movie.title + '<span class="badge text-bg-dark">' + rating + '</span></h5>'
-			            + '<p class="card-text">' + movie.release_date + ' 개봉</p>'
-			            + '<div class="d-flex justify-content-between align-items-center">'
-			            + '<div class="btn-group">'
-			            + '<a href="movieDetails?movieId=' + upMovieId + '" class="btn btn-sm btn-outline-secondary">View</a>'
-			            + '<form action="reservationById" method="get">'
-			            + '<input type="hidden" value="' + upMovieId + '" name="movieId">'
-			            + '<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
-			            + '</form>'
-			            + '</div>'
-			            + '<small class="text-muted">인기도 ' + movie.popularity + '</small>'
-			            + '</div>'
-			            + '</div>'
-			            + '</div>'
-			            + '</div>';
+			        let movie = groupedMovies[releaseDate][i];
+			        let upMovieId = movie.id;
+			        let rating = movieRatings[upMovieId] || 'N/A'; // rating 가져오기
+			        upMovieHtml += `
+			        <div class="col-md-4">
+			        	<div class="card mb-4 box-shadow">
+			            	<img class="card-img-top" src="https://image.tmdb.org/t/p/w500\${ movie.poster_path}" alt="Card image cap">
+			            	<div class="card-body">
+			            	<h5 class="card-title">\${ movie.title}<span class="badge text-bg-dark">\${rating}</span></h5>
+			            	<p class="card-text">\${ movie.release_date} 개봉</p>
+			            	<div class="d-flex justify-content-between align-items-center">
+			           			<div class="btn-group">
+				           			<a href="movieDetails?movieId=\${upMovieId}" class="btn btn-sm btn-outline-secondary">View</a>
+				            		<form action="reservationById" method="get">
+					            		<input type="hidden" value="\${upMovieId}" name="movieId">
+				            			<button type="submit" class="btn btn-sm btn-danger">예매하기</button>
+			            			</form>
+			            		</div>
+			            		<small class="text-muted">인기도 \${ movie.popularity }</small>
+		            		</div>
+		           		</div>
+	            	</div>
+	           </div>
+	           `;
 			    }
 			}
 
-	        // 정렬된 영화 목록 추가
 	        movieUpList.append(upMovieHtml);
 
-	        // 모든 데이터를 처리한 후, movieUpHtml이 비어 있으면 '현재 상영 중인 영화가 없습니다.' 메시지를 추가
 	        if (movieUpList.children().length === 0) {
 	            movieUpList.html('<p class="text-center">현재 상영 중인 영화가 없습니다.</p>');
 	        }
