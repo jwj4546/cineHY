@@ -277,53 +277,48 @@
 	    
 
     <script>
-	    $(document).ready(function() {
-		    const findAllMovie = () => {
-				
-				$.ajax({
-					url : 'movieList/movieEnrollList',
-					method : 'get',
-					dataType : 'json',
-					success: data => {
-						//console.log(data.data);
-						const movieTitleList = data.data;
-						let ListHtml ='<option value="">영화를 선택하세요</option>';
-						for(let i in movieTitleList) {
-							ListHtml += '<option value="'+ movieTitleList[i].movieCode +'">'+ movieTitleList[i].movieTitle +'</option>';
-							//console.log(movieTitleList[i].movieTitle);
-						}
-						$('#movieSelect').html(ListHtml);
-						
-					},
-					error: function(jqXHR, textStatus, errorThrown) {
-	    	            console.error('Error fetching movie data:', textStatus, errorThrown);
-	    	        }
-				});
-		    }
-		    findAllMovie();
+	    $(document).ready(() => {
+	        const findAllMovie = () => {
+	            $.ajax({
+	                url: 'movieList/movieEnrollList',
+	                method: 'GET',
+	                dataType: 'json',
+	                success: (data) => {
+	                    const movieTitleList = data.data;
+	                    let listHtml = '<option value="">영화를 선택하세요</option>';
+	                    movieTitleList.forEach(movie => {
+	                        listHtml += `<option value="\${movie.movieCode}">\${movie.movieTitle}</option>`;
+	                    });
+	                    $('#movieSelect').html(listHtml);
+	                },
+	                error: (jqXHR, textStatus, errorThrown) => {
+	                    console.error('Error fetching movie data:', textStatus, errorThrown);
+	                }
+	            });
+	        };
+	
+	    	findAllMovie();
 		    
-		    const getTheater = () => {
-		    	
-		    	$.ajax({
-		    		url : 'movieSchedule/theater',
-		    		method : 'get',
-		    		dataType : 'json',
-		    		success : data => {
-		    			//console.log(data.data);
-		    			const theaterList = data.data;
-		    			let TheaterHtml ='<option value="">영화관을 선택하세요</option>';
-		    			for(let i in theaterList) {
-		    				//console.log(theaterList[i].theaterName);
-		    				TheaterHtml += '<option value="'+ theaterList[i].theaterCode +'">'+ theaterList[i].theaterName +'</option>';
-		    			}
-		    			$('#theaterSelect').html(TheaterHtml);
-		    		},
-		    		error: function(jqXHR, textStatus, errorThrown) {
-	    	            console.error('Error fetching movie data:', textStatus, errorThrown);
-		    		}
-		    	});
-		    }
-		    getTheater();
+	        const getTheater = () => {
+	            $.ajax({
+	                url: 'movieSchedule/theater',
+	                method: 'GET',
+	                dataType: 'json',
+	                success: (data) => {
+	                    const theaterList = data.data;
+	                    let theaterHtml = '<option value="">영화관을 선택하세요</option>';
+	                    theaterList.forEach(theater => {
+	                        theaterHtml += `<option value="\${theater.theaterCode}">\${theater.theaterName}</option>`;
+	                    });
+	                    $('#theaterSelect').html(theaterHtml);
+	                },
+	                error: (jqXHR, textStatus, errorThrown) => {
+	                    console.error('Error fetching movie data:', textStatus, errorThrown);
+	                }
+	            });
+	        };
+
+	        getTheater();
 	    });
     	
 	    //영화-극장-날짜 선조회 함수 

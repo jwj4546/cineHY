@@ -238,17 +238,6 @@ public class MovieApiController {
 	}
 	
 	
-	@GetMapping("movieDB")
-	public String getMovieDB() {
-		 
-		 List<Integer> movieIdList = movieService.getMovieIdList();
-		 
-		 return new Gson().toJson(movieIdList);
-    }
-	
-	
-	
-	
 	@PostMapping("movieInsert")
 	public ResponseEntity<Message> save(@RequestBody Movie movie) {
 		

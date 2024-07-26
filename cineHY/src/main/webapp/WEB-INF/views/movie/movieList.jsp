@@ -146,31 +146,19 @@
     
     <script>
 	$(document).ready( () => {
-	    var movieIdList = []; // DB movieCode 리스트 전역 변수로 선언
-		var movieRatings = {};
+	    const movieIdList = []; // DB movieCode 리스트 전역 변수로 선언
+		const movieRatings = {};
 	    
-	    const getMovieDB = () => {
-	        $.ajax({
-	            url: 'movieList/movieDB',
-	            method: 'GET',
-	            dataType: 'json',
-	            success: result => {
-	                movieIdList = result; // movieIdList에 결과 할당
-	            },
-	            error: function() {
-	                console.log('데이터를 불러올 수 없습니다.');
-	            }
-	        });
-	    }
-	    
-	    
-	    const getMovieRatings = () => {
+	    const getMovieList = () => {
 	        return $.ajax({
 	            url: 'movieList/movieEnrollList',
 	            method: 'GET',
 	            dataType: 'json',
 	            success: response => {
-	                var data = response.data; // response에서 data 배열 가져오기
+	                const data = response.data;
+	                for (const movieDB of data)
+	                movieIdList.push(movieDB.movieCode);
+	                
 	                if (!Array.isArray(data)) {
 	                    data = [data]; // data가 배열이 아닌 경우 배열로 변환
 	                }
@@ -424,8 +412,7 @@
 	    }
 	    
 	
-	    getMovieDB();
-	    getMovieRatings();
+	    getMovieList();
 	    fetchMovies();
 	    fetchUpMovies();
 	});

@@ -17,11 +17,6 @@ public class MovieServiceImpl implements MovieService {
 	private final MovieRepository movieRepository;
 	private final SqlSessionTemplate sqlSession;
 	
-	@Override
-	public List<Integer> getMovieIdList() {
-		
-		return movieRepository.getMovieIdList(sqlSession);
-	}
 
 	@Override
 	public int save(Movie movie) {

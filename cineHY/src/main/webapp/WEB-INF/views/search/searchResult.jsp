@@ -60,13 +60,6 @@
 	    var movieIdList = []; // DB movieCode 리스트 전역 변수로 선언
 	    var movieRatings = {};
 	
-	    function getMovieDB() {
-	        return $.ajax({
-	            url: 'movieList/movieDB',
-	            method: 'GET',
-	            dataType: 'json'
-	        });
-	    }
 	
 	    function getMovieRatings() {
 	        return $.ajax({
@@ -85,114 +78,129 @@
 	        });
 	    }
 	
-	    function search() {
-	        Promise.all([getMovieDB(), getMovieRatings(), searchMovies()])
-	            .then(function(results) {
-	                movieIdList = results[0]; // movieDB results
-	                var movieEnrollList = results[1].data; // movieEnrollList results
+	    const search = () => {
+	        Promise.all([getMovieRatings(), searchMovies()])
+	            .then(results => {
+	                const [movieRatingsResults, searchResults] = results;
 	                
-	                if (!Array.isArray(movieEnrollList)) {
-	                    movieEnrollList = [movieEnrollList]; // data가 배열이 아닌 경우 배열로 변환
-	                }
-	
-	                movieEnrollList.forEach(function(movie) {
-	                    movieRatings[movie.movieCode] = movie.rating; // movieCode와 rating 매핑
+	                // movieRatingsResults를 배열로 처리
+	                const movieEnrollList = Array.isArray(movieRatingsResults) 
+	                    ? movieRatingsResults 
+	                    : (movieRatingsResults.data && Array.isArray(movieRatingsResults.data) 
+	                        ? movieRatingsResults.data 
+	                        : []);
+	                
+	                // movieIdList와 movieRatings 업데이트
+	                movieEnrollList.forEach(movie => {
+	                    if (movie.movieCode) {
+	                        movieIdList.push(movie.movieCode);
+	                        movieRatings[movie.movieCode] = movie.rating;
+	                    }
 	                });
-	
-	                let searchResults = results[2]; // search results
-	                let resultsM = searchResults.map(result => result.results).flat();
-	
+
+	                // searchResults 처리
+	                const resultsM = searchResults.flatMap(result => result.results);
+	                
 	                displayPeople(resultsM);
 	                displayMovies(resultsM);
 	            })
-	            .catch(function(error) {
+	            .catch(error => {
 	                console.error('오류 발생:', error);
 	            });
 	    }
 	
 	    // 영화인 정보 출력
-	    function displayPeople(resultsM) {
-	        const moviePeople = $('#moviePeople');
-	        moviePeople.empty();
-	        var peopleListHtml = '';
-	        for (var i = 0; i < resultsM.length; i++) {
-	            let people = resultsM[i];
-	            console.log(people);
-	            if (people && people.media_type == 'person' && people.adult == false) {
-	                let knownFor = resultsM[i].known_for.slice(0, 3);
-	                peopleListHtml += '<div class="card mb-3" style="max-width: 700px;">'
-	                                + '<div class="row g-0">'
-	                                + '<div class="col-md-4">'  
-	                                + '<img src="https://image.tmdb.org/t/p/w500' + people.profile_path + '" class="img-fluid rounded-start" alt="moviePeople">'    
-	                                + '</div>'
-	                                + '<div class="col-md-8">'
-	                                + '<div class="card-body">'
-	                                + '<h5 class="card-title">' + people.name + '</h5>'
-	                                + '<p class="card-text"> ' + people.known_for_department + '</p>'
-	                                + '<div class="row">';
-	                                
-	                for (var j = 0; j < knownFor.length; j++) {
-	                	if(knownFor[j].media_type == "movie" && !knownFor[j].genre_ids.includes(10749)){
-	                    peopleListHtml += '<div class="col-md-4">'
-	                                    + '<div class="card mb-4 shadow-sm">'
-	                                    + '<img src="https://image.tmdb.org/t/p/w500' + knownFor[j].poster_path + '" class="card-img-top" alt="영화 포스터">'
-	                                    + '<div class="card-body">'
-	                                    + '<p class="card-text"><small class="text-body-secondary">' + knownFor[j].title + '</small></p>'
-	                                    + '</div>'
-	                                    + '</div>'
-	                                    + '</div>';
-	                	}
-	                }
-	                        
-	                peopleListHtml += '</div>'
-	                                + '</div>'
-	                                + '</div>'
-	                                + '</div>';
-	            }
-	        }
-	        moviePeople.append(peopleListHtml);
-	
-	        if (moviePeople.children().length === 0) {
-	            moviePeople.html('<p class="text-center">인물 검색 결과가 없습니다.</p>');
-	        }
-	    }
+	    const displayPeople = (resultsM) => {
+		    const moviePeople = $('#moviePeople');
+		    moviePeople.empty();
+		
+		    if (resultsM.length === 0) {
+		        moviePeople.html('<p class="text-center">인물 검색 결과가 없습니다.</p>');
+		        return;
+		    }
+		
+		    const peopleListHtml = resultsM
+		        .filter(people => people && people.media_type === 'person' && !people.adult)
+		        .map(people => {
+		            const knownFor = people.known_for.slice(0, 3);
+		
+		            const knownForHtml = knownFor
+		                .filter(item => item.media_type === "movie" && !item.genre_ids.includes(10749))
+		                .map(item => `
+		                    <div class="col-md-4">
+		                        <div class="card mb-4 shadow-sm">
+		                            <img src="https://image.tmdb.org/t/p/w500\${item.poster_path}" class="card-img-top" alt="영화 포스터">
+		                            <div class="card-body">
+		                                <p class="card-text"><small class="text-body-secondary">\${item.title}</small></p>
+		                            </div>
+		                        </div>
+		                    </div>
+		                `).join('');
+		
+		            return `
+		                <div class="card mb-3" style="max-width: 700px;">
+		                    <div class="row g-0">
+		                        <div class="col-md-4">
+		                            <img src="https://image.tmdb.org/t/p/w500\${people.profile_path}" class="img-fluid rounded-start" alt="moviePeople">
+		                        </div>
+		                        <div class="col-md-8">
+		                            <div class="card-body">
+		                                <h5 class="card-title">\${people.name}</h5>
+		                                <p class="card-text">\${people.known_for_department}</p>
+		                                <div class="row">
+		                                    \${knownForHtml}
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		            `;
+		        }).join('');
+		
+		    moviePeople.html(peopleListHtml || '<p class="text-center">인물 검색 결과가 없습니다.</p>');
+		}
 	
 	    // 검색결과 중 상영중인 영화정보 출력
 	    function displayMovies(resultsM) {
-	        const moviePlaying = $('#moviePlaying');
-	        moviePlaying.empty();
-	        var movieListHtml = '';
-	        for (var i = 0; i < resultsM.length; i++) {
-	            let movie = resultsM[i];
-	            if (movie && movieIdList.includes(movie.id)) {
-	                var rating = movieRatings[movie.id] || 'N/A';
-	                movieListHtml += '<div class="col-md-4">'
-	                                + '<div class="card mb-4 box-shadow">'
-	                                + 	'<img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + movie.poster_path + '" alt="Card image cap">'
-	                                + 		'<div class="card-body">'
-	                                + 			'<h5 class="card-title">' + movie.title + '<span class="badge text-bg-dark">' + rating + '</span></h5>'
-	                                + 			'<p class="card-text">' + movie.release_date + ' 개봉</p>'
-	                                + 			'<div class="d-flex justify-content-between align-items-center">'
-	                                + 				'<div class="btn-group">'
-	                                + 					'<a href="movieDetails?movieId=' + movie.id + '" class="btn btn-sm btn-outline-secondary">View</a>'
-	                                + 					'<form action="reservationById" method="get">'
-	                                + 						'<input type="hidden" value="' + movie.id + '" name="movieId">'
-	                                + 						'<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
-	                                + 					'</form>'
-	                                + 				'</div>'
-	                                + 				'<small class="text-muted">인기도 ' + movie.popularity + '</small>'
-	                                + 			'</div>'
-	                                + 		'</div>'
-	                                + 	'</div>'
-	                                + '</div>';
-	            }
-	        }
-	        moviePlaying.append(movieListHtml);
-	
-	        if (moviePlaying.children().length === 0) {
-	            moviePlaying.html('<p class="text-center">상영중인 영화 결과가 없습니다.</p>');
-	        }
-	    }
+		    const moviePlaying = $('#moviePlaying');
+		    moviePlaying.empty();
+		    
+		    if (resultsM.length === 0) {
+		        moviePlaying.html('<p class="text-center">상영중인 영화 결과가 없습니다.</p>');
+		        return;
+		    }
+		    
+		    let movieListHtml = '';
+		    
+		    resultsM.forEach(movie => {
+		        if (movie && movieIdList.includes(movie.id)) {
+		            const rating = movieRatings[movie.id] || 'N/A';
+		            movieListHtml += `
+		                <div class="col-md-4">
+		                    <div class="card mb-4 box-shadow">
+		                        <img class="card-img-top" src="https://image.tmdb.org/t/p/w500\${movie.poster_path}" alt="Card image cap">
+		                        <div class="card-body">
+		                            <h5 class="card-title">\${movie.title} <span class="badge text-bg-dark">\${rating}</span></h5>
+		                            <p class="card-text">\${movie.release_date} 개봉</p>
+		                            <div class="d-flex justify-content-between align-items-center">
+		                                <div class="btn-group">
+		                                    <a href="movieDetails?movieId=\${movie.id}" class="btn btn-sm btn-outline-secondary">View</a>
+		                                    <form action="reservationById" method="get">
+		                                        <input type="hidden" value="\${movie.id}" name="movieId">
+		                                        <button type="submit" class="btn btn-sm btn-danger">예매하기</button>
+		                                    </form>
+		                                </div>
+		                                <small class="text-muted">인기도 ${movie.popularity}</small>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		            `;
+		        }
+		    });
+		    
+		    moviePlaying.html(movieListHtml || '<p class="text-center">상영중인 영화 결과가 없습니다.</p>');
+		}
 	
 	    // 페이지가 로드되면 검색을 수행
 	    search();

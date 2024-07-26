@@ -173,7 +173,7 @@ $(document).ready(function() {
     getTheater();
    
 	
-	function updateDate() {
+	const updateDate = () => {
         // 오늘 날짜를 기준
         const today = new Date();
         const days = ['일', '월', '화', '수', '목', '금', '토'];
@@ -202,7 +202,7 @@ $(document).ready(function() {
 	
 	updateDate();
 	
-	function fetchScheduleTime() {
+	const fetchScheduleTime = () => {
 		const movie = document.getElementById('movieSelect').value;
 	    const theater = document.getElementById('theaterSelect').value;
 	    const startdate = document.getElementById('dateSelect').value;
@@ -213,7 +213,7 @@ $(document).ready(function() {
 	    		url : 'movieSchedule/schedule/' + movie + '/' + theater + '/' + startdate + '/' + enddate,
 	    		method : 'get',
 	    		dataType : 'json',
-	    		success : function(data) { // data => 
+	    		success : data => { // data => 
 	    			const scheduleResult = document.getElementById('timeSelect');
 		            scheduleResult.innerHTML = '';
 	    			if (data.data.length > 0) {
@@ -227,7 +227,7 @@ $(document).ready(function() {
 	    			$('#timeSelect option:first').prop('selected', true);
 	    			displaySelectedMovie();
 	    		},
-	    		error: function(jqXHR, textStatus, errorThrown) {
+	    		error: (jqXHR, textStatus, errorThrown) => {
 	                console.error('Error fetching schedule data:', textStatus, errorThrown);
 	    		}
 			});
@@ -235,38 +235,42 @@ $(document).ready(function() {
 	}
 	
 	
-	function displaySelectedMovie() {
-        const movie = $('#movieSelect option:selected').text();
-        const theater = $('#theaterSelect option:selected').text();
-        const startDate = $('#dateSelect').val();
-        const startTime = $('#timeSelect option:selected').text();
-        console.log('Selected Movie:', movie);
-        console.log('Selected Theater:', theater);
-        console.log('Selected Date:', startDate);
-        console.log('Selected Time:', startTime);
-
-        if (movie && theater && startDate && startTime) {
-        	console.log('Selected Movie:', movie);
-        	console.log('Selected Theater:', theater);
-        	console.log('Selected Date:', startDate);
-        	console.log('Selected Time:', startTime);
-            let infoHtml = '';
-            infoHtml += '<p class="card-text">영화 제목: ' + movie + '</p>'
-                      + '<p class="card-text">극장: ' + theater + '</p>'
-                      + '<p class="card-text">날짜: ' + startDate + '</p>'
-                      + '<p class="card-text">시간: ' + startTime + '</p>';
-
-            $('#selectedInfo').html(infoHtml);
-        } else {
-        	let infoHtml = '';
-            infoHtml += '<p class="card-text">영화 제목을 선택하세요 </p>'
-                      + '<p class="card-text">극장을 선택하세요 </p>'
-                      + '<p class="card-text">날짜를 선택하세요 </p>'
-                      + '<p class="card-text">시간을 선택하세요 </p>';
-
-            $('#selectedInfo').html(infoHtml);
-        }
-    }
+	const displayScheduleForDate= (data) => {
+	    const activeTabId = $('.nav-tabs .nav-link.active').attr('href');
+	    const scheduleTable = $(`${activeTabId} .schedule-table tbody`);
+	    const selectedTabDate = $('.nav-tabs .nav-link.active').attr('data-date');
+	    const theaterCode = $('input[name="theater"]:checked').val();
+	    scheduleTable.empty();
+	    if (data && data.data.length > 0) {
+	        data.data.forEach(schedule => {
+	            const row = `
+	                <tr>
+	                    <td>
+	                        \${schedule.movieTitle}
+	                        <span class="badge text-bg-dark">\${schedule.rating}</span>
+	                    </td>
+	                    <td>\${schedule.screenCode}</td>
+	                    <td>\${schedule.startTime} - \${schedule.endTime}</td>
+	                    <td>
+	                        <form action="reservationFromTheater" method="post">
+	                            <input type="hidden" value="\${schedule.movieCode}" id="tableMovieCode" name="movieCode">
+	                            <input type="hidden" value="\${selectedTabDate}" name="ticketDate">
+	                            <input type="hidden" value="\${schedule.screenCode}" name="screenCode">
+	                            <input type="hidden" value="\${theaterCode}" name="theaterCode">
+	                            <input type="hidden" value="\${schedule.startTime}" name="startTime">
+	                            <input type="hidden" value="\${schedule.screeningId}" name="screeningId">
+	                            <button class="btn btn-danger btn-sm float-right delete-btn" type="submit">예매</button>
+	                        </form>
+	                    </td>
+	                </tr>
+	            `;
+	            scheduleTable.append(row);
+	        });
+	    } else {
+	        const noScheduleMessage = '<tr><td colspan="4">선택한 날짜에 해당하는 스케줄이 없습니다.</td></tr>';
+	        scheduleTable.append(noScheduleMessage);
+	    }
+	}
 
     // 페이지 로드 시 초기 한 번 호출
     displaySelectedMovie();
