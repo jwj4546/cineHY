@@ -356,7 +356,7 @@ ul.CTAs a {
                 <li>
                     <a href="movieScheduleEnroll">상영 스케줄 등록</a>
                 <li>
-                    <a href="#">회원관리</a>
+                    <a href="memberList">회원관리</a>
                 </li>
                 <li >
 				    <a href="productForm">상품 등록</a>

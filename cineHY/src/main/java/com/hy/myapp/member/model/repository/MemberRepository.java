@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.hy.myapp.member.model.vo.Member;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -55,7 +56,11 @@ public class MemberRepository {
 		return sqlSession.update("MemberMapper.myInfoChange", member);
 	}
 
-	public int delete(SqlSessionTemplate sqlSession2, String userId) {
+	public int delete(SqlSessionTemplate sqlSession, String userId) {
 		return sqlSession.update("MemberMapper.resign", userId);
+	}
+
+	 public List<Member> findAll(Map<String, Integer> map) {
+	        return sqlSession.selectList("MemberMapper.findAll", map);
 	}
 }
