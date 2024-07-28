@@ -234,6 +234,32 @@ $(document).ready(function() {
 	    }
 	}
 	
+	const displaySelectedMovie = () => {
+	    const movie = $('#movieSelect option:selected').text();
+	    const theater = $('#theaterSelect option:selected').text();
+	    const startDate = $('#dateSelect').val();
+	    const startTime = $('#timeSelect option:selected').text();
+
+	    let infoHtml = '';
+
+	    if (movie && theater && startDate && startTime) {
+	        infoHtml = `
+	            <p class="card-text">영화 제목: \${movie}</p>
+	            <p class="card-text">극장: \${theater}</p>
+	            <p class="card-text">날짜: \${startDate}</p>
+	            <p class="card-text">시간: \${startTime}</p>
+	        `;
+	    } else {
+	        infoHtml = `
+	            <p class="card-text">영화 제목을 선택하세요</p>
+	            <p class="card-text">극장을 선택하세요</p>
+	            <p class="card-text">날짜를 선택하세요</p>
+	            <p class="card-text">시간을 선택하세요</p>
+	        `;
+	    }
+
+	    $('#selectedInfo').html(infoHtml);
+	}
 	
 	const displayScheduleForDate= (data) => {
 	    const activeTabId = $('.nav-tabs .nav-link.active').attr('href');

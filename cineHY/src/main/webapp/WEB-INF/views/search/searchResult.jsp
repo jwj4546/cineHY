@@ -80,17 +80,9 @@
 	
 	    const search = () => {
 	        Promise.all([getMovieRatings(), searchMovies()])
-	            .then(results => {
-	                const [movieRatingsResults, searchResults] = results;
-	                
-	                // movieRatingsResults를 배열로 처리
-	                const movieEnrollList = Array.isArray(movieRatingsResults) 
-	                    ? movieRatingsResults 
-	                    : (movieRatingsResults.data && Array.isArray(movieRatingsResults.data) 
-	                        ? movieRatingsResults.data 
-	                        : []);
-	                
-	                // movieIdList와 movieRatings 업데이트
+	            .then(([movieRatingsResults, searchResults]) => {
+	                const movieEnrollList = movieRatingsResults.data || [];
+
 	                movieEnrollList.forEach(movie => {
 	                    if (movie.movieCode) {
 	                        movieIdList.push(movie.movieCode);
@@ -98,8 +90,7 @@
 	                    }
 	                });
 
-	                // searchResults 처리
-	                const resultsM = searchResults.flatMap(result => result.results);
+	                const resultsM = searchResults.map(result => result.results).flat();
 	                
 	                displayPeople(resultsM);
 	                displayMovies(resultsM);
