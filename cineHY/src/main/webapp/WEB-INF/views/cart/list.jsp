@@ -189,7 +189,6 @@
 		function pay() {
 			
 			
-			// 반복되는 checkbox의 길이를 count에 저장
 			const count = document.getElementsByClassName("checkbox").length;
 			
 			const form = $("#payForm");
@@ -198,7 +197,7 @@
 			for(let i=0; i<count; i++) {
 				if(document.getElementsByClassName("checkbox")[i].checked == true) {
 					
-					var pay = {
+					const pay = {
 						productId : document.getElementsByClassName("productId")[i].value,
 						cartNo : document.getElementsByClassName("cartNo")[i].value,
 						productComment : document.getElementsByClassName("productComment")[i].value,
@@ -206,16 +205,19 @@
 						productName : document.getElementsByClassName("productName")[i].innerHTML,
 						productPrice : document.getElementsByClassName("productPrice")[i].value,
 						cartAmount : document.getElementsByClassName("productAmount")[i].value 
+					
 					};
+					
 					infoArray.push(pay);
-					console.log(infoArray);
 				}
-				console.log(infoArray);
             }
 			const arr = JSON.stringify(infoArray);
 			window.sessionStorage.setItem('list', '');
 			window.sessionStorage.setItem('list', arr);
 			location.href = "payCart";
+			
+			
+			
 			
 			/* $.ajax({
 				url : "payCart",

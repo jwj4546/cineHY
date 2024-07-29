@@ -102,164 +102,160 @@
     <script>
     
    
-    $(document).ready(function() {
+    $(document).ready(() => {
     	
-    	 <%-- const movieId = "<%= movieId %>"; --%> //리뷰에서 호출한 movieID 있음
-    	 getDetails(movieId);  // getDetails 호출
-        
-        
-	    function getDetails(movieId) {
-	        $.ajax({
-	            url: 'movieList/details',
-	            method: 'get',
-	            dataType: 'json',
-	            data: { movie_id: movieId },
-	            success: function(data) {
-	            	//console.log(data);
-	            	$('#poster').html('<img src="https://image.tmdb.org/t/p/w500' + data.poster_path + '" class="img-fluid" alt="Movie Poster" style="width:300px;">')
-	                $('#title').html ('<h4 class="mb-4">' + data.title + '</h4>');
-	                $('#overview').html ('<p>' + data.overview + '</p>');
-		            $('#releaseDate').html ('<p><strong>개봉일 : </strong>' + data.release_date + '</p>');
-					$('#runtime').html ('<p><strong>상영 시간 : </strong>'+ data.runtime +'분</p>');
-	                //장르 문자열 변환
-					var genres = data.genres.map(function(genre) {
-	                	return genre.name;
-	                }).join(',');
-	                
-	                $('#genre').html ('<p><strong>장르 : </strong>'+ genres +'</p>');
-	                
-	             	// 트레일러 추가
-                    if (data.videos && data.videos.results.length > 0) {
-                        const trailersHtml = data.videos.results.slice(0, 3).map(video => {
-                            return `<div class="col-md-4 mt-3">
-                                <div class="video-container">
-                                    <iframe src="https://www.youtube.com/embed/${video.key}" frameborder="0" allowfullscreen></iframe>
-                                </div>
-                            </div>`;
-                        }).join('');
-                        $('#trailers').html(trailersHtml);
-                    } else {
-                        $('#trailers').html('<p>No trailers available.</p>');
-                    }
+	   	 <%-- const movieId = "<%= movieId %>"; --%> //리뷰에서 호출한 movieID 있음
+	       
+	     const getDetails = (movieId) => {
+		     $.ajax({
+					url: 'movieList/details',
+					method: 'GET',
+					dataType: 'json',
+					data: { movie_id: movieId },
+					success: (data) => {
+					    $('#poster').html(`
+					        <img src="https://image.tmdb.org/t/p/w500\${data.poster_path}" 
+					             class="img-fluid" 
+					             alt="Movie Poster" 
+					             style="width:300px;">
+					    `);
+					    $('#title').html(`
+					        <h4 class="mb-4">\${data.title}</h4>
+					    `);
+					    $('#overview').html(`
+					        <p>\${data.overview}</p>
+					    `);
+					    $('#releaseDate').html(`
+					        <p><strong>개봉일 : </strong>\${data.release_date}</p>
+					    `);
+					    $('#runtime').html(`
+					        <p><strong>상영 시간 : </strong>\${data.runtime}분</p>
+					    `);
+					    
+					    let genres = data.genres.map( (genre) => {
+			              	return genre.name;
+			              }).join(',');
+			              
+			              $('#genre').html ('<p><strong>장르 : </strong>'+ genres +'</p>');
+		               
+				    
+					getMovieImages(movieId);
+					getRating(movieId);  
+					getStarAvg(movieId); 
+					getCredit(movieId);
+						
+		           	},
+			           error: (jqXHR, textStatus, errorThrown) => {
+			               console.error('Error fetching movie details:', textStatus, errorThrown);
+			           }
+			       });
+		     	
+		}
+	     getDetails(movieId);  // getDetails 호출
 
-                 // 스틸컷 추가
-                getMovieImages(movieId);
-                getRating(movieId);  
-                getStarAvg(movieId); 
-                getCredit(movieId);
-	            },
-	            error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('Error fetching movie data:', textStatus, errorThrown);
-	            }
-	        });
-    	 }
-	            
-	    function getRating(movieId) {         
-                //등급 정보 가져오기
-	        $.ajax({
-	            url: 'movieList/rating',
-	            method: 'get',
-	            dataType: 'json',
-	            data: { movie_id: movieId },
-	            success: function(releaseData) {
-	                let rating = 'N/A';
-	                let countries = releaseData.results;
-	                for (let i = 0; i < countries.length; i++) {
-	                    if (countries[i].iso_3166_1 === 'KR') {
-	                        let releases = countries[i].release_dates;
-	                        for (let j = 0; j < releases.length; j++) {
-	                            if (releases[j].certification) {
-	                                rating = releases[j].certification;
-	                                break;
-	                            }
-	                        }
-	                        break;
-	                    }
-	                }
-	                
-	                $('#rating').html ('<p><strong>관람 등급 : </strong>'+ rating +'</p>');
-	            },
-	        });
-	     }
-                            
-	    function getStarAvg(movieId) {                   
-	          //평균 별점
-	       	 $.ajax({
+	     const getRating = (movieId) => {         
+	               //등급 정보 가져오기
+	         $.ajax({
+	             url: 'movieList/rating',
+	             method: 'get',
+	             dataType: 'json',
+	             data: { movie_id: movieId },
+	             success: releaseData => {
+	                 let rating = 'N/A';
+	                 let countries = releaseData.results;
+	                 for (let i = 0; i < countries.length; i++) {
+	                     if (countries[i].iso_3166_1 === 'KR') {
+	                         let releases = countries[i].release_dates;
+	                         for (let j = 0; j < releases.length; j++) {
+	                             if (releases[j].certification) {
+	                                 rating = releases[j].certification;
+	                                 break;
+	                             }
+	                         }
+	                         break;
+	                     }
+	                 }
+	                 
+	                 $('#rating').html ('<p><strong>관람 등급 : </strong>'+ rating +'</p>');
+	             },
+	         });
+	      }
+                             
+	     const getStarAvg = (movieId) => {                   
+	    
+	      	 $.ajax({
 	   	        url: 'starAvg',
 	   	        data: {
 	   	        	movieCode: movieId
 	   	        },
-	   	        type: 'get',
-	   	        success: function(response) {
-	   	        	console.log("response{}", response);
+	   	        type: 'GET',
+	   	        success: response => {
 	   	        	$('#rateAvg').html('<div id="rateAvg"><p><strong>평균 별점 : </strong>'+ response +'</p></div>');  
-
-		   	    },
-	  	        error: function(err) {
-	  	            console.error('Error get review:', err);
-	  	          	$('#rateAvg').html('<div id="rateAvg"><p><strong>평균 별점 : </strong> 0 </p></div>');
-	  	        }
-	         });
-	    }
-	   	        
-	    function getCredit(movieId) {        
-	         // 감독 및 배우 정보 추가
-	         $.ajax({
-	             url: 'movieList/credits',
-	             method: 'get',
-	             dataType: 'json',
-	             data: { movie_id: movieId },
-	             success: function(creditData) {
-	            	 console.log(creditData);
-	                 let director = creditData.crew.find(member => member.job === 'Director');
-	                 let actors = creditData.cast.slice(0, 5).map(actor => actor.name).join(', ');
 	
-	                 $('#director').html('<p><strong>감독 : </strong>' + (director ? director.name : 'N/A') + '</p>');
-	                 $('#actor').html('<p><strong>배우 : </strong>' + (actors ? actors : 'N/A') + '</p>');
-	
-                  },
-                  error: function(jqXHR, textStatus, errorThrown) {
-                      console.error('Error fetching movie credit data:', textStatus, errorThrown);
-                  }
-                  
-              });
-	    }
-           		 
-
-	    function getMovieImages(movieId) {
+	    	    },
+	           error: (err) => {
+	               console.error('Error get review:', err);
+	             	$('#rateAvg').html('<div id="rateAvg"><p><strong>평균 별점 : </strong> 0 </p></div>');
+	           }
+	        });
+	     }
+      	        
+	     const getCredit = (movieId) => {       
 	        $.ajax({
-	            url: 'movieList/images',
+	            url: 'movieList/credits',
 	            method: 'get',
 	            dataType: 'json',
 	            data: { movie_id: movieId },
-	            success: function(imageData) {
-	                if (imageData.backdrops && imageData.backdrops.length > 0) {
-	                    for (let i = 0; i < Math.min(4, imageData.backdrops.length); i++) {
-	                        const image = imageData.backdrops[i];
-	                        console.log(image.file_path);
-	                        const imageUrl = 'https://image.tmdb.org/t/p/w500'+ image.file_path;
-	                        console.log(imageUrl);
-	                        let imageHtml =''
-	                        imageHtml += '<div class="col-md-3 mt-3">'
-	                                   + '<div class="gallery-item">'
-	                                   + '<a href="#">'        
-	                                   + '<img src="'+ imageUrl +'" class="img-fluid" alt="Still Image">'
-	                                   + '</a>'
-	                                   + '</div>'
-	                                   + '</div>';
-	                        $('#stills').append(imageHtml);
-	                    }
-	                } else {
-	                    $('#stills').html('<p>No stills available.</p>');
-	                }
-	            },
-	            error: function(jqXHR, textStatus, errorThrown) {
-	                console.error('Error fetching movie images:', textStatus, errorThrown);
-	                $('#stills').html('<p>Error fetching stills.</p>');
-	            }
-	        });
-	    }
-    });
+	            success: creditData => {
+	           	 console.log(creditData);
+	                let director = creditData.crew.find(member => member.job === 'Director');
+	                let actors = creditData.cast.slice(0, 5).map(actor => actor.name).join(', ');
+	
+	                $('#director').html('<p><strong>감독 : </strong>' + (director ? director.name : 'N/A') + '</p>');
+	                $('#actor').html('<p><strong>배우 : </strong>' + (actors ? actors : 'N/A') + '</p>');
+	
+	               },
+	               error: (jqXHR, textStatus, errorThrown) => {
+	                   console.error('Error fetching movie credit data:', textStatus, errorThrown);
+	               }
+	               
+	           });
+	   	  }
+            		 
+
+	     const getMovieImages = (movieId) => {
+	    	    $.ajax({
+	    	        url: 'movieList/images',
+	    	        method: 'GET',
+	    	        dataType: 'json',
+	    	        data: { movie_id: movieId },
+	    	        success: (imageData) => {
+	    	            if (imageData.backdrops && imageData.backdrops.length > 0) {
+	    	                imageData.backdrops.slice(0, 4).forEach(image => {
+	    	                    const imageUrl = `https://image.tmdb.org/t/p/w500\${image.file_path}`;
+	    	                    const imageHtml = `
+	    	                        <div class="col-md-3 mt-3">
+	    	                            <div class="gallery-item">
+	    	                                <a href="#">
+	    	                                    <img src="\${imageUrl}" class="img-fluid" alt="Still Image">
+	    	                                </a>
+	    	                            </div>
+	    	                        </div>
+	    	                    `;
+	    	                    $('#stills').append(imageHtml);
+	    	                });
+	    	            } else {
+	    	                $('#stills').html('<p>No stills available.</p>');
+	    	            }
+	    	        },
+	    	        error: (jqXHR, textStatus, errorThrown) => {
+	    	            console.error('Error fetching movie images:', textStatus, errorThrown);
+	    	            $('#stills').html('<p>Error fetching stills.</p>');
+	    	        }
+	    	    });
+	    	}
+	     });
+    
     
     
     </script>

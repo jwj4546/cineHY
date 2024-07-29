@@ -1,5 +1,8 @@
 package com.hy.myapp.member.model.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 
@@ -68,6 +71,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int changePw(Member member) {
 		return memberRepository.changePw(sqlSession, member);
+	}
+
+	  @Override
+	    public List<Member> findAll(Map<String, Integer> map) {
+	        return sqlSession.selectList("MemberMapper.findAll", map);
 	}
 	
 	

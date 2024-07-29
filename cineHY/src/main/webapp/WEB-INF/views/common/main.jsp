@@ -145,17 +145,18 @@
 	<script>
 	$(document).ready(function() {
 		
-		
-	    var movieIdList = []; // DB movieCode 리스트 전역 변수로 선언
-		
-	    function getMovieDB() {
-	        $.ajax({
-	            url: 'movieList/movieDB',
+	    const movieIdList = []; // DB movieCode 리스트 전역 변수로 선언
+	    
+	    const getMovieList = () => {
+	        return $.ajax({
+	            url: 'movieList/movieEnrollList',
 	            method: 'GET',
 	            dataType: 'json',
-	            success: function(result) {
-	                console.log(result);
-	                movieIdList = result; // movieIdList에 결과 할당
+	            success: response => {
+	                const data = response.data;
+	                for (const movieDB of data)
+	                movieIdList.push(movieDB.movieCode);
+	                
 	            },
 	            error: function() {
 	                console.log('데이터를 불러올 수 없습니다.');
@@ -178,48 +179,56 @@
 	    }
 	    
 	
-	    function displayMovies(data) {
-	        var movieList = $('#movieList');
-	       	movieList.empty(); // 기존 내용 비우기
-	       	var totalRankMoviesDisplayed = 0; // 총 출력한 영화 수
-	        var rank = 1; // 순위 초기화
-	        var movieHtml = '';
+	    const displayMovies = (data) => {
+	        const movieList = $('#movieList');
+	        movieList.empty(); // 기존 내용 비우기
+	        const maxDisplayCount = 5; // 총 출력할 영화 최대 수
+	        let totalRankMoviesDisplayed = 0; // 총 출력한 영화 수
+	        let rank = 1; // 순위 초기화
+	        let movieHtml = '';
 	        
-	        for (var j = 0; j < data.length && totalRankMoviesDisplayed < 5; j++) {
-	            if (data[j].results && data[j].results.length > 0) {
-	                var movies = data[j].results;
-	                for (var i = 0; i < movies.length && totalRankMoviesDisplayed < 5; i++) {
-	                    var movieId = movies[i].id;
+	        data.forEach((item) => {
+	            if (totalRankMoviesDisplayed >= maxDisplayCount) return;
+
+	            if (item.results && item.results.length > 0) {
+	                item.results.forEach((movie) => {
+	                    if (totalRankMoviesDisplayed >= maxDisplayCount) return;
+
+	                    const movieId = movie.id;
 	                    if (movieIdList.includes(movieId)) {
-	                    	//console.log(movies[i].title);
-	                        movieHtml += '<div class="card" style="width: 14rem; position: relative;">'
-	                            + '<div class="rank text-light" style="position:absolute; font-size:30px; margin-left:10px; text-shadow: 2px 2px black;">' + rank + '</div>'
-	                            + '<a href="movieDetails?movieId=' + movieId + '"><img class="card-img-top" src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" alt="Card image cap"></a>'
-	                            + '<div class="card-body">'
-	                            + '<div class="d-flex justify-content-between align-items-center">'
-	                            + '<div class="btn-group">'
-	                            + '<form action="reservationById" method="get">'
-	                            + '<input type="hidden" value="' + movieId + '" name="movieId">'
-	                            + '<button type="submit" class="btn btn-sm btn-danger">예매하기</button>'
-	                            + '</form>'
-	                            + '<small class="text-muted-light">평점 ' + 5 + '</small>'
-	                            + '</div>'
-	                            + '</div>'
-	                            + '</div>'
-	                            + '</div>';
+	                        movieHtml += `
+	                            <div class="card" style="width: 14rem; position: relative;">
+	                                <div class="rank text-light" style="position:absolute; font-size:30px; margin-left:10px; text-shadow: 2px 2px black;">\${rank}</div>
+	                                <a href="movieDetails?movieId=\${movieId}">
+	                                    <img class="card-img-top" src="https://image.tmdb.org/t/p/w500\${movie.poster_path}" alt="Card image cap">
+	                                </a>
+	                                <div class="card-body">
+	                                    <div class="d-flex justify-content-between align-items-center">
+	                                        <div class="btn-group">
+	                                            <form action="reservationById" method="get">
+	                                                <input type="hidden" name="movieId" value="\${movieId}">
+	                                                <button type="submit" class="btn btn-sm btn-danger">예매하기</button>
+	                                            </form>
+	                                            <small class="text-muted-light">평점 5</small>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>`;
 	                        rank++;
 	                        totalRankMoviesDisplayed++;
 	                    }
-	                }
+	                });
 	            }
-	        }
+	        });
+
+	        // Append the generated HTML to the movieList
 	        movieList.append(movieHtml);
 
-	        // 모든 데이터를 처리한 후, movieHtml이 비어 있으면 '현재 상영 중인 영화가 없습니다.' 메시지를 추가
-	        if (movieList.children().length === 0) {
+	        // If no movies were displayed, show a message
+	        if (totalRankMoviesDisplayed === 0) {
 	            movieList.html('<li>현재 상영 중인 영화가 없습니다.</li>');
 	        }
-	    }
+	    };
 	
 	  //상영예정작 영화 API
 	    function fetchUpMovies() {
@@ -307,8 +316,7 @@
             });
         }
 	    
-	
-	    getMovieDB();
+	    getMovieList();
 	    fetchMovies();
 	    fetchUpMovies();
 	    fetchProducts();

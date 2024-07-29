@@ -1,6 +1,10 @@
 package com.hy.myapp.member.model.service;
 
+import java.util.List;
+import java.util.Map;
+
 import com.hy.myapp.member.model.vo.Member;
+
 
 public interface MemberService {
 
@@ -23,6 +27,8 @@ public interface MemberService {
 	Member findMyPw(String userId, String userName, String phoneNo);
 
 	int changePw(Member member);
+	
+	List<Member> findAll(Map<String, Integer> map);
 	
 	
 }

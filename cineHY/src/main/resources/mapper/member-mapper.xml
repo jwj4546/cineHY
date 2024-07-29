@@ -4,6 +4,20 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="MemberMapper">
 
+
+<sql id="selectMember">
+    SELECT
+	        USER_NAME AS userName,
+	        USER_NICK AS userNick,
+	        USER_ID AS userId,
+	        JOIN_DATE AS joinDate
+</sql>
+	
+	<select id="findAll" resultType="Member" parameterType="map"> 
+	    <include refid="selectMember"/>
+	    FROM TB_MEMBER
+	</select>
+
     <insert id="insert" parameterType = "member">
     
         INSERT INTO TB_MEMBER

@@ -29,7 +29,6 @@ public class PaymentController {
 	@PostMapping("payment/prepare")
 	public void preparePayment(@RequestBody PrePaymentVO request) throws IamportResponseException, IOException {
 		paymentServiceImpl.postPrepare(request);
-		log.info("이게 뭔데 : {}", request);
 		
 	}
 	

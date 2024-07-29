@@ -48,13 +48,9 @@ public class PaymentServiceImpl implements PaymentService {
 
 	public void postPrepare(PrePaymentVO request) throws IamportResponseException, IOException {
 		PrepareData prepareData = new PrepareData(request.getMerchantUid(), request.getAmount());
-		api.postPrepare(prepareData);			// 사전 등록 API
+		api.postPrepare(prepareData);		
 		
-		log.info("key {}", key);
-		log.info("key {}", secret);
-		//log.info("이게 뭔데 : {}", request.getMerchantUid());
-		
-		prePaymentRepository.save(request);			// 주문번호와 결제 예정 금액 DB 저장
+		prePaymentRepository.save(request);			
 		
 	}
 

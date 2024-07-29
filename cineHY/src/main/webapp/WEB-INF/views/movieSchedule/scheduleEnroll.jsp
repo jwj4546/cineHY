@@ -277,98 +277,98 @@
 	    
 
     <script>
-	    $(document).ready(function() {
-		    function findAllMovie() {
-				
-				$.ajax({
-					url : 'movieList/movieEnrollList',
-					method : 'get',
-					dataType : 'json',
-					success: function(data) {
-						//console.log(data.data);
-						const movieTitleList = data.data;
-						let ListHtml ='<option value="">영화를 선택하세요</option>';
-						for(let i in movieTitleList) {
-							ListHtml += '<option value="'+ movieTitleList[i].movieCode +'">'+ movieTitleList[i].movieTitle +'</option>';
-							//console.log(movieTitleList[i].movieTitle);
-						}
-						$('#movieSelect').html(ListHtml);
-						
-					},
-					error: function(jqXHR, textStatus, errorThrown) {
-	    	            console.error('Error fetching movie data:', textStatus, errorThrown);
-	    	        }
-				});
-		    }
-		    findAllMovie();
+	    $(document).ready(() => {
+	        const findAllMovie = () => {
+	            $.ajax({
+	                url: 'movieList/movieEnrollList',
+	                method: 'GET',
+	                dataType: 'json',
+	                success: (data) => {
+	                    const movieTitleList = data.data;
+	                    let listHtml = '<option value="">영화를 선택하세요</option>';
+	                    movieTitleList.forEach(movie => {
+	                        listHtml += `<option value="\${movie.movieCode}">\${movie.movieTitle}</option>`;
+	                    });
+	                    $('#movieSelect').html(listHtml);
+	                },
+	                error: (jqXHR, textStatus, errorThrown) => {
+	                    console.error('Error fetching movie data:', textStatus, errorThrown);
+	                }
+	            });
+	        };
+	
+	    	findAllMovie();
 		    
-		    function getTheater() {
-		    	
-		    	$.ajax({
-		    		url : 'movieSchedule/theater',
-		    		method : 'get',
-		    		dataType : 'json',
-		    		success : function(data) {
-		    			//console.log(data.data);
-		    			const theaterList = data.data;
-		    			let TheaterHtml ='<option value="">영화관을 선택하세요</option>';
-		    			for(let i in theaterList) {
-		    				//console.log(theaterList[i].theaterName);
-		    				TheaterHtml += '<option value="'+ theaterList[i].theaterCode +'">'+ theaterList[i].theaterName +'</option>';
-		    			}
-		    			$('#theaterSelect').html(TheaterHtml);
-		    		},
-		    		error: function(jqXHR, textStatus, errorThrown) {
-	    	            console.error('Error fetching movie data:', textStatus, errorThrown);
-		    		}
-		    	});
-		    }
-		    getTheater();
+	        const getTheater = () => {
+	            $.ajax({
+	                url: 'movieSchedule/theater',
+	                method: 'GET',
+	                dataType: 'json',
+	                success: (data) => {
+	                    const theaterList = data.data;
+	                    let theaterHtml = '<option value="">영화관을 선택하세요</option>';
+	                    theaterList.forEach(theater => {
+	                        theaterHtml += `<option value="\${theater.theaterCode}">\${theater.theaterName}</option>`;
+	                    });
+	                    $('#theaterSelect').html(theaterHtml);
+	                },
+	                error: (jqXHR, textStatus, errorThrown) => {
+	                    console.error('Error fetching movie data:', textStatus, errorThrown);
+	                }
+	            });
+	        };
+
+	        getTheater();
 	    });
     	
 	    //영화-극장-날짜 선조회 함수 
-        function fetchSchedule() {
-            const movie = document.getElementById('movieSelect').value;
-            const theater = document.getElementById('theaterSelect').value;
-            const startdate = document.getElementById('startdateSelect').value;
-            const enddate = document.getElementById('enddateSelect').value;
-            
-            
-            if (!movie || !theater || !startdate || !enddate ) {
-                alert('영화, 영화관, 상영날짜를 모두 선택해주세요.');
-                return;
-            }
-			
-            $.ajax({
-	    		url : 'movieSchedule/schedule/' + movie + '/' + theater + '/' + startdate + '/' + enddate,
-	    		method : 'get',
-	    		dataType : 'json',
-	    		success : function(data) { // data => 
-	    			console.log(data);
-		            const scheduleResult = document.getElementById('scheduleResult');
+       const fetchSchedule = () => {
+    		const movie = $('#movieSelect').val();
+		    const theater = $('#theaterSelect').val();
+		    const startdate = $('#startdateSelect').val();
+		    const enddate = $('#enddateSelect').val();
+		    
+		    if (!movie || !theater || !startdate || !enddate) {
+		        alert('영화, 영화관, 상영날짜를 모두 선택해주세요.');
+		        return;
+		    }
+		    
+		    $.ajax({
+		        url: 'movieSchedule/schedule/'+ movie + '/' + theater + '/' + startdate + '/' + enddate,
+		        method: 'GET',
+		        dataType: 'json',
+		        success: data => {
+		            console.log(data);
+		            const scheduleResult = $('#scheduleResult');
 		            scheduleResult.innerHTML = '';
-					//console.log(data);
+		            
 		            if (data.data.length > 0) {
 		                data.data.forEach(s => {
-		                    scheduleResult.innerHTML += '<div class="card mt-2">'
-		                            + '<div class="card-body">'
-		                            + '<h5 class="card-title">' + s.startDate + '-' + s.endDate + ' 상영 스케줄</h5>'
-		                            + '<p class="card-text">상영관: ' + s.screenCode + '관</p>'
-		                            + '<p class="card-text">시간: ' + s.startTime +'-' + s.endTime + '</p>'
-		                            + '</div>'
-		                        	+ '</div>'
-		                  ;})
+		                    console.log(s.screenCode); // 콘솔에 screenCode 출력
+		                    scheduleResult.append(`
+		                        <div class="card mt-2">
+		                            <div class="card-body">
+		                                <h5 class="card-title">\${s.startDate} - \${s.endDate} 상영 스케줄</h5>
+		                                <p class="card-text">상영관: \${s.screenCode}관</p>
+		                                <p class="card-text">시간: \${s.startTime} - \${s.endTime}</p>
+		                            </div>
+		                        </div>
+		                    `);
+		                });
+		            } else {
+		                scheduleResult.html('<p>선택한 날짜에 해당 영화의 스케줄이 없습니다.</p>');
 		            }
-		            else {
-		                scheduleResult.innerHTML = '<p>선택한 날짜에 해당 영화의 스케줄이 없습니다.</p>';
-		            }
-	        	}
-	        });
-        }
+		        },
+		        error: (xhr, status, error) => {
+		            console.error('AJAX Error:', status, error);
+		            $('#scheduleResult').html('<p>스케줄 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.</p>');
+		        }
+		    });
+		}
  
         
         //중복 스케줄 체크
-        function checkSchedule() {
+        const checkSchedule = () => {
            
             const theaterCode= $('#theaterSelect').val();
             const screenCode= $('#screenSelect').val();
@@ -401,7 +401,7 @@
             });
         }
 		//중복된 시간이 없으면 스케줄 등록
-        function registerSchedule() {
+        const registerSchedule = () => {
             const requestData = {
             		movieCode: $('#movieSelect').val(),
                     theaterCode: $('#theaterSelect').val(),
@@ -431,9 +431,8 @@
             });
         }
 		
-        updateDateTabs(); // 페이지 로드 시 날짜 탭 업데이트
 
-        $(document).ready(function() {
+        $(document).ready( () => {
             // 첫 번째 지역 버튼 자동 선택
             const firstTheaterButton = $('.btn-group-toggle .btn').first();
             firstTheaterButton.addClass('active');
@@ -450,36 +449,34 @@
         });
         
         // 날짜 탭 업데이트 함수
-        function updateDateTabs() {
-            // 오늘 날짜를 기준으로 탭 생성
-            const today = new Date();
-            const days = ['일', '월', '화', '수', '목', '금', '토'];
-            let tabHtml = '';
-
-            // 7일 동안의 날짜 탭 생성
-            for (let i = 0; i < 7; i++) {
-                const date = new Date(today);
-                date.setDate(today.getDate() + i);
-
-                const dayOfWeek = days[date.getDay()];
-                const month = date.getMonth() + 1;
-                const day = date.getDate();
-                const formattedDate = date.getFullYear() + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
-
-                // 탭 HTML 생성
-                tabHtml += '<li class="nav-item" value="">';
-                tabHtml += '<a class="nav-link' + (i === 0 ? ' active' : '') + '" href="#date' + (i + 1) + '" data-toggle="tab" data-date="' + formattedDate + '">';
-                tabHtml += month + '/' + day + ' (' + dayOfWeek + ')';
-                tabHtml += '</a>';
-                tabHtml += '</li>';
-            }
-
-            // 날짜 탭 업데이트
-            $('.nav-tabs').html(tabHtml);
-
-            // 첫 번째 탭을 활성화
-            $('.nav-tabs a:first').tab('show');
-        }
+         const updateDateTabs = () => {
+	        const today = new Date();
+	        const days = ['일', '월', '화', '수', '목', '금', '토'];
+	        let tabHtml = '';
+	
+	        for (let i = 0; i < 7; i++) {
+	            const date = new Date(today);
+	            date.setDate(today.getDate() + i);
+	
+	            const dayOfWeek = days[date.getDay()];
+	            const month = date.getMonth() + 1;
+	            const day = date.getDate();
+	            const formattedDate = `\${date.getFullYear()}-\${month < 10 ? '0' + month : month}-\${day < 10 ? '0' + day : day}`;
+	
+	            tabHtml += `
+	                <li class="nav-item">
+	                    <a class="nav-link\${i === 0 ? ' active' : ''}" href="#date\${i + 1}" data-toggle="tab" data-date="\${formattedDate}">
+	                        \${month}/\${day} (\${dayOfWeek})
+	                    </a>
+	                </li>
+	            `;
+	        }
+	
+	        $('.nav-tabs').html(tabHtml);
+	        $('.nav-tabs a:first').tab('show');
+	    };
+	
+	    updateDateTabs();
         
        
         
@@ -510,7 +507,7 @@
         });
 
     // 하단 극장,날짜별 스케줄 조회 함수
-    function AllScheduleList(theaterCode, selectedTabDate) {
+    const AllScheduleList = (theaterCode, selectedTabDate) => {
         //console.log(theaterCode, selectedTabDate)
         $.ajax({
             url: 'movieSchedule/AllScheduleList/' + theaterCode + '/' + selectedTabDate,
@@ -528,17 +525,16 @@
     }
     
  	// 받아온 스케줄 데이터를 화면에 출력하는 함수
-    function displayScheduleForDate(data) {
+    const displayScheduleForDate = (data) => {
         // 탭 페이지의 스케줄 테이블에 출력
         const activeTabId = $('.nav-tabs .nav-link.active').attr('href'); // 현재 활성화된 탭의 ID 가져오기
         const scheduleTable = $(activeTabId + ' .schedule-table tbody'); // 현재 탭의 스케줄 테이블의 tbody 선택
 
-        scheduleTable.empty(); // 기존 내용 비우기
-
+        scheduleTable.empty();
+        
         if (data && data.data.length > 0) {
         	console.log(data.data);
             data.data.forEach(schedule => {
-                // 각 스케줄 항목을 테이블에 추가
                 const row = '<tr>' +
                                 '<td>' + schedule.movieTitle + '</td>' +
                                 '<td>' + schedule.screenCode + '</td>' +
@@ -549,19 +545,19 @@
                 scheduleTable.append(row);
             });
         } else {
-            // 데이터가 없을 경우 메시지 표시
             const noScheduleMessage = '<tr><td colspan="4">선택한 날짜에 해당하는 스케줄이 없습니다.</td></tr>';
             scheduleTable.append(noScheduleMessage);
         }
     }
     
  	//스케줄 삭제 함수
-    function deleteSchedule(screeningId) {
+    const deleteSchedule = (screeningId) => {
+    	confirm('스케줄을 삭제하시겠습니까?')
     	$.ajax ({
 			url : 'movieSchedule/'+screeningId,
 			type : 'delete',
 			success : data => {
-				//console.log(data)
+				alert('스케줄이 삭제되었습니다.')
 				AllScheduleList();
 			},
 			error: function(xhr, status, error) {

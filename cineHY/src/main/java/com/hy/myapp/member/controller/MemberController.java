@@ -1,9 +1,12 @@
 package com.hy.myapp.member.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -196,7 +199,7 @@ public class MemberController {
 	    if (bcryptPasswordEncoder.matches(plainPwd, encPwd)) {
 	        try {
 	            if (memberService.delete(member.getUserId()) > 0) {
-	                session.setAttribute("alertMsg","허허");
+	                session.setAttribute("alertMsg","회원 탈퇴 성공!");
 	                session.removeAttribute("loginUser");
 	                return "redirect:/";
 	            } else {
@@ -280,7 +283,15 @@ public class MemberController {
             return "common/errorPage"; // 오류 페이지로 리턴
         }
     }
-	
+    
+    
+    @GetMapping("memberList")
+    public String memberList(Model model) {
+        Map<String, Integer> paramMap = new HashMap<>();
+        List<Member> memberList = memberService.findAll(paramMap);
+        model.addAttribute("list", memberList);
+        return "member/memberList";
+    }
 	
 	
 	

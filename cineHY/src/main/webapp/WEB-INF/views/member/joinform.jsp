@@ -224,117 +224,70 @@ article input {
 </style>
 
 <script>
-	
-	
-	function onCheckClick()	{
-		
-		const checkB1 = document.getElementById("hy-agree");	
-		const checkB2 = document.getElementById("info-agree");
-		const checkB3 = document.getElementById("pro-agree");
-		const allAg = document.getElementById("all-agree");
-		
-		if(allAg.checked){			
-			checkB1.checked = true;
-			checkB2.checked = true;
-			checkB3.checked = true;	
-			
-			
-		} else {
-			checkB1.checked = false;
-			checkB2.checked = false;
-			checkB3.checked = false;
-		}
-		
-
-	}
-	
-	function agCheck() {
-		
-		const joinSubmit = document.getElementById("join-btn");
-		const agreeCheck = document.getElementById("agreeCheckResult");
-		const checkB1 = document.getElementById("hy-agree");	
-		const checkB2 = document.getElementById("info-agree");
-		const checkB3 = document.getElementById("pro-agree");
-		
-				if(!(checkB1.checked && checkB2.checked && checkB3.checked)){				
-					joinSubmit.setAttribute('disabled' ,'true'); 
-					
-					
-				} else {
-					joinSubmit.removeAttribute('disabled');					
-					agreeCheck.style.display = 'none';
-				} 
-	
-	}
-	
-	function formSub() {
-	    
-	    const checkB1 = document.getElementById("hy-agree");    
-	    const checkB2 = document.getElementById("info-agree");
-	    const checkB3 = document.getElementById("pro-agree");
-	    
-
-	   
-	    if (!(checkB1.checked && checkB2.checked && checkB3.checked)) {
-	        
-	        alert('모든 약관에 동의해주세요!');
-	        return; 
-	    }
-	    
-	   
-	    document.getElementById("join-form").submit(); 
-	}
-    
-	
-
-    function pwCheck(){
-    	const $pwdInput = $(' #userPwd');
-    	const $pwdInput2 = $(' #userPwd2');
-    	var regPw = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%&*^?]).{8,16}$/;
-    	var $userPwd = $(' #userPwd');
-    	
-    	if (regPw.test($userPwd.val())) {
-    		
-	    	if ($pwdInput.val() == $pwdInput2.val()) {
-	    		$('#pwdCheckResult').show().css('color', 'green').text('비밀번호가 일치하며 유효한 형식입니다!')
-	    		
-	    		}else {
-	    			$('#pwdCheckResult').show().css('color', 'crimson').text('비밀번호가 서로 다릅니다. 다시 확인해주세요!')
-	    		}
-    		
-    	} else {
-    			$('#pwdCheckResult').show().css('color', 'crimson').text('비밀번호는 최소 8자에서 16자까지 영문자, 숫자 및 특수 문자를 각각 하나 이상 포함해야 합니다.')
-    	}
+    function onCheckClick() {
+        const checkB1 = document.getElementById("hy-agree");	
+        const checkB2 = document.getElementById("info-agree");
+        const checkB3 = document.getElementById("pro-agree");
+        const allAg = document.getElementById("all-agree");
+        
+        if (allAg.checked) {			
+            checkB1.checked = true;
+            checkB2.checked = true;
+            checkB3.checked = true;	
+        } else {
+            checkB1.checked = false;
+            checkB2.checked = false;
+            checkB3.checked = false;
+        }
     }
     
-    
-    function idCheck(){
-    	
-    	var regId = /^[0-9a-z]{5,12}$/;
-    	//var regPw = /^(?=.*[a-zA-Z])(?=.[0-9])(?=.[!@#$%&*^?].{8,16}$/;
-    	//var regName = /^[가-힣]{2,6}$/;
-    	
-    	var $userId = $(' #userId');
-    	//var $userPwd = $(' #userPwd');
-    	//var $userName = $(' #userName');
-    	
-    	if (regId.test($userId.val())) {
-    		$('#IdCheckResult').show().css('color', 'green').text('유효한 아이디입니다! 중복체크 버튼을 눌러주세요!')
-    		
-    	}else{
-    		$('#IdCheckResult').show().css('color', 'crimson').text('아이디는 5~12자 사이에 영어소문자와 숫자로 이루어져야 합니다!')
-    	}
-    	
-    }
+    function formSub() {
+        const checkB1 = document.getElementById("hy-agree");    
+        const checkB2 = document.getElementById("info-agree");
+        const checkB3 = document.getElementById("pro-agree");
 
+        if (!(checkB1.checked && checkB2.checked && checkB3.checked)) {
+            alert('모든 약관에 동의해주세요!');
+            return; 
+        }
+       
+        document.getElementById("join-form").submit(); 
+    }
+    
+    function pwCheck() {
+        const $pwdInput = $('#userPwd');
+        const $pwdInput2 = $('#userPwd2');
+        var regPw = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%&*^?]).{8,16}$/;
+        var $userPwd = $('#userPwd');
+        
+        if (regPw.test($userPwd.val())) {
+            if ($pwdInput.val() == $pwdInput2.val()) {
+                $('#pwdCheckResult').show().css('color', 'green').text('비밀번호가 일치하며 유효한 형식입니다!');
+            } else {
+                $('#pwdCheckResult').show().css('color', 'crimson').text('비밀번호가 서로 다릅니다. 다시 확인해주세요!');
+            }
+        } else {
+            $('#pwdCheckResult').show().css('color', 'crimson').text('비밀번호는 최소 8자에서 16자까지 영문자, 숫자 및 특수 문자를 각각 하나 이상 포함해야 합니다.');
+        }
+    }
+    
+    function idCheck() {
+        var regId = /^[0-9a-z]{5,12}$/;
+        var $userId = $('#userId');
+        
+        if (regId.test($userId.val())) {
+            $('#IdCheckResult').show().css('color', 'green').text('유효한 아이디입니다! 중복체크 버튼을 눌러주세요!');
+        } else {
+            $('#IdCheckResult').show().css('color', 'crimson').text('아이디는 5~12자 사이에 영어소문자와 숫자로 이루어져야 합니다!');
+        }
+    }
 </script>
+
 </head>
 <body>
     <article class="join">
 
         <h1>회원가입</h1><br><br>
-
- 
         <div>
             <p>회원정보 입력</p>
             
@@ -342,19 +295,39 @@ article input {
 		        <p>* 은 필수사항입니다</p>
 		     </div>
 		    <form action="join.do" method="post" enctype="multipart/form-data">
-		    	
 			    <div>
 			        <p>아이디 * </p><span id="IdCheckResult" style="font-size:12px;"></span>	                
-			        <input type="text" id="userId" oninput=idCheck() placeholder="아이디를 입력해주세요." name="userId" required>
-			        <button type="button" id = "checkId-btn" class="btn btn-dark">중복확인</button>
+			        <input type="text" 
+			        	   id="userId" 
+			        	   oninput=idCheck() 
+			        	   placeholder="아이디를 입력해주세요." 
+			        	   name="userId" required
+			        	   >
+			        <button type="button" 
+			        		id = "checkId-btn" 
+			        		class="btn btn-dark">
+			        		중복확인
+			        		</button>
 			    </div>
+			    
 			    <div>
 			        <p>비밀번호 *</p>
-			        <input type="password" id="userPwd" oninput=pwCheck() placeholder="비밀번호를 입력해주세요." name="userPwd" required>
+			        <input type="password" 
+			        	   id="userPwd" 
+			        	   oninput=pwCheck() 
+			        	   placeholder="비밀번호를 입력해주세요." 
+			        	   name="userPwd" required
+			        	   >
 			    </div>
 			    <div>
-			        <p>비밀번호 확인 *</p><span id="pwdCheckResult" style="font-size:12px;"></span>
-			        <input type="password" id="userPwd2" oninput=pwCheck() placeholder="비밀번호를 한번 더 입력해주세요." name="userPwd2" required>
+			        <p>비밀번호 확인 *</p>
+			        <span id="pwdCheckResult" style="font-size:12px;"></span>
+			        <input type="password" 
+			        	   id="userPwd2" 
+			        	   oninput=pwCheck() 
+			        	   placeholder="비밀번호를 한번 더 입력해주세요." 
+			        	   name="userPwd2" required
+			        	   >
 			    </div>
 			    <div>
 			        <p>이름 *</p>
@@ -431,6 +404,9 @@ article input {
 			            </div>
 			        </div>
 			    </div>
+			    
+			    
+			    
 			    <button type="submit" id="join-btn" onclick="formSub()"  class="join-btn btn-primary" >가입하기</button>
 			    </form>
 			
@@ -438,21 +414,49 @@ article input {
             <div class = "terms" id = "terms">
                 <p>이용약관동의</p>
                 <div>
-                    <input type="checkbox" onclick="onCheckClick()" name="all-agree" id="all-agree">전체 동의하기<br>
-                    <span id="agreeCheckResult" style="font-size:12px; font-weight: bold;"></span>
+                    <input type="checkbox" 
+                    	   onclick="onCheckClick()" 
+                    	   name="all-agree" 
+                    	   id="all-agree"
+                    	   >
+                    	   전체 동의하기
+                    	   <br>               
                 </div>
                 <div>
+                
                     <div>
-                        <input type="checkbox" name="agree" id="hy-agree" onclick="agCheck()">이용약관 동의 <span>(필수)</span>
-                         <a href="terms">약관 보기 ></a>
+                    
+                        <input type="checkbox" 
+                       		   name="agree" 
+                       		   id="hy-agree"
+                       		   >
+                       		   이용약관 동의 
+                       		   <span>(필수)</span>
+	                           <a href="terms">
+	                           약관 보기 >
+	                           </a>
                     </div>
                     <div>
-                        <input type="checkbox" name="agree" id="info-agree" onclick="agCheck()">개인정보 수집 및 이용 동의 <span>(필수)</span>
-                       <a href="terms">약관 보기 ></a>
+                        <input type="checkbox" 
+                        	   name="agree" 
+                        	   id="info-agree"
+                        	   >
+                        	   개인정보 수집 및 이용 동의 
+                        	   <span>(필수)</span>
+		                       <a href="terms">
+		                       약관 보기 >
+		                       </a>
                     </div>
                     <div>
-                        <input type="checkbox" name="agree" id="pro-agree" onclick="agCheck()">프로모션 정보 수신 동의 <span>(필수)</span>
-                         <a href="terms">약관 보기 ></a>
+                        <input type="checkbox" 
+                        	   name="agree" 
+                        	   id="pro-agree">프로모션 정보 수신 동의 
+                        	   <span>(필수)</span>
+	                           <a href="terms">
+	                           약관 보기 >
+	                           </a>	
+                    
+                    
                     </div>
                     
                     
@@ -470,42 +474,35 @@ article input {
     
     
     
-    $(()=> {
-    	
-	   	const $idInput = $(' #userId');
-	   	const $checkResult = $('#IdCheckResult');
-	   	const $joinSubmit = $('#join-btn');
-	   	const $checkIdBtn = $('#checkId-btn');
-    	
-    	$checkIdBtn.click(() => {
-    		
-  		console.log('checked button');
-    		
-  		$.ajax({
-    			type : 'get',
-				url : 'checkId',
-				data : {checkId : $idInput.val()},
-				success: response => {
-					
-					console.log(response);
-					
-					if(response === 'N') {
-						$checkResult.show().css('color', 'crimson').text('이미 존재하는 아이디입니다!');
-						$joinSubmit.attr('disabled', true);
-						
-					}
-					else {
-						$checkResult.show().css('color', 'green').text('사용가능한 아이디입니다!');
-						$joinSubmit.removeAttr('disabled');
-					}
-				},
-					error : ()	=> {
-						console.log('띠용 오류입니다!')
-					}
-    		});
-    		
-    	});
-    	
+    $(() => {
+        const $idInput = $('#userId');
+        const $checkResult = $('#IdCheckResult');
+        const $joinSubmit = $('#join-btn');
+        const $checkIdBtn = $('#checkId-btn');
+
+        $checkIdBtn.click(() => {
+            console.log('checked button');
+
+            $.ajax({
+                type: 'get',
+                url: 'checkId',
+                data: { checkId: $idInput.val() },
+                success: response => {
+                    console.log(response);
+
+                    if (response === 'N') {
+                        $checkResult.show().css('color', 'crimson').text('이미 존재하는 아이디입니다!');
+                        $joinSubmit.attr('disabled', true);
+                    } else {
+                        $checkResult.show().css('color', 'green').text('사용가능한 아이디입니다!');
+                        $joinSubmit.removeAttr('disabled');
+                    }
+                },
+                error: () => {
+                    console.log('띠용 오류입니다!');
+                }
+            });
+        });
     });
     
     

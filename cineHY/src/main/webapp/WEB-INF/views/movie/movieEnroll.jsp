@@ -165,10 +165,10 @@
     <script>
     
     
-	    $(document).ready(function() {
+	    $(document).ready( () => {
 	    	
 	    	
-	    	function handleKeyPress(event) {
+	    	const handleKeyPress = (event) => {
 	            if (event.key === 'Enter') {
 	                searchMovies();
 	            }
@@ -177,8 +177,8 @@
 	    	
 	    	findAll();
 	    	
-	        var currentPage = 1;
-	        function fetchMovies(pageNo) {
+	        let currentPage = 1;
+	        const fetchMovies = (pageNo) => {
 	            $.ajax({
 	                url: 'movieList/nowPlaying/Admin',
 	                method: 'get',
@@ -194,208 +194,195 @@
 	        }
 	        
 	
-	        function changePage(pageNo) {
+	        const changePage = (pageNo) => {
 	            currentPage = pageNo;
 	            fetchMovies(pageNo);
 	        }
 	
 	        window.changePage = changePage;
-	        window.nextPage = function() {
+	        window.nextPage = () => {
 	            changePage(currentPage + 1);
 	        }
-	        window.previousPage = function() {
+	        window.previousPage = () => {
 	        	changePage(currentPage - 1);				
 			}
 	
 	        fetchMovies(currentPage);
 	        
 	        
-	        window.viewDetail = function(movieId) {
-	        	scrollDownView();
-	        	
+	        const fetchMovieDetails = (movieId) => {
+	            scrollDownView();
+	            
 	            $.ajax({
 	                url: 'movieList/details',
-	                method: 'get',
+	                method: 'GET',
 	                dataType: 'json',
 	                data: { movie_id: movieId },
-	                success: function(data) {
-	                    var movieDetails = $('#movieDetails');
-	                    let InfoHtml = '';
-	                    InfoHtml += '<div class="col-md-4 mt-5">'
-	                        + '<img src="https://image.tmdb.org/t/p/w500' + data.poster_path + '"class="img-fluid" alt="Movie Poster" style="width:300px;">'
-	                        + '</div>'
-	                        + '<div class="col-md-6 mt-5" >'
-	                        + '<h4 class="mb-4">' + data.title + '</h4>'
-	                        + '<p>' + data.overview + '</p>'
-	                        + '<p><strong>개봉일:</strong>'+ data.release_date + '</p>';
-						
-	                    //장르 문자열 변환
-						var genre = data.genres.map(function(genre) {
-	                    	return genre.name;
-	                    });
-	                    var genres = genre.join(',');
-	                    
-	                    
-	                    InfoHtml += '<p><strong>장르:</strong>'+ genres +'</p>';
-	                   
-	                    //등급 정보 가져오기
+	                success: (data) => {
+	                    const movieDetails = $('#movieDetails');
+	                    let InfoHtml = `
+	                        <div class="col-md-4 mt-5">
+	                            <img src="https://image.tmdb.org/t/p/w500\${data.poster_path}" class="img-fluid" alt="Movie Poster" style="width:300px;">
+	                        </div>
+	                        <div class="col-md-6 mt-5">
+	                            <h4 class="mb-4">\${data.title}</h4>
+	                            <p>\${data.overview}</p>
+	                            <p><strong>개봉일:</strong> \${data.release_date}</p>`;
+
+	                    // 장르 문자열 변환
+	                    const genres = data.genres.map(genre => genre.name).join(',');
+	                    InfoHtml += `<p><strong>장르:</strong> \${genres}</p>`;
+
+	                    // 등급 정보 가져오기
 	                    $.ajax({
 	                        url: 'movieList/rating',
-	                        method: 'get',
+	                        method: 'GET',
 	                        dataType: 'json',
 	                        data: { movie_id: movieId },
-	                        success: function(releaseData) {
+	                        success: (releaseData) => {
 	                            let rating = 'N/A';
-	                            let countries = releaseData.results;
-	                            for (let i = 0; i < countries.length; i++) {
-	                                if (countries[i].iso_3166_1 === 'KR') {
-	                                    let releases = countries[i].release_dates;
-	                                    for (let j = 0; j < releases.length; j++) {
-	                                        if (releases[j].certification) {
-	                                            rating = releases[j].certification;
+	                            const countries = releaseData.results;
+	                            for (const country of countries) {
+	                                if (country.iso_3166_1 === 'KR') {
+	                                    for (const release of country.release_dates) {
+	                                        if (release.certification) {
+	                                            rating = release.certification;
 	                                            break;
 	                                        }
 	                                    }
 	                                    break;
 	                                }
 	                            }
-	                            console.log(genre[0])
-	                            InfoHtml += '<p><strong>관람 등급:</strong>'+ rating +'</p>'
-	                                + '<p><strong>상영 시간:</strong>'+ data.runtime +'분</p>'
-	                                + '<p><strong>평점:</strong>'+ data.vote_average +'</p>'
-	                                + '<div class="mt-4">'
-	                                + '<input type="hidden" id="movieCode" name="movieCode" value="' + movieId + '"/>' //영화 코드
-	                                + '<input type="hidden" id="movieTitle" name="movieTitle" value="' + data.title + '"/>' //영화 타이틀
-	                                + '<input type="hidden" id="genre" name="genre" value="' + genre[0] + '"/>' //영화 장르
-	                                + '<input type="hidden" id="summary" name="summary" value="' + data.overview + '"/>' //영화 설명
-	                                + '<input type="hidden" id="runningTime" name="runningTime" value="' + data.runtime + '"/>' //영화 상영시간
-	                                + '<input type="hidden" id="rating" name="rating" value="' + rating + '"/>' //영화 등급
-	                                + '<input type="hidden" id="openedDate" name="openedDate" value="' + data.release_date + '"/>' //영화 개봉일 */
-	                                + '<input type="hidden" id="status" name="status" value="Y">' //상태
-	                                + '<button class="btn btn-primary mr-3" onclick="insert()" style="background-color:#29b9a5; border:1px #29b9a5;">등록하기</button>'
-	                                + '</div>';
-	                        
+
+	                            InfoHtml += `
+	                                <p><strong>관람 등급:</strong> \${rating}</p>
+	                                <p><strong>상영 시간:</strong> \${data.runtime}분</p>
+	                                <p><strong>평점:</strong> \${data.vote_average}</p>
+	                                <div class="mt-4">
+	                                    <input type="hidden" id="movieCode" name="movieCode" value="\${movieId}"/>
+	                                    <input type="hidden" id="movieTitle" name="movieTitle" value="\${data.title}"/>
+	                                    <input type="hidden" id="genre" name="genre" value="\${genres}"/>
+	                                    <input type="hidden" id="summary" name="summary" value="\${data.overview}"/>
+	                                    <input type="hidden" id="runningTime" name="runningTime" value="\${data.runtime}"/>
+	                                    <input type="hidden" id="rating" name="rating" value="\${rating}"/>
+	                                    <input type="hidden" id="openedDate" name="openedDate" value="\${data.release_date}"/>
+	                                    <input type="hidden" id="status" name="status" value="Y"/>
+	                                    <button class="btn btn-primary mr-3" onclick="insert()" style="background-color:#29b9a5; border:1px #29b9a5;">등록하기</button>
+	                                </div>`;
 	                            movieDetails.html(InfoHtml);
 	                        },
-	                        error: function(jqXHR, textStatus, errorThrown) {
+	                        error: (jqXHR, textStatus, errorThrown) => {
 	                            console.error('Error fetching movie rating data:', textStatus, errorThrown);
-	                            InfoHtml += '<p><strong>관람 등급:</strong> N/A</p>'
-	                                + '<p><strong>상영 시간:</strong>'+ data.runtime +'분</p>'
-	                                + '<p><strong>평점:</strong>'+ data.vote_average +'</p>'
-	                                + '<div class="mt-4">'
-	                                + '<a href="#" class="btn btn-primary mr-3">등록하기</a>'
-	                                + '</div>';
+	                            InfoHtml += `
+	                                <p><strong>관람 등급:</strong> N/A</p>
+	                                <p><strong>상영 시간:</strong> \${data.runtime}분</p>
+	                                <p><strong>평점:</strong> \${data.vote_average}</p>
+	                                <div class="mt-4">
+	                                    <a href="#" class="btn btn-primary mr-3">등록하기</a>
+	                                </div>`;
 	                            movieDetails.html(InfoHtml);
 	                        }
 	                    });
 	                },
-	                error: function(jqXHR, textStatus, errorThrown) {
+	                error: (jqXHR, textStatus, errorThrown) => {
 	                    console.error('Error fetching movie data:', textStatus, errorThrown);
 	                }
-	                
 	            });
-	        }
-	        
-	        
-	        window.viewDetailFromList = function(movieId) {
-	        	scrollDownView();
-	        	
+	        };
+
+	        const fetchMovieDetailsFromList = (movieId) => {
+	            scrollDownView();
+	            
 	            $.ajax({
 	                url: 'movieList/details',
-	                method: 'get',
+	                method: 'GET',
 	                dataType: 'json',
 	                data: { movie_id: movieId },
-	                success: function(data) {
-	                    var movieDetails = $('#movieDetails');
-	                    let InfoHtml = '';
-	                    InfoHtml += '<div class="col-md-4 mt-5">'
-	                        + '<img src="https://image.tmdb.org/t/p/w500' + data.poster_path + '"class="img-fluid" alt="Movie Poster" style="width:300px;">'
-	                        + '</div>'
-	                        + '<div class="col-md-6 mt-5" >'
-	                        + '<h4 class="mb-4">' + data.title + '</h4>'
-	                        + '<p>' + data.overview + '</p>'
-	                        + '<p><strong>개봉일:</strong>'+ data.release_date + '</p>';
-						
-	                    //장르 문자열 변환
-						var genre = data.genres.map(function(genre) {
-	                    	return genre.name;
-	                    });
-	                    var genres = genre.join(',');
-	                    
-	                    
-	                    InfoHtml += '<p><strong>장르:</strong>'+ genres +'</p>';
-	                   
-	                    //등급 정보 가져오기
+	                success: (data) => {
+	                    const movieDetails = $('#movieDetails');
+	                    let InfoHtml = `
+	                        <div class="col-md-4 mt-5">
+	                            <img src="https://image.tmdb.org/t/p/w500\${data.poster_path}" class="img-fluid" alt="Movie Poster" style="width:300px;">
+	                        </div>
+	                        <div class="col-md-6 mt-5">
+	                            <h4 class="mb-4">\${data.title}</h4>
+	                            <p>\${data.overview}</p>
+	                            <p><strong>개봉일:</strong> \${data.release_date}</p>`;
+
+	                    // 장르 문자열 변환
+	                    const genres = data.genres.map(genre => genre.name).join(',');
+	                    InfoHtml += `<p><strong>장르:</strong> ${genres}</p>`;
+
+	                    // 등급 정보 가져오기
 	                    $.ajax({
 	                        url: 'movieList/rating',
-	                        method: 'get',
+	                        method: 'GET',
 	                        dataType: 'json',
 	                        data: { movie_id: movieId },
-	                        success: function(releaseData) {
+	                        success: (releaseData) => {
 	                            let rating = 'N/A';
-	                            let countries = releaseData.results;
-	                            for (let i = 0; i < countries.length; i++) {
-	                                if (countries[i].iso_3166_1 === 'KR') {
-	                                    let releases = countries[i].release_dates;
-	                                    for (let j = 0; j < releases.length; j++) {
-	                                        if (releases[j].certification) {
-	                                            rating = releases[j].certification;
+	                            const countries = releaseData.results;
+	                            for (const country of countries) {
+	                                if (country.iso_3166_1 === 'KR') {
+	                                    for (const release of country.release_dates) {
+	                                        if (release.certification) {
+	                                            rating = release.certification;
 	                                            break;
 	                                        }
 	                                    }
 	                                    break;
 	                                }
 	                            }
-	                            console.log(genre[0])
-	                            InfoHtml += '<p><strong>관람 등급:</strong>'+ rating +'</p>'
-	                                + '<p><strong>상영 시간:</strong>'+ data.runtime +'분</p>'
-	                                + '<p><strong>평점:</strong>'+ data.vote_average +'</p>'
-	                                + '<div class="mt-4">'
-	                                + '<input type="hidden" id="movieCode" name="movieCode" value="' + movieId + '"/>' //영화 코드
-	                                + '<input type="hidden" id="movieTitle" name="movieTitle" value="' + data.title + '"/>' //영화 타이틀
-	                                + '<input type="hidden" id="genre" name="genre" value="' + genre[0] + '"/>' //영화 장르
-	                                + '<input type="hidden" id="summary" name="summary" value="' + data.overview + '"/>' //영화 설명
-	                                + '<input type="hidden" id="runningTime" name="runningTime" value="' + data.runtime + '"/>' //영화 상영시간
-	                                + '<input type="hidden" id="rating" name="rating" value="' + rating + '"/>' //영화 등급
-	                                + '<input type="hidden" id="openedDate" name="openedDate" value="' + data.release_date + '"/>' //영화 개봉일 */
-	                                + '<input type="hidden" id="status" name="status" value="N">' //상태
-	                                + '<button class="btn btn-danger mr-3" onclick="deleteByCode()">삭제하기</button>'
-	                                + '</div>';
-	                        
+
+	                            InfoHtml += `
+	                                <p><strong>관람 등급:</strong> \${rating}</p>
+	                                <p><strong>상영 시간:</strong> \${data.runtime}분</p>
+	                                <p><strong>평점:</strong> \${data.vote_average}</p>
+	                                <div class="mt-4">
+	                                    <input type="hidden" id="movieCode" name="movieCode" value="\${movieId}"/>
+	                                    <input type="hidden" id="movieTitle" name="movieTitle" value="\${data.title}"/>
+	                                    <input type="hidden" id="genre" name="genre" value="\${genres}"/>
+	                                    <input type="hidden" id="summary" name="summary" value="\${data.overview}"/>
+	                                    <input type="hidden" id="runningTime" name="runningTime" value="\${data.runtime}"/>
+	                                    <input type="hidden" id="rating" name="rating" value="\${rating}"/>
+	                                    <input type="hidden" id="openedDate" name="openedDate" value="\${data.release_date}"/>
+	                                    <input type="hidden" id="status" name="status" value="N"/>
+	                                    <button class="btn btn-danger mr-3" onclick="deleteByCode()">삭제하기</button>
+	                                </div>`;
 	                            movieDetails.html(InfoHtml);
 	                        },
-	                        error: function(jqXHR, textStatus, errorThrown) {
+	                        error: (jqXHR, textStatus, errorThrown) => {
 	                            console.error('Error fetching movie rating data:', textStatus, errorThrown);
-	                            InfoHtml += '<p><strong>관람 등급:</strong> N/A</p>'
-	                                + '<p><strong>상영 시간:</strong>'+ data.runtime +'분</p>'
-	                                + '<p><strong>평점:</strong>'+ data.vote_average +'</p>'
-	                                + '<div class="mt-4">'
-	                                + '<a href="#" class="btn btn-primary mr-3">등록하기</a>'
-	                                + '</div>';
+	                            InfoHtml += `
+	                                <p><strong>관람 등급:</strong> N/A</p>
+	                                <p><strong>상영 시간:</strong> \${data.runtime}분</p>
+	                                <p><strong>평점:</strong> \${data.vote_average}</p>
+	                                <div class="mt-4">
+	                                    <a href="#" class="btn btn-primary mr-3">등록하기</a>
+	                                </div>`;
 	                            movieDetails.html(InfoHtml);
 	                        }
 	                    });
 	                },
-	                error: function(jqXHR, textStatus, errorThrown) {
+	                error: (jqXHR, textStatus, errorThrown) => {
 	                    console.error('Error fetching movie data:', textStatus, errorThrown);
 	                }
-	                
 	            });
-	        }
-	        
-	    });
+	        };
+
+	        // Assign the functions to the global window object
+	        window.viewDetail = fetchMovieDetails;
+	        window.viewDetailFromList = fetchMovieDetailsFromList;
 	    
 	    
 	    function findAll() {
     		
     		$.ajax({
     			url : 'movieList/movieEnrollList',
-    			method : 'get',
+    			method : 'GET',
     			dataType : 'json',
     			success: function(data) {
-    				//console.log(data);
     				const movieEList = data.data;
-    				//console.log(data.data)
     				let ListHtml = '';
     				ListHtml += '<li class="list-group-item" style="font-size:25px; color:white; background-color:#29b9a5;"><p>등록한 영화</p></li>'
     				for(let i in movieEList) {
@@ -407,7 +394,6 @@
     				
     				$('#movieEnrollList').html(ListHtml);
 
-    	            // 리스트 항목에 호버 효과와 클릭 이벤트 핸들러 추가
     	            $('#movieEnrollList .list-group-item').hover(
     	                function() {
     	                    $(this).addClass('hover');
@@ -445,7 +431,6 @@
 	            data: JSON.stringify(requestData),
 	            dataType: "json",
 	            success: function(response) {
-	                //console.log(response);
 	                if (response.message === '서비스요청성공') {
 	                	findAll();
 	                alert("영화가 상영리스트에 등록되었습니다.")
@@ -483,7 +468,6 @@
 				data : JSON.stringify(requestData),
 				contentType : 'application/json',
 				success : data => {
-					//console.log(data)
 					alert("영화가 리스트에서 삭제되었습니다.")
 					findAll();
 					$('#movieDetails').empty();
@@ -496,121 +480,118 @@
 		}
 	    
 	    //view 클릭 시 해당 화면으로 스크롤
-	    function scrollDownView() {
+	    const scrollDownView = () => {
 	        let location = document.querySelector('#movieDetails').offsetTop;
-	        //console.log(location);
 	        window.scrollTo({ top: location - 80, behavior: 'smooth' });
 	    }
 	    
         	
-         var currentPage = 1;
-         function fetchUpMovies(pageUpNo) {
-             $.ajax({
-                 url: 'movieList/upComming/Admin',
-                 method: 'get',
-                 dataType: 'json',
-                 data: { pageNo: pageUpNo },
-                 success: function(data) {
-                     displayUpMovies(data);
-                 },
-                 error: function(jqXHR, textStatus, errorThrown) {
-                     console.error('Error fetching movie data:', textStatus, errorThrown);
-                 }
-             });
-         }
-         
-         function displayUpMovies(data) {
-             var movieList = $('#movieUpList');
-             movieList.empty();
-             if (data.results && data.results.length > 0) {
-                 const movies = data.results;
-                 let movieHtml = '';
-                 for(let i in movies) {
-                 	const movieId = movies[i].id;
-                     movieHtml += '<div class="card" style="width: 12rem;">'
-                       + '<img src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" class="card-img-top">'
-                       + '<div class="card-body">'
-                       + '<h5 class="card-title">' + movies[i].title + '</h5>'
-                       + '<p class="card-text">' + movies[i].title + '</p>'
-                       + '</div>'
-                       + '<ul class="list-group list-group-flush">'
-                       + '<li class="list-group-item">' + movies[i].release_date + ' 개봉</li>'
-                       + '</ul>'
-                       + '<div class="card-body">'
-                       + '<div class="btn-group">'
-                       + '<button type="button" class="btn btn-sm btn-outline-secondary" onclick=viewDetail('+ movieId +')>View</button>'
-                       + '</div>'
-                       + '</div>'
-                       + '</div>';
-                 }
-                 movieList.html(movieHtml);
-             } else {
-                 movieList.append('<li>No movies currently playing.</li>');
-             }
-         }
+	    const fetchUpMovies = (pageUpNo) => {
+	        $.ajax({
+	            url: 'movieList/upComming/Admin',
+	            method: 'GET',
+	            dataType: 'json',
+	            data: { pageNo: pageUpNo },
+	            success: (data) => {
+	                displayUpMovies(data);
+	            },
+	            error: (jqXHR, textStatus, errorThrown) => {
+	                console.error('Error fetching movie data:', textStatus, errorThrown);
+	            }
+	        });
+	    };
 
-        function changeUpPage(pageUpNo) {
-            currentPage = pageUpNo;
-            fetchUpMovies(pageUpNo);
-        }
+	    const displayUpMovies = (data) => {
+	        const movieList = $('#movieUpList');
+	        movieList.empty();
 
-        window.changeUpPage = changeUpPage;
-        window.nextUpPage = function() {
-            changeUpPage(currentPage + 1);
-        }
-        window.previousUpPage = function() {
-       		changeUpPage(currentPage - 1);				
-		}
+	        if (data.results && data.results.length > 0) {
+	            const movies = data.results;
+	            let movieHtml = '';
+	            movies.forEach(movie => {
+	                const movieId = movie.id;
+	                movieHtml += `
+	                    <div class="card" style="width: 12rem;">
+	                        <img src="https://image.tmdb.org/t/p/w500\${movie.poster_path}" class="card-img-top">
+	                        <div class="card-body">
+	                            <h5 class="card-title">\${movie.title}</h5>
+	                            <p class="card-text">\${movie.title}</p>
+	                        </div>
+	                        <ul class="list-group list-group-flush">
+	                            <li class="list-group-item">\${movie.release_date} 개봉</li>
+	                        </ul>
+	                        <div class="card-body">
+	                            <div class="btn-group">
+	                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="viewDetail(\${movieId})">View</button>
+	                            </div>
+	                        </div>
+	                    </div>`;
+	            });
+	            movieList.html(movieHtml);
+	        } else {
+	            movieList.append('<li>No movies currently playing.</li>');
+	        }
+	    };
 
-        fetchUpMovies(currentPage);
+	    const changeUpPage = (pageUpNo) => {
+	        currentPage = pageUpNo;
+	        fetchUpMovies(pageUpNo);
+	    };
 
-        
-        
-      	//관리자 영화 검색 
-	    function searchMovies() {
-	    	var keyword = $('#keyword').val();
+	    window.changeUpPage = changeUpPage;
+	    window.nextUpPage = () => changeUpPage(currentPage + 1);
+	    window.previousUpPage = () => changeUpPage(currentPage - 1);
+
+	    fetchUpMovies(currentPage);
+
+	    // 관리자 영화 검색 
+	    const searchMovies = () => {
+	        const keyword = $('#keyword').val();
 	        $.ajax({
 	            url: 'movieList/searchMovie',
 	            method: 'GET',
-	            data : { keyword : keyword },
+	            data: { keyword },
 	            dataType: 'json',
-	            success: function(data) {
+	            success: (data) => {
 	                displayMovies(data);
 	                console.log(data);
 	            },
-	            error: function(jqXHR, textStatus, errorThrown) {
+	            error: (jqXHR, textStatus, errorThrown) => {
 	                console.error('영화 데이터를 불러오는 중 오류 발생:', textStatus, errorThrown);
 	            }
 	        });
-	    }
-      
-	    function displayMovies(data) {
-            var movieList = $('#movieList');
-            movieList.empty();
-            if (data.results && data.results.length > 0) {
-                const movies = data.results;
-                let movieHtml = '';
-                for(let i in movies) {
-                	const movieId = movies[i].id;
-                    movieHtml += '<div class="card" style="width: 12rem;">'
-                      + '<img src="https://image.tmdb.org/t/p/w500' + movies[i].poster_path + '" class="card-img-top" >'
-                      + '<div class="card-body">'
-                      + '<h5 class="card-title">' + movies[i].title + '</h5>'
-                      + '<p class="card-text">' + movies[i].title + '</p>'
-                      + '</div>'
-                      + '<ul class="list-group list-group-flush">'
-                      + '<li class="list-group-item">' + movies[i].release_date + ' 개봉</li>'
-                      + '</ul>'
-                      + '<div class="card-body">'
-                      + '<button type="button" class="btn btn-outline-secondary" onclick="viewDetail('+movieId+')">View</button>'
-                      + '</div>'
-                      + '</div>';
-                }
-                movieList.html(movieHtml);
-            } else {
-                movieList.append('<li>No movies currently playing.</li>');
-            }
-        }
+	    };
+
+	    const displayMovies = (data) => {
+	        const movieList = $('#movieList');
+	        movieList.empty();
+
+	        if (data.results && data.results.length > 0) {
+	            const movies = data.results;
+	            let movieHtml = '';
+	            movies.forEach(movie => {
+	                const movieId = movie.id;
+	                movieHtml += `
+	                    <div class="card" style="width: 12rem;">
+	                        <img src="https://image.tmdb.org/t/p/w500\${movie.poster_path}" class="card-img-top">
+	                        <div class="card-body">
+	                            <h5 class="card-title">\${movie.title}</h5>
+	                            <p class="card-text">\${movie.title}</p>
+	                        </div>
+	                        <ul class="list-group list-group-flush">
+	                            <li class="list-group-item">\${movie.release_date} 개봉</li>
+	                        </ul>
+	                        <div class="card-body">
+	                            <button type="button" class="btn btn-outline-secondary" onclick="viewDetail(\${movieId})">View</button>
+	                        </div>
+	                    </div>`;
+	            });
+	            movieList.html(movieHtml);
+	        } else {
+	            movieList.append('<li>No movies currently playing.</li>');
+	        }
+	    };
+	});
         
 	</script>
     	
