@@ -313,12 +313,13 @@ public class MemberController {
     
     @PostMapping("forceDelete")
     public String forceDelete(@RequestParam("userId") String userId, RedirectAttributes redirectAttributes) {
+    	
         int result = memberService.forceDelete(userId);
 
         if (result > 0) {
-            redirectAttributes.addFlashAttribute("message", "해당 유저를 강제탈퇴 완료 : " + userId);
+            redirectAttributes.addFlashAttribute("message", "해당 유저 강제탈퇴 완료 : " + userId);
         } else {
-            redirectAttributes.addFlashAttribute("message", "해당 유저를 강제탈퇴 실패 : " + userId);
+            redirectAttributes.addFlashAttribute("message", "해당 유저 강제탈퇴 실패 : " + userId);
         }
 
         return "redirect:memberList";
