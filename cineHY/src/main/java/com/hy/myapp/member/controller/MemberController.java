@@ -47,16 +47,12 @@ public class MemberController {
 	@PostMapping("join.do")
 	public String join(Member member, Model model) {
 		
-		
-		
-		//log.info("평문 : {}", member.getUserPwd() );
 		String encPwd = bcryptPasswordEncoder.encode(member.getUserPwd());
-		//log.info("암호문 : {}", encPwd);
 		member.setUserPwd(encPwd);
 		
 		String viewName = "";
 		if(memberService.insert(member) > 0) {
-			
+			model.addAttribute("alertMsg", "회원가입 성공");
 			return "redirect:/";
 			
 		} else {
