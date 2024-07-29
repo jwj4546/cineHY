@@ -257,7 +257,8 @@
                                     window.location.href = "orderResult?merchantUid=" + rsp.merchant_uid;	
                                     } 
                                     else {
-                                    window.location.href = 'productlist';
+                                    	alert("결제에 실패하였습니다.")
+                                    	window.location.href = 'productlist';
                                     }
                             });
                         }

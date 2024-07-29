@@ -27,7 +27,9 @@
 <body>
 	<jsp:include page="../common/menubar.jsp"></jsp:include>
 	<main>
-	<div id="page1"></div>
+	<div id="page1">
+		<input type="hidden" id="userId" value="${ sessionScope.loginUser.userId }" />
+	</div>
     <div id="page2">
     	<div class="container mt-5">
 	    	<h2 class="mb-4 text-center">예매하기</h2>
@@ -314,37 +316,40 @@ $(document).ready(function() {
 // 좌석선택 버튼 클릭시 선택한 데이터를 sessionStorage에 저장 후 좌석 페이지로 이동
 $("#seatBtn").on("click", function() {
 	
+	const uid = $('#userId').val();
 	
-	const movieCode = $('#movieSelect option:selected');
-    const theaterName = $('#theaterSelect option:selected');
-    const startDate = $('#dateSelect');
-    const startTime = $('#timeSelect option:selected');
-    const movie = $('#movieSelect option:selected').text();
-    const theater = $('#theaterSelect option:selected').text();
+		const movieCode = $('#movieSelect option:selected');
+	    const theaterName = $('#theaterSelect option:selected');
+	    const startDate = $('#dateSelect');
+	    const startTime = $('#timeSelect option:selected');
+	    const movie = $('#movieSelect option:selected').text();
+	    const theater = $('#theaterSelect option:selected').text();
+	    
+	    if(uid !== "" && movieCode.val() !== 0 && theaterName.val() !== "" && startDate.val() !== "" && startTime.text() !== "") {
+	    	
+	    	const res = {
+	    			movieCode : movieCode.val(),
+	    			theaterCode : theaterName.val(),
+	    			ticketDate : startDate.val(),
+	    			startTime : startTime.text(),
+	    			movieName : movie,
+	    			theaterName : theater
+	    	};
+	    	console.log(res);
+	    
+	    
+	    const resInfo = JSON.stringify(res);
+	    console.log(resInfo);
+	    window.sessionStorage.setItem('resInfo', '');
+	    window.sessionStorage.setItem('resInfo', resInfo);
+	    location.href = "seat";
+	    }
+	    else {
+	    	alert("모든 항목을 선택해줘잉");
+	    }
     
-    if(movieCode.val() !== 0 && theaterName.val() !== "" && startDate.val() !== "" && startTime.text() !== "") {
-    	
-    	const res = {
-    			movieCode : movieCode.val(),
-    			theaterCode : theaterName.val(),
-    			ticketDate : startDate.val(),
-    			startTime : startTime.text(),
-    			movieName : movie,
-    			theaterName : theater
-    	};
-    	console.log(res);
-    
-    
-    const resInfo = JSON.stringify(res);
-    console.log(resInfo);
-    window.sessionStorage.setItem('resInfo', '');
-    window.sessionStorage.setItem('resInfo', resInfo);
-    location.href = "seat";
-    }
-    else {
-    	alert("모든 항목을 선택해줘잉");
-    }
 });
+
 
 
 </script>
