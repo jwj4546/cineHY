@@ -77,6 +77,11 @@ public class MemberServiceImpl implements MemberService {
 	    public List<Member> findAll(Map<String, Integer> map) {
 	        return sqlSession.selectList("MemberMapper.findAll", map);
 	}
+
+	@Override
+	public Member findbyId(String userId) {
+		return sqlSession.selectOne("Membermapper.findById", userId);
+	}
 	
 	
 

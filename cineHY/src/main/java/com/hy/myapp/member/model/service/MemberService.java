@@ -29,6 +29,10 @@ public interface MemberService {
 	int changePw(Member member);
 	
 	List<Member> findAll(Map<String, Integer> map);
+
+	Member findbyId(String userId);
+	
+	
 	
 	
 }

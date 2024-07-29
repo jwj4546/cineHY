@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.hy.myapp.member.model.service.MemberService;
 import com.hy.myapp.member.model.vo.Member;
+import com.hy.myapp.notice.model.vo.Notice;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -293,6 +294,29 @@ public class MemberController {
         return "member/memberList";
     }
 	
+    
+    
+    @GetMapping("memberDetail")
+    public String findById(@RequestParam String userId, Model model) {
+    	log.info("게시글 정보 : {}", userId);
+    	
+        Member member = memberService.findbyId(userId);
+        
+        log.info("게시글 정보 : {}", member);
+        
+        if (member == null) {
+        	
+            model.addAttribute("message", "member not found for id: " + userId);
+            
+            return "common/errorPage"; // 에러 페이지로 이동
+        }
+        
+        model.addAttribute("member", member);
+        
+        System.out.println(model);
+        
+        return "member/memberDetail"; // 뷰 이름 반환
+    }
 	
 	
 	
