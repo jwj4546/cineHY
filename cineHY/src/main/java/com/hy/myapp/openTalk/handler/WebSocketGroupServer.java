@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -40,30 +41,46 @@ public class WebSocketGroupServer extends TextWebSocketHandler {
 		log.info("사용자 접속");
 		users.add(session);  //사용자 추가
 		log.info("현재 {}명 접속중", users.size());
-		//session.sendMessage(new TextMessage("Session ID: " + session.getId()));
+	
+	    List<OpenTalk> openTalkList = openTalkService.selectMessage();
+	    session.getAttributes().put("openTalkList", openTalkList);
+
+	    
+	    if (session.getAttributes().get("isInitialized") == null) {
+	        for (OpenTalk talk : openTalkList) {
+	            JSONObject previousMessage = new JSONObject();
+	            previousMessage.put("userId", talk.getUserId());
+	            previousMessage.put("message", talk.getTalkContent());
+	            session.sendMessage(new TextMessage(previousMessage.toString()));
+	            log.info("세션에 담은 previousMessage: {}", previousMessage.toString());
+	        }
+	        session.getAttributes().put("isInitialized", true);
+	    }
+		
+		
+		
 	}
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		
 		String clientMessage = message.getPayload();
-		
-		//TextMessage newMessage = new TextMessage((CharSequence)message.getPayload());
-		//TextMessage newMessage2 = new TextMessage(session.getAttributes()+"님이 입장함"); Member객체 출력
-		
-		userID = session.getAttributes();
-		
-		Member loginUser = (Member)userID.get("loginUser");
-		String userId = loginUser.getUserId();
-		
+		log.info("clientMessage:{}",clientMessage);
+	    Map<String, Object> userID = session.getAttributes();
+	    
+	    Member loginUser = (Member) userID.get("loginUser");
+	    String userId = loginUser.getUserId();
+	    
+	    
 		
 		//json으로 전송
-		String jsonMessage = String.format("{\"userId\": \"%s\", \"message\": \"%s\"}", userId, clientMessage);
-
-		    // 모든 접속된 사용자에게 메시지 전송
+		JSONObject jsonMessage = new JSONObject();
+		jsonMessage.put("userId", userId);
+	    jsonMessage.put("message", clientMessage);
+	    
+		     //모든 접속된 사용자에게 메시지 전송
 		    for (WebSocketSession ws : users) {
-		        ws.sendMessage(new TextMessage(jsonMessage));
-		        log.info(userId);
+		        ws.sendMessage(new TextMessage(jsonMessage.toString()));
 		        
 		    }
 		    

@@ -9,6 +9,9 @@
 <head>
     <meta charset="UTF-8">
     <title>오픈톡메인</title>
+    
+   
+    
     <style>
 
 
@@ -277,6 +280,7 @@
 </head>
 <body>
     <main>
+    
         <div class="container">
 			<!-- chat아이콘 -->
             <button class="chat-icon" id="chatIcon" >
