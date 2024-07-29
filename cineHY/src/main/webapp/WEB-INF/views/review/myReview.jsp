@@ -134,11 +134,11 @@
                         <p>${sessionScope.loginUser.userName} 님</p>
                         <br>
                         <ul class="nav nav-tabs">
-                            <li id="rr" class="tab__item active">
-                                <a id="aa" href="#tab1">작성한 리뷰 : <span id="rcount">0</span>건</a>
+                            <li id="written" class="tab__item active">
+                                
                             </li>
-                            <li id="rr2" class="tab__item">
-                                <a id="aa" href="#tab1">미작성 리뷰 : <span id="ncount">0</span>건</a>
+                            <li id="unwritten" class="tab__item">
+                                
                             </li>
                         </ul>
                     </div>
@@ -218,10 +218,12 @@
             },
             dataType: "json",
             success: function(data) {
-                console.log("result:", data);  // 전체 데이터 구조 확인
+                //console.log("result:", data);  // 전체 데이터 구조 확인
                 let text = '';
                 let reviews = data.reviews;
                 let pageInfo = data.pageInfo;
+                let countMyReview = data.pageInfo.listCount;
+                
 
                 for (let i in reviews) {
                     let starCount = reviews[i].star;
@@ -249,7 +251,12 @@
                             +'</li>';
                 }
                 $('.reviewList').html(text);
-                $('#rcount').html(reviews.length);
+                
+                
+                //리뷰 카운트
+                let count = `<a id="aa" href="#tab1">작성한 리뷰 : <span id="reviewCount">\${countMyReview}</span>건</a>`;
+				$('#written').html(count);  
+		             
 
                 // 페이징 처리
                 let pageText = '';
@@ -271,7 +278,7 @@
                     pageText += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectMyReview(' + pageInfo.maxPage + ')">Last</a></li>';
                 }
 
-                console.log("pageText:", pageText);  // 페이지 텍스트 확인
+                //console.log("pageText:", pageText);  // 페이지 텍스트 확인
                 $('.pagination').html(pageText);
             },
             error: function(xhr, status, error) {
@@ -283,6 +290,8 @@
     $(document).ready(function() {
         selectMyReview();  // 페이지 로드 시 첫 페이지 데이터 로드
     });
+    
+    
 
 
     
@@ -296,13 +305,14 @@
                 	page: page
             },
             dataType: "json",
-            success: function(data2) {
+            success: function(data) {
             	
-            	let reviews_No = data2.reviews_No;
-                let pageInfo2 = data2.pageInfo2;
-                console.log("미작성data2:", data2);
+            	let reviews_No = data.reviews_No;
+                let pageInfo_No = data.pageInfoNo;
+                let countNoReview = data.pageInfoNo.listCount;
+                console.log("미작성countNoReview:", countNoReview);
                 //let pageInfo = data2.pageInfo;
-                console.log("pageInfo2:", pageInfo2);
+                
                 
                 let Noreview = '';
                 
@@ -326,31 +336,37 @@
 		     				+'</li>';
                 }
                 $('.reviewList_tab2').html(Noreview);
-                $('#ncount').html(data2.length);
+
+
+              	//리뷰 카운트
+                let countNo = `<a id="aa" href="#tab1">미작성 리뷰 : <span id="">\${countNoReview}</span>건</a>`;
+                $('#unwritten').html(countNo);  
+                
+                
                 
                  // 페이징 처리
-                let pageText2 = '';
-                if (pageInfo2.startPage > 1) {
-                	pageText2 += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(1)">First</a></li>';
-                	pageText2 += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + (pageInfo2.startPage - 1) + ')">Previous</a></li>';
+                let pageText_No = '';
+                if (pageText_No.startPage > 1) {
+                	pageText_No += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(1)">First</a></li>';
+                	pageText_No += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + (pageInfo2.startPage - 1) + ')">Previous</a></li>';
                 }
                 
-                for (let i = pageInfo2.startPage; i <= pageInfo2.endPage; i++) {
-                    if (i === pageInfo2.currentPage) {
-                    	pageText2 += '<li class="page-item active"><a class="page-link" href="javascript:void(0);">' + i + '</a></li>';
+                for (let i = pageText_No.startPage; i <= pageText_No.endPage; i++) {
+                    if (i === pageText_No.currentPage) {
+                    	pageText_No += '<li class="page-item active"><a class="page-link" href="javascript:void(0);">' + i + '</a></li>';
                     } else {
-                    	pageText2 += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + i + ')">' + i + '</a></li>';
+                    	pageText_No += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + i + ')">' + i + '</a></li>';
                     }
                 }
                 
-                if (pageInfo2.endPage < pageInfo2.maxPage) {
-                	pageText2 += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + (pageInfo2.endPage + 1) + ')">Next</a></li>';
-                	pageText2 += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + pageInfo2.maxPage + ')">Last</a></li>';
+                if (pageText_No.endPage < pageText_No.maxPage) {
+                	pageText_No += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + (pageInfo2.endPage + 1) + ')">Next</a></li>';
+                	pageText_No += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + pageInfo2.maxPage + ')">Last</a></li>';
                 }
                 
                 
-                console.log("pageText:", pageText2); // 페이지 텍스트 확인
-                $('.pagination_No').html(pageText2);
+                console.log("pageText:", pageText_No); // 페이지 텍스트 확인
+                $('.pagination_No').html(pageText_No);
                 
                 
             },
