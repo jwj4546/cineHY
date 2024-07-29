@@ -5,14 +5,17 @@
 
 <mapper namespace="openTalkMapper">
     <select id="selectMessage" resultType="openTalk">
-        SELECT
+         SELECT
         		TALK_ID talkId,
         		TALK_CONTENT talkContent,
-        		TALK_SENDDATE talkSendDate,
+        		TO_CHAR(TALK_SENDDATE, 'YYYY-MM-DD HH24:MI:SS')  talkSendDate,
         		USER_ID userId,
         		STATUS status
 		FROM
 				TB_OPEN_TALK
+		ORDER BY 
+				TALK_SENDDATE 
+			ASC
 		
     </select>
     

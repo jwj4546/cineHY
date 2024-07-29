@@ -307,39 +307,43 @@
 						console.log('연결 문제');
 					};
 					
-					phone.onmessage =e=>{ 
-						console.log("e",e);
-						
-						 const currentTime = new Date().toLocaleTimeString();
-					       		
-					        	const data = JSON.parse(e.data);
-            					const userId = data.userId;
-            					const message = data.message;
-								console.log(userId);
-								console.log(message);
-								
-								// 채팅 메시지 출력할 부분
-					        	const chatBox = $(`
-							            <div class="d-flex justify-content-start mb-4">
-							                <div class="img_cont_msg">
-							                    <img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img_msg">
-							                </div>
-							                <div class="msg_cotainer">
-							                    <span class="message-text"></span>
-							                    <span class="msg_time"></span>
-							                    <span class="userID"></span>
-							                </div>
-							            </div>
-							        `);
+					phone.onmessage = e => {
+					    console.log("e", e);
 
-							        chatBox.find('.message-text').text(message);  //메세지 내용 담음
-							        chatBox.find('.userID').text(userId);
-							        console.log(chatBox);
-							        chatBox.find('.msg_time').text(currentTime);  //보낸 시간 담음
-							        $('#contentArea').append(chatBox);  
-					        	
-							        scrollToBottom();
+					    const data = JSON.parse(e.data);
+					    const userId = data.userId;
+					    const message = data.message;
+					    const sendDate = data.sendDate; // 서버에서 보낸 시간
+					    const currentTime = new Date().toLocaleTimeString(); // 클라이언트에서 현재 시간
+
+					    // 채팅 메시지 출력할 부분
+					    const chatBox = $(`
+					        <div class="d-flex justify-content-start mb-4">
+					            <div class="img_cont_msg">
+					                <img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img_msg">
+					            </div>
+					            <div class="msg_cotainer">
+					                <span class="message-text"></span>
+					                <span class="msg_time"></span>
+					                <span class="userID"></span>
+					            </div>
+					        </div>
+					    `);
+
+					    chatBox.find('.message-text').text(message);  // 메시지 내용 담음
+					    chatBox.find('.userID').text(userId);
+
+					    // 서버에서 받은 메시지에는 서버 시간을 표시
+					    if (sendDate) {
+					        chatBox.find('.msg_time').text(new Date(sendDate).toLocaleString()); // 서버 시간 표시
+					    } else {
+					        chatBox.find('.msg_time').text(currentTime); // 클라이언트에서 보낸 메시지에는 클라이언트 시간을 표시
+					    }
+
+					    $('#contentArea').append(chatBox);  
+					    scrollToBottom();
 					};
+
 				};
 				
 				//소켓 끊음
@@ -391,18 +395,7 @@
         							
         						
                                     
-                                    <c:forEach var="talk" items="${openTalkList}">
-							            <div class="d-flex justify-content-start mb-4">
-							                <div class="img_cont_msg">
-							                    <img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img_msg">
-							                </div>
-							                <div class="msg_cotainer">
-							                    <span class="message-text">${talk.talkContent}</span>
-							                    <span class="msg_time">${talk.talkSendDate}</span>
-							                    <span class="userID">${talk.userId}</span>
-							                </div>
-							            </div>
-        							</c:forEach>
+                                    
                                     
                                 </div>
                                 
@@ -424,8 +417,6 @@
     </main>
 
     <script>    
-    
-    	
 	    let isLoggedIn = ${not empty sessionScope.loginUser};
 	    let firstConnect = false;
 	
@@ -480,6 +471,29 @@
             scrollToBottom();
         };
 
+        
+        function selectOpenTalk(){
+        		$.ajax({
+            		url : 'insertReview',
+            		data : {
+            			reviewContent : $('#textReview').val(),
+            			star: $('#star').val(),
+            			userId : '${ sessionScope.loginUser.userId }',
+            			movieCode : movieId
+            		},
+            		type : 'post',
+            		
+            		success : function(result)  {
+            			//console.log(result);
+            			
+            			if(result == 'success'){
+            				selectReview(movieId);
+            				$('#textReview').val('');
+            			};
+            		}
+            	});
+        	
+        }
 
     </script>
     

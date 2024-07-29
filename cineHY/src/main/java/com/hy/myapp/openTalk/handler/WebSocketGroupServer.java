@@ -1,5 +1,7 @@
 package com.hy.myapp.openTalk.handler;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,9 +53,11 @@ public class WebSocketGroupServer extends TextWebSocketHandler {
 	            JSONObject previousMessage = new JSONObject();
 	            previousMessage.put("userId", talk.getUserId());
 	            previousMessage.put("message", talk.getTalkContent());
+	            previousMessage.put("sendDate", talk.getTalkSendDate().toString()); // 날짜를 문자열로 변환
 	            session.sendMessage(new TextMessage(previousMessage.toString()));
 	            log.info("세션에 담은 previousMessage: {}", previousMessage.toString());
 	        }
+	        // 초기화 상태를 세션 속성에 기록
 	        session.getAttributes().put("isInitialized", true);
 	    }
 		
@@ -72,17 +76,28 @@ public class WebSocketGroupServer extends TextWebSocketHandler {
 	    String userId = loginUser.getUserId();
 	    
 	    
+	    
+	    JSONObject chatMessage = new JSONObject();
+	    chatMessage.put("userId", userId);
+	    chatMessage.put("message", clientMessage);
+	    chatMessage.put("sendDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())); // 현재 시간
+	    for (WebSocketSession s : users) {
+	        s.sendMessage(new TextMessage(chatMessage.toString()));
+	    }
+	    log.info("Broadcasted chatMessage: {}", chatMessage.toString());
+	    
+	    
 		
-		//json으로 전송
-		JSONObject jsonMessage = new JSONObject();
-		jsonMessage.put("userId", userId);
-	    jsonMessage.put("message", clientMessage);
+//		//json으로 전송
+//		JSONObject jsonMessage = new JSONObject();
+//		jsonMessage.put("userId", userId);
+//	    jsonMessage.put("message", clientMessage);
 	    
 		     //모든 접속된 사용자에게 메시지 전송
-		    for (WebSocketSession ws : users) {
-		        ws.sendMessage(new TextMessage(jsonMessage.toString()));
-		        
-		    }
+//		    for (WebSocketSession ws : users) {
+//		        ws.sendMessage(new TextMessage(jsonMessage.toString()));
+//		        
+//		    }
 		    
 		    // 메시지 저장
 		    OpenTalk openTalk = new OpenTalk();
