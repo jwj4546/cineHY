@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.json.simple.JSONObject;
@@ -32,6 +33,9 @@ public class WebSocketGroupServer extends TextWebSocketHandler {
 	// 사용자 정보 저장용
 	private Set<WebSocketSession> users = new CopyOnWriteArraySet();
 	
+    private final Set<WebSocketSession> usersMap = ConcurrentHashMap.newKeySet();
+
+	
 	//사용자 Httpsession userId 저장용
 	private Map<String, Object> userID; 
 	
@@ -43,7 +47,8 @@ public class WebSocketGroupServer extends TextWebSocketHandler {
 		log.info("사용자 접속");
 		users.add(session);  //사용자 추가
 		log.info("현재 {}명 접속중", users.size());
-	
+		log.info("users:{}",users);
+		log.info("users:{}",usersMap);
 	    List<OpenTalk> openTalkList = openTalkService.selectMessage();
 	    session.getAttributes().put("openTalkList", openTalkList);
 
@@ -55,7 +60,7 @@ public class WebSocketGroupServer extends TextWebSocketHandler {
 	            previousMessage.put("message", talk.getTalkContent());
 	            previousMessage.put("sendDate", talk.getTalkSendDate().toString()); // 날짜를 문자열로 변환
 	            session.sendMessage(new TextMessage(previousMessage.toString()));
-	            log.info("세션에 담은 previousMessage: {}", previousMessage.toString());
+	            //log.info("세션에 담은 previousMessage: {}", previousMessage.toString());
 	        }
 	        // 초기화 상태를 세션 속성에 기록
 	        session.getAttributes().put("isInitialized", true);
