@@ -119,11 +119,11 @@
 	<%
         //userId 가져옴
         String userId = request.getParameter("userId");
-        System.out.println("MyReview JSP received userId: " + userId);
+        //System.out.println("MyReview JSP received userId: " + userId);
     %>
 
 
-    <div class="container" id="test01">
+    <div class="container">
     <h4 class="fst-italic" id="title">작성한 리뷰</h4>
     <main role="main" class="container" id="test">
         
@@ -165,17 +165,9 @@
                     <div id="reviewList">
 		                <ul class="pagination_No"> </ul>
 		            </div>
-                
             </div>
-            
     </main>
     
-    		
-            
-    
-
-
-
 
     <script>
     

@@ -69,16 +69,15 @@
     
     
     <select id="MovieOfReviewCount" resultType="_int" parameterType="_int" >
-    SELECT 
-	    COUNT(*)
-	FROM
-	    TB_REVIEW
-	WHERE
-	    MOVIE_CODE = #{movieCode}
-	    AND STATUS = 'Y'
     
-    
-    
+	    SELECT 
+		    COUNT(*)
+		FROM
+		    TB_REVIEW
+		WHERE
+		    MOVIE_CODE = #{movieCode}
+		    AND STATUS = 'Y'
+  
     </select>
     
     

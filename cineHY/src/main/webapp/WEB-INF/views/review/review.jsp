@@ -278,12 +278,10 @@
 	<%
     	//movieId 파라미터 읽어옴
 	    String movieId = request.getParameter("movieId");
-	    //System.out.println("Received movieId: " + movieId);
 	%>
 
 
 	<div class="container" id="test01">
-	 <!-- <h2>Reviews for Movie ID: <%= movieId %></h2> -->
 		<br>
 		<br>
 		<main role="main" class="container" id="test">
@@ -368,17 +366,12 @@
 				</tbody>
 			</table>
 
-			<div class="modal-btn-box">
-				<c:if test="${not empty sessionScope.loginUser}">
-					<button class="btn " type="button" id="insertmodal-open"
-						style="float: right;">돌아가기</button>
-				</c:if>
-			</div>
-			<br>
 		</main>
-		<div id="pagingArea">
+			<div id="pagingArea">
                 <ul class="pagination">
-                    
+                	<%--
+                          ajax영역
+                    --%>
                 </ul>
             </div>
 		<br clear="both">
@@ -394,10 +387,10 @@
 		window.onload =()=>{
 			const searchParams = new URLSearchParams(window.location.href);
 			let movieId;
-		    for (var param of searchParams) {
+		    for (const param of searchParams) {
 		        const parsedMovieId = parseInt(param[1]);
-		        console.log("parsedMovieId",parsedMovieId);
-		        console.log(typeof parsedMovieId);
+		        //console.log("parsedMovieId",parsedMovieId);
+		        //console.log(typeof parsedMovieId);
 		        if (!isNaN(parsedMovieId)) {
 		            movieId = parsedMovieId;  
 		        }
@@ -436,9 +429,7 @@
 			}
 		
 		
-		var starCount = 0;
-
-		// 리뷰 조회
+		 let starCount = 0;
 		 function selectReview(movieId, page = 1) {
 		     $.ajax({
 		         url: 'selectReview',
@@ -449,14 +440,8 @@
 		         }, 
 		         dataType: "json",
 		         success: result => {
-		             console.log(result);  // json 타입의 배열 출력됨
-		             
 		             let reviews = result.reviews;
 		             let pageInfo = result.pageInfo;
-		             
-		             console.log("pageInfo", pageInfo);
-		             console.log("reviews", reviews);
-		             
 		             let resultStr = '';
 		             starAvg(movieId);
 		             
@@ -464,70 +449,60 @@
 		                 const review = reviews[i];
 		                 starCount = review.star;
 		                 
-		                 // 별 출력 for문
 		                 let stars = '';
 		                 for (let j = 0; j < starCount; j++) {
 		                     stars += '⭐';
-		                 }
-		                 
-		                 resultStr +=  '<tr>'
-		                             + '<td class="rv">'
-		                             +     '<div class="d-flex bd-highlight">'
-		                             +         '<div class="img_cont">'
-		                             +             '<img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img">'
-		                             +         '</div>'
-		                             +         '<div class="user_info">'
-		                             +             '<p>' + stars + '</p>'
-		                             + 			  '<input type="hidden" id="stars" name="stars" value="' + stars + '"/>' 
-		                             +             '<p>' + review.userId + '</p>'
-		                             + 			  '<input type="hidden" id="user_id" name="user_id" value="' + review.userId + '"/>' 
-		                             +             '<p>' + review.reviewContent + '</p>'
-		                             + 			  '<input type="hidden" id="reviewNo" name="reviewNo" value="' + review.reviewNo + '"/>' 
-		                             + 			  '<input type="hidden" id="reviewContent" name="reviewContent" value="' + review.reviewContent + '"/>' 
-		                             +         '</div>'
-		                             +     '</div>'
-		                             + '</td>'
-		                             + '<td class="right">'
-		                             +     '<p class="plus" onclick="test(\'' + review.userId + '\')">...</p>'
-		                             +     	'<div id="bubble_sp" class="speech-bubble hidden">'
-		                             +         	'<input onclick="call_confirm_sp()" class="btn btn-light" type="button" id="id2" value="스포일러 신고">'
-		                             +     	'</div>'
-		                             + 		'<div id="bubble_up" class="speech-bubble hidden">'
-		                             +     		'<button class="btn btn-light"  type="button" id="updatemodal-open" onclick="updatemodal_No(\'' + review.reviewNo + '\')"  >리뷰수정2</button>'
-		                             +     		'<input class="btn btn-light" type="button" onclick="call_confirm_up_de(\'' + review.reviewNo + '\')" value="리뷰 삭제">'		                            
-		                             + 		'</div>'
-		                             +     '<p class="date">' + review.reviewDate + '</p>'
-		                             + '</td>'
-		                             + '</tr>';
+		                 }  
+		                 resultStr+=`
+		                	 		 <tr>
+		                              <td class="rv">
+		                                  <div class="d-flex bd-highlight">
+		                                      <div class="img_cont">
+		                                          <img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img">
+		                                      </div>
+		                                      <div class="user_info">
+		                                          <p>\${stars}</p>
+		                              			  <input type="hidden" id="stars" name="stars" value="\${stars}"/> 
+		                                          <p>\${review.userId}</p>
+		                              			  <input type="hidden" id="user_id" name="user_id" value="\${review.userId}"/>
+		                                          <p>\${review.reviewContent}</p>
+		                              			  <input type="hidden" id="reviewNo" name="reviewNo" value="\${review.reviewNo}"/> 
+		                              			  <input type="hidden" id="reviewContent" name="reviewContent" value="\${review.reviewContent}"/>
+		                                      </div>
+		                                  </div>
+		                              </td>
+		                              <td class="right">
+		                                  <p class="plus" onclick="test('\${review.userId}')">...</p>
+		                                  	<div id="bubble_sp" class="speech-bubble hidden">
+		                                      	<input onclick="call_confirm_sp()" class="btn btn-light" type="button" id="id2" value="스포일러 신고">
+		                                  	</div>
+		                              		<div id="bubble_up" class="speech-bubble hidden">
+		                                  		<button class="btn btn-light"  type="button" id="updatemodal-open" onclick="updatemodal_No('\${review.reviewNo}')"  >리뷰수정</button>
+		                                  		<input class="btn btn-light" type="button" onclick="call_confirm_up_de('\${review.reviewNo}')" value="리뷰 삭제">	                            
+		                              		</div>
+		                                  <p class="date">\${review.reviewDate}</p>
+		                              </td>
+		                            </tr>`;
 		             }
-		             //console.log(resultStr);
-		             $('#reviewList tbody').html(resultStr);
-		             $('#rcount').html(reviews.length);
 		             
-		             // 페이징 처리
 		             let pageText = '';
-		             if (pageInfo.startPage > 1) {
-		                 pageText += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectReview(' + movieId + ', 1)">First</a></li>';
-		                 pageText += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectReview(' + movieId + ', ' + (pageInfo.startPage - 1) + ')">Previous</a></li>';
-		             }
-		             
 		             for (let i = pageInfo.startPage; i <= pageInfo.endPage; i++) {
 		                 if (i === pageInfo.currentPage) {
-		                     pageText += '<li class="page-item active"><a class="page-link" href="javascript:void(0);">' + i + '</a></li>';
+		                     pageText += `<li class="page-item active">
+		                                      <a class="page-link" href="javascript:void(0);">\${i}</a>
+		                                  </li>`;
 		                 } else {
-		                     pageText += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectReview(' + movieId + ', ' + i + ')">' + i + '</a></li>';
+		                     pageText += `<li class="page-item">
+		                                      <a class="page-link" href="javascript:void(0);" 
+		                                      onclick="selectReview(\${movieId}, \${i})">\${i}
+		                                      </a>
+		                                  </li>`;
 		                 }
 		             }
-		             
-		             
-		             
-		             if (pageInfo.endPage < pageInfo.maxPage) {
-		                 pageText += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectReview(' + movieId + ', ' + (pageInfo.endPage + 1) + ')">Next</a></li>';
-		                 pageText += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectReview(' + movieId + ', ' + pageInfo.maxPage + ')">Last</a></li>';
-		             }
-		             
-		             console.log("pageText:", pageText); // 페이지 텍스트 확인
+		            
 		             $('.pagination').html(pageText);
+		             $('#reviewList tbody').html(resultStr);
+		             $('#rcount').html(reviews.length);
 		         },
 		         error: err => {
 		             console.error('Error fetching reviews:', err);
@@ -538,8 +513,8 @@
 		// 리뷰쓴 id가 세션의 아이디와 같을 때 => 리뷰 수정, 삭제 버튼
 		// 다를때 => 스포일러 신고버튼
         window.test = function(reviewUserId) {
-        	var offset = $(".plus").offset();
-            var loggedInUserId = '${sessionScope.loginUser.userId}'; // 세션의 사용자 ID
+        	const offset = $(".plus").offset();
+            const loggedInUserId = '${sessionScope.loginUser.userId}'; // 세션의 사용자 ID
             
             if (reviewUserId === loggedInUserId) {
             	$("#bubble_up").css({
@@ -563,7 +538,7 @@
 		window.call_confirm_up_de= function(reviewNo){
 	        if(confirm("리뷰를 삭세하시겠습니까?")){
 	        	$('#reviewNo').val(reviewNo);
-	        	console.log(reviewNo)
+	        	//console.log(reviewNo)
 	        	deleteById(reviewNo);
 	            alert("리뷰가 삭제되었습니다.");
 	        }
@@ -602,8 +577,6 @@
         
         //리뷰 추가
         function saveReview(){
-        	
-        	//빈 문자열이 아닐때만 요청 보낼거임 (빈 게시글작성 막기 위해)trim(): 앞 뒤 공백 제거
         	if($('#textReview').val().trim() != ''){
         		$.ajax({
             		url : 'insertReview',
@@ -616,7 +589,7 @@
             		type : 'post',
             		
             		success : function(result)  {
-            			console.log(result);
+            			//console.log(result);
             			
             			if(result == 'success'){
             				selectReview(movieId);
@@ -650,7 +623,7 @@
         function Review_Update(){
         	
         	const reviewNo = $('#reviewNo').val(); //수정모달에서 리뷰번호 받아옴
-        	console.log(reviewNo);
+        	//console.log(reviewNo);
         
         	if($('#ReviewUpdate').val().trim() != ''){
         		
@@ -665,7 +638,7 @@
             		type : 'post',
             		
             		success : function(result)  {
-            			console.log(result);
+            			//console.log(result);
             			
             			if(result == 'success'){
             				selectReview(movieId);
@@ -732,19 +705,19 @@
        	        },
        	        type: 'get',
        	        success: function(response) {
-       	        	console.log("response{}", response);
+       	        	//console.log("response{}", response);
                     $('#avgInfo').html(response);  // avgInfo에 응답값을 넣음
 
                     let starCount = parseFloat(response); // 필요시 적절히 변환
                     let stars = generateStars(starCount); // 별을 생성하는 함수 호출
 
-                    console.log("stars{}", stars);
+                    //console.log("stars{}", stars);
                     let starContainer = document.getElementById('avgStar'); // 별을 삽입할 <h2> 요소를 찾음
                     starContainer.innerHTML = stars; // 별을 <h2> 요소에 삽입
                   
        	        },
        	        error: function(err) {
-       	            console.error('Error deleting review:', err);
+       	            console.error('Error review:', err);
        	        }
        	    });
    		}
