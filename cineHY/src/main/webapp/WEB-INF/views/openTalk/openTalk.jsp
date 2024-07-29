@@ -303,7 +303,7 @@
 					phone.onclose =()=>{ 
 						console.log('서버와 연결 종료');
 					};
-					phone.onerror =e=>{ //
+					phone.onerror =e=>{ 
 						console.log('연결 문제');
 					};
 					
