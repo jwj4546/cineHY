@@ -92,23 +92,23 @@
     		
 			lists.forEach(list => {    			
     			
-    			text += `
+    			text = `
     				<tr class="cartItem">
-		                <td class="imageArea"><img src="${list.changeImage}" class="productImage" /></td>
+		                <td class="imageArea"><img src="\${list.changeImage}" class="productImage" /></td>
 		                <td>
-		                    ${list.productName}
-		                    <input type="hidden" class="productId" value="${list.productId}" />
-		                    <input type="hidden" class="cartNo" value="${list.cartNo}" />
-		                    <input type="hidden" class="productPrice" value="${list.productPrice}" />
-		                    <input type="hidden" class="productName" value="${list.productName}" />
-		                    <input type="hidden" class="changeImage" value="${list.changeImage}" />
-		                    <input type="hidden" class="cartAmount" value="${list.cartAmount}" />
-		                    <input type="hidden" class="productComment" value="${list.productComment}" />
-		                    <input type="hidden" class="oneTotal" value="${list.productPrice * list.cartAmount}" />
+		                    \${list.productName}
+		                    <input type="hidden" class="productId" value="\${list.productId}" />
+		                    <input type="hidden" class="cartNo" value="\${list.cartNo}" />
+		                    <input type="hidden" class="productPrice" value="\${list.productPrice}" />
+		                    <input type="hidden" class="productName" value="\${list.productName}" />
+		                    <input type="hidden" class="changeImage" value="\${list.changeImage}" />
+		                    <input type="hidden" class="cartAmount" value="\${list.cartAmount}" />
+		                    <input type="hidden" class="productComment" value="\${list.productComment}" />
+		                    <input type="hidden" class="oneTotal" value="\${list.productPrice * list.cartAmount}" />
                 		</td>
-                		<td>${formatter.format(list.productPrice)}원</td>
-                		<td>${list.cartAmount}</td>
-                		<td>${formatter.format(list.productPrice * list.cartAmount)}원</td>
+                		<td>\${formatter.format(list.productPrice)}원</td>
+                		<td>\${list.cartAmount}</td>
+                		<td>\${formatter.format(list.productPrice * list.cartAmount)}원</td>
             		</tr>`;
 			});
     		document.getElementById("reLoad").innerHTML = text;
@@ -178,7 +178,7 @@
 	                pg: "html5_inicis",          
 	                pay_method: "card",           
 	                merchant_uid: merchant_uid,  
-	                name: cartItems[0].productName+" 외 " + (cartItems.length-1),                 
+	                name: cartItems[0].productName != null ? cartItems[0].productName : cartItems[0].productName +" 외 " + (cartItems.length-1),                 
 	                amount: totalPrice,           
 	                buyer_name: userName,         
 	                buyer_tel: phoneNo,             
@@ -198,6 +198,7 @@
 								merchantUid : rsp.merchant_uid
 							})
 						}).done((data) => {
+							console.log(data);
 							let msg = '결제가 완료되었습니다.';
 							const payInfo = {
 									"merchantUid" : rsp.merchant_uid,

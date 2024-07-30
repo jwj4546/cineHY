@@ -1,5 +1,13 @@
 package com.hy.myapp.ticketInfo.model.repository;
 
-public class TicketInfoRepository {
+import org.apache.ibatis.annotations.Mapper;
+
+import com.hy.myapp.ticketInfo.model.vo.TicketInfoVO;
+
+@Mapper
+public interface TicketInfoRepository {
+
+	int saveTicket(TicketInfoVO ticketInfo);
+	
 
 }

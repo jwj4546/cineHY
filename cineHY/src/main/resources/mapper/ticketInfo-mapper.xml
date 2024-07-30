@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hy.myapp.ticketInfo.model.repository.TicketInfoRepository">
+	<insert id="saveTicket" parameterType="ticketInfo">
+		INSERT
+		   INTO
+		   			TB_TICKET_INFO
+		   			(
+		   			MERCHANT_UID,
+		   			USER_ID,
+		   			USER_NAME,
+		   			PHONE_NO,
+		   			PAY_METHOD,
+		   			RECEIPT,
+		   			MOVIE_CODE,
+		   			MOVIE_TITLE,
+		   			PRICE,
+		   			SEAT_CODE,
+		   			START_TIME,
+		   			SCREENING_ID,
+		   			THEATER_CODE,
+		   			TICKET_DATE,
+		   			PAYMENT_TIME
+		   			)
+		VALUES
+					(
+					#{merchantUid},
+					#{userId},
+					#{userName},
+					#{phoneNo},
+					#{payMethod},
+					#{receipt},
+					#{movieCode},
+					#{movieTitle},
+					#{price},
+					#{seatCode},
+					#{startTime},
+					#{screeningId},
+					#{theaterCode},
+					#{ticketDate},
+					#{paymentTime}
+					)
+	</insert>
+	
+</mapper>

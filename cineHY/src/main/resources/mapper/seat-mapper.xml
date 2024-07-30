@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hy.myapp.seat.model.repository.SeatRepository">
+	
+	<insert id="saveSeat" parameterType="seat">
+		INSERT
+		   INTO
+		   			TB_SEAT
+		   			(
+		   			SCREENING_ID,
+		   			SEAT_CODE,
+		   			USER_ID
+		   			)
+		VALUES
+					(
+					#{screeningId},
+					#{seatCode},
+					#{userId}
+					)
+	</insert>
+				
+</mapper>
