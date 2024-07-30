@@ -65,7 +65,7 @@ cineHY는 다양한 영화 목록을 외부 API를 통해 JSON 형식으로 데�
 - **Collaboration Tools**: Notion, Slack, GitHub, Google Spreadsheet
 
 ## 테이블 설계
-<img src="erd_image.png" width="100%" />
+<img src="README_IMG/erd_image.png" width="100%" />
 
 ### 주요 테이블 설명
 
