@@ -146,7 +146,8 @@
 		  userId  ,
 		  reviewDate  ,
 		  reviewContent,
-		  star 
+		  star,
+		  movieCode
 	FROM
 	    (
 	    SELECT 
@@ -156,6 +157,7 @@
 	        R.REVIEW_DATE AS reviewDate,
 	        R.REVIEW_CONTENT AS reviewContent,
 	        R.STAR AS star,
+	        R.MOVIE_CODE AS movieCode,
              ROWNUM  RNUM
 	    FROM 
 	        TB_REVIEW R
