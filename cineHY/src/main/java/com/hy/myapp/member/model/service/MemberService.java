@@ -30,7 +30,10 @@ public interface MemberService {
 	
 	List<Member> findAll(Map<String, Integer> map);
 
-	Member findbyId(String userId);
+	Member findById(String userId);
+
+	int forceDelete(String userId);
+	
 	
 	
 	

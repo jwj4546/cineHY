@@ -54,7 +54,13 @@
         height: 200px;
         width: 180px;
       }
-      #pagingArea { width: fit-content; margin: 10px auto; }
+      .pagingArea { 
+      	width: fit-content;  
+      	margin-top:10px ;
+      	margin: 0 auto;
+      	}
+      
+      
 
       #member_info{
         text-align: center;
@@ -92,13 +98,16 @@
     .tab__content {
     display: none;
     width: 550px;
+    height: 600px;
     }
     .tab__content.active {
     display: block;
     width: 550px;
+    height: 600px;
     }
     .col-md-9 {
         width: 650px;
+        height: 600px;
     }
     #review_btn{
       background-color: rgb(41, 185,165);
@@ -122,8 +131,7 @@
         //System.out.println("MyReview JSP received userId: " + userId);
     %>
 
-
-    <div class="container">
+<div class="container">
     <h4 class="fst-italic" id="title">작성한 리뷰</h4>
     <main role="main" class="container" id="test">
         
@@ -134,11 +142,11 @@
                         <p>${sessionScope.loginUser.userName} 님</p>
                         <br>
                         <ul class="nav nav-tabs">
-                            <li id="rr" class="tab__item active">
-                                <a id="aa" href="#tab1">작성한 리뷰 : <span id="rcount">0</span>건</a>
+                            <li id="written" class="tab__item active">
+                                
                             </li>
-                            <li id="rr2" class="tab__item">
-                                <a id="aa" href="#tab1">미작성 리뷰 : <span id="ncount">0</span>건</a>
+                            <li id="unwritten" class="tab__item">
+                               
                             </li>
                         </ul>
                     </div>
@@ -151,7 +159,7 @@
                         <!-- 리뷰조회 AJAX  -->
                     </ul>
                 </div>
-                <div id="reviewList">
+                <div class=pagingArea>
                 	<ul class="pagination"> </ul>
             	</div>
             </div>
@@ -162,12 +170,13 @@
                         <!-- 리뷰 미작성 조회 AJAX  -->
                     </ul>
                 </div>
-                    <div id="reviewList">
-		                <ul class="pagination_No"> </ul>
-		            </div>
+                <div class=pagingArea>
+		            <ul id="pagination" class="pagination"> </ul>
+		        </div>
             </div>
     </main>
-    
+    </div>
+
 
     <script>
     
@@ -201,9 +210,7 @@
             });
         });
         
-        function reviewPage(movieId){
-        	
-        }
+        
         
         
     });
@@ -222,6 +229,8 @@
                 let text = '';
                 let reviews = data.reviews;
                 let pageInfo = data.pageInfo;
+                let countMyReview = data.pageInfo.listCount;
+                
 
                 for (let i in reviews) {
                     let starCount = reviews[i].star;
@@ -234,9 +243,8 @@
 
                     text += '<li class="list_style" style="width: 700px;">' 
                             +    '<a style="width: 700px;" class="d-flex flex-row gap-3 align-items-start py-3 link-body-emphasis text-decoration-none border-bottom" href="#">' 
-                            +        '<svg class="bd-placeholder-img" width="120" height="150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">' 
-                            +            '<rect width="100%" height="100%" fill="#777"></rect>' 
-                            +       '</svg>' 
+                            +        '<div id="poster">'
+                            +		 '</div>'
                             +        '<div class="col-lg-8" style="width: 500px;">' 
                             +            '<h6 class="mb-0">' + item.movieTitle + '</h6>' 
                             +            '<br>' 
@@ -249,7 +257,12 @@
                             +'</li>';
                 }
                 $('.reviewList').html(text);
-                $('#rcount').html(reviews.length);
+                
+                
+                //리뷰 카운트
+                let count = `<a id="aa" href="#tab1">작성한 리뷰 : <span id="reviewCount">\${countMyReview}</span>건</a>`;
+				$('#written').html(count);  
+		             
 
                 // 페이징 처리
                 let pageText = '';
@@ -273,6 +286,24 @@
 
                 console.log("pageText:", pageText);  // 페이지 텍스트 확인
                 $('.pagination').html(pageText);
+                
+                
+                
+                $.ajax({
+        			url : 'movieList/details',
+        			type : 'get',
+        			dataType : 'json',
+        			data : {movie_id : parseInt(info.movieCode)},
+        			success : function(data) {
+        				console.log(data);
+        				$('#poster').html('<img src="https://image.tmdb.org/t/p/w500' + data.poster_path + '" style="height:200px; width=auto;"/>');
+        			},
+        			error: function(xhr, status, error) {
+        		        console.error("AJAX Error: ", status, error);
+        			}
+        		});
+                
+                
             },
             error: function(xhr, status, error) {
                 console.error("Error:", error);
@@ -282,7 +313,10 @@
 
     $(document).ready(function() {
         selectMyReview();  // 페이지 로드 시 첫 페이지 데이터 로드
+        selectNoReview(); 
     });
+    
+    
 
 
     
@@ -292,17 +326,17 @@
             url: 'NoReview',
             type: 'GET',
             data: {
-               		 userId: '${sessionScope.loginUser.userId}',
+               		userId: '${sessionScope.loginUser.userId}',
                 	page: page
             },
             dataType: "json",
-            success: function(data2) {
+            success: function(data) {
             	
-            	let reviews_No = data2.reviews_No;
-                let pageInfo2 = data2.pageInfo2;
-                console.log("미작성data2:", data2);
-                //let pageInfo = data2.pageInfo;
-                console.log("pageInfo2:", pageInfo2);
+            	let reviews_No = data.reviews_No;
+                let pageInfo_No = data.pageInfoNo;
+                let countNoReview = data.pageInfoNo.listCount;
+                
+                
                 
                 let Noreview = '';
                 
@@ -326,31 +360,37 @@
 		     				+'</li>';
                 }
                 $('.reviewList_tab2').html(Noreview);
-                $('#ncount').html(data2.length);
+
+
+                let countNo = `<a id="aa" href="#tab1">미작성 리뷰 : <span id="">\${countNoReview}</span>건</a>`;
+                $('#unwritten').html(countNo);  
+                
+                
                 
                  // 페이징 처리
-                let pageText2 = '';
-                if (pageInfo2.startPage > 1) {
-                	pageText2 += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(1)">First</a></li>';
-                	pageText2 += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + (pageInfo2.startPage - 1) + ')">Previous</a></li>';
+                let pageText_No = '';
+                if (pageInfo_No.startPage > 1) {
+                	pageText_No += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(1)">First</a></li>';
+                	pageText_No += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + (pageInfo2.startPage - 1) + ')">Previous</a></li>';
                 }
                 
-                for (let i = pageInfo2.startPage; i <= pageInfo2.endPage; i++) {
-                    if (i === pageInfo2.currentPage) {
-                    	pageText2 += '<li class="page-item active"><a class="page-link" href="javascript:void(0);">' + i + '</a></li>';
+                for (let i = pageInfo_No.startPage; i <= pageInfo_No.endPage; i++) {
+                    if (i === pageInfo_No.currentPage) {
+                    	pageText_No += '<li class="page-item active"><a class="page-link" href="javascript:void(0);">' + i + '</a></li>';
+
                     } else {
-                    	pageText2 += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + i + ')">' + i + '</a></li>';
+                    	pageText_No += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + i + ')">' + i + '</a></li>';
                     }
                 }
                 
-                if (pageInfo2.endPage < pageInfo2.maxPage) {
-                	pageText2 += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + (pageInfo2.endPage + 1) + ')">Next</a></li>';
-                	pageText2 += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + pageInfo2.maxPage + ')">Last</a></li>';
+                if (pageInfo_No.endPage < pageInfo_No.maxPage) {
+                	pageText_No += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + (pageInfo2.endPage + 1) + ')">Next</a></li>';
+                	pageText_No += '<li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="selectNoReview(' + pageInfo2.maxPage + ')">Last</a></li>';
                 }
                 
                 
-                console.log("pageText:", pageText2); // 페이지 텍스트 확인
-                $('.pagination_No').html(pageText2);
+                console.log("pageText_No:", pageText_No); // 페이지 텍스트 확인
+                $('#pagination').html(pageText_No);
                 
                 
             },

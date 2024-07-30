@@ -27,13 +27,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@RequestMapping("/phone")
+@RequestMapping("/group")
 public class WebSocketGroupServer extends TextWebSocketHandler {
 
 	// 사용자 정보 저장용
 	private Set<WebSocketSession> users = new CopyOnWriteArraySet();
 	
-    private final Set<WebSocketSession> usersMap = ConcurrentHashMap.newKeySet();
+    //private final Set<WebSocketSession> usersMap = ConcurrentHashMap.newKeySet();
 
 	
 	//사용자 Httpsession userId 저장용
@@ -46,9 +46,10 @@ public class WebSocketGroupServer extends TextWebSocketHandler {
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		log.info("사용자 접속");
 		users.add(session);  //사용자 추가
+		
 		log.info("현재 {}명 접속중", users.size());
 		log.info("users:{}",users);
-		log.info("users:{}",usersMap);
+		
 	    List<OpenTalk> openTalkList = openTalkService.selectMessage();
 	    session.getAttributes().put("openTalkList", openTalkList);
 
@@ -65,9 +66,6 @@ public class WebSocketGroupServer extends TextWebSocketHandler {
 	        // 초기화 상태를 세션 속성에 기록
 	        session.getAttributes().put("isInitialized", true);
 	    }
-		
-		
-		
 	}
 
 	@Override
@@ -91,8 +89,6 @@ public class WebSocketGroupServer extends TextWebSocketHandler {
 	    }
 	    log.info("Broadcasted chatMessage: {}", chatMessage.toString());
 	    
-	    
-		
 //		//json으로 전송
 //		JSONObject jsonMessage = new JSONObject();
 //		jsonMessage.put("userId", userId);
@@ -109,8 +105,6 @@ public class WebSocketGroupServer extends TextWebSocketHandler {
 		    openTalk.setUserId(userId);
 		    openTalk.setTalkContent(clientMessage);
 		    int test = openTalkService.insertMsessage(openTalk);
-		    
-	
 		 
 	}
 
@@ -120,6 +114,4 @@ public class WebSocketGroupServer extends TextWebSocketHandler {
 		log.info("접속종료 현재 {}명 접속중", users.size());
 	}
 	
-	
-
 }
