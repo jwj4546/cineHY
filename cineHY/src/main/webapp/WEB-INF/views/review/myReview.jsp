@@ -210,9 +210,7 @@
             });
         });
         
-        function reviewPage(movieId){
-        	
-        }
+        
         
         
     });
@@ -227,7 +225,7 @@
             },
             dataType: "json",
             success: function(data) {
-                //console.log("result:", data);  // 전체 데이터 구조 확인
+                console.log("result:", data);  // 전체 데이터 구조 확인
                 let text = '';
                 let reviews = data.reviews;
                 let pageInfo = data.pageInfo;
@@ -245,9 +243,8 @@
 
                     text += '<li class="list_style" style="width: 700px;">' 
                             +    '<a style="width: 700px;" class="d-flex flex-row gap-3 align-items-start py-3 link-body-emphasis text-decoration-none border-bottom" href="#">' 
-                            +        '<svg class="bd-placeholder-img" width="120" height="150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">' 
-                            +            '<rect width="100%" height="100%" fill="#777"></rect>' 
-                            +       '</svg>' 
+                            +        '<div id="poster">'
+                            +		 '</div>'
                             +        '<div class="col-lg-8" style="width: 500px;">' 
                             +            '<h6 class="mb-0">' + item.movieTitle + '</h6>' 
                             +            '<br>' 
@@ -289,6 +286,24 @@
 
                 console.log("pageText:", pageText);  // 페이지 텍스트 확인
                 $('.pagination').html(pageText);
+                
+                
+                
+                $.ajax({
+        			url : 'movieList/details',
+        			type : 'get',
+        			dataType : 'json',
+        			data : {movie_id : parseInt(info.movieCode)},
+        			success : function(data) {
+        				console.log(data);
+        				$('#poster').html('<img src="https://image.tmdb.org/t/p/w500' + data.poster_path + '" style="height:200px; width=auto;"/>');
+        			},
+        			error: function(xhr, status, error) {
+        		        console.error("AJAX Error: ", status, error);
+        			}
+        		});
+                
+                
             },
             error: function(xhr, status, error) {
                 console.error("Error:", error);
