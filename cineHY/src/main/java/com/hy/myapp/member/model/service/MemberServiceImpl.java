@@ -79,9 +79,18 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Member findbyId(String userId) {
-		return sqlSession.selectOne("Membermapper.findById", userId);
+	public Member findById(String userId) {
+		return memberRepository.findbyId(sqlSession, userId);
 	}
+
+	@Override
+	public int forceDelete(String userId) {
+		return memberRepository.forceDelete(sqlSession, userId);
+	}
+
+	
+
+	
 	
 	
 

@@ -93,12 +93,6 @@ button:hover {
   <input type="text" id="userId" class="form-control" name="userId" placeholder="ID를 입력하세요." required autofocus>
   <label for="userPwd" class="sr-only">Password</label>
   <input type="password" id="userPwd" class="form-control" name="userPwd" placeholder="Password를 입력하세요." required>
-  <div class="image_btn" id = "image_btn">
-    <div>
-      <button><img src="https://cdn-icons-png.flaticon.com/128/3991/3991999.png" alt="카카오 아이콘"> 카카오 로그인 </button>
-      <button><img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTGDlEVgNyqjAJN8vqSZP3q6aZ5QcgQsaKHDrZuCsdSYmGdKa5Z">네이버 로그인</button>
-  </div>
-  </div>
   <div class = "login_line" id="login_line">
     <hr>
   </div>

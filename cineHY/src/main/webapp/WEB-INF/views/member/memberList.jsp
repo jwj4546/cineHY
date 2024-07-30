@@ -49,6 +49,11 @@
         <div class="innerOuter" style="padding:5% 10%;">
             <h2>회원관리</h2>
             <br>
+            <c:if test="${not empty message}">
+                <div class="alert alert-info">
+                    ${message}
+                </div>
+            </c:if>
             <br>
             <table id="memberList" class="table table-hover" align="center">
                 <thead>
@@ -66,16 +71,23 @@
                     <c:choose>
                         <c:when test="${list.size() == 0}">
                             <tr>
-                                <td colspan="6">조회된 결과가 존재하지 않습니다</td>
+                                <td colspan="5">조회된 결과가 존재하지 않습니다</td>
                             </tr>
                         </c:when>
                         <c:otherwise>
                             <c:forEach items="${list}" var="member">
-                                <tr class="member-detail" id="memberNo-${member.userId}">
+                                <tr class="member-detail" id="memberNo-${member.userId}" onclick="viewMemberDetail('${member.userId}')">
                                     <td>${member.userName}</td>
                                     <td>${member.userNick}</td>
                                     <td>${member.userId}</td>
                                     <td>${member.joinDate}</td>
+                                    <td>
+                                        <!-- 탈퇴 버튼 -->
+                                        <form action="forceDelete" method="post" onsubmit="return confirmDelete();" style="display:inline;">
+                                            <input type="hidden" name="userId" value="${member.userId}" />
+                                            <button type="submit" class="btn btn-danger btn-sm">탈퇴시키기</button>
+                                        </form>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         </c:otherwise>
@@ -88,5 +100,15 @@
     </div>
 
     <jsp:include page="../common/footer.jsp" />
+
+    <script>
+        function viewMemberDetail(userId) {
+            window.location.href = 'memberDetail?userId=' + userId;
+        }
+
+        function confirmDelete() {
+            return confirm('진짜 해당유저를 탈퇴시키시겠습니까?');
+        }
+    </script>
 </body>
 </html>

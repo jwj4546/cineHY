@@ -22,16 +22,11 @@ public class OpenTalkServiceImpl implements OpenTalkService {
 	public List<OpenTalk> selectMessage() {
 
 		return openTalkRepository.selectMessage(sqlSession);
-		
 	}
-
 	
-
 	@Override
 	public int insertMsessage(OpenTalk opentalk) {
 		return openTalkRepository.insertMessage(sqlSession, opentalk);
 	}
-
-	
 
 }

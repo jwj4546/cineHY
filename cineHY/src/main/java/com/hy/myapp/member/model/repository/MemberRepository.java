@@ -63,4 +63,16 @@ public class MemberRepository {
 	 public List<Member> findAll(Map<String, Integer> map) {
 	        return sqlSession.selectList("MemberMapper.findAll", map);
 	}
+
+	public Member findbyId(SqlSessionTemplate sqlSession2, Member member) {
+		return sqlSession.selectOne("MemberMapper.findById", member);
+	}
+
+	public Member findbyId(SqlSessionTemplate sqlSession2, String userId) {
+		return sqlSession.selectOne("MemberMapper.findById", userId);
+	}
+
+	public int forceDelete(SqlSessionTemplate sqlSession2, String userId) {
+		return sqlSession.update("MemberMapper.forceDelete", userId);
+	}
 }

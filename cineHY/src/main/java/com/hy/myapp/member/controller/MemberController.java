@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hy.myapp.member.model.service.MemberService;
 import com.hy.myapp.member.model.vo.Member;
-import com.hy.myapp.notice.model.vo.Notice;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,16 +47,12 @@ public class MemberController {
 	@PostMapping("join.do")
 	public String join(Member member, Model model) {
 		
-		
-		
-		//log.info("평문 : {}", member.getUserPwd() );
 		String encPwd = bcryptPasswordEncoder.encode(member.getUserPwd());
-		//log.info("암호문 : {}", encPwd);
 		member.setUserPwd(encPwd);
 		
 		String viewName = "";
 		if(memberService.insert(member) > 0) {
-			
+			model.addAttribute("alertMsg", "회원가입 성공");
 			return "redirect:/";
 			
 		} else {
@@ -298,25 +294,35 @@ public class MemberController {
     
     @GetMapping("memberDetail")
     public String findById(@RequestParam String userId, Model model) {
-    	log.info("게시글 정보 : {}", userId);
-    	
-        Member member = memberService.findbyId(userId);
-        
-        log.info("게시글 정보 : {}", member);
-        
+      
+        Member member = memberService.findById(userId);
+
         if (member == null) {
-        	
-            model.addAttribute("message", "member not found for id: " + userId);
-            
+            model.addAttribute("message", "해당 ID의 회원을 찾을 수 없습니다: " + userId);
             return "common/errorPage"; // 에러 페이지로 이동
         }
-        
+
         model.addAttribute("member", member);
-        
-        System.out.println(model);
-        
         return "member/memberDetail"; // 뷰 이름 반환
     }
+    
+    
+    @PostMapping("forceDelete")
+    public String forceDelete(@RequestParam("userId") String userId, RedirectAttributes redirectAttributes) {
+    	
+        int result = memberService.forceDelete(userId);
+
+        if (result > 0) {
+            redirectAttributes.addFlashAttribute("message", "해당 유저 강제탈퇴 완료 : " + userId);
+        } else {
+            redirectAttributes.addFlashAttribute("message", "해당 유저 강제탈퇴 실패 : " + userId);
+        }
+
+        return "redirect:memberList";
+    }
+
+
+
 	
 	
 	

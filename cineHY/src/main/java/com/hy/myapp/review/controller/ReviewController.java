@@ -131,7 +131,6 @@ public class ReviewController {
 	                                    Model model) {
 
 	    int listCount = reviewService.myReviewCount(userId);  // 총 게시글의 수 
-	   
 	    
 	    int currentPage = page;
 	    int pageLimit = 10;
@@ -163,14 +162,14 @@ public class ReviewController {
 	    
 	    List<Review> selectMyReview = reviewService.selectMyReview(map); //얘만 안나옴
 	    
-	    log.info("selectMyReview:{}",selectMyReview);
-	    log.info("pageInfo:{}",pageInfo);
+	    //log.info("selectMyReview:{}",selectMyReview);
+	    //log.info("pageInfo:{}",pageInfo);
 	    
 	    Map<String, Object> response = new HashMap<>();
 	    response.put("reviews", selectMyReview);
 	    response.put("pageInfo", pageInfo);
 	    
-	    log.info("response:{}",response);
+	    //log.info("response:{}",response);
 	    return response;
 	}
 	    
@@ -181,6 +180,8 @@ public class ReviewController {
 	    									Model model) {
 	      
 			int listCountNo = reviewService.NoReviewCount(userId);  // 총 게시글의 수 
+
+		    log.info("listCountNo:{}",listCountNo);
 			
 		    int currentPage = page;
 		    int pageLimit = 10;
@@ -213,7 +214,7 @@ public class ReviewController {
 		    
 		    Map<String, Object> responseNo = new HashMap<>();
 		    responseNo.put("reviews_No", selectNoReview);
-		    responseNo.put("pageInfo2", pageInfoNo);
+		    responseNo.put("pageInfoNo", pageInfoNo);
 		    
 		    return responseNo;
 	    }
