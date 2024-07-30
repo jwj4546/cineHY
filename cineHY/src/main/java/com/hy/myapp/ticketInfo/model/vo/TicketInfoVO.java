@@ -16,8 +16,18 @@ import lombok.ToString;
 public class TicketInfoVO {
 		
 	private String merchantUid;
-	private String movieCode;
+	private String userId;
+	private String userName;
+	private String phoneNo;
+	private String payMethod;
+	private String receipt;
+	private int movieCode;
 	private String movieTitle;
-	private int amount;
-	private String seat;
+	private int price;
+	private String seatCode;
+	private String startTime;
+	private int screeningId;
+	private String theaterCode;
+	private String ticketDate;
+	private String paymentTime;
 }

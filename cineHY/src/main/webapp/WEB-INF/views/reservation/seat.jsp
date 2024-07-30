@@ -163,7 +163,30 @@
         		};
         		$(".cinema").html(text);
         		
-        	});
+        		
+        		const screeningId = parseInt(resInfo.screeningId);
+        		const totalSeats = 120;
+        		
+        		 $.ajax({
+        		        url: 'reserved/${screeningId}',
+        		        method: 'GET',
+        		        dataType: 'json',
+        		        data: { screeningId },
+        		        success: (reservedSeats) => {
+        		            const reservedSeatCount = reservedSeats.length;
+        		            const remainingSeats = totalSeats - reservedSeatCount;
+        		            $('#remainingSeats').text(`남은 좌석: ${remainingSeats}+석 / 120석`);
+        		            
+        		            reservedSeats.forEach(seat => {
+        		                $('#' + seat).addClass('reserved').off('click');
+        		            });
+        		        },
+        		        error: (xhr, status, error) => {
+        		            console.error('Error fetching reserved seats:', status, error);
+        		        }
+        		    });
+        		});
+        		
         	
         	
         	
@@ -194,7 +217,7 @@
             // 결제 버튼 클릭시
             $("#payBtn").on("click",  function() {
             	
-            	const ticketPrice = 12000;
+            	const ticketPrice = 100;
 				const count = $('.person-btn.active').text();
 				const seatNumber = $('.selected');
 				const totalPrice = ticketPrice * count;

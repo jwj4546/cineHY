@@ -66,6 +66,8 @@
 	  	  <mybatis-spring:scan base-package="com.hy.myapp.product.model.repository"/>
 	  	  <mybatis-spring:scan base-package="com.hy.myapp.cart.model.repository"/>
 	  	  <mybatis-spring:scan base-package="com.hy.myapp.order.model.repository"/>
+	  	  <mybatis-spring:scan base-package="com.hy.myapp.ticketInfo.model.repository"/>
+	  	  <mybatis-spring:scan base-package="com.hy.myapp.seat.model.repository"/>
 	  	  
 	  	  <context:property-placeholder location="classpath:api.properties"/>
 	  	  
