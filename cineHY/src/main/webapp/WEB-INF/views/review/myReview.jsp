@@ -347,9 +347,11 @@
                 for (let n in reviews_No) {
                 	
                     const item = reviews_No[n];
+                    const code = item.movieCode;
+                    
                     Noreview += '<li class="list_style">'
 		            		+	'<a class="d-flex flex-column flex-lg-row  align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-bottom" href="#">'
-		                	+		'<svg class="bd-placeholder-img" width="120" height="150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"></rect></svg>'
+					        + '<div class="poster" id="poster_' + code + '" style="height: 180px; width: 120px; background-color: #f0f0f0;"></div>'
 		                	+		'<div class="col-lg-8">'
 		                	+		'<h6 class="mb-0">' + item.movieTitle + '</h6>'
 		                	+		'<br>'
@@ -362,6 +364,22 @@
 		            		+	'</div>'
 		            		+	'</a>'
 		     				+'</li>';
+		     				
+		     				
+
+                   // 비동기적으로 포스터 이미지를 가져와서 HTML에 삽입
+                   $.ajax({
+                       url: 'movieList/details',
+                       type: 'get',
+                       dataType: 'json',
+                       data: { movie_id: code },
+                       success: function(data) {
+                           $('#poster_' + code).html('<img src="https://image.tmdb.org/t/p/w500' + data.poster_path + '" style="height:180px; width:auto;"/>');
+                       },
+                       error: function(xhr, status, error) {
+                           console.error("AJAX Error: ", status, error);
+                       }
+                   });
                 }
                 
                 if (Noreview === 0) {
