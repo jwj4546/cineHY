@@ -11,11 +11,16 @@
 	        USER_NICK AS userNick,
 	        USER_ID AS userId,
 	        JOIN_DATE AS joinDate
+	
 </sql>
 	
 	<select id="findAll" resultType="Member" parameterType="map"> 
 	    <include refid="selectMember"/>
-	    FROM TB_MEMBER
+	    
+	     FROM
+				TB_MEMBER
+	 WHERE
+	 		STATUS = 'Y'
 	</select>
 	
 	<select id="findById" parameterType="String" resultType="Member">
@@ -31,12 +36,14 @@
        			PRE_GENRE2 AS preGenre2,
        			USER_NICK AS userNick,
        			JOIN_DATE AS joinDate,
-       			STATUS AS status
+       			
 
 		FROM
 				TB_MEMBER
 		WHERE
 				USER_ID = #{userId}
+		AND
+				STATUS = 'Y'
 	</select>
 
     <insert id="insert" parameterType = "member">
