@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.hy.myapp.movieSchedule.model.service.MovieScheduleService;
 import com.hy.myapp.theater.model.vo.Theater;
-import com.hy.myapp.ticketList.model.vo.TicketList;
 
 @Controller
 public class TheaterController {
