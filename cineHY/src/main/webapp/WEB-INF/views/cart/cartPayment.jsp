@@ -84,57 +84,48 @@
     
     
     <script>
-    	window.onload = function() {
+    	window.onload = () => {
     		const lists = JSON.parse(window.sessionStorage.getItem('list'));
     		
     		let text = '';
     		const formatter = new Intl.NumberFormat('ko-KR');
     		
-    		for(let i in lists) {
+			lists.forEach(list => {    			
     			
-    			const list = lists[i];
-    			
-    			text += '<tr class="cartItem">'
-    					 + '<td class="imageArea"><img src="' + list.changeImage + '" class="productImage" /></td>'
-    					 + '<td>' 
-    					 + list.productName
-    					 + '<input type="hidden" class="productId" value="' + list.productId + '" />'
-    					 + '<input type="hidden" class="cartNo" value="' + list.cartNo + '" />'
-    					 + '<input type="hidden" class="productPrice" value="' + list.productPrice + '" />'
-    					 + '<input type="hidden" class="productName" value="' + list.productName + '" />'
-    					 + '<input type="hidden" class="changeImage" value="' + list.changeImage + '" />'
-    					 + '<input type="hidden" class="cartAmount" value="' + list.cartAmount + '" />'
-    					 + '<input type="hidden" class="productComment" value="' + list.productComment + '" />'
-    					 + '<input type="hidden" class="oneTotal" value="' + (list.productPrice * list.cartAmount) + '" />'
-    					 + '</td>'
-    					 + '<td>' 
-    					 + formatter.format(list.productPrice)
-    					 + '원</td>'
-    					 + '<td>' + list.cartAmount + '</td>'
-    					 + '<td>' + formatter.format((list.productPrice * list.cartAmount)) + '원</td>'
-    					 + '</tr>'
-    					 
-    		};
+    			text += `
+    				<tr class="cartItem">
+		                <td class="imageArea"><img src="${list.changeImage}" class="productImage" /></td>
+		                <td>
+		                    ${list.productName}
+		                    <input type="hidden" class="productId" value="${list.productId}" />
+		                    <input type="hidden" class="cartNo" value="${list.cartNo}" />
+		                    <input type="hidden" class="productPrice" value="${list.productPrice}" />
+		                    <input type="hidden" class="productName" value="${list.productName}" />
+		                    <input type="hidden" class="changeImage" value="${list.changeImage}" />
+		                    <input type="hidden" class="cartAmount" value="${list.cartAmount}" />
+		                    <input type="hidden" class="productComment" value="${list.productComment}" />
+		                    <input type="hidden" class="oneTotal" value="${list.productPrice * list.cartAmount}" />
+                		</td>
+                		<td>${formatter.format(list.productPrice)}원</td>
+                		<td>${list.cartAmount}</td>
+                		<td>${formatter.format(list.productPrice * list.cartAmount)}원</td>
+            		</tr>`;
+			});
     		document.getElementById("reLoad").innerHTML = text;
     	}
     	
-    	window.addEventListener('load', function () {
+    	window.addEventListener('load', () => {
     		const lists = JSON.parse(window.sessionStorage.getItem('list'));
     		// 금액 계산
-    		const count = lists.length;
+			const total = lists.reduce((sum, list) => sum + (list.productPrice * list.cartAmount), 0);
     		
-    		var total = 0;
-    	 	for(let i=0;i<count;i++) {
-    			var oneTotal = Number(document.getElementsByClassName("oneTotal")[i].value);
-    			total += oneTotal;
-    		}
-    	 	document.getElementById("total").innerHTML = total.toLocaleString();
+    		document.getElementById("total").innerHTML = total.toLocaleString();
     	 	
-    	 	var totalPrice = document.createElement("input");
-    	 	totalPrice.setAttribute("type", "hidden");
-    	 	totalPrice.setAttribute("name", "total");
-    	 	totalPrice.setAttribute("value", total);
-    	 	totalPrice.setAttribute('id', 'totalPrice');
+    	 	const totalPrice = document.createElement("input");
+			totalPrice.type = "hidden";
+			totalPrice.name = "total";
+			totalPrice.value = total;
+			totalPrice.id = "totalPrice";
     	 	
     	 	document.querySelector("#total").append(totalPrice);
     	});
@@ -144,7 +135,7 @@
     	<script>
     	
     	// 결제 버튼 클릭시
-    	$("#orderBtn").on("click", function() {
+    	$("#orderBtn").on("click", () => {
     		
    	    	const merchant_uid = "O" + new Date().getTime();
    	    	const userId = $("#userId").val();
@@ -195,7 +186,7 @@
 	                product_id : cartItems[0].productId,
 	           
 
-	            }, function (rsp) {
+	            }, (rsp) => {
 	            	console.log(rsp);
 	                if (rsp.success) {
 						$.ajax({
@@ -206,7 +197,7 @@
 								impUid : rsp.imp_uid,
 								merchantUid : rsp.merchant_uid
 							})
-						}).done(function (data) {
+						}).done((data) => {
 							let msg = '결제가 완료되었습니다.';
 							const payInfo = {
 									"merchantUid" : rsp.merchant_uid,
@@ -223,10 +214,10 @@
 								url : "savePay",
 								contentType : "application/json",
 								data : JSON.stringify(payInfo),
-								success : function(response) {
+								success : (response) => {
 						
 						
-						const orderPromises = cartItems.map(function(item) {
+						const orderPromises = cartItems.map((item) => {
 							const orderInfo = {
 								"merchantUid" : rsp.merchant_uid,
 								"userId" : userId,
@@ -252,7 +243,7 @@
 							});
 						});
                                     
-							$.when.apply($, orderPromises).then(function() {
+							$.when.apply($, orderPromises).then(() => {
 								if(confirm("결제 완료")) {
                                     window.location.href = "orderResult?merchantUid=" + rsp.merchant_uid;	
                                     } 

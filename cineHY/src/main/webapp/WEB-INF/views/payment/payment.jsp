@@ -60,25 +60,32 @@
     
     
     <script>
-    	window.onload = function() {
-    		const info = JSON.parse(window.sessionStorage.getItem('seatInfo'));
+    	
+    	const info = JSON.parse(window.sessionStorage.getItem('seatInfo'));	
+    
+    	window.onload = () => {
     		
     		let text = '';
     		const formatter = new Intl.NumberFormat('ko-KR');
     		
-    		text += '<tr class="ticketItem">'
-					 + '<td id="poster" style="text-align:center; width:200px;"></td>'
-					 + '<td>' 
-					 + info.movieName
-					 + '<input type="hidden" class="movieCode" value="' + info.movieCode + '" />'
-					 + '</td>'
-					 + '<td>' 
-					 + info.theaterName
-					 + '</td>'
-					 + '<td>' + info.startTime + '</td>'
-					 + '<td>' + info.seat + '</td>'
-					 + '<td>' + formatter.format(info.price) + '원</td>'
-					 + '</tr>'
+    		text += `
+    			<tr class="ticketItem">
+            		<td id="poster" style="text-align:center; width:200px;"></td>
+            		<td id="movieName">
+                		${info.movieName}
+                		<input type="hidden" id="movieCode" value="${info.movieCode}" />
+            		</td>
+            		<td>
+                		${info.theaterName}
+            		</td>
+            		<td>${info.startTime}</td>
+            		<td>${info.seat}</td>
+            		<td>
+            			<input type="hidden" value="${info.price}" id="totalPrice" />
+            			${formatter.format(info.price)}원
+            		</td>
+        		</tr>
+        	`;
 					 
 			 document.getElementById("reLoad").innerHTML = text;
     		
@@ -87,113 +94,51 @@
     			type : 'get',
     			dataType : 'json',
     			data : {movie_id : parseInt(info.movieCode)},
-    			success : function(data) {
+    			success : (data) => {
     				console.log(data);
-    				$('#poster').html('<img src="https://image.tmdb.org/t/p/w500' + data.poster_path + '" style="height:200px; width=auto;"/>');
+    				$('#poster').html(`<img src="https://image.tmdb.org/t/p/w500${data.poster_path}" style="height:200px; width=auto;"/>`);
     			},
-    			error: function(xhr, status, error) {
+    			error : (xhr, status, error) => {
     		        console.error("AJAX Error: ", status, error);
     			}
     		});
-    		
-    		
-    		
-
-    		
-    		
-    	}
+    	};
     	
-    	
-    	<%-- 
-    	window.addEventListener('load', function () {
-    		const lists = JSON.parse(window.sessionStorage.getItem('list'));
-    		// 금액 계산
-    		const count = lists.length;
-    		
-    		var total = 0;
-    	 	for(let i=0;i<count;i++) {
-    			var oneTotal = Number(document.getElementsByClassName("oneTotal")[i].value);
-    			total += oneTotal;
-    		}
-    	 	document.getElementById("total").innerHTML = total.toLocaleString();
-    	 	
-    	 	var totalPrice = document.createElement("input");
-    	 	totalPrice.setAttribute("type", "hidden");
-    	 	totalPrice.setAttribute("name", "total");
-    	 	totalPrice.setAttribute("value", total);
-    	 	totalPrice.setAttribute('id', 'totalPrice');
-    	 	
-    	 	document.querySelector("#total").append(totalPrice);
-    	});
-    	
-    	</script>
-    	
-    	<script>
     	
     	// 결제 버튼 클릭시
-    	$("#orderBtn").on("click", function() {
-			
+    	$("#orderBtn").on("click", () => {
     		
-    		
-    		// 사전검증
-   	    	var merchant_uid = "O" + new Date().getTime();
-   	    	var userId = $("#userId").val();
-   	    	var userName = $("#userName").val();
-   	    	var phoneNo = $("#phoneNo").val();
-   	    	var totalPrice = $("#totalPrice").val();
-   	    	
-   	    	var cartItems = [];
-   	    	$("tr.cartItem").each(function() {
-   	    		var item = {
-   	    			oneTotal : $(this).find(".oneTotal").val(),
-	   	   	    	productName : $(this).find(".productName").val(),
-	   	   	    	day : new Date(),
-	   	   	    	productId : $(this).find(".productId").val(),
-	   	   	    	productComment : $(this).find(".productComment").val(),
-	   	   	    	changeImage : $(this).find(".changeImage").val(),
-	   	   	    	cartAmount : $(this).find(".cartAmount").val(),
-	   	   	    	cartNo : $(this).find(".cartNo").val()
-   	    		};
-   	    		cartItems.push(item);
-   	    	});
-    		
-			console.log(cartItems);   	    	
-   	    	
-   	    	
+   	    	const merchant_uid = "O" + new Date().getTime();
+   	    	const userId = $("#userId").val();
+   	    	const userName = $("#userName").val();
+   	    	const phoneNo = $("#phoneNo").val();
+   	    		
    	    	$.ajax({
    	    		url : "payment/prepare",
    	    		method : "POST",
    	    		contentType : "application/json",
    	    		data : JSON.stringify({
    	    			merchantUid : merchant_uid,
-   	    			amount : totalPrice
+   	    			amount : info.price
    	    		})
    	    	});
    	    	
    	    	
 
-            var IMP = window.IMP;
-            IMP.init("imp33642125"); // 가맹점 식별코드 입력 
+            const IMP = window.IMP;
+            IMP.init("imp33642125"); 
             
 
 	            IMP.request_pay({
-	                pg: "html5_inicis",           // 등록된 pg사 (적용된 pg사는 KG이니시스)
-	                pay_method: "card",           // 결제방식: card(신용카드), trans(실시간계좌이체), vbank(가상계좌), phone(소액결제)
-	                merchant_uid: merchant_uid,   // 주문번호
-	                name: cartItems[0].productName+" 외 " + (cartItems.length-1),                  // 상품명
-	                amount: totalPrice,           // 금액
-	                buyer_name: userName,         // 주문자
-	                buyer_tel: phoneNo,             // 전화번호 (필수입력)
-	                buyer_addr: "",    		  // 주소
-	                buyer_postcode: "",          // 우편번호
-	                img : cartItems[0].changeImage,
-	                day : "2024-07-09",
-	                product_id : cartItems[0].productId,
-	                movie_code : "영화",
-	                movie_title : "인사이드 아웃2"
-	           
-	            // 사후 검증
-	            }, function (rsp) {
+	                pg: "html5_inicis",          
+	                pay_method: "card",           
+	                merchant_uid: merchant_uid,  
+	                name: info.movieName,
+	                amount: info.price,           
+	                buyer_name: userName,         
+	                buyer_tel: phoneNo    
+
+	            }, (rsp) => {
 	            	console.log(rsp);
 	                if (rsp.success) {
 						$.ajax({
@@ -204,12 +149,9 @@
 								impUid : rsp.imp_uid,
 								merchantUid : rsp.merchant_uid
 							})
-						}).done(function (data) {
-							console.log(data);
-							// 결제 정보 DB 저장
-							//주문 상품 정보 DB 저장
-							var msg = '결제가 완료되었습니다.';
-							var payInfo = {
+						}).done((data) => {
+							let msg = '결제가 완료되었습니다.';
+							const payInfo = {
 									"merchantUid" : rsp.merchant_uid,
 									"userId" : userId,
 									"userName" : rsp.buyer_name,
@@ -219,61 +161,53 @@
 									"phoneNo" : rsp.buyer_tel,
 									"receipt" : rsp.receipt_url
 							};
-							console.log(payInfo);
 							$.ajax({
 								type : "POST",
 								url : "savePay",
 								contentType : "application/json",
 								data : JSON.stringify(payInfo),
-								success : function(response) {
-									console.log("결제정보 저장 완료");
+								success : (response) => {
+							
 						
-						
-						var orderPromises = cartItems.map(function(item) {
-							var orderInfo = {
+							const ticketInfo = {
 								"merchantUid" : rsp.merchant_uid,
 								"userId" : userId,
 								"userName" : rsp.buyer_name,
 								"receipt" : rsp.receipt_url,
 								"payMethod" : rsp.pay_method,
-								"productId" : item.productId,		//
-								"productName" : item.productName,
-								"productComment" : item.productComment,
-								"changeImage" : item.changeImage,
-								"price" : item.oneTotal,						//
+								"movieCode" : item.productId,		
+								"movieTitle" : item.productName,
+								"summary" : item.productComment,
+								"price" : item.oneTotal,						
 								"phoneNo" : rsp.buyer_tel,
 								"amount" : item.cartAmount,
 								"cartNo" : item.cartNo
 							
 							};
 							
-							console.log(orderInfo);
 							return $.ajax({
                                 type: "post",
-                                url: "saveOrder",
+                                url: "saveTicket",
                                 contentType: "application/json",
                                 data: JSON.stringify(orderInfo)
-							});
-						});
-                                    
-							$.when.apply($, orderPromises).then(function() {
-								if(confirm("결제 완료")) {
-                                    window.location.href = "orderResult?merchantUid=" + rsp.merchant_uid;	
+							}).done(() => {
+									if(confirm("결제 완료")) {
+                                   		window.location.href = "orderResult?merchantUid=" + rsp.merchant_uid;	
                                     } 
                                     else {
-                                    window.location.href = 'productlist';
+                                    	alert("결제에 실패하였습니다.")
+                                    	window.location.href = 'productlist';
                                     }
-                            });
-                        }
-                    });
-                
-            });
-        } else {
-            var msg = '결제를 실패하였습니다.';
-            alert(msg);
-        }
-    });
-});--%>
+	                            });
+	                        }
+	                    });
+		            });
+		        } else {
+		            let msg = '결제를 실패하였습니다.';
+		            alert(msg);
+		        }
+		    });
+		});
     </script>
 
 <jsp:include page="../common/footer.jsp"></jsp:include>
