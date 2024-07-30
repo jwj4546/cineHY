@@ -20,5 +20,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					#{userId}
 					)
 	</insert>
+	
+	<select id="reservedSeats" resultType="string">
+		SELECT
+					SEAT_CODE
+		  FROM
+		  			TB_SEAT
+		WHERE
+					SCREENING_ID = #{screeningId}
+	</select>
 				
 </mapper>

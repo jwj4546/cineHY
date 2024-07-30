@@ -1,5 +1,7 @@
 package com.hy.myapp.seat.model.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.hy.myapp.seat.model.repository.SeatRepository;
@@ -16,6 +18,11 @@ public class SeatServiceImpl implements SeatService {
 	@Override
 	public int saveSeat(SeatVO seat) {
 		return seatRepository.saveSeat(seat);
+	}
+
+	@Override
+	public List<String> reservedSeats(int screeningId) {
+		return seatRepository.reservedSeats(screeningId);
 	}
 
 }

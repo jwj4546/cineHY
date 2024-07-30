@@ -163,7 +163,30 @@
         		};
         		$(".cinema").html(text);
         		
-        	});
+        		
+        		const screeningId = parseInt(resInfo.screeningId);
+        		const totalSeats = 120;
+        		
+        		 $.ajax({
+        		        url: 'reserved/${screeningId}',
+        		        method: 'GET',
+        		        dataType: 'json',
+        		        data: { screeningId },
+        		        success: (reservedSeats) => {
+        		            const reservedSeatCount = reservedSeats.length;
+        		            const remainingSeats = totalSeats - reservedSeatCount;
+        		            $('#remainingSeats').text(`남은 좌석: ${remainingSeats}+석 / 120석`);
+        		            
+        		            reservedSeats.forEach(seat => {
+        		                $('#' + seat).addClass('reserved').off('click');
+        		            });
+        		        },
+        		        error: (xhr, status, error) => {
+        		            console.error('Error fetching reserved seats:', status, error);
+        		        }
+        		    });
+        		});
+        		
         	
         	
         	
