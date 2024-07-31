@@ -65,6 +65,10 @@
     .selected {
         background-color: #6c757d;
     }
+     .reserved {
+        background-color: rgb(171, 47, 44); 
+        pointer-events: none; 
+    }
 </style>
 </head>
 <body>
@@ -164,18 +168,18 @@
         		$(".cinema").html(text);
         		
         		
-        		const screeningId = parseInt(resInfo.screeningId);
+        		const screeningId = resInfo.screeningId;
         		const totalSeats = 120;
         		
         		 $.ajax({
-        		        url: 'reserved/${screeningId}',
+        		        url: `reservedSeats`,
         		        method: 'GET',
         		        dataType: 'json',
         		        data: { screeningId },
         		        success: (reservedSeats) => {
         		            const reservedSeatCount = reservedSeats.length;
         		            const remainingSeats = totalSeats - reservedSeatCount;
-        		            $('#remainingSeats').text(`남은 좌석: ${remainingSeats}+석 / 120석`);
+        		            $('#remainingSeats').text(`남은 좌석: \${remainingSeats}` + `석 / 120석`);
         		            
         		            reservedSeats.forEach(seat => {
         		                $('#' + seat).addClass('reserved').off('click');

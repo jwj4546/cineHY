@@ -15,7 +15,10 @@
 	
 	<select id="findAll" resultType="Member" parameterType="map"> 
 	    <include refid="selectMember"/>
-	    FROM TB_MEMBER
+	    FROM 
+	    		TB_MEMBER
+	    WHERE
+	    		STATUS = 'Y'
 	</select>
 	
 	<select id="findById" parameterType="String" resultType="Member">
