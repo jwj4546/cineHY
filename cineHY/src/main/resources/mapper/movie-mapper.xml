@@ -51,6 +51,8 @@
 
 </insert>
 
+
+
 <select id="getMovieList" resultType="movie">
 
 	 SELECT

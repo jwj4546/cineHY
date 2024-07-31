@@ -1,6 +1,7 @@
 package com.hy.myapp.movie.controller;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
 import com.hy.myapp.movie.model.service.MovieService;
 import com.hy.myapp.movie.model.vo.Message;
 import com.hy.myapp.movie.model.vo.Movie;
@@ -293,28 +292,7 @@ public class MovieApiController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
 	
-	@GetMapping("searchMovie")
-	public String searchMovie(@RequestParam("keyword") String query) throws IOException {
-		
-		OkHttpClient client = new OkHttpClient();
-
-		Request request = new Request.Builder()
-		  .url("https://api.themoviedb.org/3/search/movie?query="+ query +"&include_adult=false&language=ko-KR&primary_release_year=2024&page=1&region=KR")
-		  .get()
-		  .addHeader("Authorization", BEARER_TOKEN)
-		  .addHeader("accept", "application/json")
-		  .build();
-
-		try (Response response = client.newCall(request).execute()) {
-	            // 응답 본문 추출
-	            okhttp3.ResponseBody responseBody = response.body();
-	            if (responseBody != null) {
-	                return responseBody.string();
-	            } else {
-	                return "{}"; // 응답 본문이 없는 경우 빈 JSON 객체 반환
-	            }
-	        }
-	}
+	
 	
 	@GetMapping("search")
 	public String search(@RequestParam("keyword") String query) throws IOException {
