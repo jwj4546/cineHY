@@ -157,6 +157,8 @@
                             "phoneNo": rsp.buyer_tel,
                             "receipt": rsp.receipt_url
                         };
+                        
+                        
 
                         $.ajax({
                             type: "POST",

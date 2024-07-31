@@ -19,50 +19,51 @@
 
     <select id="findAllReview" resultType="review">
         SELECT
-			REVIEW_NO reviewNo,
-			REVIEW_CONTENT reviewContent,
-			REVIEW_DATE reviewDate,
-			STAR star,
-			STATUS status,
-			USER_ID userId,
-			MOVIE_CODE movieCode
-		FROM
-			TB_REVIEW
+			  REVIEW_NO 		reviewNo,
+			  REVIEW_CONTENT    reviewContent,
+			  REVIEW_DATE 	    reviewDate,
+			  STAR 			    star,
+			  STATUS 			status,
+			  USER_ID 		    userId,
+			  MOVIE_CODE 		movieCode
+		 FROM
+			  TB_REVIEW
     </select>
     
     <select id="getMovieOfReview" resultMap="reviewResultMap" parameterType="map">
     	SELECT 
-		    movieTitle,
-		    reviewNo,
-		    userId,
-		    reviewDate,
-		    reviewContent,
-		    star
-		FROM
-		    (SELECT 
-		            M.MOVIE_TITLE AS movieTitle,
-		            R.REVIEW_NO AS reviewNo,
-		            R.REVIEW_CONTENT AS reviewContent,
-		            R.REVIEW_DATE AS reviewDate,
-		            R.STAR AS star,
-		            R.STATUS AS status,
-		            R.USER_ID AS userId,
-		            R.MOVIE_CODE AS movieCode,
-		            R.TICKET_NO AS ticketNo,
-		            ROWNUM AS RNUM
-		    FROM
-		            TB_REVIEW R
-		    JOIN
-		            TB_MOVIE M ON R.MOVIE_CODE = M.MOVIE_CODE
-		    WHERE
-		            R.MOVIE_CODE = #{movieCode}
-		        AND 
-		            R.STATUS = 'Y'
-		    ORDER BY
-		            R.REVIEW_DATE DESC
-		    ) 
-		WHERE
-		    RNUM BETWEEN #{startValue} AND #{endValue}
+		      movieTitle,
+		      reviewNo,
+		      userId,
+		      reviewDate,
+		      reviewContent,
+		      star,
+		      merchantUid
+		  FROM
+		      (SELECT 
+		             M.MOVIE_TITLE AS movieTitle,
+		             R.REVIEW_NO AS reviewNo,
+		             R.REVIEW_CONTENT AS reviewContent,
+		             R.REVIEW_DATE AS reviewDate,
+		             R.STAR AS star,
+		             R.STATUS AS status,
+		             R.USER_ID AS userId,
+		             R.MOVIE_CODE AS movieCode,
+		             R.MERCHANT_UID AS merchantUid,
+		             ROWNUM AS RNUM
+		    	 FROM
+		             TB_REVIEW R
+		         JOIN
+		             TB_MOVIE M ON R.MOVIE_CODE = M.MOVIE_CODE
+		        WHERE
+		             R.MOVIE_CODE = #{movieCode}
+		          AND 
+		             R.STATUS = 'Y'
+		     ORDER BY
+		             R.REVIEW_DATE DESC
+		      ) 
+			 WHERE
+			       RNUM BETWEEN #{startValue} AND #{endValue}
     
     
     </select>
@@ -71,40 +72,41 @@
     <select id="MovieOfReviewCount" resultType="_int" parameterType="_int" >
     
 	    SELECT 
-		    COUNT(*)
-		FROM
-		    TB_REVIEW
-		WHERE
-		    MOVIE_CODE = #{movieCode}
-		    AND STATUS = 'Y'
+		      COUNT(*)
+		  FROM
+		      TB_REVIEW
+		 WHERE
+		      MOVIE_CODE = #{movieCode}
+		      AND STATUS = 'Y'
   
     </select>
     
     
     <insert id="insertReview"  parameterType="review">
-    	INSERT INTO 
-    			TB_REVIEW
-						(
-						REVIEW_NO, 
-						REVIEW_CONTENT, 
-						REVIEW_DATE, 
-						STAR, 
-						STATUS, 
-						USER_ID, 
-						MOVIE_CODE,
-						TICKET_NO
-						)
-				VALUES
-						(
-						SEQ_RNO.NEXTVAL,
-						#{reviewContent},
-						SYSDATE,
-						#{star },
-						DEFAULT, 
-						#{userId }, 
-						#{movieCode}, 
-						'TICK00007'
-						)
+    	 INSERT INTO TB_REVIEW (
+		        REVIEW_NO, 
+		        REVIEW_CONTENT, 
+		        REVIEW_DATE, 
+		        STAR, 
+		        STATUS, 
+		        USER_ID, 
+		        MOVIE_CODE,
+		        MERCHANT_UID
+		    )
+		    VALUES (
+		        SEQ_RNO.NEXTVAL,
+		        #{reviewContent},
+		        SYSDATE,
+		        #{star},
+		        DEFAULT, 
+		        #{userId}, 
+		        #{movieCode}, 
+		        (SELECT MERCHANT_UID 
+		         FROM TB_TICKET_INFO 
+		         WHERE USER_ID = #{userId} 
+		           AND MOVIE_CODE = #{movieCode}
+		          AND ROWNUM = 1)
+		    )
     
     </insert>
     
@@ -113,26 +115,21 @@
     	UPDATE 
     		   TB_REVIEW
 			SET 
-				REVIEW_CONTENT = #{reviewContent},
-    			STAR = #{star },
-    			REVIEW_DATE = SYSDATE
+			   REVIEW_CONTENT = #{reviewContent},
+    		   STAR = #{star },
+    		   REVIEW_DATE = SYSDATE
 		  WHERE
-				REVIEW_NO = #{reviewNo }
-				
-				
-		
-    
+			   REVIEW_NO = #{reviewNo }
     
     </update>
     
     
     <delete id="deleteReview" parameterType="_int">
     
-    
 		DELETE FROM 
 					TB_REVIEW
-				WHERE 
-						REVIEW_NO = #{reviewNo }
+			   WHERE 
+					REVIEW_NO = #{reviewNo }
 	
 	</delete>
 	
@@ -141,33 +138,33 @@
 	<select id="selectMyReview" resultMap="reviewResultMap" parameterType="map">
 	
 	  SELECT 
-		  movieTitle  ,
-		  reviewNo  ,
-		  userId  ,
-		  reviewDate  ,
-		  reviewContent,
-		  star,
-		  movieCode
-	FROM
-	    (
-	    SELECT 
-	        M.MOVIE_TITLE AS movieTitle,
-	        R.REVIEW_NO AS reviewNo,
-	        R.USER_ID AS userId,
-	        R.REVIEW_DATE AS reviewDate,
-	        R.REVIEW_CONTENT AS reviewContent,
-	        R.STAR AS star,
-	        R.MOVIE_CODE AS movieCode,
-             ROWNUM  RNUM
-	    FROM 
-	        TB_REVIEW R
-	    JOIN 
-	        TB_MOVIE M ON R.MOVIE_CODE = M.MOVIE_CODE
-	    WHERE 
-	        R.USER_ID = #{userId }
-            ) 
-		WHERE
-		RNUM BETWEEN #{startValue} AND #{endValue}
+		    movieTitle  ,
+		    reviewNo  ,
+		    userId  ,
+		    reviewDate  ,
+		    reviewContent,
+		    star,
+		    movieCode
+	   FROM
+	      (
+		  SELECT 
+		        M.MOVIE_TITLE AS movieTitle,
+		        R.REVIEW_NO AS reviewNo,
+		        R.USER_ID AS userId,
+		        R.REVIEW_DATE AS reviewDate,
+		        R.REVIEW_CONTENT AS reviewContent,
+		        R.STAR AS star,
+		        R.MOVIE_CODE AS movieCode,
+	            ROWNUM  RNUM
+		    FROM 
+		        TB_REVIEW R
+		    JOIN 
+		        TB_MOVIE M ON R.MOVIE_CODE = M.MOVIE_CODE
+		   WHERE 
+		        R.USER_ID = #{userId }
+	        ) 
+	   WHERE
+			RNUM BETWEEN #{startValue} AND #{endValue}
 		     
 	</select>
 
@@ -176,13 +173,13 @@
 	
 	<select id ="myReviewCount" resultType="_int" parameterType="String"> 
 		SELECT 
-    			COUNT(*) AS reviewCount
-			FROM 
-    			TB_REVIEW R
-			JOIN 
-    			TB_MOVIE M ON R.MOVIE_CODE = M.MOVIE_CODE
-			WHERE 
-    			R.USER_ID = #{userId}
+    		  COUNT(*) AS reviewCount
+		  FROM 
+    		  TB_REVIEW R
+		  JOIN 
+    		  TB_MOVIE M ON R.MOVIE_CODE = M.MOVIE_CODE
+		 WHERE 
+    		  R.USER_ID = #{userId}
 	</select>
 	
 	
@@ -190,24 +187,24 @@
 	<select id="starAvg" resultType="Double" parameterType="_int">
 		
 		 SELECT 
-				ROUND(AVG(STAR), 1) AS AVG_STAR
+			   ROUND(AVG(STAR), 1) AS AVG_STAR
 		   FROM 
-		   		TB_REVIEW 
+		   	   TB_REVIEW 
 		  WHERE 
-		   		MOVIE_CODE = #{movieCode}
-		GROUP BY 
-				 MOVIE_CODE
+		   	   MOVIE_CODE = #{movieCode}
+	   GROUP BY 
+			   MOVIE_CODE
 	
 	
 	</select>
 	
 	<select id="reviewCount" resultType="_int"> 
 		SELECT
-			COUNT(REVIEW_NO)
-		FROM
-			TB_REVIEW
-		WHERE
-			USER_ID = #{userId}
+			  COUNT(REVIEW_NO)
+		  FROM
+			  TB_REVIEW
+		 WHERE
+			  USER_ID = #{userId}
 	
 	</select>
 	
@@ -216,42 +213,38 @@
 	<select id="selectNoReview" resultMap="reviewResultMap" parameterType="map">
 	    
 	    SELECT 
-			    movieCode,
-			    movieTitle,
-			    paymentTime
+			  movieCode,
+			  movieTitle,
+			  paymentTime
 		  FROM
-			    (
-			    SELECT 
-				        m.MOVIE_CODE AS movieCode,
-				        m.MOVIE_TITLE AS movieTitle,
-				        t.PAYMENT_TIME AS paymentTime,
-				        ROW_NUMBER() OVER (ORDER BY t.PAYMENT_TIME DESC) AS RNUM
-			     FROM 
-			        	TB_TICKET_INFO t
-			     JOIN 
-			        	TB_MOVIE_SCHEDULE ms ON t.SCREENING_ID = ms.SCREENING_ID
-			     JOIN 
-			        	TB_MOVIE m ON ms.MOVIE_CODE = m.MOVIE_CODE
-			     WHERE 
-			        	t.USER_ID = #{userId}
-			     AND 
-			        	m.MOVIE_CODE 
-			        	NOT IN 
-					        	(
-						            SELECT 
-						                   r.MOVIE_CODE 
-						              FROM 
-						                   TB_REVIEW r
-						             WHERE 
-						                   r.USER_ID = #{userId}
-					        	)
+			 (
+			  SELECT 
+				    m.MOVIE_CODE AS movieCode,
+				    m.MOVIE_TITLE AS movieTitle,
+				    t.PAYMENT_TIME AS paymentTime,
+				    ROW_NUMBER() OVER (ORDER BY t.PAYMENT_TIME DESC) AS RNUM
+			   FROM 
+			       	TB_TICKET_INFO t
+			   JOIN 
+			        TB_MOVIE_SCHEDULE ms ON t.SCREENING_ID = ms.SCREENING_ID
+			   JOIN 
+			        TB_MOVIE m ON ms.MOVIE_CODE = m.MOVIE_CODE
+			  WHERE 
+			        t.USER_ID = #{userId}
+			    AND 
+			        m.MOVIE_CODE 
+			        NOT IN 
+					      (
+						  SELECT 
+						        r.MOVIE_CODE 
+						    FROM 
+						        TB_REVIEW r
+						   WHERE 
+						        r.USER_ID = #{userId}
+					      )
 			    ) 
 			WHERE
-			    RNUM BETWEEN #{startValue} AND #{endValue}
-
-	        
-	
-		
+			     RNUM BETWEEN #{startValue} AND #{endValue}
 		
 	</select>
 
@@ -259,33 +252,27 @@
 
 	<select id ="NoReviewCount" resultType="_int" parameterType="String"> 
 	
-	
 		SELECT 
-		    COUNT(*)
-		FROM 
-		    TB_TICKET_INFO t
-		JOIN 
-		    TB_MOVIE_SCHEDULE ms ON t.SCREENING_ID = ms.SCREENING_ID
-		JOIN 
-		    TB_MOVIE m ON ms.MOVIE_CODE = m.MOVIE_CODE
-		WHERE 
-		    t.USER_ID =#{userId}
-		AND 
-		    m.MOVIE_CODE NOT IN (
-		        SELECT 
-		            r.MOVIE_CODE 
-		        FROM 
-		            TB_REVIEW r
-		        WHERE 
-		            r.USER_ID = #{userId}
-		    )
-	
-	
-	
-	
-	
-	
-	
+		      COUNT(*)
+		  FROM 
+		      TB_TICKET_INFO t
+		  JOIN 
+		      TB_MOVIE_SCHEDULE ms ON t.SCREENING_ID = ms.SCREENING_ID
+		  JOIN 
+		      TB_MOVIE m ON ms.MOVIE_CODE = m.MOVIE_CODE
+		 WHERE 
+		      t.USER_ID =#{userId}
+		   AND 
+		      m.MOVIE_CODE 
+	    NOT IN 
+	          (
+			  SELECT 
+			        r.MOVIE_CODE 
+			    FROM 
+			        TB_REVIEW r
+			   WHERE 
+			        r.USER_ID = #{userId}
+			   )
 	
 	</select>
 
