@@ -11,13 +11,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		   			(
 		   			SCREENING_ID,
 		   			SEAT_CODE,
-		   			USER_ID
+		   			USER_ID,
+		   			TICKET_DATE
 		   			)
 		VALUES
 					(
 					#{screeningId},
 					#{seatCode},
-					#{userId}
+					#{userId},
+					#{ticketDate}
 					)
 	</insert>
 	
