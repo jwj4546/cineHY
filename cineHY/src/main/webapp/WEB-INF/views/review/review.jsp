@@ -501,8 +501,14 @@
 		             }
 		            
 		             $('.pagination').html(pageText);
-		             $('#reviewList tbody').html(resultStr);
 		             $('#rcount').html(reviews.length);
+		             
+		             if (reviews.length === 0) {
+		                    $('#reviewList').html('<p>작성된 리뷰가 없습니다.<p/>');
+						} else {
+							$('#reviewList tbody').html(resultStr);
+						}
+		             
 		         },
 		         error: err => {
 		             console.error('Error fetching reviews:', err);

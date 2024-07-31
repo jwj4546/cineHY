@@ -116,8 +116,13 @@
     #tab1,#tab2{float: left;}
     #user_div{float: left;}
 
-    .list_style{
+    .list_style, .nav-tabs{
     list-style:none;}
+    
+    li{
+    list-style:none;
+    padding-left:0px;
+    }
       
     </style>
 
@@ -141,7 +146,7 @@
                         <br>
                         <p>${sessionScope.loginUser.userName} 님</p>
                         <br>
-                        <ul class="nav nav-tabs">
+                        <ul id="ulStyle" class="nav nav-tabs" style="list-style:none;">
                             <li id="written" class="tab__item active">
                                 
                             </li>
@@ -206,13 +211,8 @@
                 if (index === 1) {
                     selectNoReview();
                 }
-                
             });
         });
-        
-        
-        
-        
     });
 
     function selectMyReview(page = 1) {
@@ -225,65 +225,71 @@
             },
             dataType: "json",
             success: function(data) {
-                console.log("result:", data);  // 전체 데이터 구조 확인
+                //console.log("result:", data);  // 전체 데이터 구조 확인
                 let text = '';
                 let reviews = data.reviews;
                 let pageInfo = data.pageInfo;
                 let countMyReview = data.pageInfo.listCount;
                 let code='';
                 
-
-                for (let i in reviews) {
-                    let starCount = reviews[i].star;
-                    let stars = '';
-
-                    // 별 출력
-                    for (let j = 0; j < starCount; j++) {
-                        stars += '⭐';
-                    }
-
-                    const item = reviews[i];
-                    const code = item.movieCode;
-                    console.log("code:", code);
-
-                    // 리뷰 항목 HTML 추가
-                     text += '<li class="list_style" style="width: 700px;">'
-					        + '<a href="movieDetails?movieId=' + code + '" class="d-flex flex-row gap-3 align-items-start py-3 link-body-emphasis text-decoration-none border-bottom">'
-					        + '<div class="poster" id="poster_' + code + '" style="height: 180px; width: 120px; background-color: #f0f0f0;"></div>'
-					        + '<div class="col-lg-8" style="width: 500px;">'
-					        + '<h6 class="mb-0">' + item.movieTitle + '</h6>'
-					        + '<br>'
-					        + '<p class="mb-0">' + stars + '</p>'
-					        + '<p class="mb-0">' + item.reviewContent + '</p>'
-					        + '<br>'
-					        + '<small class="text-body-secondary">' + item.userId + ' | ' + item.reviewDate + '</small>'
-					        + '</div>'
-					        + '</a>'
-					        + '</li>';
-
-                    // 비동기적으로 포스터 이미지를 가져와서 HTML에 삽입
-                    $.ajax({
-                        url: 'movieList/details',
-                        type: 'get',
-                        dataType: 'json',
-                        data: { movie_id: code },
-                        success: function(data) {
-                            console.log(data);
-                            $('#poster_' + code).html('<img src="https://image.tmdb.org/t/p/w500' + data.poster_path + '" style="height:180px; width:auto;"/>');
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("AJAX Error: ", status, error);
-                        }
-                    });
-                }
-
-                // 생성된 HTML을 특정 컨테이너에 추가
-                $('.reviewList').html(text);
+                
+                
+					
+	                for (let i in reviews) {
+	                    let starCount = reviews[i].star;
+	                    let stars = '';
+	
+	                    // 별 출력
+	                    for (let j = 0; j < starCount; j++) {
+	                        stars += '⭐';
+	                    }
+	
+	                    const item = reviews[i];
+	                    const code = item.movieCode;
+	
+	                    // 리뷰 항목 HTML 추가
+	                     text += '<li class="list_style" style="width: 700px;">'
+						        + '<a href="movieDetails?movieId=' + code + '" class="d-flex flex-row gap-3 align-items-start py-3 link-body-emphasis text-decoration-none border-bottom">'
+						        + '<div class="poster" id="poster_' + code + '" style="height: 180px; width: 120px; background-color: #f0f0f0;"></div>'
+						        + '<div class="col-lg-8" style="width: 500px;">'
+						        + '<h6 class="mb-0">' + item.movieTitle + '</h6>'
+						        + '<br>'
+						        + '<p class="mb-0">' + stars + '</p>'
+						        + '<p class="mb-0">' + item.reviewContent + '</p>'
+						        + '<br>'
+						        + '<small class="text-body-secondary">' + item.userId + ' | ' + item.reviewDate + '</small>'
+						        + '</div>'
+						        + '</a>'
+						        + '</li>';
+	
+	                    // 비동기적으로 포스터 이미지를 가져와서 HTML에 삽입
+	                    $.ajax({
+	                        url: 'movieList/details',
+	                        type: 'get',
+	                        dataType: 'json',
+	                        data: { movie_id: code },
+	                        success: function(data) {
+	                            $('#poster_' + code).html('<img src="https://image.tmdb.org/t/p/w500' + data.poster_path + '" style="height:180px; width:auto;"/>');
+	                        },
+	                        error: function(xhr, status, error) {
+	                            console.error("AJAX Error: ", status, error);
+	                        }
+	                    });
+	                }
+				
+	                if (countMyReview === 0) {
+	                    $('.reviewList').html('<li>조회된 리뷰가 없습니다.<li/>');
+					} else {
+						 // 생성된 HTML을 특정 컨테이너에 추가
+		                $('.reviewList').html(text);
+					}
+               
                 
                 //리뷰 카운트
                 let count = `<a id="aa" href="#tab1">작성한 리뷰 : <span id="reviewCount">\${countMyReview}</span>건</a>`;
-				$('#written').html(count);  
-		             
+				$('#written').html(count); 
+				
+				 
 
                 // 페이징 처리
                 let pageText = '';
@@ -342,12 +348,14 @@
                 
                 let Noreview = '';
                 
-                for (let j in reviews_No) {
+                for (let n in reviews_No) {
                 	
-                    const item = reviews_No[j];
+                    const item = reviews_No[n];
+                    const code = item.movieCode;
+                    
                     Noreview += '<li class="list_style">'
 		            		+	'<a class="d-flex flex-column flex-lg-row  align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-bottom" href="#">'
-		                	+		'<svg class="bd-placeholder-img" width="120" height="150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"></rect></svg>'
+					        + '<div class="poster" id="poster_' + code + '" style="height: 180px; width: 120px; background-color: #f0f0f0;"></div>'
 		                	+		'<div class="col-lg-8">'
 		                	+		'<h6 class="mb-0">' + item.movieTitle + '</h6>'
 		                	+		'<br>'
@@ -360,14 +368,37 @@
 		            		+	'</div>'
 		            		+	'</a>'
 		     				+'</li>';
+		     				
+		     				
+
+                   // 비동기적으로 포스터 이미지를 가져와서 HTML에 삽입
+                   $.ajax({
+                       url: 'movieList/details',
+                       type: 'get',
+                       dataType: 'json',
+                       data: { movie_id: code },
+                       success: function(data) {
+                           $('#poster_' + code).html('<img src="https://image.tmdb.org/t/p/w500' + data.poster_path + '" style="height:180px; width:auto;"/>');
+                       },
+                       error: function(xhr, status, error) {
+                           console.error("AJAX Error: ", status, error);
+                       }
+                   });
                 }
-                $('.reviewList_tab2').html(Noreview);
+                
+                
+                
 
 
                 let countNo = `<a id="aa" href="#tab1">미작성 리뷰 : <span id="">\${countNoReview}</span>건</a>`;
                 $('#unwritten').html(countNo);  
                 
-                
+                if (countNoReview === 0) {
+                    $('.reviewList_tab2').html('<li>미작성한 리뷰가 없습니다.<li/>');
+				} else {
+					 // 생성된 HTML을 특정 컨테이너에 추가
+					$('.reviewList_tab2').html(Noreview);
+				}
                 
                  // 페이징 처리
                 let pageText_No = '';

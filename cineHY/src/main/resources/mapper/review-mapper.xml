@@ -216,35 +216,38 @@
 	<select id="selectNoReview" resultMap="reviewResultMap" parameterType="map">
 	    
 	    SELECT 
-    movieCode,
-    movieTitle,
-    paymentTime
-FROM
-    (SELECT 
-        m.MOVIE_CODE AS movieCode,
-        m.MOVIE_TITLE AS movieTitle,
-        t.PAYMENT_TIME AS paymentTime,
-        ROW_NUMBER() OVER (ORDER BY t.PAYMENT_TIME DESC) AS RNUM
-     FROM 
-        TB_TICKETLIST t
-     JOIN 
-        TB_MOVIE_SCHEDULE ms ON t.SCREENING_ID = ms.SCREENING_ID
-     JOIN 
-        TB_MOVIE m ON ms.MOVIE_CODE = m.MOVIE_CODE
-     WHERE 
-        t.USER_ID = #{userId}
-     AND 
-        m.MOVIE_CODE NOT IN (
-            SELECT 
-                r.MOVIE_CODE 
-            FROM 
-                TB_REVIEW r
-            WHERE 
-                r.USER_ID = #{userId}
-        )
-    ) 
-WHERE
-    RNUM BETWEEN #{startValue} AND #{endValue}
+			    movieCode,
+			    movieTitle,
+			    paymentTime
+		  FROM
+			    (
+			    SELECT 
+				        m.MOVIE_CODE AS movieCode,
+				        m.MOVIE_TITLE AS movieTitle,
+				        t.PAYMENT_TIME AS paymentTime,
+				        ROW_NUMBER() OVER (ORDER BY t.PAYMENT_TIME DESC) AS RNUM
+			     FROM 
+			        	TB_TICKET_INFO t
+			     JOIN 
+			        	TB_MOVIE_SCHEDULE ms ON t.SCREENING_ID = ms.SCREENING_ID
+			     JOIN 
+			        	TB_MOVIE m ON ms.MOVIE_CODE = m.MOVIE_CODE
+			     WHERE 
+			        	t.USER_ID = #{userId}
+			     AND 
+			        	m.MOVIE_CODE 
+			        	NOT IN 
+					        	(
+						            SELECT 
+						                   r.MOVIE_CODE 
+						              FROM 
+						                   TB_REVIEW r
+						             WHERE 
+						                   r.USER_ID = #{userId}
+					        	)
+			    ) 
+			WHERE
+			    RNUM BETWEEN #{startValue} AND #{endValue}
 
 	        
 	
@@ -260,7 +263,7 @@ WHERE
 		SELECT 
 		    COUNT(*)
 		FROM 
-		    TB_TICKETLIST t
+		    TB_TICKET_INFO t
 		JOIN 
 		    TB_MOVIE_SCHEDULE ms ON t.SCREENING_ID = ms.SCREENING_ID
 		JOIN 
