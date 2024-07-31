@@ -208,46 +208,53 @@ $(document).ready(() => {
 
         if (movie && theater && startdate && enddate) {
             $.ajax({
-            	url : 'movieSchedule/schedule/' + movie + '/' + theater + '/' + startdate + '/' + enddate,
+                url: 'movieSchedule/schedule/' + movie + '/' + theater + '/' + startdate + '/' + enddate,
                 method: 'GET',
                 dataType: 'json',
                 success: (data) => {
                     const scheduleResult = $('#timeSelect');
-
                     scheduleResult.html('');
                     if (data.data.length > 0) {
                         for (const s of data.data) {
-                            scheduleResult.append(`<option value="\${s.startTime}" data-screen-code="\${s.screenCode}">\${s.startTime} \${s.screenCode}관 <div id="seat"></div></option>` );
-                            screeningId = s.screeningId; // 전역 변수 업데이트
+                            const optionHtml = `
+                                <option value="\${s.startTime}" data-screen-code="\${s.screenCode}" data-screening-id="\${s.screeningId}">
+                                    \${s.startTime} \${s.screenCode}관 - 좌석 정보를 불러오는 중...
+                                </option>
+                            `;
+                            scheduleResult.append(optionHtml);
                         }
+
                         const ticketDate = $('#dateSelect').val();
-                    	const totalSeats = 120;
-                        
-                        $.ajax({
-                            url: `reservedSeats`,
-                            method: 'GET',
-                            dataType: 'json',
-                            data: { 
-                            	screeningId : screeningId,
-                            	ticketDate : ticketDate
-                            },
-                            success: (reservedSeats) => {
-                                const reservedSeatCount = reservedSeats.length;
-                                const remainingSeats = totalSeats - reservedSeatCount;
-                                
-                                $('#seat').append(`\${remainingSeats}석 / 120석 </option>`);
-                                
-                            },
-                            error: (xhr, status, error) => {
-                                console.error('Error fetching reserved seats:', status, error);
-                            }
+                        const totalSeats = 120;
+
+                        data.data.forEach(s => {
+                            const screeningId = s.screeningId;
+
+                            $.ajax({
+                                url: 'reservedSeats',
+                                method: 'GET',
+                                dataType: 'json',
+                                data: {
+                                    screeningId: screeningId,
+                                    ticketDate: ticketDate
+                                },
+                                success: (reservedSeats) => {
+                                    const reservedSeatCount = reservedSeats.length;
+                                    const remainingSeats = totalSeats - reservedSeatCount;
+                                    scheduleResult.find(`option[data-screening-id="\${screeningId}"]`).text(`\${s.startTime} \${s.screenCode}관 - \${remainingSeats}석 / 120석`);
+                                },
+                                error: (xhr, status, error) => {
+                                    console.error('Error fetching reserved seats:', status, error);
+                                }
+                            });
                         });
+
                     } else {
-                        scheduleResult.html('<option>스케줄이 없습니다.</option>');
+                        scheduleResult.html('<option disabled>스케줄이 없습니다.</option>');
                     }
                     $('#timeSelect option:first').prop('selected', true);
                     displaySelectedMovie();
-                    
+
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
                     console.error('Error fetching schedule data:', textStatus, errorThrown);
@@ -288,7 +295,9 @@ $(document).ready(() => {
         const scheduleTable = $(`${activeTabId} .schedule-table tbody`);
         const selectedTabDate = $('.nav-tabs .nav-link.active').attr('data-date');
         const theaterCode = $('input[name="theater"]:checked').val();
+        
         scheduleTable.empty();
+        
         if (data && data.data.length > 0) {
             for (const schedule of data.data) {
                 const row = `
@@ -335,7 +344,7 @@ $('#seatBtn').on('click', () => {
 
     console.log('screeningId:', screeningId);
 
-    if (uid && movieCode && theaterName && startDate && startTime) {
+    if (uid && movieCode && theaterName && startDate && startTime && !(startTime === "스케줄이 없습니다.")) {
         const res = {
             movieCode,
             theaterCode: theaterName,
