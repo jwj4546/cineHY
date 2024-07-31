@@ -23,8 +23,6 @@ public class OrderVO {
 	private String changeImage;
 	private String payMethod;
 	private int amount;
-	private int movieCode;
-	private String movieTitle;
 	private int price;
 	private String phoneNo;
 	private String orderDay;
