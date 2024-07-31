@@ -7,10 +7,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
    <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <!-- jQuery CDN - Slim version (=without AJAX) -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <!-- Popper.JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <!-- Bootstrap JS -->
@@ -298,6 +297,21 @@ ul.CTAs a {
     color: #333; 
 }
 
+ .ticket-item {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+.ticket-item img {
+    width: 200px;
+    height: 300px;
+    margin-right: 20px;
+}
+
+p {
+	font-size : 16px;
+}
 
 
 
@@ -441,10 +455,28 @@ ul.CTAs a {
               		</div>
                 </div>
             </nav>
-            
-           <div id = "innerCont">
+            	<div class="container">
+			    <h1>예매 내역</h1><br><br>
+			    <div id="ticketInfo">
+			        <c:forEach var="ticket" items="${ ticket }">
+			            <div class="ticket-item"  >
+			                <div id="poster_${ ticket.movieCode }">
+			                	<img src="" alt="" >
+			                </div>
+			                <div class="ticket-content">
+			                    <h3>${ ticket.movieTitle}</h3><br>
+			                    <p>영화관 : ${ ticket.theaterName}</p>
+			                    <p>관람 일자 : ${ ticket.ticketDate}</p>
+			                    <p>좌석 : ${ ticket.seatCode }</p>
+			                    <p>결제 금액 : ${ ticket.price }원</p>
+			                    <p>관람 시간 : ${ ticket.startTime }</p>
+			                    <input type="hidden" class="movieCode" value=${ ticket.movieCode } />
+			                </div>
+			            </div>
+			        </c:forEach>
+			    </div>
+			</div>
            
-           <!-- 여기에 컨텐트를 넣어주세요!!!
            
            
            
@@ -460,8 +492,6 @@ ul.CTAs a {
            
            
            
-           
-            -->
            </div>
             
 
@@ -469,13 +499,34 @@ ul.CTAs a {
     	</div>
 
    
-    <script type="text/javascript">
+    <script>
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
                 $(this).toggleClass('active');
             });
+            
+
+            $(".movieCode").each(function() {
+            	const movieCode = $(this).val();
+           
+            
+	            //포스터 img 삽입
+	            $.ajax({
+	                url: 'movieList/details',
+	                type: 'get',
+	                dataType: 'json',
+	                data: { movie_id: movieCode },
+	                success: (data) => {
+	                	$(`#poster_\${movieCode}`).html(`<img src="https://image.tmdb.org/t/p/w500\${data.poster_path}" />`);
+	                },
+	                error: (xhr, status, error) => {
+	                    console.error("AJAX Error: ", status, error);
+	                }
+	            });
+	        });
         });
+            
     </script>
      
 </body>

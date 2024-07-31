@@ -16,10 +16,19 @@
 	<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 	
 	<style>
-	.imageArea {"text-align:center; width:200px;"}
+	.imageArea {
+		text-align:center; 
+		width:200px;
+	}
 	
-	.productImage {"height:100px; width:auto;"}
+	.productImage {
+		height:100px; 
+		width:auto;
+	}
 	
+	td, tr {
+		text-align : center;
+	}
 	
 	</style>
 </head>

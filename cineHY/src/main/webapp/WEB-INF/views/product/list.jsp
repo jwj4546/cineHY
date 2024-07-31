@@ -62,8 +62,9 @@
               	<!-- userId별 장바구니 품목 개수 설정  -->
 	            	<input type="hidden" name="userId" value="${ sessionScope.loginUser.userId }" />
 					<!-- 상품 등록 페이지로 이동 -->	            	
-	            	<a href="productForm"><button type="button" class="btn btn-warning">상품 등록</button></a>
-	            	
+	            	<c:if test="${ sessionScope.loginUser.userId eq 'admin' }">
+	            		<a href="productForm"><button type="button" class="btn btn-warning">상품 등록</button></a>
+	            	</c:if>
 	            	<!-- 장바구니 개수 출력 및 장바구니로 이동 -->
 	            	<c:set var="count" value="${ count }" />
 	            	<c:choose>

@@ -30,4 +30,5 @@ public class TicketInfoVO {
 	private String theaterCode;
 	private String ticketDate;
 	private String paymentTime;
+	private String theaterName;
 }

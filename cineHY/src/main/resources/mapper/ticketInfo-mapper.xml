@@ -44,4 +44,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					)
 	</insert>
 	
+	<select id="ticketFindById" resultType="ticketInfo">
+		SELECT 
+					TI.MOVIE_TITLE movieTitle,
+					TH.THEATER_NAME theaterName,
+					TI.TICKET_DATE ticketDate,
+					TI.SEAT_CODE seatCode,
+					TI.PRICE price,
+					TI.START_TIME startTime,
+					TI.MOVIE_CODE movieCode
+		  FROM
+		  			TB_TICKET_INFO TI
+		   JOIN
+		   			TB_THEATER TH
+		   	 ON
+		   	 		TI.THEATER_CODE = TH.THEATER_CODE
+ 		WHERE
+	 				TI.USER_ID = #{userId}
+					
+	</select>
+	
 </mapper>
