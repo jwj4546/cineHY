@@ -78,7 +78,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 
 	@Override
-	public Double getStarAvg(int movieCode) {
+	public double getStarAvg(int movieCode) {
 		return reviewRepository.getStarAvg(sqlSession, movieCode);
 	}
 

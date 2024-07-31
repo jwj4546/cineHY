@@ -221,15 +221,15 @@ public class ReviewController {
 	    
 	    @ResponseBody
 		@GetMapping(value="starAvg", produces="application/json; charset=UTF-8")
-		public Double selectStarAvg(int movieCode) {
+		public double selectStarAvg(int movieCode) {
 			
 			log.info("별점의 movieCode : {}", movieCode);
-			Double  StarAvg = reviewService.getStarAvg(movieCode);
+			double StarAvg = reviewService.getStarAvg(movieCode);
 			log.info("StarAvgList : {}", StarAvg);
 		
-			if (StarAvg == null) {
-				StarAvg = 0.0; // null 방지
-	        }
+//			if (StarAvg == null) {
+//				StarAvg = 0.0; // null 방지
+//	        }
 	        return StarAvg;
 			
 			//return reviewService.getStarAvg(movieCode);

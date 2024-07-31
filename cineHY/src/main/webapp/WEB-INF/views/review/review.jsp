@@ -289,10 +289,10 @@
 			
 			<div class="center1">
 				<br>
-				<div class="info" >
-					<h2 style="float:left" id="avgInfo"></h2>
+				<div class="info"  >
+					<p style="font-size: 30px; float:left; margin-right:15px; margin-bottom:7px" id="avgInfo"></p>
 					<h2 style="float:left">|</h2>
-					<h2 style="float:left" id="avgStar"></h2>
+					<h2 style="float:left; margin-left:15px; color:#bbbbbb" id="avgStar"></h2>
 				</div>
 			</div>
 			<div class="modal-btn-box">
@@ -442,7 +442,7 @@
 		             let reviews = result.reviews;
 		             let pageInfo = result.pageInfo;
 		             let resultStr = '';
-		             starAvg(movieId);
+		             starAvg(movieId);  //평균별점
 		             
 		             for (let i = 0; i < reviews.length; i++) {
 		                 const review = reviews[i];
@@ -501,14 +501,14 @@
 		            
 		             $('.pagination').html(pageText);
 		             $('#rcount').html(reviews.length);
-		             $('#reviewList tbody').html(resultStr);
-		             /*
+		             
 		             if (reviews.length === 0) {
-		                    $('#reviewList').html('<p>작성된 리뷰가 없습니다.<p/>');
+		                    $('#reviewList tbody').html('<p>작성된 리뷰가 없습니다.<p/>');
 						} else {
-							
+				             $('#reviewList tbody').html(resultStr);
+
 						}
-		             */
+		             
 		             
 		         },
 		         error: err => {
@@ -613,7 +613,7 @@
             error: function(err) {
                 // 요청 실패 시 에러 처리
                 console.error('Error fetching reviews:', err);
-                alert('관람하지않은 영화입니다. 구매내역을 확인해주세요');
+                alert('관람하지않은 영화입니다. 예매내역을 확인해주세요');
             }
         });
     } else {
@@ -706,42 +706,54 @@
         
         function generateStars(starCount) {
             let stars = '';
-            for (let i = 0; i < Math.floor(starCount); i++) {
-                stars += '⭐';
+
+            if (starCount==0 || starCount === null || starCount === undefined) {
+            	stars+= '☆☆☆☆☆';
+            }else {
+            	for (let i = 0; i < Math.floor(starCount); i++) {
+                    stars += '⭐';
+                }
+
+                if (starCount % 1 !== 0) {  // 소수점이 있을 경우 반개 별 추가
+                    stars += '✨';
+                }
             }
-            if (starCount % 1 !== 0) {  // 소수점이 있을 경우 반개 별 추가
-                stars += '✨';
-            }
+
+            
+
+            console.log("stars{}", stars);
             return stars;
         }
+
         
         
-        //평균 별점
         function starAvg(movieId) {
-    		
-       	 $.ajax({
-       	        url: 'starAvg',
-       	        data: {
-       	        	movieCode: movieId
-       	        },
-       	        type: 'get',
-       	        success: function(response) {
-       	        	//console.log("response{}", response);
-                    $('#avgInfo').html(response);  // avgInfo에 응답값을 넣음
+            $.ajax({
+                url: 'starAvg',
+                data: {
+                    movieCode: movieId
+                },
+                type: 'get',
+                success: function(response) {
+                    console.log("response", response); // 응답 값을 확인
 
-                    let starCount = parseFloat(response); // 필요시 적절히 변환
-                    let stars = generateStars(starCount); // 별을 생성하는 함수 호출
+                    let starCount = parseFloat(response).toFixed(1); // 소수점 이하 한 자리로 포맷팅
+                    console.log("starCount", starCount); // 변환 후 값을 확인
 
-                    //console.log("stars{}", stars);
+                    let stars = generateStars(parseFloat(starCount)); // 별을 생성하는 함수 호출
+                    console.log("stars", stars); // 생성된 별들을 확인
+
+                    $('#avgInfo').html(starCount); // avgInfo에 포맷팅된 응답값을 넣음
                     let starContainer = document.getElementById('avgStar'); // 별을 삽입할 <h2> 요소를 찾음
                     starContainer.innerHTML = stars; // 별을 <h2> 요소에 삽입
-                  
-       	        },
-       	        error: function(err) {
-       	            console.error('Error review:', err);
-       	        }
-       	    });
-   		}
+                },
+                error: function(err) {
+                    console.error('Error review:', err);
+                }
+            });
+        }
+
+
        
         
     </script>

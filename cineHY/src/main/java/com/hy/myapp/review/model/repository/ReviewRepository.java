@@ -44,9 +44,13 @@ public class ReviewRepository {
 		return sqlSession.selectList("reviewMapper.selectNoReview", map);
 
 	}
-	public Double getStarAvg(SqlSessionTemplate sqlSession, int movieCode) {
-		return sqlSession.selectOne("reviewMapper.starAvg", movieCode);
-	}
+	public double getStarAvg(SqlSessionTemplate sqlSession, int movieCode) {
+        if (sqlSession == null) {
+            throw new IllegalArgumentException("sqlSession is null");
+        }
+        Double starAvg = sqlSession.selectOne("reviewMapper.starAvg", movieCode);
+        return (starAvg != null) ? starAvg : 0.0; // null 방지
+    }
 
 	public int reviewCount(SqlSessionTemplate sqlSession) {
 		return sqlSession.selectOne("reviewMapper.reviewCount");

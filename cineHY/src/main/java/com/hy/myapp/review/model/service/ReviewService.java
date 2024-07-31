@@ -51,7 +51,7 @@ public interface ReviewService {
 	List<Review> selectNoReview(Map<String, Object> map);
 
 	//평균별점
-	Double getStarAvg(int movieCode);
+	double getStarAvg(int movieCode);
 	
 	int reviewCount();
 	
