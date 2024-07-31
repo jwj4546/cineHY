@@ -421,7 +421,7 @@ p {
                     <a href="myInfoUpdate" >나의 정보수정</a>                 
                 </li>
                 <li class="highlighted-item">
-                    <a href="myTicketList">나의 영화 예매내역 ></a>
+                    <a href="ticketFindById">나의 영화 예매내역 ></a>
                 <li>
                     <a href="myProductList">나의 구매내역</a>
                 </li>
@@ -434,7 +434,7 @@ p {
                 <li>
                     <a href="myNearby">내 주변 영화관 찾기</a>
                 </li>
-                <li>
+                <li class="highlighted-item">
                     <a href="resign">회원탈퇴</a>
                 </li>
             </ul>

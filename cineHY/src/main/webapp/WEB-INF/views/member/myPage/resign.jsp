@@ -443,7 +443,7 @@ ul.CTAs a {
                     <a href="myInfoUpdate" >나의 정보수정</a>                 
                 </li>
                 <li>
-                    <a href="myTicketList">나의 영화 예매내역</a>
+                    <a href="ticketFindById">나의 영화 예매내역</a>
                 <li>
                     <a href="myProductList">나의 구매내역</a>
                 </li>

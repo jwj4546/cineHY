@@ -348,7 +348,9 @@ ul.CTAs a {
             </div>
 
             <ul class="list-unstyled components">
-                <li><p>마이페이지</p></li>
+                <li class="highlighted-item">
+                <p>마이페이지</p>
+                </li>
                 <li >
                     <a href="myInfoUpdate" >나의 정보수정</a>                 
                 </li>
