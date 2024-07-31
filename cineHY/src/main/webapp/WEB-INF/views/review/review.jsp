@@ -502,12 +502,14 @@
 		            
 		             $('.pagination').html(pageText);
 		             $('#rcount').html(reviews.length);
-		             
+		             $('#reviewList tbody').html(resultStr);
+		             /*
 		             if (reviews.length === 0) {
 		                    $('#reviewList').html('<p>작성된 리뷰가 없습니다.<p/>');
 						} else {
-							$('#reviewList tbody').html(resultStr);
+							
 						}
+		             */
 		             
 		         },
 		         error: err => {
@@ -582,31 +584,44 @@
         });
         
         //리뷰 추가
-        function saveReview(){
-        	if($('#textReview').val().trim() != ''){
-        		$.ajax({
-            		url : 'insertReview',
-            		data : {
-            			reviewContent : $('#textReview').val(),
-            			star: $('#star').val(),
-            			userId : '${ sessionScope.loginUser.userId }',
-            			movieCode : movieId
-            		},
-            		type : 'post',
-            		
-            		success : function(result)  {
-            			//console.log(result);
-            			
-            			if(result == 'success'){
-            				selectReview(movieId);
-            				$('#textReview').val('');
-            			};
-            		}
-            	});
-        	}else {
-        		alertify.alert('내용 쓰셈');
-        	}
-        }
+        
+       function saveReview() {
+    // 리뷰 내용이 비어있지 않은지 확인
+    if ($('#textReview').val().trim() != '') {
+        $.ajax({
+            url: 'insertReview',
+            data: {
+                reviewContent: $('#textReview').val(),
+                star: $('#star').val(),
+                userId: '${sessionScope.loginUser.userId}',
+                movieCode: movieId
+            },
+            type: 'post',
+            success: function(result) {
+                console.log(result);
+                
+                if (result === 'success') {
+                    // 리뷰가 성공적으로 추가된 경우
+                    selectReview(movieId); // 리뷰 목록 갱신
+                    $('#textReview').val(''); // 입력 필드 초기화
+                    console.log("추가됨");
+                } else {
+                    // 결과가 'success'가 아닐 경우 처리
+                    alert('리뷰 추가에 실패했습니다.');
+                }
+            },
+            error: function(err) {
+                // 요청 실패 시 에러 처리
+                console.error('Error fetching reviews:', err);
+                alert('관람하지않은 영화입니다. 구매내역을 확인해주세요');
+            }
+        });
+    } else {
+        // 리뷰 내용이 비어있을 경우 경고
+        alertify.alert('내용을 입력하세요.');
+    }
+}
+
         
     	//리뷰 추가하는 모달 
 	    $("#insert_confirm").click(() => {
