@@ -31,8 +31,9 @@ public class SeatController {
 	}
 	
 	@GetMapping("reservedSeats")
-	public List<String> reservedSeats(@RequestParam int screeningId) {
-		log.info("screeningId" + screeningId);
-		return seatService.reservedSeats(screeningId);
+	public List<String> reservedSeats(@RequestParam int screeningId,
+													@RequestParam String ticketDate) {
+		
+		return seatService.reservedSeats(screeningId, ticketDate);
 	}
 }

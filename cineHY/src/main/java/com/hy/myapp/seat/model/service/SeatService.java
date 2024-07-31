@@ -8,6 +8,6 @@ public interface SeatService {
 
 	int saveSeat(SeatVO seat);
 
-	List<String> reservedSeats(int screeningId);
+	List<String> reservedSeats(int screeningId, String ticketDate);
 
 }

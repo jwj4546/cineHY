@@ -16,5 +16,6 @@ public class SeatVO {
 	private int screeningId;
 	private String seatCode;
 	private String userId;
+	private String ticketDate;
 	
 }

@@ -28,6 +28,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		  			TB_SEAT
 		WHERE
 					SCREENING_ID = #{screeningId}
+			AND
+					TICKET_DATE = #{ticketDate}
 	</select>
 				
 </mapper>
