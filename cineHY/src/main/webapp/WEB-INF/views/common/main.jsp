@@ -128,11 +128,10 @@
 		    <div class="h-100 p-5 bg-light border rounded-3">
 				<h3>공지사항</h3>
 				<a href="notiList" class="btn btn-outline-secondary" type="button" >공지사항 보기</a>
-				<a href="getQnauser" class="btn btn-outline-secondary" type="button" >1:1 문의</a>
+				<a href="chatAdmin" class="btn btn-outline-secondary" type="button" >1:1 문의</a>
 		    </div>
 		</div>
 	</div>
-      <a href="group-chat">오픈톡</a>
       
       </div>
       <div id="page3">

@@ -95,13 +95,13 @@
     <script>
     	window.onload = () => {
     		const lists = JSON.parse(window.sessionStorage.getItem('list'));
-    		
+
     		let text = '';
     		const formatter = new Intl.NumberFormat('ko-KR');
     		
 			lists.forEach(list => {    			
     			
-    			text = `
+    			text += `
     				<tr class="cartItem">
 		                <td class="imageArea"><img src="\${list.changeImage}" class="productImage" /></td>
 		                <td>
@@ -187,7 +187,7 @@
 	                pg: "html5_inicis",          
 	                pay_method: "card",           
 	                merchant_uid: merchant_uid,  
-	                name: cartItems[0].productName != null ? cartItems[0].productName : cartItems[0].productName +" 외 " + (cartItems.length-1),                 
+	                name: (cartItems[1] && cartItems[1].productName !== null) ? `\${cartItems[0].productName} 외 \${cartItems.length-1}` : cartItems[0].productName,                 
 	                amount: totalPrice,           
 	                buyer_name: userName,         
 	                buyer_tel: phoneNo,             

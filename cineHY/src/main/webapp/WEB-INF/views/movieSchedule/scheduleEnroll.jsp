@@ -15,7 +15,7 @@
 <style>
     #page1 { height: 80px;}
     #page3 { 
-    	height: 800px;
+		padding-bottom : 150px;
     }
    	.mt-4 { margin-top: 1.5rem; }
     .mt-5 { margin-top: 3rem; }
@@ -278,6 +278,26 @@
 
     <script>
 	    $(document).ready(() => {
+	    	
+	    	$('#startTime').on('change', function() {
+	            const startTime = $(this).val();
+	            const endTime = $('#endTime').val();
+	            $('#endTime').attr('min', startTime); // 종료 시간의 최소 시간을 시작 시간으로 설정
+	            if(endTime && startTime > endTime) {
+	            	alert('시작시간이 종료시간보다 늦습니다. 다시 선택해주세요.');
+	            	$(this).val(''); // 종료 시간을 초기화
+	            }
+	        });
+
+	        $('#endTime').on('change', function() {
+	            const endTime = $(this).val();
+	            const startTime = $('#startTime').val();
+	            if (startTime && endTime <= startTime) {
+	                alert('종료 시간이 시작 시간보다 이르거나 같습니다. 다시 선택해주세요.');
+	                $(this).val(''); // 종료 시간을 초기화
+	            }
+	        });
+	    	
 	        const findAllMovie = () => {
 	            $.ajax({
 	                url: 'movieList/movieEnrollList',
@@ -287,7 +307,7 @@
 	                    const movieTitleList = data.data;
 	                    let listHtml = '<option value="">영화를 선택하세요</option>';
 	                    movieTitleList.forEach(movie => {
-	                        listHtml += `<option value="\${movie.movieCode}">\${movie.movieTitle}</option>`;
+	                        listHtml += `<option value="\${movie.movieCode}" data-opened-date="\${movie.openedDate}">\${movie.movieTitle}</option>`;
 	                    });
 	                    $('#movieSelect').html(listHtml);
 	                },
@@ -319,6 +339,13 @@
 	        };
 
 	        getTheater();
+	        
+	        $('#movieSelect').on('change', function() {
+                const openedDate = $(this).find('option:selected').data('opened-date');
+                if (openedDate) {
+                    $('#startdateSelect').val(openedDate);
+                }
+            });
 	    });
     	
 	    //영화-극장-날짜 선조회 함수 
@@ -423,8 +450,6 @@
                     alert('상영 스케줄이 등록되었습니다.');
 
                     // 등록 후 폼 초기화
-                    document.getElementById('scheduleForm').reset();
-                    document.getElementById('registerForm').reset();
                     document.getElementById('newScheduleInfo').innerHTML = '';
                     document.getElementById('scheduleResult').innerHTML = '';
                 }

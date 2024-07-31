@@ -22,7 +22,7 @@
 		height: 80px;
 	}
 	#page2 { 
-		height: 800px;
+		margin-bottom: 150px;
 	}
 	
 	.nav-tabs .nav-link {
