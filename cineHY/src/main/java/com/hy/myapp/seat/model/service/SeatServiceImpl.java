@@ -21,8 +21,8 @@ public class SeatServiceImpl implements SeatService {
 	}
 
 	@Override
-	public List<String> reservedSeats(int screeningId) {
-		return seatRepository.reservedSeats(screeningId);
+	public List<String> reservedSeats(int screeningId, String ticketDate) {
+		return seatRepository.reservedSeats(screeningId, ticketDate);
 	}
 
 }

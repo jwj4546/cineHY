@@ -169,13 +169,17 @@
         		
         		
         		const screeningId = resInfo.screeningId;
+        		const ticketDate = resInfo.ticketDate;
         		const totalSeats = 120;
         		
         		 $.ajax({
         		        url: `reservedSeats`,
         		        method: 'GET',
         		        dataType: 'json',
-        		        data: { screeningId },
+        		        data: { 
+        		        	screeningId : screeningId,
+        		        	ticketDate : ticketDate
+        		        },
         		        success: (reservedSeats) => {
         		            const reservedSeatCount = reservedSeats.length;
         		            const remainingSeats = totalSeats - reservedSeatCount;
