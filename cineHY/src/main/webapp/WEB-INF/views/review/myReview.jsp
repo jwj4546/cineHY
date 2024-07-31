@@ -116,8 +116,13 @@
     #tab1,#tab2{float: left;}
     #user_div{float: left;}
 
-    .list_style{
+    .list_style, .nav-tabs{
     list-style:none;}
+    
+    li{
+    list-style:none;
+    padding-left:0px;
+    }
       
     </style>
 
@@ -141,7 +146,7 @@
                         <br>
                         <p>${sessionScope.loginUser.userName} 님</p>
                         <br>
-                        <ul class="nav nav-tabs">
+                        <ul id="ulStyle" class="nav nav-tabs" style="list-style:none;">
                             <li id="written" class="tab__item active">
                                 
                             </li>
@@ -273,8 +278,7 @@
 	                }
 				
 	                if (countMyReview === 0) {
-	                    $('.reviewList').html('<li class="list_style" style="width: 700px;"><p>조회된 리뷰가 없습니다.</p><li/>');
-						console.log("if문 실행");
+	                    $('.reviewList').html('<li>조회된 리뷰가 없습니다.<li/>');
 					} else {
 						 // 생성된 HTML을 특정 컨테이너에 추가
 		                $('.reviewList').html(text);
@@ -382,19 +386,19 @@
                    });
                 }
                 
-                if (Noreview === 0) {
-                    $('.reviewList_tab2').html('<li class="list_style" style="width: 700px;"><p>미작성한 리뷰가 없습니다.</p><li/>');
-				} else {
-					 // 생성된 HTML을 특정 컨테이너에 추가
-					$('.reviewList_tab2').html(Noreview);
-				}
+                
                 
 
 
                 let countNo = `<a id="aa" href="#tab1">미작성 리뷰 : <span id="">\${countNoReview}</span>건</a>`;
                 $('#unwritten').html(countNo);  
                 
-                
+                if (countNoReview === 0) {
+                    $('.reviewList_tab2').html('<li>미작성한 리뷰가 없습니다.<li/>');
+				} else {
+					 // 생성된 HTML을 특정 컨테이너에 추가
+					$('.reviewList_tab2').html(Noreview);
+				}
                 
                  // 페이징 처리
                 let pageText_No = '';
