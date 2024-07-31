@@ -217,14 +217,37 @@ $(document).ready(() => {
                     scheduleResult.html('');
                     if (data.data.length > 0) {
                         for (const s of data.data) {
-                            scheduleResult.append(`<option value="\${s.startTime}" data-screen-code="\${s.screenCode}">\${s.startTime} \${s.screenCode}관</option>`);
+                            scheduleResult.append(`<option value="\${s.startTime}" data-screen-code="\${s.screenCode}">\${s.startTime} \${s.screenCode}관 <div id="seat"></div></option>` );
                             screeningId = s.screeningId; // 전역 변수 업데이트
                         }
+                        const ticketDate = $('#dateSelect').val();
+                    	const totalSeats = 120;
+                        
+                        $.ajax({
+                            url: `reservedSeats`,
+                            method: 'GET',
+                            dataType: 'json',
+                            data: { 
+                            	screeningId : screeningId,
+                            	ticketDate : ticketDate
+                            },
+                            success: (reservedSeats) => {
+                                const reservedSeatCount = reservedSeats.length;
+                                const remainingSeats = totalSeats - reservedSeatCount;
+                                
+                                $('#seat').append(`\${remainingSeats}석 / 120석 </option>`);
+                                
+                            },
+                            error: (xhr, status, error) => {
+                                console.error('Error fetching reserved seats:', status, error);
+                            }
+                        });
                     } else {
                         scheduleResult.html('<option>스케줄이 없습니다.</option>');
                     }
                     $('#timeSelect option:first').prop('selected', true);
                     displaySelectedMovie();
+                    
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
                     console.error('Error fetching schedule data:', textStatus, errorThrown);
@@ -293,7 +316,12 @@ $(document).ready(() => {
     $('#movieSelect, #theaterSelect, #dateSelect, #timeSelect').change(() => {
         displaySelectedMovie();
     });
+    
+    
+    
 });
+
+
 
 // 좌석선택 버튼 클릭 시 선택한 데이터를 sessionStorage에 저장 후 좌석 페이지로 이동
 $('#seatBtn').on('click', () => {
@@ -328,6 +356,12 @@ $('#seatBtn').on('click', () => {
         alert('모든 항목을 선택해줘잉');
     }
 });
+
+
+
+ 
+
+
 </script>
 
 </body>
