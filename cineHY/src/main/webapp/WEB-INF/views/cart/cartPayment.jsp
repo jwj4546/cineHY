@@ -83,12 +83,12 @@
         <input type="hidden" id="userId" value="${ sessionScope.loginUser.userId }" />
         <input type="hidden" id="userName" value="${ sessionScope.loginUser.userName }" />
         <input type="hidden" id="phoneNo" value="${ sessionScope.loginUser.phoneNo }" />
-    </div>
+    </div><br><br>
 
         <div class="text-center mt-4">
             <button type="button" class="btn btn-primary" id="orderBtn">구매하기</button>
         </div>
-    </div><br><br>
+    </div>
 
     
     
@@ -273,7 +273,6 @@
     });
 });
     </script>
-
 <jsp:include page="../common/footer.jsp"></jsp:include>
 
 
