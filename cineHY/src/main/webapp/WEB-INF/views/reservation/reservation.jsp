@@ -278,9 +278,10 @@ $(document).ready(() => {
                 success: (reservedSeats) => {
                     const reservedSeatCount = reservedSeats.length;
                     const remainingSeats = totalSeats - reservedSeatCount;
-
+					
                     $('#seat').empty();
                     $('#seat').append(`잔여좌석 : \${remainingSeats}석 / 120석`);
+	                    
                 },
                 error: (xhr, status, error) => {
                     console.error('Error fetching reserved seats:', status, error);
@@ -288,6 +289,8 @@ $(document).ready(() => {
             });
         } else {
             console.error('Invalid screeningId:', screeningId);
+            $('#seat').empty();
+            $('#seat').append(`잔여좌석 :   / 120석`);
         }
     }
 
