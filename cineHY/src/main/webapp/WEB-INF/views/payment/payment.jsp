@@ -169,9 +169,10 @@
                                 // Save each seat info
                                 info.seat.forEach(seat => {
                                     const seatInfo = {
-                                        "screeningId": info.screeningId,
+                                        "screeningId" : info.screeningId,
                                         "seatCode": seat, // Use seat variable here
-                                        "userId": userId
+                                        "userId" : userId,
+                                        "ticketDate" : info.ticketDate
                                     };
 
                                     $.ajax({
