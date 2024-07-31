@@ -296,9 +296,8 @@
 				</div>
 			</div>
 			<div class="modal-btn-box">
-				<c:if test="${ empty sessionScope.ticketNo}">
 					<button class="btn" type="button" id="insertmodal-open" style="float: right;">리뷰쓰기</button>
-				</c:if>
+				
 
 			</div>
 			<div class="popup-wrap" id="insert_popup">
@@ -559,6 +558,7 @@
         function enableScroll() {
             document.body.style.overflow = 'visible';
         }
+        
         
         //class로 지정된 star을 누르면 id로 지정된 star값의 value값을 변수에 할당
     	document.addEventListener('DOMContentLoaded', function () {
