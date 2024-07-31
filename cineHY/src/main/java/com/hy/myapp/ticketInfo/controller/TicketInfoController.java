@@ -13,12 +13,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TicketInfoController {
 
-	//private final TicketInfoService ticketInfoService;
+	private final TicketInfoService ticketInfoService;
 	
 	@PostMapping("saveTicket")
 	public String saveTicket(@RequestBody TicketInfoVO ticketInfo) {
 		
-		//ticketInfoService.saveTicket(ticketInfo);
+		ticketInfoService.saveTicket(ticketInfo);
 		
 		return ticketInfo.getMerchantUid(); 
 	}
