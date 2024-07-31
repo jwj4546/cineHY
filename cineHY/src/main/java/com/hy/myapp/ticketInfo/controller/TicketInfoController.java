@@ -28,7 +28,7 @@ public class TicketInfoController {
 	@PostMapping("saveTicket")
 	public String saveTicket(@RequestBody TicketInfoVO ticketInfo) {
 		
-		//ticketInfoService.saveTicket(ticketInfo);
+		ticketInfoService.saveTicket(ticketInfo);
 		
 		return ticketInfo.getMerchantUid(); 
 	}
