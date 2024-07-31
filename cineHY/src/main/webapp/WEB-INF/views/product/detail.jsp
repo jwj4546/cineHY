@@ -59,8 +59,10 @@
 			  	<input type="hidden" id="productId" name="productId" value="${ product.productId }" />
 			  	<input type="hidden" id="changeImage" name="filePath" value="${ product.changeImage }">
 		  	</form>
-		  	<button type="submit" class="btn btn-primary" onclick="postSubmit()">수정하기</button>
-		  	<button type="button" data-toggle="modal" class="btn btn-danger" data-target="#deleteForm">삭제하기</button>
+		  	<c:if test="${ sessionScope.loginUser.userId eq 'admin' }">
+			  	<button type="submit" class="btn btn-primary" onclick="postSubmit()">수정하기</button>
+			  	<button type="button" data-toggle="modal" class="btn btn-danger" data-target="#deleteForm">삭제하기</button>
+		  	</c:if>
 			  	<!-- 장바구니 개수 출력 및 장바구니로 이동 -->
 	            	<c:set var="count" value="${ count }" />
 	            	<c:choose>
@@ -138,7 +140,6 @@
         
         <input type="hidden" id="userId" value="${ sessionScope.loginUser.userId }"/>
        	<button class="btn btn-secondary" id="cartInsert">장바구니 추가</button>
-       	<button class="btn btn-info">구매하기</button>
       </div>
     </div>
   </div>

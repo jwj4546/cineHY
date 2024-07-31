@@ -16,10 +16,19 @@
 	<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 	
 	<style>
-	.imageArea {"text-align:center; width:200px;"}
+	.imageArea {
+		text-align:center; 
+		width:200px;
+	}
 	
-	.productImage {"height:100px; width:auto;"}
+	.productImage {
+		height:100px; 
+		width:auto;
+	}
 	
+	td, tr {
+		text-align : center;
+	}
 	
 	</style>
 </head>
@@ -74,12 +83,12 @@
         <input type="hidden" id="userId" value="${ sessionScope.loginUser.userId }" />
         <input type="hidden" id="userName" value="${ sessionScope.loginUser.userName }" />
         <input type="hidden" id="phoneNo" value="${ sessionScope.loginUser.phoneNo }" />
-    </div>
+    </div><br><br>
 
         <div class="text-center mt-4">
             <button type="button" class="btn btn-primary" id="orderBtn">구매하기</button>
         </div>
-    </div><br><br>
+    </div>
 
     
     
@@ -264,7 +273,6 @@
     });
 });
     </script>
-
 <jsp:include page="../common/footer.jsp"></jsp:include>
 
 

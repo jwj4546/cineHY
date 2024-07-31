@@ -1,5 +1,7 @@
 package com.hy.myapp.ticketInfo.model.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.hy.myapp.ticketInfo.model.vo.TicketInfoVO;
@@ -8,6 +10,8 @@ import com.hy.myapp.ticketInfo.model.vo.TicketInfoVO;
 public interface TicketInfoRepository {
 
 	int saveTicket(TicketInfoVO ticketInfo);
+
+	List<TicketInfoVO> ticketFindById(String userId);
 	
 
 }

@@ -34,14 +34,16 @@
         cursor: pointer;
         }    
     .screen {
-            width: 1200px;
+            width: 800px;
             grid-column: span 12;
             background-color: #ccc;
             height: 50px;
             text-align: center;
             padding: 10px;
             margin:0 auto;
-
+			border-radius: 10px; /* 모서리를 둥글게 */
+		    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 상자 그림자 */
+		    background: linear-gradient(to bottom, #eee, #ccc); /* 그라데이션 배경 */
         }
     .cinema {
             display: grid;
@@ -69,6 +71,21 @@
         background-color: rgb(171, 47, 44); 
         pointer-events: none; 
     }
+    .btn-toolbar {
+    	border: 1px solid #000;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background: #f9f9f9;
+    }
+    
+    .btn-toolbar .btn {
+    	height : 50px;
+    	margin-top : 75px;
+    }
+    .btn-toolbar .btn:first-child {
+    	pointer-events : none;
+    }
 </style>
 </head>
 <body>
@@ -82,7 +99,7 @@
     </div>
 
     <!-- 인원 / 좌석 표시 -->
-    <div style="width: 1200px; height: 100px; background-color: #ccc; margin: 0 auto; text-align: center;">
+    <div style="width: 1200px; height: 120px; background-color: #ccc; margin: 0 auto; text-align: center;"><br><br>
         <p style="color: #444;">인원 / 좌석</p>
     </div>
     <br><br><br>
