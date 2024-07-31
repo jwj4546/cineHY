@@ -215,7 +215,7 @@
                                     data: JSON.stringify(ticketInfo)
                                 }).done(() => {
                                     if (confirm("결제 완료")) {
-                                        window.location.href = "ticketResult?merchantUid=" + rsp.merchant_uid;
+                                        window.location.href = "ticketFindById";
                                     } else {
                                         alert("결제에 실패하였습니다.");
                                     }
