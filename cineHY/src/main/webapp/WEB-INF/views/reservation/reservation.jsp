@@ -208,30 +208,27 @@ $(document).ready(() => {
 
         if (movie && theater && startdate && enddate) {
             $.ajax({
-                url: 'movieSchedule/schedule/' + movie + '/' + theater + '/' + startdate + '/' + enddate,
+            	url : 'movieSchedule/schedule/' + movie + '/' + theater + '/' + startdate + '/' + enddate,
                 method: 'GET',
                 dataType: 'json',
                 success: (data) => {
                     const scheduleResult = $('#timeSelect');
+					
                     scheduleResult.html('');
                     if (data.data.length > 0) {
                         for (const s of data.data) {
-                            const optionHtml = `
-                                <option value="\${s.startTime}" data-screen-code="\${s.screenCode}" data-screening-id="\${s.screeningId}">
-                                    \${s.startTime} \${s.screenCode}관 - 좌석 정보를 불러오는 중...
-                                </option>
-                            `;
-                            scheduleResult.append(optionHtml);
-                        }
+                            screeningId = s.screeningId; 
+                            console.log(s.screeningId)// screeningId를 int로 변환
+                            const option = $(`<option value="\${s.startTime}" data-screen-code="\${s.screenCode}">\${s.startTime} \${s.screenCode}관</option>`);
+                            const seatDiv = $(`<div class="seat" data-screening-id="\${screeningId}"></div>`);
+                            option.append(seatDiv);
+                            scheduleResult.append(option);
 
-                        const ticketDate = $('#dateSelect').val();
-                        const totalSeats = 120;
-
-                        data.data.forEach(s => {
-                            const screeningId = s.screeningId;
+                            const ticketDate = $('#dateSelect').val();
+                            const totalSeats = 120;
 
                             $.ajax({
-                                url: 'reservedSeats',
+                                url: `reservedSeats`,
                                 method: 'GET',
                                 dataType: 'json',
                                 data: {
@@ -241,20 +238,19 @@ $(document).ready(() => {
                                 success: (reservedSeats) => {
                                     const reservedSeatCount = reservedSeats.length;
                                     const remainingSeats = totalSeats - reservedSeatCount;
-                                    scheduleResult.find(`option[data-screening-id="\${screeningId}"]`).text(`\${s.startTime} \${s.screenCode}관 - \${remainingSeats}석 / 120석`);
+                                    seatDiv.append(`\${remainingSeats}석 / 120석`);
                                 },
                                 error: (xhr, status, error) => {
                                     console.error('Error fetching reserved seats:', status, error);
                                 }
                             });
-                        });
-
+                        }
                     } else {
-                        scheduleResult.html('<option disabled>스케줄이 없습니다.</option>');
+                        scheduleResult.html('<option>스케줄이 없습니다.</option>');
                     }
                     $('#timeSelect option:first').prop('selected', true);
                     displaySelectedMovie();
-
+                    
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
                     console.error('Error fetching schedule data:', textStatus, errorThrown);
@@ -295,9 +291,7 @@ $(document).ready(() => {
         const scheduleTable = $(`${activeTabId} .schedule-table tbody`);
         const selectedTabDate = $('.nav-tabs .nav-link.active').attr('data-date');
         const theaterCode = $('input[name="theater"]:checked').val();
-        
         scheduleTable.empty();
-        
         if (data && data.data.length > 0) {
             for (const schedule of data.data) {
                 const row = `
@@ -344,7 +338,7 @@ $('#seatBtn').on('click', () => {
 
     console.log('screeningId:', screeningId);
 
-    if (uid && movieCode && theaterName && startDate && startTime && !(startTime === "스케줄이 없습니다.")) {
+    if (uid && movieCode && theaterName && startDate && startTime && !(startTime == "스케줄이 없습니다.")) {
         const res = {
             movieCode,
             theaterCode: theaterName,
