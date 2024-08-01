@@ -189,7 +189,7 @@ TMDB OPEN API 데이터를 호출하고 → TB_MOVIE에 INSERT한 영화와 비�
 TMDB OPEN API 상영 예정 영화 데이터를 호출하고 → TB_MOVIE에 INSERT한 영화와 비교하여 → 날짜별로 조회
 
 관리자 페이지
-![영화API관리자](https://postfiles.pstatic.net/MjAyNDA4MDFfNTEg/MDAxNzIyNDc2MTk1NTU2.YxZz_Vwz2E7Zjzd2W2RfjNIlhGKS2BPcotEOW4zEvT0g.wTqTrPoafrZoH9d2PyXWQOZYjMPmy_L9mbySB-4mwL4g.GIF/movieApiAdmin.gif?type=w3840)
+![영화API관리자](README_IMG/cineHY%20gif/movieApiAdmin.gif)
 
 상영중인 영화 정보를 관리자가 조회할 수 있도록 영화 OPEN API (TMDB)를 활용하여 pageNo를 파라미터로 AJAX 를 통해 영화정보 데이터를 조회하는 기능을 구현했습니다. `pageNo`는 하단 페이지 버튼에 1씩 증감하는 함수를 구현해 파라미터를 전달하고 새로운 데이터를 요청합니다. 상단 영화리스트의 view 버튼 클릭 시 해당 `movieId`를 파라미터를 포함하는 url로 요청하여 상세정보가 AJAX를 통해 받아온 데이터가 출력됩니다. 관리자가 선택한 영화의 정보를 즉시 확인 할 수 있도록 하단으로 자동 스크롤 되도록  scrollDownView() 함수가 실행되도록 코드를 추가했습니다.
 
