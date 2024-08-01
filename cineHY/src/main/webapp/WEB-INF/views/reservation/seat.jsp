@@ -245,7 +245,7 @@
             // 결제 버튼 클릭시
             $("#payBtn").on("click",  function() {
             	
-            	const ticketPrice = 100;
+            	const ticketPrice = 12000;
 				const count = $('.person-btn.active').text();
 				const seatNumber = $('.selected');
 				const totalPrice = ticketPrice * count;

@@ -62,7 +62,8 @@
     <script>
     	
     	const info = JSON.parse(window.sessionStorage.getItem('seatInfo'));	
-    
+    	const merchant_uid = "O" + new Date().getTime();
+    	
     	window.onload = () => {
     		
     		let text = '';
@@ -102,140 +103,143 @@
     		        console.error("AJAX Error: ", status, error);
     			}
     		});
-    	}
+    		
+    		
+    		 $.ajax({
+    	            url: "payment/prepare",
+    	            method: "POST",
+    	            contentType: "application/json",
+    	            data: JSON.stringify({
+    	                merchantUid: merchant_uid,
+    	                amount: info.price
+    	            }),
+    	            success: () => {
+    	                console.log("사전 준비 완료");
+    	            },
+    	            error: (xhr, status, error) => {
+    	                console.error(`Error preparing payment:`, status, error);
+    	            }
+    	        });
+    	    };
     	
     	
     	// 결제 버튼 클릭시
     	$("#orderBtn").on("click", () => {
-		    const merchant_uid = "O" + new Date().getTime();
+		    
 		    const userId = $("#userId").val();
 		    const userName = $("#userName").val();
 		    const phoneNo = $("#phoneNo").val();
 		
-		    $.ajax({
-		        url: "payment/prepare",
-		        method: "POST",
-		        contentType: "application/json",
-		        data: JSON.stringify({
-		            merchantUid: merchant_uid,
-		            amount: info.price
-		        }),
-		        success: () => {
-		            const IMP = window.IMP;
-		            IMP.init("imp33642125");
-		
-		            IMP.request_pay({
-		                pg: "html5_inicis",
-		                pay_method: "card",
-		                merchant_uid: merchant_uid,
-		                name: info.movieName,
-		                amount: info.price,
-		                buyer_name: userName,
-		                buyer_tel: phoneNo
-		            }, (rsp) => {
-		                if (rsp.success) {
-		                    $.ajax({
-		                        url: "payment/validate",
-		                        method: "POST",
-		                        contentType: "application/json",
-		                        data: JSON.stringify({
-		                            impUid: rsp.imp_uid,
-		                            merchantUid: rsp.merchant_uid
-		                        })
-		                    }).done(() => {
-		                        let msg = '결제가 완료되었습니다.';
-		
-		                        // Save payment info
-		                        const payInfo = {
-		                            "merchantUid": rsp.merchant_uid,
-		                            "userId": userId,
-		                            "userName": rsp.buyer_name,
-		                            "payMethod": rsp.pay_method,
-		                            "productName": rsp.name,
-		                            "amount": rsp.paid_amount,
-		                            "phoneNo": rsp.buyer_tel,
-		                            "receipt": rsp.receipt_url
-		                        };
-		                        
-		                        
-		
-		                        $.ajax({
-		                            type: "POST",
-		                            url: "savePay",
-		                            contentType: "application/json",
-		                            data: JSON.stringify(payInfo),
-		                            success: () => {
-		                                // Save each seat info
-		                                info.seat.forEach(seat => {
-		                                    
-		                                	const seatInfo = {
-		                                        "screeningId" : info.screeningId,
-		                                        "seatCode": seat, // Use seat variable here
-		                                        "userId" : userId,
-		                                        "ticketDate" : info.ticketDate
-		                                    };
-		
-		                                    $.ajax({
-		                                        type: "POST",
-		                                        url: "saveSeat",
-		                                        contentType: "application/json",
-		                                        data: JSON.stringify(seatInfo),
-		                                        success: () => {
-		                                            console.log("Seat saved successfully");
-		                                        },
-		                                        error: (xhr, status, error) => {
-		                                            console.error(`Error saving seat:`, status, error);
-		                                        }
-		                                    });
-		                                });
-		
-		                                // Save ticket info
-		                                const startTime = info.startTime.split(' ')[0];
-		                                const ticketInfo = {
-		                                    "merchantUid": rsp.merchant_uid,
-		                                    "userId": userId,
-		                                    "userName": rsp.buyer_name,
-		                                    "phoneNo": rsp.buyer_tel,
-		                                    "payMethod": rsp.pay_method,
-		                                    "receipt": rsp.receipt_url,
-		                                    "movieCode": info.movieCode,
-		                                    "movieTitle": info.movieName,
-		                                    "price": info.price,
-		                                    "seatCode": info.seat.join(','), // Convert seat array to comma-separated string
-		                                    "startTime": startTime,
-		                                    "screeningId": info.screeningId,
-		                                    "theaterCode": info.theaterCode,
-		                                    "ticketDate": info.ticketDate,
-		                                    "paymentTime": new Date().toLocaleString()
-		                                };
-		
-		                                $.ajax({
-		                                    type: "POST",
-		                                    url: "saveTicket",
-		                                    contentType: "application/json",
-		                                    data: JSON.stringify(ticketInfo)
-		                                }).done(() => {
-		                                    if (confirm("결제 완료")) {
-		                                        window.location.href = "ticketFindById";
-		                                    } else {
-		                                        alert("결제에 실패하였습니다.");
-		                                    }
-		                                });
-		                            }
-		                        });
-		                    }).fail((xhr, status, error) => {
-		                        console.error(`Error validating payment:`, status, error);
-		                    });
-		                } else {
-		                    alert('결제를 실패하였습니다.');
-		                }
-		            });
-		        },
-		        error: (xhr, status, error) => {
-		            console.error(`Error preparing payment:`, status, error);
-		        }
-		    });
-		});
+	            const IMP = window.IMP;
+	            IMP.init("imp33642125");
+	
+	            IMP.request_pay({
+	                pg: "html5_inicis",
+	                pay_method: "card",
+	                merchant_uid: merchant_uid,
+	                name: info.movieName,
+	                amount: info.price,
+	                buyer_name: userName,
+	                buyer_tel: phoneNo
+	            }, (rsp) => {
+	                if (rsp.success) {
+	                    $.ajax({
+	                        url: "payment/validate",
+	                        method: "POST",
+	                        contentType: "application/json",
+	                        data: JSON.stringify({
+	                            impUid: rsp.imp_uid,
+	                            merchantUid: rsp.merchant_uid
+	                        })
+	                    }).done(() => {
+	                        let msg = '결제가 완료되었습니다.';
+	
+	                        // Save payment info
+	                        const payInfo = {
+	                            "merchantUid": rsp.merchant_uid,
+	                            "userId": userId,
+	                            "userName": rsp.buyer_name,
+	                            "payMethod": rsp.pay_method,
+	                            "productName": rsp.name,
+	                            "amount": rsp.paid_amount,
+	                            "phoneNo": rsp.buyer_tel,
+	                            "receipt": rsp.receipt_url
+	                        };
+	                        
+	                        
+	
+	                        $.ajax({
+	                            type: "POST",
+	                            url: "savePay",
+	                            contentType: "application/json",
+	                            data: JSON.stringify(payInfo),
+	                            success: () => {
+	                                // Save each seat info
+	                                info.seat.forEach(seat => {
+	                                    
+	                                	const seatInfo = {
+	                                        "screeningId" : info.screeningId,
+	                                        "seatCode": seat, // Use seat variable here
+	                                        "userId" : userId,
+	                                        "ticketDate" : info.ticketDate
+	                                    };
+	
+	                                    $.ajax({
+	                                        type: "POST",
+	                                        url: "saveSeat",
+	                                        contentType: "application/json",
+	                                        data: JSON.stringify(seatInfo),
+	                                        success: () => {
+	                                            console.log("Seat saved successfully");
+	                                        },
+	                                        error: (xhr, status, error) => {
+	                                            console.error(`Error saving seat:`, status, error);
+	                                        }
+	                                    });
+	                                });
+	
+	                                // Save ticket info
+	                                const startTime = info.startTime.split(' ')[0];
+	                                const ticketInfo = {
+	                                    "merchantUid": rsp.merchant_uid,
+	                                    "userId": userId,
+	                                    "userName": rsp.buyer_name,
+	                                    "phoneNo": rsp.buyer_tel,
+	                                    "payMethod": rsp.pay_method,
+	                                    "receipt": rsp.receipt_url,
+	                                    "movieCode": info.movieCode,
+	                                    "movieTitle": info.movieName,
+	                                    "price": info.price,
+	                                    "seatCode": info.seat.join(','), // Convert seat array to comma-separated string
+	                                    "startTime": startTime,
+	                                    "screeningId": info.screeningId,
+	                                    "theaterCode": info.theaterCode,
+	                                    "ticketDate": info.ticketDate,
+	                                    "paymentTime": new Date().toLocaleString()
+	                                };
+	
+	                                $.ajax({
+	                                    type: "POST",
+	                                    url: "saveTicket",
+	                                    contentType: "application/json",
+	                                    data: JSON.stringify(ticketInfo)
+	                                }).done(() => {
+	                                    if (confirm("결제 완료")) {
+	                                        window.location.href = "ticketFindById";
+	                                    } else {
+	                                        alert("결제에 실패하였습니다.");
+	                                    }
+	                                });
+	                            }
+	                        });
+	                    }).fail((xhr, status, error) => {
+	                        console.error(`Error validating payment:`, status, error);
+	                    });
+	                } else {
+	                    alert('결제를 실패하였습니다.');
+		        	}
+		    	});
+			});
     </script>
 
 <jsp:include page="../common/footer.jsp"></jsp:include>
