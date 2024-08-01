@@ -198,6 +198,7 @@
         		        	ticketDate : ticketDate
         		        },
         		        success: (reservedSeats) => {
+        		        	console.log(reservedSeats);
         		            const reservedSeatCount = reservedSeats.length;
         		            const remainingSeats = totalSeats - reservedSeatCount;
         		            $('#remainingSeats').text(`남은 좌석: \${remainingSeats}` + `석 / 120석`);
