@@ -126,9 +126,7 @@
 	height: 25px;
 	margin-right: 10px;
 	display: inline-block;
-	background:
-		url('https://blog.kakaocdn.net/dn/b2d6gV/btsvbDoal87/XH5b17uLeEJcBP3RV3FyDk/img.png')
-		no-repeat;
+	background-image: url('resources/images/fullStar.png');
 	background-size: 100%;
 	box-sizing: border-box;
 }
@@ -137,9 +135,7 @@
 	height: 25px;
 	margin-right: 10px;
 	display: inline-block;
-	background:
-		url('https://blog.kakaocdn.net/dn/b2d6gV/btsvbDoal87/XH5b17uLeEJcBP3RV3FyDk/img.png')
-		no-repeat;
+	background-image: url('resources/images/fullStar.png');
 	background-size: 100%;
 	box-sizing: border-box;
 }
@@ -429,62 +425,72 @@
 		
 		
 		let starCount = 0;
-		 function selectReview(movieId, page = 1) {
-		     $.ajax({
-		         url: 'selectReview',
-		         type: 'get',
-		         data: { 
-		             movieId: movieId,
-		             page: page 
-		         }, 
-		         dataType: "json",
-		         success: result => {
-		             let reviews = result.reviews;
-		             let pageInfo = result.pageInfo;
-		             let resultStr = '';
-		             starAvg(movieId);  //평균별점
-		             
-		             for (let i = 0; i < reviews.length; i++) {
-		                 const review = reviews[i];
-		                 starCount = review.star;
-		                 
-		                 let stars = '';
-		                 for (let j = 0; j < starCount; j++) {
-		                     stars += '⭐';
-		                 }  
-		                 resultStr+=`
-		                	 		 <tr>
-		                              <td class="rv">
-		                                  <div class="d-flex bd-highlight">
-		                                      <div class="img_cont">
-		                                          <img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img">
-		                                      </div>
-		                                      <div class="user_info">
-		                                          <p>\${stars}</p>
-		                              			  <input type="hidden" id="stars" name="stars" value="\${stars}"/> 
-		                                          <p>\${review.userId}</p>
-		                              			  <input type="hidden" id="user_id" name="user_id" value="\${review.userId}"/>
-		                                          <p>\${review.reviewContent}</p>
-		                              			  <input type="hidden" id="reviewNo" name="reviewNo" value="\${review.reviewNo}"/> 
-		                              			  <input type="hidden" id="reviewContent" name="reviewContent" value="\${review.reviewContent}"/>
-		                                      </div>
-		                                  </div>
-		                              </td>
-		                              <td class="right">
-		                                  <p class="plus" onclick="test('\${review.userId}')">...</p>
-		                                  	<div id="bubble_sp" class="speech-bubble hidden">
-		                                      	<input onclick="call_confirm_sp()" class="btn btn-light" type="button" id="id2" value="스포일러 신고">
-		                                  	</div>
-		                              		<div id="bubble_up" class="speech-bubble hidden">
-		                                  		<button class="btn btn-light"  type="button" id="updatemodal-open" onclick="updatemodal_No('\${review.reviewNo}')"  >리뷰수정</button>
-		                                  		<input class="btn btn-light" type="button" onclick="call_confirm_up_de('\${review.reviewNo}')" value="리뷰 삭제">	                            
-		                              		</div>
-		                                  <p class="date">\${review.reviewDate}</p>
-		                              </td>
-		                            </tr>`;
-		             }
-		             
-		             let pageText = '';
+		function selectReview(movieId, page = 1) {
+		    $.ajax({
+		        url: 'selectReview',
+		        type: 'get',
+		        data: { 
+		            movieId: movieId,
+		            page: page 
+		        }, 
+		        dataType: "json",
+		        success: result => {
+		            let reviews = result.reviews;
+		            let pageInfo = result.pageInfo;
+		            let resultStr = '';
+		            starAvg(movieId);  // 평균별점
+		            
+		            for (let i = 0; i < reviews.length; i++) {
+		                const review = reviews[i];
+		                starCount = review.star;
+		                
+		                let stars = '';
+
+		                for (let j = 0; j < Math.floor(starCount); j++) {
+		                    stars += '<img src="resources/images/fullStar.png" alt="Star" style="width:20px; height:20px; margin-left:5px;"/>';
+		                }
+
+		                if (starCount % 1 !== 0) {
+		                    stars += '<img src="resources/images/halfStar.png" alt="Star" style="width:20px; height:20px; margin-left:5px;"/>';
+		                }
+
+		                for (let j = Math.ceil(starCount); j < 5; j++) {
+		                    stars += '<img src="resources/images/emptyStar.png" alt="Star" style="width:20px; height:20px; margin-left:5px;"/>';
+		                }
+		                
+		                resultStr += `
+		                    <tr>
+		                        <td class="rv">
+		                            <div class="d-flex bd-highlight">
+		                                <div class="img_cont">
+		                                    <img src="https://i.namu.wiki/i/M0j6sykCciGaZJ8yW0CMumUigNAFS8Z-dJA9h_GKYSmqqYSQyqJq8D8xSg3qAz2htlsPQfyHZZMmAbPV-Ml9UA.webp" class="rounded-circle user_img">
+		                                </div>
+		                                <div class="user_info">
+		                                    \${stars}
+		                                    <input type="hidden" id="stars" name="stars" value="${stars}"/> 
+		                                    <p>\${review.userId}</p>
+		                                    <input type="hidden" id="user_id" name="user_id" value="${review.userId}"/>
+		                                    <p>\${review.reviewContent}</p>
+		                                    <input type="hidden" id="reviewNo" name="reviewNo" value="${review.reviewNo}"/> 
+		                                    <input type="hidden" id="reviewContent" name="reviewContent" value="${review.reviewContent}"/>
+		                                </div>
+		                            </div>
+		                        </td>
+		                        <td class="right">
+		                            <p class="plus" onclick="test('${review.userId}')">...</p>
+		                            <div id="bubble_sp" class="speech-bubble hidden">
+		                                <input onclick="call_confirm_sp()" class="btn btn-light" type="button" id="id2" value="스포일러 신고">
+		                            </div>
+		                            <div id="bubble_up" class="speech-bubble hidden">
+		                                <button class="btn btn-light" type="button" id="updatemodal-open" onclick="updatemodal_No('${review.reviewNo}')">리뷰수정</button>
+		                                <input class="btn btn-light" type="button" onclick="call_confirm_up_de('${review.reviewNo}')" value="리뷰 삭제">
+		                            </div>
+		                            <p class="date">\${review.reviewDate}</p>
+		                        </td>
+		                    </tr>`;
+		            }
+		            
+		            let pageText = '';
 		             for (let i = pageInfo.startPage; i <= pageInfo.endPage; i++) {
 		                 if (i === pageInfo.currentPage) {
 		                     pageText += `<li class="page-item active">
@@ -511,11 +517,12 @@
 		             
 		             
 		         },
-		         error: err => {
-		             console.error('Error fetching reviews:', err);
-		         }
-		     });
-		 }
+		        error: err => {
+		            console.error('Error fetching reviews:', err);
+		        }
+		    });
+		}
+
 		
 		// 리뷰쓴 id가 세션의 아이디와 같을 때 => 리뷰 수정, 삭제 버튼
 		// 다를때 => 스포일러 신고버튼
