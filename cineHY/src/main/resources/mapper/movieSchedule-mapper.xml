@@ -38,34 +38,41 @@
             OR (#{endDate} BETWEEN STARTDATE AND ENDDATE)
             OR (STARTDATE BETWEEN #{startDate} AND #{endDate})
             OR (ENDDATE BETWEEN #{startDate} AND #{endDate})
-		   )
-	   
+	   )
+       AND (
+            (STARTDATE BETWEEN SYSDATE AND SYSDATE + 7)
+            OR (ENDDATE BETWEEN SYSDATE AND SYSDATE + 7)
+            OR (SYSDATE BETWEEN STARTDATE AND ENDDATE)
+       )
+		   
+	 ORDER 
+        BY
+	        STARTTIME ASC
+   	 
 </select>
 
 	
 <select id="allScheduleListByDate" resultType="movieScheduleVO" parameterType="hashmap">
     SELECT
-        MS.SCREENING_ID screeningId,
-        MS.SCREEN_CODE screenCode,
-        MS.STARTTIME startTime,
-        MS.ENDTIME endTime, 
-        MS.STARTDATE startDate,
-        MS.ENDDATE endDate,
-        MS.MOVIE_CODE movieCode,
-        MS.THEATER_CODE theaterCode,
-        M.MOVIE_TITLE movieTitle, 
-        M.RATING rating
-    FROM
-        TB_MOVIE_SCHEDULE MS
-        INNER JOIN TB_MOVIE M ON MS.MOVIE_CODE = M.MOVIE_CODE
+	        MS.SCREENING_ID screeningId,
+	        MS.SCREEN_CODE screenCode,
+	        MS.STARTTIME startTime,
+	        MS.ENDTIME endTime, 
+	        MS.STARTDATE startDate,
+	        MS.ENDDATE endDate,
+	        MS.MOVIE_CODE movieCode,
+	        MS.THEATER_CODE theaterCode,
+	        M.MOVIE_TITLE movieTitle, 
+	        M.RATING rating
+     FROM
+	        TB_MOVIE_SCHEDULE MS
+	        INNER JOIN TB_MOVIE M ON MS.MOVIE_CODE = M.MOVIE_CODE
     WHERE
-        MS.THEATER_CODE = #{theaterCode} 
-        AND #{date} BETWEEN MS.STARTDATE AND MS.ENDDATE 
-    ORDER BY
-        M.MOVIE_TITLE ASC,
-        MS.SCREEN_CODE ASC,
-        MS.STARTTIME ASC,
-        MS.ENDTIME ASC
+	        MS.THEATER_CODE = #{theaterCode} 
+	        AND #{date} BETWEEN MS.STARTDATE AND MS.ENDDATE 
+    ORDER 
+       BY
+	        MS.STARTTIME ASC
 </select>	   
 
 <select id="checkSchedule" resultType="int">

@@ -240,10 +240,17 @@
 	                    let starCount = reviews[i].star;
 	                    let stars = '';
 	
-	                    // 별 출력
-	                    for (let j = 0; j < starCount; j++) {
-	                        stars += '⭐';
-	                    }
+	                    for (let j = 0; j < Math.floor(starCount); j++) {
+		                    stars += '<img src="resources/images/fullStar.png" alt="Star" style="width:20px; height:20px; margin-left:5px;"/>';
+		                }
+
+		                if (starCount % 1 !== 0) {
+		                    stars += '<img src="resources/images/halfStar.png" alt="Star" style="width:20px; height:20px; margin-left:5px;"/>';
+		                }
+
+		                for (let j = Math.ceil(starCount); j < 5; j++) {
+		                    stars += '<img src="resources/images/emptyStar.png" alt="Star" style="width:20px; height:20px; margin-left:5px;"/>';
+		                }
 	
 	                    const item = reviews[i];
 	                    const code = item.movieCode;
