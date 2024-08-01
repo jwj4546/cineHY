@@ -48,10 +48,7 @@ public class MemberRepository {
 		return sqlSession.selectOne("MemberMapper.findMyPw", params);
 	}
 
-	public int changePw(SqlSessionTemplate sqlSession, Member member) {
-		return sqlSession.update("MemberMapper.changePw", member);
-	}
-
+	 
 	public int update(SqlSessionTemplate sqlSession, Member member) {
 		return sqlSession.update("MemberMapper.myInfoChange", member);
 	}
@@ -75,4 +72,8 @@ public class MemberRepository {
 	public int forceDelete(SqlSessionTemplate sqlSession2, String userId) {
 		return sqlSession.update("MemberMapper.forceDelete", userId);
 	}
+
+	public int changePw(Member member) {
+        return sqlSession.update("MemberMapper.changePw", member);
+    }
 }

@@ -605,14 +605,14 @@ if (navigator.geolocation) {
             lon = position.coords.longitude; // 경도
         
         var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-        message = '<div style="padding:5px; width:180px">당신 거기 있어줄래요?</div>'; 
+        message = '<div style="padding:5px; width:180px">나는 지금 여기에!</div>'; 
         
         // 마커와 인포윈도우를 표시합니다
         displayMarker(locPosition, message);
         
         var ps = new kakao.maps.services.Places();
 
-        ps.keywordSearch('서울 영화관', placesSearchCB); 
+        ps.keywordSearch('', placesSearchCB); 
         
         function placesSearchCB (data, status, pagination) {
             if (status === kakao.maps.services.Status.OK) {
