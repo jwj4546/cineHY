@@ -38,13 +38,7 @@
             OR (#{endDate} BETWEEN STARTDATE AND ENDDATE)
             OR (STARTDATE BETWEEN #{startDate} AND #{endDate})
             OR (ENDDATE BETWEEN #{startDate} AND #{endDate})
-	   )
-       AND (
-            (STARTDATE BETWEEN SYSDATE AND SYSDATE + 7)
-            OR (ENDDATE BETWEEN SYSDATE AND SYSDATE + 7)
-            OR (SYSDATE BETWEEN STARTDATE AND ENDDATE)
-       )
-		   
+		   )
 	 ORDER 
         BY
 	        STARTTIME ASC
