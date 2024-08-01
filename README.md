@@ -25,7 +25,7 @@
   - [리뷰](#리뷰)
   - [오픈톡](#오픈톡)
   - [공지](#공지)
-
+- [Trouble Shooting](#trouble-shooting)
 
 ## 팀원
 
@@ -172,28 +172,58 @@ cineHY는 다양한 영화 목록을 외부 API를 통해 JSON 형식으로 데�
 
 
 ### 영화 API
+사용자 페이지
+![영화API](https://postfiles.pstatic.net/MjAyNDA4MDFfMjg4/MDAxNzIyNDc1Nzk2MzE0.UWOuIFR0Uh09TcaONSbep6hz0VdpMgrrA_n_75lxc4Yg.3lImzp8kPdNo1bRlVwlvKmpegG9NVRU41WzKkRFh_Wsg.GIF/movieApi.gif?type=w3840)
+
+front: OPEN API 영화 데이터 중 관리자가 등록한 영화를 박스오피스 순 / 선호도별 추천영화 / 상영 예정 영화가출력이 되도록 AJAX로 응답을 받아 출력하는 코드에 조건문을 추가했습니다. 
+
+back: 하나의 페이지 번호를 파라미터로 받는 OPEN API 영화 리스트를 요청할 경우, 특정 페이지에 조건에 일치하는 영화만 나오는 문제를 해결하기 위해, 10페이지까지의 데이터를 한 번에 받아와서 요청한 페이지에 맞는 영화 리스트를 제공하도록 반복문을 활용했습니다
+
+**`상영중인 영화`**
+TMDB OPEN API 데이터를 호출하고 → TB_MOVIE에 INSERT한 영화 비교하여 → 박스오피스 순으로 조회
+
+**`선호도별 영화`**
+TMDB OPEN API 데이터를 호출하고 → TB_MOVIE에 INSERT한 영화와 비교하고 → TB_MEMBER의 GENRE 데이터와 비교하여 포함하는 영화 조회
+
+**`상영 예정 영화`** 
+TMDB OPEN API 상영 예정 영화 데이터를 호출하고 → TB_MOVIE에 INSERT한 영화와 비교하여 → 날짜별로 조회
+
+관리자 페이지
+![영화API관리자](https://postfiles.pstatic.net/MjAyNDA4MDFfNTEg/MDAxNzIyNDc2MTk1NTU2.YxZz_Vwz2E7Zjzd2W2RfjNIlhGKS2BPcotEOW4zEvT0g.wTqTrPoafrZoH9d2PyXWQOZYjMPmy_L9mbySB-4mwL4g.GIF/movieApiAdmin.gif?type=w3840)
+
+상영중인 영화 정보를 관리자가 조회할 수 있도록 영화 OPEN API (TMDB)를 활용하여 pageNo를 파라미터로 AJAX 를 통해 영화정보 데이터를 조회하는 기능을 구현했습니다. `pageNo`는 하단 페이지 버튼에 1씩 증감하는 함수를 구현해 파라미터를 전달하고 새로운 데이터를 요청합니다. 상단 영화리스트의 view 버튼 클릭 시 해당 `movieId`를 파라미터를 포함하는 url로 요청하여 상세정보가 AJAX를 통해 받아온 데이터가 출력됩니다. 관리자가 선택한 영화의 정보를 즉시 확인 할 수 있도록 하단으로 자동 스크롤 되도록  scrollDownView() 함수가 실행되도록 코드를 추가했습니다.
 
 
 
 ### 영화 스케줄 관리
+![영화스케줄등록](https://postfiles.pstatic.net/MjAyNDA4MDFfMjUw/MDAxNzIyNDc0OTgwNDg1.0OsOtvdVwiAoRRNUzJ7_wZHYtSMZ-SCfEjohqHUTpTEg.xCZ7XXDb569dUU96vjxyEYeFvSNvyoATE-27MIKC7Skg.GIF/scheduleEnroll.gif?type=w3840)
 기획 단계에서 관리자가 스케줄을 등록할 때 필요한 정보가 어떤 것들이 있을지 고민했습니다.
 등록 전 기존 상영 스케줄을 확인할 수 있도록 `movieCode`, `theaterCode`, `startdate`, `enddate` 값을 입력 받아 AJAX를 통해 조회하는 기능을 구현 했습니다.
 우선 옵션에 등록된 TB_MOVIE, TB_THEATER의 정보를 출력하여 변동되는 데이터에 따라 동적으로 옵션 값이 변하도록 출력했습니다.
 
 **영화, 영화관, 상영날짜와 중복되는 스케줄 조회** : 
 `movieSelect`, `theaterSelect`, `startdateSelect`, `enddateSelect` 옵션을 모두 선택하고 조회 버튼 클릭 시 해당 옵션의 스케줄을 가져오는 AJAX 요청을 보냅니다.
-이때 옵션을 모두 선택하지 않으면 조회를 할 수 없도록 조건문을 추가하였습니다.
-
-조회된 스케줄의 날짜범위를 알 수 있도록 등록된 스케줄의 날짜를 상단에 출력합니다.
+이때 옵션을 모두 선택하지 않으면 조회를 할 수 없도록 조건문을 추가하고 영화 개봉일이 상영 시작일로 자동 선택되도록 자바스크립트를 이용해 설정했습니다. 
 
 조회하는 날짜와 등록된 스케줄의 날짜가 교차되는 범위를 모두 조회하기 위한 SQL 구문을 작성했습니다.
 TB_MOVIE_SCEDULE 에서 
 선택한 `movieCode`와 `thaterCode`가 일치하고
 선택한 `startDate`와 `endDate`를 DB의 STARTDATE, ENDDATE 데이터와 BTWEEN ~ AND 구문으로 날짜 범위가 교차되는 조건을 만족하는 모든 컬럼을 SELECT 합니다.
 
+상영 스케줄은 날짜범위를 지정할 수 있기 때문에 등록기능 구현시 스케줄 중복검사가 필수라고 생각했습니다.INSERT 실행 시, 스케줄이 중복되지 않도록 선택한 값을 파라미터로 받아 중복 스케줄이 있는지 비동기 방식으로 요청하는 checkSchedule ( ) 함수를 만들었습니다.
+
+상영시작시간과 종료시간 선택 시 서로 값을 비교하여 시작시간이 종료시간을 넘을 수 없도록 처리했습니다. 
+
 ### 멀티검색
+![멀티검색](https://postfiles.pstatic.net/MjAyNDA4MDFfMjQ2/MDAxNzIyNDc2Nzk5MTg0.QSoDj2LTHbnKcIg0Oci391L2fqCHrj0CA18Io7BPp_Ig.Xqf_yyJgpLGO7-cl7fYo0ru9bUFVwSzcMK1eQwxYNCgg.GIF/multiSearch.gif?type=w3840)
 
+`keyword`를 전역변수로 선언 후 등록된 영화 리스트(movieIdList) AJAX 요청과 키워드를 파라미터로 받아 OPEN API에서 검색결과(searchMovie( ))를 받아오는 AJAX 요청을 보냅니다. `search` 함수는 `getMovieRatings`와 `searchMovies` 함수가 모두 완료될 때까지 기다립니다. `Promise.all`을 사용하여 두 비동기 작업을 병렬로 실행합니다.
 
+받아온 검색결과 데이터 중 ‘영화인’은 media_type이 `people` 인 조건으로 filter함수를 사용해 필터링하여 map과 join을 사용해 반복출력합니다.
+
+같은 구조로 결과값의 known_for(대표작품) 3개를 함께 출력합니다.
+
+‘상영중인 영화’는 media_type이 movie 인 데이터 중 TB_MOVIE 에서 가져온movie_code와 일치하는 조건문으로 반복 출력합니다.
 
 ### 예매
 
@@ -213,6 +243,6 @@ TB_MOVIE_SCEDULE 에서
 
 ### 공지
 
-
-
+## Trouble Shooting
+- 영화 데이터 삭제 시 회원의 예매 내역과 리뷰 내역이 보이지 않는 문제
 
