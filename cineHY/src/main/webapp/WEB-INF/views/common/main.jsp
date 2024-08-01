@@ -24,8 +24,8 @@
     
     #pills-tab { margin-top: 20px; }
     #page2 { 
-       	height: 600px;
     	padding-top: 120px;
+    	padding-bottom: 120px;
     }   
     
     .card {
