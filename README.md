@@ -234,13 +234,13 @@ TB_MOVIE_SCEDULE 에서
 ‘상영중인 영화’는 media_type이 movie 인 데이터 중 TB_MOVIE 에서 가져온movie_code와 일치하는 조건문으로 반복 출력합니다.
 
 ### 예매
-
-
-
+seat.jsp(ajax)
+![멀티검색](README_IMG/seat1.png)
 ### 결제
-
-
-
+postPrepare()
+![멀티검색](README_IMG/postPrepare.png)
+validatePayment()
+![멀티검색](README_IMG/validatePayment.png)
 ### 리뷰
 
 

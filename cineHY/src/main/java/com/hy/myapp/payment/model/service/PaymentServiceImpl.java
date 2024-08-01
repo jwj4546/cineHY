@@ -42,7 +42,7 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	
 	public PaymentServiceImpl() {
-		this.api = new IamportClient(key, secret);
+		this.api = new IamportClient("8006731832536307", "Rzaw0rU4BFImk2cqDjAGXcGywGGgAzLfy16909OPBxtvdxzEe1zzWonqmoQwdbiJN45sSaGqTXc1BMJs");
 	}
 
 	public void postPrepare(PrePaymentVO request) throws IamportResponseException, IOException {
