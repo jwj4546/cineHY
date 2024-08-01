@@ -15,7 +15,9 @@
 - [기여도](#기여도)
 - [화면 구성](#화면-구성)
 - [주요기능](#주요기능)
-  - [로그인회원가입/아이디\&비밀번호찾기](#로그인회원가입아이디비밀번호찾기)
+  - [로그인/회원가입](#로그인회원가입)
+  - [아이디 찾기](#아이디-찾기)
+  - [비밀번호 찾기](#비밀번호-찾기)
   - [정보수정/회원탈퇴](#정보수정회원탈퇴)
   - [영화 API](#영화-api)
   - [영화 스케줄 관리](#영화-스케줄-관리)
@@ -298,25 +300,33 @@ public String getNowPlayingMovie() throws IOException {
 
 ```
 
-**`상영중인 영화`**
-TMDB OPEN API 데이터를 호출하고 → TB_MOVIE에 INSERT한 영화 비교하여 → 박스오피스 순으로 조회
-
 **`선호도별 영화`**
-TMDB OPEN API 데이터를 호출하고 → TB_MOVIE에 INSERT한 영화와 비교하고 → TB_MEMBER의 GENRE 데이터와 비교하여 포함하는 영화 조회
+
+TB_MEMBER의 GENRE 데이터와 비교하여 포함하는 영화 조회
 
 **`상영 예정 영화`** 
-TMDB OPEN API 상영 예정 영화 데이터를 호출하고 → TB_MOVIE에 INSERT한 영화와 비교하여 → 날짜별로 조회
+
+날짜별로 조회
+
+---
 
 관리자 페이지
 ![영화API관리자](README_IMG/cineHY%20gif/movieApiAdmin.gif)
 
-상영중인 영화 정보를 관리자가 조회할 수 있도록 영화 OPEN API (TMDB)를 활용하여 pageNo를 파라미터로 AJAX 를 통해 영화정보 데이터를 조회하는 기능을 구현했습니다. `pageNo`는 하단 페이지 버튼에 1씩 증감하는 함수를 구현해 파라미터를 전달하고 새로운 데이터를 요청합니다. 상단 영화리스트의 view 버튼 클릭 시 해당 `movieId`를 파라미터를 포함하는 url로 요청하여 상세정보가 AJAX를 통해 받아온 데이터가 출력됩니다. 관리자가 선택한 영화의 정보를 즉시 확인 할 수 있도록 하단으로 자동 스크롤 되도록  scrollDownView() 함수가 실행되도록 코드를 추가했습니다.
+상영중인 영화 정보를 관리자가 조회할 수 있도록 영화 OPEN API (TMDB)를 활용하여 pageNo를 파라미터로 AJAX 를 통해 영화정보 데이터를 조회하는 기능을 구현했습니다. 
+
+`pageNo`는 하단 페이지 버튼에 1씩 증감하는 함수를 구현해 파라미터를 전달하고 새로운 데이터를 요청합니다. 
+
+상단 영화리스트의 view 버튼 클릭 시 해당 `movieId`를 파라미터를 포함하는 url로 요청하여 상세정보가 AJAX를 통해 받아온 데이터가 출력됩니다. 
+
+관리자가 선택한 영화의 정보를 즉시 확인 할 수 있도록 하단으로 자동 스크롤 되도록  scrollDownView() 함수가 실행되도록 코드를 추가했습니다.
 
 
 
 ### 영화 스케줄 관리
 ![영화스케줄등록](https://postfiles.pstatic.net/MjAyNDA4MDFfMjUw/MDAxNzIyNDc0OTgwNDg1.0OsOtvdVwiAoRRNUzJ7_wZHYtSMZ-SCfEjohqHUTpTEg.xCZ7XXDb569dUU96vjxyEYeFvSNvyoATE-27MIKC7Skg.GIF/scheduleEnroll.gif?type=w3840)
 기획 단계에서 관리자가 스케줄을 등록할 때 필요한 정보가 어떤 것들이 있을지 고민했습니다.
+
 등록 전 기존 상영 스케줄을 확인할 수 있도록 `movieCode`, `theaterCode`, `startdate`, `enddate` 값을 입력 받아 AJAX를 통해 조회하는 기능을 구현 했습니다.
 우선 옵션에 등록된 TB_MOVIE, TB_THEATER의 정보를 출력하여 변동되는 데이터에 따라 동적으로 옵션 값이 변하도록 출력했습니다.
 
