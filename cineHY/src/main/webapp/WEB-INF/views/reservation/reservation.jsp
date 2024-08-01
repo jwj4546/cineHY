@@ -34,22 +34,10 @@
     	<div class="container mt-5">
 	    	<h2 class="mb-4 text-center">예매하기</h2>
 		    <div class="text-center mb-4">
-		        <button class="btn btn-secondary" style="float: right; margin-left: 10px;">예매 다시하기</button>
-		        <button class="btn btn-primary" style="float: right;">상영시간표</button>
+		        <button class="btn btn-secondary" id="resetBtn" style="float: right; margin-left: 10px;">예매 다시하기</button>
+		        <a href="theater" type="button" button class="btn btn-primary" style="float: right;"> 상영시간표</a>
 		    </div>  
-		    <br><br>
-	        <div class="row mb-3">
-	            <div class="col">
-	                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-	                    <label class="btn btn-secondary active">
-	                        <input type="radio" name="options" id="option1" autocomplete="off" checked> 박스오피스 순
-	                    </label>
-	                    <label class="btn btn-secondary">
-	                        <input type="radio" name="options" id="option2" autocomplete="off"> 가나다순
-	                    </label>
-	                </div>
-	            </div>
-	        </div>
+		    <br><br><br>
 	        
 	        <div class="row mb-3">
 	            <div class="col">
@@ -329,6 +317,15 @@ $(document).ready(() => {
     });
 });
 
+$('#resetBtn').on('click', () => {
+    $('#movieSelect').prop('selectedIndex', -1); // 첫 번째 옵션 선택 해제
+    $('#theaterSelect').prop('selectedIndex', -1);
+    $('#dateSelect').prop('selectedIndex', -1);
+    $('#timeSelect').prop('selectedIndex', -1);
+    $('#selectedInfo').empty();
+});
+
+
 // 좌석선택 버튼 클릭 시 선택한 데이터를 sessionStorage에 저장 후 좌석 페이지로 이동
 $('#seatBtn').on('click', () => {
     const uid = $('#userId').val();
@@ -367,6 +364,7 @@ $('#seatBtn').on('click', () => {
 		alert('로그인이 필요한 서비스 입니다.');
 	}
 });
+
 
 
 
