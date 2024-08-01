@@ -165,23 +165,25 @@
         		// 좌석 출력 반복문
         		for(let char of row) {
         			
-        			text += '<div class="row">' +char + '</div>'
-                    + '<div class="seat" id="'+ char + '1">1</div>'
-                    + '<div class="seat" id="'+ char + '2">2</div>'
-                    + '<div class="seat" id="'+ char + '3">3</div>'
-                    + '<div class="seat" id="'+ char + '4">4</div>'
-                    + '<div class="seat" id="'+ char + '5">5</div>'
-                    + '<div class="seat" id="'+ char + '6">6</div>'
-                    + '<div class="space"></div>'
-                    
-                    + '<div class="seat" id="'+ char + '7">7</div>'
-                    + '<div class="seat" id="'+ char + '8">8</div>'
-                    + '<div class="seat" id="'+ char + '9">9</div>'
-                    + '<div class="seat" id="'+ char + '10">10</div>'
-                    + '<div class="seat" id="'+ char + '11">11</div>'
-                    + '<div class="seat" id="'+ char + '12">12</div>'
+        			text += `
+     				  <div class="row">\${char}</div>
+     				  <div class="seat" id="\${char}1">1</div>
+     				  <div class="seat" id="\${char}2">2</div>
+     				  <div class="seat" id="\${char}3">3</div>
+     				  <div class="seat" id="\${char}4">4</div>
+     				  <div class="seat" id="\${char}5">5</div>
+     				  <div class="seat" id="\${char}6">6</div>
+     				  <div class="space"></div>
+     				  <div class="seat" id="\${char}7">7</div>
+     				  <div class="seat" id="\${char}8">8</div>
+     				  <div class="seat" id="\${char}9">9</div>
+     				  <div class="seat" id="\${char}10">10</div>
+     				  <div class="seat" id="\${char}11">11</div>
+     				  <div class="seat" id="\${char}12">12</div>
+        			`
         			
         		};
+        		
         		$(".cinema").html(text);
         		
         		
@@ -198,6 +200,7 @@
         		        	ticketDate : ticketDate
         		        },
         		        success: (reservedSeats) => {
+        		        	console.log(reservedSeats);
         		            const reservedSeatCount = reservedSeats.length;
         		            const remainingSeats = totalSeats - reservedSeatCount;
         		            $('#remainingSeats').text(`남은 좌석: \${remainingSeats}` + `석 / 120석`);

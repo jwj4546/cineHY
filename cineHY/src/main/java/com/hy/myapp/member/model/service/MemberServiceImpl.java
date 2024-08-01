@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hy.myapp.member.model.repository.MemberRepository;
 import com.hy.myapp.member.model.vo.Member;
@@ -15,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
+	@Autowired
+    private BCryptPasswordEncoder bcryptPasswordEncoder;
 	
 	private final SqlSessionTemplate sqlSession;
 	private final MemberRepository memberRepository;
@@ -68,11 +73,7 @@ public class MemberServiceImpl implements MemberService {
 		return memberRepository.findMyPw(userId, userName, phoneNo);
 	}
 
-	@Override
-	public int changePw(Member member) {
-		return memberRepository.changePw(sqlSession, member);
-	}
-
+	
 	  @Override
 	    public List<Member> findAll(Map<String, Integer> map) {
 	        return sqlSession.selectList("MemberMapper.findAll", map);
@@ -87,6 +88,15 @@ public class MemberServiceImpl implements MemberService {
 	public int forceDelete(String userId) {
 		return memberRepository.forceDelete(sqlSession, userId);
 	}
+
+	 @Transactional
+	    public int changePw(Member member) {
+	        String encPwd = bcryptPasswordEncoder.encode(member.getUserPwd());
+	        member.setUserPwd(encPwd);
+	        
+	       
+	        return memberRepository.changePw(member);
+	    }
 
 	
 

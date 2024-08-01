@@ -97,6 +97,16 @@
             $('#userPwd, #userPwd2').on('input', pwCheck);
             $('#change-btn').on('click', formsub);
         });
+
+        $(function() {
+           
+            const urlParams = new URLSearchParams(window.location.search);
+            $('#userId').val(urlParams.get('userId'));
+            $('#userName').val(urlParams.get('userName'));
+            $('#phoneNo').val(urlParams.get('phoneNo'));
+        });
+        
+        
     </script>
 </head>
 <body>
@@ -106,9 +116,9 @@
         </div>
         <div class="card-body">
             <form id="changeMyPwForm" action="changeMyPw.do" class="form-signin" method="POST">     
-                <input type="hidden" id="userId" name="userId" value="${userId}">
-                <input type="hidden" id="userName" name="userName" value="${userName}">
-                <input type="hidden" id="phoneNo" name="phoneNo" value="${phoneNo}">
+                <input type="hidden" id="userId" name="userId">
+                <input type="hidden" id="userName" name="userName">
+                <input type="hidden" id="phoneNo" name="phoneNo">
                 
                 <label for="userPwd">새 비밀번호:</label>
                 <input type="password" class="form-control" id="userPwd" name="userPwd" required><br>

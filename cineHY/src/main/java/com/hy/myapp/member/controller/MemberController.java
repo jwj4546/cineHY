@@ -265,46 +265,43 @@ public class MemberController {
                            @RequestParam("phoneNo") String phoneNo) {
         Member member = memberService.findMyPw(userId, userName, phoneNo);
         if (member == null) {
-            return "not_found"; // 비밀번호를 찾을 수 없다는 메시지 반환
+            return "not_found"; 
         } else {
-            return "found"; // 비밀번호를 찾았다는 메시지 반환
+            return "found"; 
         }
     }
 
-    // 비밀번호 변경 페이지를 위한 GET 요청 처리
+
     @GetMapping("changeMyPw")
     public String changeMyPwPage() {
         return "member/find/changeMyPw"; // JSP 파일 경로를 지정
     }
 
-    // 비밀번호 변경 처리
+
     @PostMapping("changeMyPw.do")
     public String changePw(@RequestParam("userId") String userId,
                            @RequestParam("userName") String userName,
                            @RequestParam("phoneNo") String phoneNo,
                            @RequestParam("userPwd") String userPwd,
                            Model model) {
-        // 비밀번호 암호화
-        String encPwd = bcryptPasswordEncoder.encode(userPwd);
 
-        // Member 객체에 정보 설정
         Member member = new Member();
         member.setUserId(userId);
         member.setUserName(userName);
         member.setPhoneNo(phoneNo);
-        member.setUserPwd(encPwd);
+        member.setUserPwd(userPwd); // 비밀번호는 서비스에서 암호화됨
 
-        // 비밀번호 변경 시도
         int result = memberService.changePw(member);
 
         if (result > 0) {
-            model.addAttribute("member", member);
-            return "redirect:/"; // 비밀번호 변경 후 리다이렉트
+            model.addAttribute("successMessage", "비밀번호 변경 성공!");
+            return "redirect:/";
         } else {
-            model.addAttribute("errorMessage", "비밀번호 변경에 실패했습니다.");
-            return "common/errorPage"; // 오류 페이지로 리턴
+            model.addAttribute("errorMessage", "비밀번호 변경 실패ㅠ");
+            return "common/errorPage"; // 실패 시 오류 페이지로 리다이렉트
         }
     }
+
     
     
     @GetMapping("memberList")
