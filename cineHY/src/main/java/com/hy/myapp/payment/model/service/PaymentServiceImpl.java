@@ -61,7 +61,6 @@ public class PaymentServiceImpl implements PaymentService {
 		IamportResponse<Payment> iamportResponse = api.paymentByImpUid(request.getImpUid());
 		BigDecimal paidAmount = iamportResponse.getResponse().getAmount();			// 사용자가 실제 결제한 금액
 		
-		//log.info("이게 뭔데 : {}", request.getImpUid());
 
 		
 		if(!(preAmount.compareTo(paidAmount) == 0)) {

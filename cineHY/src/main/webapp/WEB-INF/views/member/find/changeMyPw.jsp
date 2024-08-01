@@ -84,7 +84,7 @@
 
             if (regPw.test($pwdInput.val())) {
                 if ($pwdInput.val() === $pwdInput2.val()) {
-                    $('#changeMyPwForm').off('submit').submit(); // Prevent double submission
+                    $('#changeMyPwForm').off('submit').submit(); 
                 } else {
                     alert('비밀번호가 일치해야 합니다!');
                 }

@@ -36,8 +36,6 @@ public class PaymentController {
 	@ResponseBody
 	@PostMapping("payment/validate")
 	public Payment validatePayment(@RequestBody PaymentVO request) throws IamportResponseException, IOException {
-		log.info("이게 뭔데 : {}", request);
-		log.info("asd {}", paymentServiceImpl.validatePayment(request));
 		return paymentServiceImpl.validatePayment(request);
 	}
 	
