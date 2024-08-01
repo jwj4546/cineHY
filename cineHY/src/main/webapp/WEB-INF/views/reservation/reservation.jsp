@@ -341,7 +341,7 @@ $('#seatBtn').on('click', () => {
     const screeningIdStr = $('#timeSelect option:selected').data('screen-id');
     const screeningId = parseInt(screeningIdStr, 10);
 
-	if(uid !== null) {
+	if(uid) {
 	    if (movieCode && theaterName && startDate && startTime && !(startTime == "스케줄이 없습니다.")) {
 	        const res = {
 	            movieCode,
