@@ -192,6 +192,7 @@
         const tabItems = document.querySelectorAll(".tab__item");
         const tabContents = document.querySelectorAll(".tab__content");
 
+        //tab처리 
         tabItems.forEach((item, index) => {
             item.addEventListener("click", (e) => {
                 e.preventDefault();
