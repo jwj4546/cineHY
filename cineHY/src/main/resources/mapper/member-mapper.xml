@@ -14,12 +14,14 @@
 </sql>
 	
 	<select id="findAll" resultType="Member" parameterType="map"> 
-	    <include refid="selectMember"/>
-	    FROM 
-	    		TB_MEMBER
-	    WHERE
-	    		STATUS = 'Y'
-	</select>
+    <include refid="selectMember"/>
+    FROM 
+        TB_MEMBER
+    WHERE
+        STATUS = 'Y'
+    ORDER BY
+        JOIN_DATE DESC
+</select>
 	
 	<select id="findById" parameterType="String" resultType="Member">
 		SELECT
@@ -152,18 +154,16 @@
     </select>
     
 
-		<update id="changePw"  parameterType="Member">
-		    UPDATE 
-		        TB_MEMBER
+		<update id="changePw" parameterType="member">
+		    UPDATE TB_MEMBER
 		    SET 
 		        USER_PWD = #{userPwd},
 		        MODIFY_DATE = SYSDATE
 		    WHERE 
 		        USER_ID = #{userId}
-		   
 		</update>
 	
-	<update id="myInfoChange" parameterType="Member">
+	<update id="myInfoChange" parameterType="member">
 	
 		UPDATE
 			    TB_MEMBER

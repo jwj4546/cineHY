@@ -241,17 +241,22 @@ article input {
         }
     }
     
-    function formSub() {
+    function formSub(event) {
+        event.preventDefault();
+        
+       
         const checkB1 = document.getElementById("hy-agree");    
         const checkB2 = document.getElementById("info-agree");
         const checkB3 = document.getElementById("pro-agree");
 
+        
         if (!(checkB1.checked && checkB2.checked && checkB3.checked)) {
-            alert('모든 약관에 동의해주세요!');
-            return; 
+            alert('모든 약관에 동의해주세요!'); 
+            return false; 
         }
+
        
-        document.getElementById("join-form").submit(); 
+        document.getElementById("join-form").submit();
     }
     
     function pwCheck() {
@@ -286,187 +291,133 @@ article input {
 </head>
 <body>
     <article class="join">
-
         <h1>회원가입</h1><br><br>
         <div>
             <p>회원정보 입력</p>
-            
-             <div id = must class = must>
-		        <p>* 은 필수사항입니다</p>
-		     </div>
-		    <form action="join.do" method="post" enctype="multipart/form-data">
-			    <div>
-			        <p>아이디 * </p><span id="IdCheckResult" style="font-size:12px;"></span>	                
-			        <input type="text" 
-			        	   id="userId" 
-			        	   oninput=idCheck() 
-			        	   placeholder="아이디를 입력해주세요." 
-			        	   name="userId" required
-			        	   >
-			        <button type="button" 
-			        		id = "checkId-btn" 
-			        		class="btn btn-dark">
-			        		중복확인
-			        		</button>
-			    </div>
-			    
-			    <div>
-			        <p>비밀번호 *</p>
-			        <input type="password" 
-			        	   id="userPwd" 
-			        	   oninput=pwCheck() 
-			        	   placeholder="비밀번호를 입력해주세요." 
-			        	   name="userPwd" required
-			        	   >
-			    </div>
-			    <div>
-			        <p>비밀번호 확인 *</p>
-			        <span id="pwdCheckResult" style="font-size:12px;"></span>
-			        <input type="password" 
-			        	   id="userPwd2" 
-			        	   oninput=pwCheck() 
-			        	   placeholder="비밀번호를 한번 더 입력해주세요." 
-			        	   name="userPwd2" required
-			        	   >
-			    </div>
-			    <div>
-			        <p>이름 *</p>
-			        <input type="text" id="userName" placeholder="이름을 입력해주세요." name="userName" required>
-			    </div>
-			    <div>
-			        <p>이메일 *</p>
-			        <input type="email" id="email" placeholder="이메일을 입력해주세요." name="email" required>
-			    </div>
-			    <div>
-			        <p>휴대폰 *</p>
-			        <input type="tel" id="phoneNo" placeholder="연락처를 입력해주세요.(-없이)" name="phoneNo" required>
-			    </div>
-			    <div>
-			        <p>주소</p>
-			        <input type="text" id="postcode" placeholder="우편번호">
-					<input type="text" id="address" placeholder="주소" name = "address"><br>
-					<input type="text" id="detailAddress" placeholder="상세주소">
-					<input type="text" id="extraAddress" placeholder="참고항목">
-					<input type="button" class = "btn btn-dark" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
-			    </div>
-			    <div>
-			        <p>닉네임</p><span id="NickCheckResult" style="font-size:12px;"></span>
-			        <input type="text" id="userNick" placeholder="닉네임을 입력해주세요." name="userNick">
-			        <button type="button" id="checkNick-btn" class="btn btn-dark">중복확인</button>
-			    </div>
-			    <div class="gender" id="gender">
-			        <p>성별</p>
-			        <div style="display: flex; align-items: center;">
-			            <input type="radio" id="Male" value="M" name="gender"><label for="Male">남자</label>
-			            <input type="radio" id="Female" value="F" name="gender"><label for="Female">여자</label>
-			        </div>
-			    </div>
-			    <div>
-			        <p>생년월일</p>
-			        <input type="date" id="birthDate" name="birthDate">
-			    </div>
-			   
-			    <div>
-			        <p>선호장르</p>
-			        <div>
-			            <div>
-			                1순위 :
-			                <select name="preGenre1">
-			                    <option>멜로</option>
-			                    <option>액션</option>
-			                    <option>애니메이션</option>
-			                    <option>공포</option>
-			                    <option>코미디</option>
-			                    <option>스릴러</option>
-			                    <option>SF</option>
-			                    <option>드라마</option>
-			                    <option>로맨스</option>
-			                    <option>뮤지컬</option>
-			                    <option>판타지</option>
-			                    <option>역사</option>
-			                </select>
-			                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			                2순위 :
-			                <select name="preGenre2">
-			                    <option>멜로</option>
-			                    <option>액션</option>
-			                    <option>애니메이션</option>
-			                    <option>공포</option>
-			                    <option>코미디</option>
-			                    <option>스릴러</option>
-			                    <option>SF</option>
-			                    <option>드라마</option>
-			                    <option>로맨스</option>
-			                    <option>뮤지컬</option>
-			                    <option>판타지</option>
-			                    <option>역사</option>
-			                </select>
-			            </div>
-			        </div>
-			    </div>
-			    
-			    
-			    
-			    <button type="submit" id="join-btn" onclick="formSub()"  class="join-btn btn-primary" >가입하기</button>
-			    </form>
-			
-
-            <div class = "terms" id = "terms">
-                <p>이용약관동의</p>
+            <div id="must" class="must">
+                <p>* 은 필수사항입니다</p>
+            </div>
+            <form id="join-form" action="join.do" method="post" enctype="multipart/form-data">
                 <div>
-                    <input type="checkbox" 
-                    	   onclick="onCheckClick()" 
-                    	   name="all-agree" 
-                    	   id="all-agree"
-                    	   >
-                    	   전체 동의하기
-                    	   <br>               
+                    <p>아이디 * </p><span id="IdCheckResult" style="font-size:12px;"></span>                
+                    <input type="text" id="userId" oninput="idCheck()" placeholder="아이디를 입력해주세요." name="userId" required>
+                    <button type="button" id="checkId-btn" class="btn btn-dark">중복확인</button>
                 </div>
                 <div>
+                    <p>비밀번호 *</p>
+                    <input type="password" id="userPwd" oninput="pwCheck()" placeholder="비밀번호를 입력해주세요." name="userPwd" required>
+                </div>
+                <div>
+                    <p>비밀번호 확인 *</p><span id="pwdCheckResult" style="font-size:12px;"></span>
+                    <input type="password" id="userPwd2" oninput="pwCheck()" placeholder="비밀번호를 한번 더 입력해주세요." name="userPwd2" required>
+                </div>
+                <div>
+                    <p>이름 *</p>
+                    <input type="text" id="userName" placeholder="이름을 입력해주세요." name="userName" required>
+                </div>
+                <div>
+                    <p>이메일 *</p>
+                    <input type="email" id="email" placeholder="이메일을 입력해주세요." name="email" required>
+                </div>
+                <div>
+                    <p>휴대폰 *</p>
+                    <input type="tel" id="phoneNo" placeholder="연락처를 입력해주세요.(-없이)" name="phoneNo" required>
+                </div>
+                <div>
+                    <p>주소</p>
+                    <input type="text" id="postcode" placeholder="우편번호">
+                    <input type="text" id="address" placeholder="주소" name="address"><br>
+                    <input type="text" id="detailAddress" placeholder="상세주소">
+                    <input type="text" id="extraAddress" placeholder="참고항목">
+                    <input type="button" class="btn btn-dark" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
+                </div>
+                <div>
+                    <p>닉네임 *</p><span id="NickCheckResult" style="font-size:12px;"></span>
+                    <input type="text" id="userNick" placeholder="닉네임을 입력해주세요." name="userNick" required>
+                    <button type="button" id="checkNick-btn" class="btn btn-dark">중복확인</button>
+                </div>
+                <div class="gender" id="gender">
+                    <p>성별</p>
+                    <div style="display: flex; align-items: center;">
+                        <input type="radio" id="Male" value="M" name="gender"><label for="Male">남자</label>
+                        <input type="radio" id="Female" value="F" name="gender"><label for="Female">여자</label>
+                    </div>
+                </div>
+                <div>
+                    <p>생년월일</p>
+                    <input type="date" id="birthDate" name="birthDate">
+                </div>
+                <div>
+                    <p>선호장르</p>
+                    <div>
+                        <div>
+                            선택 1 : 
+                            <select name="preGenre1">
+                                <option>멜로</option>
+                                <option>액션</option>
+                                <option>애니메이션</option>
+                                <option>공포</option>
+                                <option>코미디</option>
+                                <option>스릴러</option>
+                                <option>SF</option>
+                                <option>드라마</option>
+                                <option>로맨스</option>
+                                <option>뮤지컬</option>
+                                <option>판타지</option>
+                                <option>역사</option>
+                            </select>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            선택 2 :
+                            <select name="preGenre2">
+                                <option>멜로</option>
+                                <option>액션</option>
+                                <option>애니메이션</option>
+                                <option>공포</option>
+                                <option>코미디</option>
+                                <option>스릴러</option>
+                                <option>SF</option>
+                                <option>드라마</option>
+                                <option>로맨스</option>
+                                <option>뮤지컬</option>
+                                <option>판타지</option>
+                                <option>역사</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 
+                <button type="submit" id="join-btn" onclick="formSub(event)" class="join-btn btn-primary">가입하기</button>
+            </form>
+            
+            <div class="terms" id="terms">
+                <p>이용약관동의</p>
+                <div>
+                    <input type="checkbox" onclick="onCheckClick()" name="all-agree" id="all-agree">
+                    전체 동의하기
+                    <br>               
+                </div>
+                <div>
                     <div>
-                    
-                        <input type="checkbox" 
-                       		   name="agree" 
-                       		   id="hy-agree"
-                       		   >
-                       		   이용약관 동의 
-                       		   <span>(필수)</span>
-	                           <a href="terms">
-	                           약관 보기 >
-	                           </a>
+                        <input type="checkbox" name="agree" id="hy-agree">
+                        이용약관 동의 
+                        <span>(필수)</span>
+                        <a href="terms">약관 보기 ></a>
                     </div>
                     <div>
-                        <input type="checkbox" 
-                        	   name="agree" 
-                        	   id="info-agree"
-                        	   >
-                        	   개인정보 수집 및 이용 동의 
-                        	   <span>(필수)</span>
-		                       <a href="terms">
-		                       약관 보기 >
-		                       </a>
+                        <input type="checkbox" name="agree" id="info-agree">
+                        개인정보 수집 및 이용 동의 
+                        <span>(필수)</span>
+                        <a href="terms">약관 보기 ></a>
                     </div>
                     <div>
-                        <input type="checkbox" 
-                        	   name="agree" 
-                        	   id="pro-agree">프로모션 정보 수신 동의 
-                        	   <span>(필수)</span>
-	                           <a href="terms">
-	                           약관 보기 >
-	                           </a>	
-                    
-                    
+                        <input type="checkbox" name="agree" id="pro-agree">
+                        프로모션 정보 수신 동의 
+                        <span>(필수)</span>
+                        <a href="terms">약관 보기 ></a>
                     </div>
-                    
-                    
-                    
-                    
-                    
                 </div>
             </div>
         </div>
-
     </article>
     
     <script>

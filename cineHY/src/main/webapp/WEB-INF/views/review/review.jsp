@@ -92,6 +92,7 @@
 	width: 100%;
 	align-items: center;
 	text-align: center;
+	justify-content: center;
 	box-sizing: border-box;
 	display: inline-flex;
 	float: left;
@@ -103,9 +104,8 @@
 	margin-right: 10px;
 	display: inline-block;
 	align-self: center;
-	background:
-		url('https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FE2bww%2FbtsviSSBz4Q%2F5UYnwSWgTlFt6CEFZ1L3Q0%2Fimg.png')
-		no-repeat;
+	color:black;
+	background-image: url('resources/images/emptyStar.png');
 	background-size: 100%;
 	box-sizing: border-box;
 }
@@ -428,7 +428,7 @@
 			}
 		
 		
-		 let starCount = 0;
+		let starCount = 0;
 		 function selectReview(movieId, page = 1) {
 		     $.ajax({
 		         url: 'selectReview',
@@ -704,18 +704,29 @@
         	    });
     	}
         
-        function generateStars(starCount) {
+        function generateStars(starCount) {  //평균 별점 출력
             let stars = '';
+            const fullStarURL = 'https://blog.kakaocdn.net/dn/b2d6gV/btsvbDoal87/XH5b17uLeEJcBP3RV3FyDk/img.png';
+            const emptyStarURL = 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FE2bww%2FbtsviSSBz4Q%2F5UYnwSWgTlFt6CEFZ1L3Q0%2Fimg.png';
 
             if (starCount==0 || starCount === null || starCount === undefined) {
-            	stars+= '☆☆☆☆☆';
+            	//stars+= '☆☆☆☆☆';
+            	for (let i = 0; i < 5; i++) {
+                    stars += `<img src="resources/images/emptyStar.png" alt="Star" style="width:36px; height:36px; margin-left:10px;"/>`;
+                }
             }else {
+            	/*
             	for (let i = 0; i < Math.floor(starCount); i++) {
                     stars += '⭐';
+                }*/
+                for (let i = 0; i < Math.floor(starCount); i++) {
+                    stars += `<img src="\${fullStarURL}" alt="Star" style="width:38px; height:38px; margin-right:8px;"/>`;
                 }
 
                 if (starCount % 1 !== 0) {  // 소수점이 있을 경우 반개 별 추가
-                    stars += '✨';
+                    //stars += '✨';
+                    stars += '<img src="resources/images/star_half.png" alt="Half Star" style="padding-top:0px; margin-botton:10px; padding-botton:10px; width:18px; height:33px;"/>';
+
                 }
             }
 
@@ -727,7 +738,7 @@
 
         
         
-        function starAvg(movieId) {
+        function starAvg(movieId) {  //평균 평점 출력
             $.ajax({
                 url: 'starAvg',
                 data: {
