@@ -182,10 +182,116 @@ cineHY는 다양한 영화 목록을 외부 API를 통해 JSON 형식으로 데�
 사용자 페이지
 ![영화API](README_IMG/cineHY%20gif/movieApi.gif)
 
-front: OPEN API 영화 데이터 중 관리자가 등록한 영화를 박스오피스 순 / 선호도별 추천영화 / 상영 예정 영화가출력이 되도록 AJAX로 응답을 받아 출력하는 코드에 조건문을 추가했습니다. 
+front: OPEN API 영화 데이터 중 관리자가 등록한 영화를 박스오피스 순 / 선호도별 추천영화 / 상영 예정 영화가출력이 되도록 AJAX로 응답을 받아 출력하는 코드입니다.
+
+박스오피스와 상영예정작에 대한 실시간 순위정보를 받기위해 등록한 영화를 출력할때마다 API가 호출됩니다. 이때 관리자가 등록한 영화만 출력되도록 하는 것이 기능 구현의 목표였습니다.
+
+먼저 TB_MOVIE 에서 등록한 영화 정보를 가져와 movieIdList로 담아줍니다.
+상영등급은 추후에 문제점에서도 나오지만 API에서 호출해오는 과정을 최소화 하기위해 INSERT 시에 함께 담아두었습니다. 해당 정보도 출력하기 위해 movieRatings에 담았습니다.
+```javascript
+const movieIdList = [];
+const movieRatings = {};
+
+const getMovieList = () => {
+    return $.ajax({
+        url: 'movieList/movieEnrollList',
+        method: 'GET',
+        dataType: 'json',
+        success: response => {
+            const data = response.data;
+            for (const movieDB of data)
+            movieIdList.push(movieDB.movieCode);
+            
+            if (!Array.isArray(data)) {
+                data = [data];
+            }
+            data.forEach(movie => {
+                movieRatings[movie.movieCode] = movie.rating;
+            });
+        },
+        error: function() {
+            console.log('데이터를 불러올 수 없습니다.');
+        }
+    });
+}
+
+```
+그리고 실시간으로 순위에 대한 정보를 받기위해 OPEN API 정보를 AJAX로 요청하고
+받아온 데이터를 출력 시에 위에서 저장해둔 movieIdList의 id가 일치하는 영화만 출력하도록 조건문을 추가했습니다.
 
 
-back: 하나의 페이지 번호를 파라미터로 받는 OPEN API 영화 리스트를 요청할 경우, 특정 페이지에 조건에 일치하는 영화만 나오는 문제를 해결하기 위해 컨트롤러에서 10페이지까지의 데이터를 한 번에 받아와서 요청한 페이지에 맞는 영화 리스트를 제공하도록 반복문을 활용했습니다
+```javascript
+
+const fetchMovies = () => {
+    $.ajax({
+        url: 'movieList/nowPlaying',
+        method: 'GET',
+        dataType: 'json',
+        success: data => {
+            displayMovies(data);
+            displayLikeMovies(data);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('영화 데이터를 불러오는 중 오류 발생:', textStatus, errorThrown);
+        }
+    });
+}
+
+const displayMovies = (data) => {
+    const movieList = $('#movieList');
+    movieList.empty();
+    let rank = 1;
+
+    const $fragment = $(document.createDocumentFragment());
+
+    data.forEach((entry) => {
+        if (entry.results && entry.results.length > 0) {
+            entry.results.forEach((movie) => {
+                if (movieIdList.includes(movie.id)) {  // 조건문 추가
+                    const rating = movieRatings[movie.id] || 'N/A';
+                    const movieCardHtml =; 
+                    
+                    ...생략
+                }
+          });      
+     });
+}
+                
+```
+
+back: 하나의 페이지 번호를 파라미터로 받는 OPEN API 영화 리스트를 요청할 경우, 특정 페이지에 조건에 일치하는 영화만 나오는 문제를 해결하기 위해 컨트롤러에서 10페이지까지의 데이터를 한 번에 받아와서 요청한 페이지에 맞는 영화 리스트를 제공하도록 반복문을 활용했습니다.
+
+```javascript
+private static final String API_URL = "https://api.themoviedb.org/3/movie/";
+private static final String BEARER_TOKEN = "Bearer MY TOKEN ><"; // 여기에 실제 Bearer Token을 입력
+private static final int TOTAL_PAGES = 10; //반복횟수
+
+@GetMapping("nowPlaying") // 상영중인 영화 맵핑값
+public String getNowPlayingMovie() throws IOException {
+
+    OkHttpClient client = new OkHttpClient();
+    List<String> allMoviesResponses = new ArrayList<>();
+
+    for (int pageNumber = 1; pageNumber <= TOTAL_PAGES; pageNumber++) {
+        Request request = new Request.Builder()
+                .url(API_URL + "now_playing?language=ko-KR&region=KR&page=" + pageNumber + "&include_image_language=en,null&sort_by=popularity.desc")
+                .get()
+                .addHeader("accept", "application/json")
+                .addHeader("Authorization", BEARER_TOKEN)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            okhttp3.ResponseBody responseBody = response.body();
+            if (responseBody != null) {
+                allMoviesResponses.add(responseBody.string());
+            }
+        }
+    }
+    String combinedResponse = "[" + String.join(",", allMoviesResponses) + "]";
+    return combinedResponse;
+}
+
+```
 
 **`상영중인 영화`**
 TMDB OPEN API 데이터를 호출하고 → TB_MOVIE에 INSERT한 영화 비교하여 → 박스오피스 순으로 조회
