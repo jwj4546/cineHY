@@ -193,6 +193,9 @@ cineHY는 다양한 영화 목록을 외부 API를 통해 JSON 형식으로 데�
 ### 정보수정/회원탈퇴
 ![회원탈퇴](README_IMG/cineHY%20gif/resign.gif)
 
+### 관리자 멤버조회
+![멤버조회](README_IMG/cineHY%20gif/merberList.gif)
+
 
 ### 영화 API
 
