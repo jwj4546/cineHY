@@ -42,7 +42,7 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	
 	public PaymentServiceImpl() {
-		this.api = new IamportClient("8006731832536307", "Rzaw0rU4BFImk2cqDjAGXcGywGGgAzLfy16909OPBxtvdxzEe1zzWonqmoQwdbiJN45sSaGqTXc1BMJs");
+		this.api = new IamportClient(key, secret);
 	}
 
 	public void postPrepare(PrePaymentVO request) throws IamportResponseException, IOException {
@@ -61,7 +61,6 @@ public class PaymentServiceImpl implements PaymentService {
 		IamportResponse<Payment> iamportResponse = api.paymentByImpUid(request.getImpUid());
 		BigDecimal paidAmount = iamportResponse.getResponse().getAmount();			// 사용자가 실제 결제한 금액
 		
-		//log.info("이게 뭔데 : {}", request.getImpUid());
 
 		
 		if(!(preAmount.compareTo(paidAmount) == 0)) {
