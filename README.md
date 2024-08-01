@@ -173,7 +173,7 @@ cineHY는 다양한 영화 목록을 외부 API를 통해 JSON 형식으로 데�
 
 ### 영화 API
 사용자 페이지
-![영화API](https://postfiles.pstatic.net/MjAyNDA4MDFfMjg4/MDAxNzIyNDc1Nzk2MzE0.UWOuIFR0Uh09TcaONSbep6hz0VdpMgrrA_n_75lxc4Yg.3lImzp8kPdNo1bRlVwlvKmpegG9NVRU41WzKkRFh_Wsg.GIF/movieApi.gif?type=w3840)
+![영화API](README_IMG/cineHY%20gif/movieApi.gif)
 
 front: OPEN API 영화 데이터 중 관리자가 등록한 영화를 박스오피스 순 / 선호도별 추천영화 / 상영 예정 영화가출력이 되도록 AJAX로 응답을 받아 출력하는 코드에 조건문을 추가했습니다. 
 
@@ -215,7 +215,7 @@ TB_MOVIE_SCEDULE 에서
 상영시작시간과 종료시간 선택 시 서로 값을 비교하여 시작시간이 종료시간을 넘을 수 없도록 처리했습니다. 
 
 ### 멀티검색
-![멀티검색](https://postfiles.pstatic.net/MjAyNDA4MDFfMjQ2/MDAxNzIyNDc2Nzk5MTg0.QSoDj2LTHbnKcIg0Oci391L2fqCHrj0CA18Io7BPp_Ig.Xqf_yyJgpLGO7-cl7fYo0ru9bUFVwSzcMK1eQwxYNCgg.GIF/multiSearch.gif?type=w3840)
+![멀티검색](README_IMG/cineHY%20gif/multiSearch.gif)
 
 `keyword`를 전역변수로 선언 후 등록된 영화 리스트(movieIdList) AJAX 요청과 키워드를 파라미터로 받아 OPEN API에서 검색결과(searchMovie( ))를 받아오는 AJAX 요청을 보냅니다. `search` 함수는 `getMovieRatings`와 `searchMovies` 함수가 모두 완료될 때까지 기다립니다. `Promise.all`을 사용하여 두 비동기 작업을 병렬로 실행합니다.
 
