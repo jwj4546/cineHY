@@ -164,12 +164,17 @@ cineHY는 다양한 영화 목록을 외부 API를 통해 JSON 형식으로 데�
 
 ## 주요기능
 
-### 로그인회원가입/아이디&비밀번호찾기
+### 로그인/회원가입
+![회원가입](README_IMG/cineHY%20gif/join.gif)
 
+### 아이디 찾기
+![아이디찾기](README_IMG/cineHY%20gif/findId.gif)
 
+### 비밀번호 찾기
+![비밀번호 찾기](README_IMG/cineHY%20gif/findPw.gif)
 
 ### 정보수정/회원탈퇴
-
+![회원탈퇴](README_IMG/cineHY%20gif/resign.gif)
 
 
 ### 영화 API
@@ -340,12 +345,19 @@ TB_MOVIE_SCEDULE 에서
 ‘상영중인 영화’는 media_type이 movie 인 데이터 중 TB_MOVIE 에서 가져온movie_code와 일치하는 조건문으로 반복 출력합니다.
 
 ### 예매
+
 seat.jsp(ajax)
+
 ![멀티검색](README_IMG/seat1.png)
 ### 결제
+
 postPrepare()
+
 ![멀티검색](README_IMG/postPrepare.png)
+
+
 validatePayment()
+
 ![멀티검색](README_IMG/validatePayment.png)
 ### 리뷰
 
