@@ -128,7 +128,7 @@
             <th>유효기간</th>
             <td>${ product.productName } : 구매일로부터 12개월 이내</td>
           </tr>
-        </table>
+        </table><hr>
         <div class="quantity-selector">
           <button class="btn btn-secondary" onclick="minus()">-</button>
           <input type="text" value="1" id="amount" class="form-control" style="width: 50px; text-align: center;">
