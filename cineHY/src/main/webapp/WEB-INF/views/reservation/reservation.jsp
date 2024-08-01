@@ -341,28 +341,31 @@ $('#seatBtn').on('click', () => {
     const screeningIdStr = $('#timeSelect option:selected').data('screen-id');
     const screeningId = parseInt(screeningIdStr, 10);
 
-    console.log('screeningId:', screeningId);
-
-    if (uid && movieCode && theaterName && startDate && startTime && !(startTime == "스케줄이 없습니다.")) {
-        const res = {
-            movieCode,
-            theaterCode: theaterName,
-            ticketDate: startDate,
-            startTime,
-            movieName: movie,
-            theaterName: theater,
-            screeningId // 세션에 screeningId 추가
-        };
-
-        console.log(res);
-
-        const resInfo = JSON.stringify(res);
-        console.log(resInfo);
-        window.sessionStorage.setItem('resInfo', resInfo);
-        location.href = 'seat';
-    } else {
-        alert('모든 항목을 선택해줘잉');
-    }
+	if(uid !== null) {
+	    if (movieCode && theaterName && startDate && startTime && !(startTime == "스케줄이 없습니다.")) {
+	        const res = {
+	            movieCode,
+	            theaterCode: theaterName,
+	            ticketDate: startDate,
+	            startTime,
+	            movieName: movie,
+	            theaterName: theater,
+	            screeningId // 세션에 screeningId 추가
+	        };
+	
+	        console.log(res);
+	
+	        const resInfo = JSON.stringify(res);
+	        console.log(resInfo);
+	        window.sessionStorage.setItem('resInfo', resInfo);
+	        location.href = 'seat';
+	    } else {
+	        alert('모든 항목을 선택해주세요');
+	    }
+	}
+	else {
+		alert('로그인이 필요한 서비스 입니다.');
+	}
 });
 
 
