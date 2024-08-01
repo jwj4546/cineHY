@@ -164,12 +164,17 @@ cineHY는 다양한 영화 목록을 외부 API를 통해 JSON 형식으로 데�
 
 ## 주요기능
 
-### 로그인회원가입/아이디&비밀번호찾기
+### 로그인/회원가입
+![회원가입](README_IMG/cineHY%20gif/join.gif)
 
+### 아이디 찾기
+![아이디찾기](README_IMG/cineHY%20gif/findId.gif)
 
+### 비밀번호 찾기
+![비밀번호 찾기](README_IMG/cineHY%20gif/findPw.gif)
 
 ### 정보수정/회원탈퇴
-
+![회원탈퇴](README_IMG/cineHY%20gif/resign.gif)
 
 
 ### 영화 API
