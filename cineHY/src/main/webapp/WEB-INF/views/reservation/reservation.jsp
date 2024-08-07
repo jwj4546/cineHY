@@ -37,7 +37,8 @@
 		        <button class="btn btn-secondary" id="resetBtn" style="float: right; margin-left: 10px;">예매 다시하기</button>
 		        <a href="theater" type="button" button class="btn btn-primary" style="float: right;"> 상영시간표</a>
 		    </div>  
-		    <br><br><br>
+		    <br><br>
+		    <p id="reservationRate"></p>
 	        
 	        <div class="row mb-3">
 	            <div class="col">
@@ -123,6 +124,7 @@ $(document).ready(() => {
                 $('#movieSelect').change(function() {
                     selectedMovieCode = $(this).val();
                     getTheater();
+                    movieReservationRate(selectedMovieCode);
                 });
             },
             error: (jqXHR, textStatus, errorThrown) => {
@@ -152,7 +154,7 @@ $(document).ready(() => {
                 // 극장 선택 시 스케줄을 업데이트하는 함수 호출
                 $('#theaterSelect').change(function() {
                     selectedTheaterCode = $(this).val();
-                    fetchScheduleTime();
+                    fetchScheduleTime(movieCode);
                 });
             },
             error: (jqXHR, textStatus, errorThrown) => {
@@ -221,6 +223,22 @@ $(document).ready(() => {
             });
         }
     }
+    
+    const movieReservationRate = (movieCode) => {
+    	$.ajax({
+    		url : `movieSchedule/reservationRate/\${movieCode}`,
+    		method : 'GET',
+    		dataType : 'json',
+    		success : (response) => {
+    			const reservationRate = response.data;
+    			$('#reservationRate').text(`예매율 : \${reservationRate.toFixed(1)}%`);
+    		},
+    		error : (jqxHR, textStatus, errorThrown) => {
+    			console.error('error : ', textStatus, errorThrown);
+    		}
+    	});
+    }
+    
 
     const displaySelectedMovie = () => {
         const movie = $('#movieSelect option:selected').text();

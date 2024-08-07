@@ -62,7 +62,7 @@
     <script>
     	
     	const info = JSON.parse(window.sessionStorage.getItem('seatInfo'));	
-    	const merchant_uid = "O" + new Date().getTime();
+    	const merchant_uid = "O" + new Date().getTime() + "-" + Math.floor(Math.random() * 10000);
     	
     	window.onload = () => {
     		

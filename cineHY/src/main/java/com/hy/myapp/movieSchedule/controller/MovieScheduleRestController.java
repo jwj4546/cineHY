@@ -188,5 +188,16 @@ public class MovieScheduleRestController {
 		return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
 	}
 	
+	@GetMapping(value="reservationRate/{movieCode}", produces="application/json; charset=UTF-8")
+    public ResponseEntity<Message> getReservationRate(@PathVariable int movieCode) { 
+        
+		double reservationRate = movieScheduleService.getReservationRate(movieCode);
+        Message responseMsg = Message.builder()
+                                     				  .data(reservationRate)
+				                                      .message("조회성공")
+				                                      .build();
+        
+        return ResponseEntity.status(HttpStatus.OK).body(responseMsg);
+    }
 	
 }

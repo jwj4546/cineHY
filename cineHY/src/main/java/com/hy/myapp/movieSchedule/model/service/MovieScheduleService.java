@@ -27,6 +27,9 @@ public interface MovieScheduleService {
 	int delete(int screeningId);
 
 
+	double getReservationRate(int movieCode);
+
+
 
 
 }

@@ -49,4 +49,9 @@ public class MovieScheduleServiceImpl implements MovieScheduleService {
 		return movieScheduleRepository.delete(sqlSession, screeningId);
 	}
 
+	@Override
+	public double getReservationRate(int movieCode) {
+		return movieScheduleRepository.getReservationRate(sqlSession, movieCode);
+	}
+
 }

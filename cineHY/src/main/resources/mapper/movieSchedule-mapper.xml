@@ -120,6 +120,79 @@
 	 	   SCREENING_ID = #{screeningId}
 
 </delete>
+
+<select id="getReservationRate" resultType="double">
+	 WITH 
+	 			MOVIE_SCHEDULE AS 
+	 			(
+            	SELECT 
+                			MS.MOVIE_CODE,
+                			MS.SCREEN_CODE
+            	  FROM 
+            				TB_MOVIE_SCHEDULE MS
+        		),
+        		RESERVED_SEATS AS 
+        		(
+            	SELECT 
+                			MS.MOVIE_CODE,
+                			COUNT(*) AS RESERVED_SEATS
+            	  FROM 
+            				TB_SEAT S
+            	   JOIN 
+            	   			TB_MOVIE_SCHEDULE MS 
+            	   	 ON 
+            	   	 		S.SCREENING_ID = MS.SCREENING_ID
+            	GROUP 
+            		  BY 
+            		  		MS.MOVIE_CODE
+        		),
+        		TOTAL_SEATS AS 
+        		(
+            	SELECT 
+                			MS.MOVIE_CODE,
+                			SUM(SC.SEAT) AS TOTAL_SEATS
+            	  FROM 
+            	  			MOVIE_SCHEDULE MS
+            	   JOIN 
+            	   			TB_SCREEN SC 
+            	   	 ON 
+            	   	 		MS.SCREEN_CODE = SC.SCREEN_CODE
+            	GROUP 
+            		  BY 
+            		  		MS.MOVIE_CODE
+        		)
+	SELECT 
+       CASE 
+      WHEN 
+      			TS.TOTAL_SEATS > 0 
+       THEN 
+            	(RS.RESERVED_SEATS / TS.TOTAL_SEATS) * 100
+        ELSE 
+            	0
+    	 END 
+    	 		AS RESERVATION_RATE
+	   FROM 
+	   			(
+	   			   SELECT 
+	   			DISTINCT 
+	   							MOVIE_CODE 
+	   				 FROM 
+	   				 			TB_MOVIE_SCHEDULE
+	   			) MS
+ LEFT JOIN 
+ 				RESERVED_SEATS RS 
+ 		   ON 
+ 		   		MS.MOVIE_CODE = RS.MOVIE_CODE
+LEFT JOIN 
+				TOTAL_SEATS TS 
+		  ON 
+		  		MS.MOVIE_CODE = TS.MOVIE_CODE
+	WHERE 
+				MS.MOVIE_CODE = #{movieCode}
+	ORDER 
+		  BY 
+		  		MS.MOVIE_CODE
+</select>
 	
 
 </mapper>

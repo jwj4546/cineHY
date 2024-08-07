@@ -66,4 +66,9 @@ public class MovieScheduleRepository {
 		return sqlSession.delete("movieScheduleMapper.delete", screeningId);
 	}
 
+
+	public double getReservationRate(SqlSessionTemplate sqlSession, int movieCode) {
+		return sqlSession.selectOne("movieScheduleMapper.getReservationRate", movieCode);
+	}
+
 }
